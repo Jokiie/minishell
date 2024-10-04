@@ -14,7 +14,8 @@
 
 // pour voir si on a des fuites en ignorant ceux que readline fait, executer :
 // valgrind --child-silent-after-fork=yes --leak-check=full --suppressions=readline.supp ./minishell
-
+ 
+/* init the minishell struct variables */
 void	ft_init_minishell(t_minishell *ms)
 {
 	ms->prompt = NULL;
@@ -32,7 +33,7 @@ void	ft_init_minishell(t_minishell *ms)
 	ms->token.in_dquotes = FALSE;
 	ms->token.in_squotes = FALSE;
 }
-
+/*  Create the prompt name, I did it for fun */
 char	*ft_get_prompt_name(char *username, char *cwd)
 {
 	char	*username_dup;
@@ -62,6 +63,7 @@ char	*ft_get_prompt_name(char *username, char *cwd)
 	return ("minishell ➜ ");
 }
 
+/* Dup the env string list, need to check if we can use it to remove a variable with unset and re-add it with export */
 char	**ft_envdup(char **envp)
 {
 	char	**env_dup;
@@ -81,6 +83,7 @@ char	**ft_envdup(char **envp)
 	return (env_dup);
 }
 
+/* Execute the prompt in a loop and read the input with readline, then separe the string in token , search the path and execute it if the oath is found. */
 int	ft_execms(t_minishell *ms, char **envp)
 {
 	while (1)
