@@ -12,6 +12,7 @@
 
 #include "../minishell.h"
 
+/* We append the name of the command to the directory in parameter, the result will be the full path of the command to search a match .*/
 char	*ft_create_full_path(char *dir, char *cmds)
 {
 	char *full_path;
@@ -26,6 +27,7 @@ char	*ft_create_full_path(char *dir, char *cmds)
 	return (full_path);
 }
 
+/* Handle the case of absolute path token (like /usr/bin/ls"). We split the string with the '/' as delimiter, then return the last element as a command, because we want to use it to iterate in the directories, like if we typed "ls". Maybe this is to change later... Like executing the path directly instead of deconstruct it.*/
 char	*ft_get_last_dir(char *cmds)
 {
 	char	**dir_split;
@@ -39,6 +41,7 @@ char	*ft_get_last_dir(char *cmds)
 	return (last_dir_dup);
 }
 
+/* Iterate in the paths returned by ft_strtok to find where is the cmd process to execute. ft_strtok replace the delimiter by a null character, creating tokens. We recall ft_strtok with NULL, to continue with the next token. If we find a match, and we can access it, we return the path to execute. */
 char	*ft_create_n_check_path(char *cmds)
 {
 	char	*paths;
