@@ -83,7 +83,7 @@ char	**ft_envdup(char **envp)
 	return (env_dup);
 }
 
-/* Execute the prompt in a loop and read the input with readline, then separe the string in token , search the path and execute it if the oath is found. */
+/* Execute the prompt in a loop and read the input with readline, then separe the string in token , search the path and execute the command if the path is found. */
 int	ft_execms(t_minishell *ms, char **envp)
 {
 	while (1)
