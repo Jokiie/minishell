@@ -12,7 +12,8 @@
 
 #include "minishell.h"
 
-// pour voir si on a des fuites en ignorant ceux que readline fait, executer :
+// /!\ Do not delete realine.supp /!\
+// To check if we have leaks while ignoring the leaks from readline : 
 // valgrind --child-silent-after-fork=yes --leak-check=full --suppressions=readline.supp ./minishell
  
 /* init the minishell struct variables */
