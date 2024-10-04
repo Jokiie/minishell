@@ -1,0 +1,41 @@
+- Pour pull le projet sur github
+
+git clone "https://github.com/Jokiie/minishell.git"
+
+- Pour voir les remotes(le lien des depots git relier au dossier)
+
+(il y en a 2 pour lecole , et 2 pour github. Ceux de lecole s'affiche qu'a l'ecole)
+git remote -v
+
+- Pour pusher le projet de la maison au github
+
+    - Ajoutes tes modifications sur le github
+
+    git status
+    git add .
+    git commit -m "Description des modifications"
+    git push origin master
+
+    - pour ajouter des fichiers specifiques
+
+    git add nom_du_fichier
+    git commit -m "Ajout de nom_du_fichier"
+    git push origin master
+
+- Pour remplacer le projet completement par celui que tu as sur ton ordi
+    (efface les changements locaux)
+
+***DANGER : a ne pas faire sauf si on s'est mis daccord***
+
+git status
+git add .
+git commit -m "Ecrasement de tout projet github par celui de la maison"
+git push origin master --force
+
+- Pour remplacer la version a la maison
+
+    - soit supprimer le tout et re-cloner
+    - git reset --hard
+        - reinitialise le projet à son dernier commit local, puis utilise 'git pull origin master' pour télécharger et appliquer les dernières modifications de GitHub au dépôt local.
+
+*** À l'école, origin est utilisé pour le dépôt de l'école. Si tu veux interagir avec GitHub à partir de l'école, remplace origin par github pour les commandes comme git push github master ou git pull github master. ***

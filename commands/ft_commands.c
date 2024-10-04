@@ -6,11 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/04 13:36:56 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/04 14:06:35 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include ".../minishell.h"
 
 void	ft_call_commands(char **args, char **envp)
 {
