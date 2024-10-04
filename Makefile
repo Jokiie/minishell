@@ -6,7 +6,7 @@
 #    By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/29 04:07:08 by ccodere           #+#    #+#              #
-#    Updated: 2024/10/04 13:09:42 by ccodere          ###   ########.fr        #
+#    Updated: 2024/10/04 13:35:22 by ccodere          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,14 +20,13 @@ LIBFT_DIR = libft
 
 LIBFT = $(LIBFT_DIR)/libft.a
 
-SRC_DIR = source
+CMD = commands
 
-SRCS = $(SRC_DIR)/minishell.c $(SRC_DIR)/ft_exit.c $(SRC_DIR)/ft_utils.c \
-	   $(SRC_DIR)/redirection.c $(SRC_DIR)/ft_parser.c $(SRC_DIR)/ft_if_is.c \
-	   $(SRC_DIR)/commands/ft_check_cmd_path.c $(SRC_DIR)/commands/ft_commands.c \
-	   $(SRC_DIR)/commands/cd.c $(SRC_DIR)/commands/pwd.c
+SOURCE = minishell.c ft_exit.c ft_utils.c redirection.c ft_parser.c ft_if_is.c
 
-OBJS = $(SRCS:.c=.o)
+SOURCE += $(CMD)/ft_check_cmd_path.c $(CMD)/ft_commands.c $(CMD)/cd.c $(CMD)/pwd.c
+
+OBJS = $(SOURCE:.c=.o)
 
 all: $(LIBFT) $(NAME)
 
@@ -41,7 +40,7 @@ $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(SRC_DIR)/$(OBJS)
+	rm -f $(OBJS)
 	$(MAKE) -C $(LIBFT_DIR) fclean
 
 fclean: clean

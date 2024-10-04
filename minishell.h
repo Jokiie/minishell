@@ -6,14 +6,14 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/04 12:56:39 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/04 13:36:36 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../libft/libft.h"
+# include "libft/libft.h"
 # include <dirent.h>
 # include <fcntl.h>
 # include <readline/history.h>
