@@ -14,6 +14,10 @@
 
 /*
 Create a child process to execute a command
+I added all the macros for child process return value, to check what it does and
+I removed the custom command because it must be executed by the parent process.
+Need to remove the check when we will finish the project or move it to respect
+the norm.
 */
 void	ft_call_commands(char **args, char **envp)
 {
