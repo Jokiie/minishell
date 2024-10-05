@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/09/30 00:33:55 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/05 03:33:29 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,44 @@ void	ft_free_split(char **args)
 		i++;
 	}
 	free(args);
+}
+
+int	ft_charcount(char *line, char to_count)
+{
+	int	count;
+	int	i;
+	
+	count = 0;
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == to_count)
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+char	*ft_strpass(char *str, int to_pass, int len)
+{
+	char	*buffer;
+	int		i;
+	int		j;
+		
+	buffer = malloc(sizeof(char) * (len + 1));
+	if (!buffer)
+		return (NULL);
+	i = 0;
+	j = 0;
+	if (!str)
+		return (NULL);
+	while (str[i])
+	{
+		while (str[i] == to_pass)
+			i++;
+		buffer[j++] = str[i];
+		i++;
+	}
+	buffer[j] = '\0';
+	return (buffer);
 }

@@ -6,12 +6,15 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:52:07 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/04 13:36:58 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/04 23:49:57 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+/*
+Display the current working directory
+*/
 void    pwd(char **args)
 {
     char cwd[BUFFER_SIZE];
@@ -24,5 +27,8 @@ void    pwd(char **args)
     if (getcwd(cwd, sizeof(cwd)) != NULL)
         ft_printf("%s\n", cwd);
     else
+    {
         ft_fprintf(2, "getcwd() error"); 
+        return ;
+    }
 }

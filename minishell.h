@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/04 13:36:36 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/05 02:03:26 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ typedef struct s_token
 	char	end;
 	t_bool	in_dquotes;
 	t_bool	in_squotes;
+	t_bool	open_dquotes;
+	t_bool	open_squotes;
 }			t_token;
 
 typedef struct s_minishell
@@ -74,6 +76,7 @@ int			ft_isnull(int c);
 // ft_commands.c
 void		ft_call_commands(char **args, char **envp);
 int			ft_exec_commands(char **args, char **envp);
+int			ft_call_custom_cmds(char **args, char **envp);
 int			ft_custom_cmds(char **args, char **envp);
 
 // ft_check_cmd_path.c
@@ -87,7 +90,8 @@ void		ft_init_token(t_minishell *ms, char *line, int i, int k);
 // ft_utils.c
 void		ft_free_split(char **args);
 int			ft_count_args(char **args);
-
+int			ft_charcount(char *line, char to_count);
+char		*ft_strpass(char *str, int to_pass, int len);
 // ft_exit.c
 void		ft_exit_minishell(t_minishell *ms);
 void		ft_free_vars(t_minishell *ms);
