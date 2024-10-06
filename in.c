@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:33:17 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/05 13:13:03 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/05 23:45:14 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,30 +20,8 @@ handle :
 hello 'ccodere'
 ➜  ~ echo hello '$USER'
 hello $USER
-
 */
-int	ft_quotes_in_quotes(t_minishell *ms, char *line, int i, int k)
-{
-	t_token	*t;
 
-	t = &(ms->token);
-	i++;
-	if (ft_is_dquote(line[i]))
-	{
-		while (line[i] && ft_is_dquote(line[i]))
-			i++;
-		while (line[i] && !ft_is_dquote(line[i]))
-			i++;
-		if (ft_is_dquote(line[i]) && !ft_is_dquote(line[i + 1]))
-		{
-			(*t).end = i;
-			ms->args[k] = ft_substr(line, (*t).start, ((*t).end - (*t).start));
-			(*t).in_dquotes = FALSE;
-			i++;
-		}
-	}
-	return (i);
-}
 int	ft_trim_quotes(t_minishell *ms, char *line, int i, int k)
 {
 	t_token	*t;
@@ -59,7 +37,7 @@ int	ft_trim_quotes(t_minishell *ms, char *line, int i, int k)
 	substr = ft_substr(line, (*t).start, ((*t).end - (*t).start));
 	res = ft_strpass(substr, '"', ((*t).end - (*t).start));
 	free(substr);
-	ms->args[k] = res;
+	ms->tokens[k] = res;
 	(*t).in_dquotes = FALSE;
 	if (line[i + 1])
 		i++;
@@ -71,19 +49,21 @@ int	ft_quotes_token(t_minishell *ms, char *line, int i, int k)
 	t_token	*t;
 
 	t = &(ms->token);
-	while (line[i] && ft_is_dquote(line[i]))
+	while (ft_is_dquote(line[i]))
 		i++;
 	(*t).start = i;
-	while (line[i] && !ft_is_dquote(line[i]))
-		i++;
-	if ((ft_is_dquote(line[i]) && (ft_is_dquote(line[i + 1])))
-		|| (ft_is_dquote(line[i]) && !ft_isspace(line[i + 1])))
-		i = ft_trim_quotes(ms, line, i, k);
-	else if (ft_is_dquote(line[i]) && !ft_is_dquote(line[i + 1]))
+	while (line[i])
 	{
-		(*t).end = i;
-		ms->args[k] = ft_substr(line, (*t).start, ((*t).end - (*t).start));
-		(*t).in_dquotes = FALSE;
+		if ((ft_is_dquote(line[i]) && (ft_is_dquote(line[i + 1])))
+			|| (ft_is_dquote(line[i]) && !ft_isspace(line[i + 1])))
+			i = ft_trim_quotes(ms, line, i, k);
+		else if (ft_is_dquote(line[i]) && !ft_is_dquote(line[i + 1]))
+		{
+			(*t).end = i;
+			ms->tokens[k] = ft_substr(line, (*t).start, ((*t).end - (*t).start));
+			(*t).in_dquotes = FALSE;
+			i++;
+		}
 		i++;
 	}
 	return (i);
@@ -95,29 +75,38 @@ int	ft_normal_token(t_minishell *ms, char *line, int i, int k)
 	char	*substr;
 
 	t = &(ms->token);
-	if (line[i] && !(*t).in_dquotes)
+	(*t).start = i;
+	while (line[i])
 	{
-		(*t).start = i;
-		while (line[i] && !ft_isspace(line[i]) && !ft_isquotes(line[i]))
+		if (!ft_isspace(line[i]) && !ft_is_dquote(line[i]))
 			i++;
-		while (ft_is_dquote(line[i]) && !ft_isspace(line[i + 1]))
+		if (ft_isspace(line[i]) && !(t)->in_dquotes)
+			break ;
+		if (ft_is_dquote(line[i]) && line[i + 1] != '\0')
+		{
 			i++;
-		(*t).end = i;
-		substr = ft_substr(line, (*t).start, ((*t).end - (*t).start));
-		ms->args[k] = substr;
+			(*t).in_dquotes = TRUE;
+		}
+		if (line[i] != '\0' && ft_is_dquote(line[i]))
+			i++;
+		(*t).in_dquotes = FALSE;
 	}
+	(*t).end = i;
+	substr = ft_substr(line, (*t).start, ((*t).end - (*t).start));
+	ms->tokens[k] = ft_strpass(substr, '"', ((*t).end - (*t).start));
+	free(substr);
 	return (i);
 }
 
-void	ft_init_token(t_minishell *ms, char *line, int i, int k)
+int	ft_create_tokens(t_minishell *ms, char *line, int i, int k)
 {
-	ms->args = malloc(sizeof(char *) * BUFFER_SIZE);
+	ms->tokens = malloc(sizeof(char *) * BUFFER_SIZE);
 	if (!line)
-		ms->args[k] = ft_strdup("");
+		ms->tokens[k] = ft_strdup("");
 	if (ft_charcount(line, '"') % 2 != 0)
 	{
 		ft_fprintf(2, "ms: open dbl quote error\n");
-		return ;
+		return (1);
 	}
 	while (ft_isspace(line[i]))
 		i++;
@@ -134,5 +123,6 @@ void	ft_init_token(t_minishell *ms, char *line, int i, int k)
 			i = ft_normal_token(ms, line, i, k);
 		k++;
 	}
-	ms->args[k] = NULL;
+	ms->tokens[k] = NULL;
+	return (0);
 }

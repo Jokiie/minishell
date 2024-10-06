@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:01:53 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/02 22:19:13 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/05 23:19:07 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ char	*ft_strtok(char *str, char *delim)
 	if (*str)
 	{
 		*str = '\0';
-		saved_str = str + 1; // pour le :
+		saved_str = str + 1;
 	}
 	else
-		saved_str = NULL; //pour commencer au '\0'
+		saved_str = NULL;
 	return (str_start);
 }

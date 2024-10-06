@@ -6,40 +6,40 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/05 03:33:29 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/05 23:29:39 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_count_args(char **args)
+int	ft_count_tokens(char **tokens)
 {
 	int	count;
 
 	count = 0;
-	while (args[count])
+	while (tokens[count])
 		count++;
 	return (count);
 }
 
-void	ft_free_split(char **args)
+void	ft_free_tokens(char **tokens)
 {
 	int	i;
 
 	i = 0;
-	while (args[i])
+	while (tokens[i])
 	{
-		free(args[i]);
+		free(tokens[i]);
 		i++;
 	}
-	free(args);
+	free(tokens);
 }
 
 int	ft_charcount(char *line, char to_count)
 {
 	int	count;
 	int	i;
-	
+
 	count = 0;
 	i = 0;
 	while (line[i])
@@ -56,19 +56,18 @@ char	*ft_strpass(char *str, int to_pass, int len)
 	char	*buffer;
 	int		i;
 	int		j;
-		
+
+	if (!str)
+		return (NULL);
 	buffer = malloc(sizeof(char) * (len + 1));
 	if (!buffer)
 		return (NULL);
 	i = 0;
 	j = 0;
-	if (!str)
-		return (NULL);
-	while (str[i])
+	while (str[i] && j < len)
 	{
-		while (str[i] == to_pass)
-			i++;
-		buffer[j++] = str[i];
+		if (str[i] != to_pass)
+			buffer[j++] = str[i];
 		i++;
 	}
 	buffer[j] = '\0';

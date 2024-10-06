@@ -1,34 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_if_is.c                                         :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/03 22:18:41 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/05 23:21:43 by ccodere          ###   ########.fr       */
+/*   Created: 2024/10/05 23:25:14 by ccodere           #+#    #+#             */
+/*   Updated: 2024/10/05 23:40:30 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-int	ft_is_dquote(int c)
+void	echo_n(char **tokens)
 {
-	return (c == '\"');
-}
+	int	k;
 
-int	ft_is_squote(int c)
-{
-	return (c == '\'');
+	k = 2;
+	while (tokens[k])
+	{
+		ft_printf("%s", tokens[k]);
+		k++;
+	}
+	ft_printf(SURL "%%\n" SURLRESET);
 }
-
-int	ft_isquotes(int c)
-{
-	return (ft_is_dquote(c) || ft_is_squote(c));
-}
-
-int	ft_isredirect(int c)
-{
-	return (c == '<' || c == '>');
-}
-
