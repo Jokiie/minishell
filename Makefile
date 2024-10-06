@@ -6,7 +6,7 @@
 #    By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/29 04:07:08 by ccodere           #+#    #+#              #
-#    Updated: 2024/10/05 23:36:03 by ccodere          ###   ########.fr        #
+#    Updated: 2024/10/06 00:24:17 by ccodere          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 
 CMD = commands
 
-SRC = minishell.c ft_exit.c ft_utils.c redirection.c ft_parser.c ft_if_is.c
+SRC = minishell.c ft_exit.c ft_utils.c redirection.c ft_init_tokens.c ft_if_is.c
 
 SRC += $(CMD)/ft_check_cmd_path.c $(CMD)/ft_commands.c $(CMD)/cd.c $(CMD)/pwd.c \
 	   $(CMD)/echo.c
