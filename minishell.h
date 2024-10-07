@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/05 23:45:25 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/06 23:40:47 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_token
 	char	end;
 	t_bool	in_dquotes;
 	t_bool	in_squotes;
+	t_bool	in_quotes;
 	t_bool	open_dquotes;
 	t_bool	open_squotes;
 }			t_token;
@@ -60,6 +61,7 @@ typedef struct s_minishell
 	int		std_out;
 	int		std_err;
 	t_token	token;
+	t_bool	redirection_needed;
 }			t_minishell;
 
 // commands.c
@@ -97,7 +99,10 @@ void		ft_exit_minishell(t_minishell *ms);
 void		ft_free_vars(t_minishell *ms);
 
 // redirection.c
+int			ft_redirection_check(t_minishell *ms);
+int			ft_exec_redirection(t_minishell *ms);
 int			ft_isredirect(int c);
-void		redirect_input(char *file);
-
+void		redirect_input(t_minishell *ms, char *file);
+void		redirect_output(t_minishell *ms, char *file);
+void		shift_tokens_after_redirect(t_minishell *ms, int k);
 #endif

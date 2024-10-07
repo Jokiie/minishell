@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/05 23:47:01 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/06 01:14:31 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	ft_call_commands(char **tokens, char **envp)
 {
 	int	pid;
 	int	child_ret;
-	int	exit_code;
-	int	signal_num;
+	//int	exit_code;
+	//int	signal_num;
 
 	pid = fork();
 	if (pid < 0)
@@ -35,20 +35,20 @@ void	ft_call_commands(char **tokens, char **envp)
 			exit(1);
 	}
 	wait(&child_ret);
-	if (WIFEXITED(child_ret))
-		ft_printf("Child process terminated gracefully.\n");
-	if (WIFEXITED(child_ret))
-	{
-		exit_code = WEXITSTATUS(child_ret);
-		ft_printf("Child exit code : %d\n", exit_code);
-	}
-	if (WIFSIGNALED(child_ret))
-		ft_printf("Child process got kill by a signal.\n");
-	if (WIFSIGNALED(child_ret))
-	{
-		signal_num = WTERMSIG(child_ret);
-		ft_printf("Child process got kill by the signal : %d\n", signal_num);
-	}
+	// if (WIFEXITED(child_ret))
+	// 	ft_printf("Child process terminated gracefully.\n");
+	// if (WIFEXITED(child_ret))
+	// {
+	// 	exit_code = WEXITSTATUS(child_ret);
+	// 	ft_printf("Child exit code : %d\n", exit_code);
+	// }
+	// if (WIFSIGNALED(child_ret))
+	// 	ft_printf("Child process got kill by a signal.\n");
+	// if (WIFSIGNALED(child_ret))
+	// {
+	// 	signal_num = WTERMSIG(child_ret);
+	// 	ft_printf("Child process got kill by the signal : %d\n", signal_num);
+	// }
 }
 
 int	ft_call_custom_cmds(char **tokens, char **envp)

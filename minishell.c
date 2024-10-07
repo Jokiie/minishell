@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/05 23:32:15 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/06 23:58:59 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	ft_init_minishell(t_minishell *ms)
 	ms->token.start = 0;
 	ms->token.in_dquotes = FALSE;
 	ms->token.in_squotes = FALSE;
+	ms->token.in_quotes = FALSE;
+	ms->redirection_needed = FALSE;
 }
 
 /*
@@ -122,13 +124,13 @@ int	ft_execms(t_minishell *ms, char **envp)
 		ms->cwd = getcwd(NULL, 0);
 		ms->prompt_name = ft_get_prompt_name(ms->user, ms->cwd);
 		ms->prompt = readline(ms->prompt_name);
-		ft_create_tokens(ms, ms->prompt, 0, 0);
-		for (int i = 0; ms->tokens[i]; i++)
+		if (ft_create_tokens(ms, ms->prompt, 0, 0) != 1)
 		{
-			ft_printf(":%s:\n", ms->tokens[i]);
+			for (int i = 0; ms->tokens[i]; i++)
+				ft_printf(":%s:\n", ms->tokens[i]);
+			if (ft_call_custom_cmds(ms->tokens, envp) != SUCCESS)
+				ft_call_commands(ms->tokens, envp);
 		}
-		if (ft_call_custom_cmds(ms->tokens, envp) != SUCCESS)
-			ft_call_commands(ms->tokens, envp);
 		if (ms->prompt == NULL)
 			ft_exit_minishell(ms);
 		if (*(ms)->prompt)

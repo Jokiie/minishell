@@ -6,13 +6,55 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:25:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/05 23:43:41 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/06 01:50:16 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	redirect_input(char *file)
+int	ft_redirection_check(t_minishell *ms)
+{
+	int	k;
+
+	k = 0;
+	while (ms->tokens[k])
+	{
+		if (ft_strnstr(ms->tokens[k], ">", 1))
+		{
+			ms->redirection_needed = TRUE;
+			return (k);
+		}
+		k++;
+	}
+	return (-1);
+}
+
+int		ft_exec_redirection(t_minishell *ms)
+{
+	int k;
+
+	k = ft_redirection_check(ms);
+	if (k > 0)
+	{
+		if (ft_strnstr(ms->tokens[k], ">", 1) && ms->redirection_needed)
+		{
+			redirect_output(ms, ms->tokens[k + 1]);
+			ms->redirection_needed = FALSE;
+			return (1);
+		}
+		else if (ft_strnstr(ms->tokens[k], "<", 1) && ms->redirection_needed)
+		{
+			redirect_input(ms, ms->tokens[k + 1]);
+			ms->redirection_needed = FALSE;
+			return (1);
+		}
+		return (-1);
+	}
+	else
+		return (-1);
+}
+// <
+void	redirect_input(t_minishell *ms, char *file)
 {
 	int	fdin;
 
@@ -22,7 +64,7 @@ void	redirect_input(char *file)
 		ft_fprintf(2, "minishell: %s: No such file or directory\n", file);
 		return ;
 	}
-	if (dup2(fdin, STDIN_FILENO) == -1)
+	if (dup2(fdin, ms->std_in) == -1)
 	{
 		ft_fprintf(2, "minishell: Error dup input\n");
 		close(fdin);
@@ -31,7 +73,8 @@ void	redirect_input(char *file)
 	close(fdin);
 }
 
-void	redirect_output(char *file)
+// >
+void	redirect_output(t_minishell *ms, char *file)
 {
 	int	fdout;
 
@@ -41,7 +84,7 @@ void	redirect_output(char *file)
 		ft_fprintf(2, "minishell: %s: No such file or directory\n", file);
 		return ;
 	}
-	if (dup2(fdout, STDOUT_FILENO) == -1)
+	if (dup2(fdout, ms->std_out) == -1)
 	{
 		ft_fprintf(2, "minishell: Error dup output\n");
 		close(fdout);
