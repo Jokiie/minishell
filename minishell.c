@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/07 03:06:29 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/07 12:47:06 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,15 @@ void	ft_init_minishell(t_minishell *ms)
 	ms->token.in_quotes = FALSE;
 }
 
-/*
-Create the prompt name by joining the username with the current working
-directory found in the environment variables. For using color, I joined a
-empty string with the username, then a '/', and finally the directory. Since
-cwd return a full path (/home/username/folder/) , I splited the directory when
-we find a '/', then got the last directory to get it displayed next to the name.
-I reused a Macro to make the arrow green, which is showing after the name and
-directory. Finally I return this result, so we get a pretty cool prompt name !
-If we got a problem and didnt get a name or a directory, we return a default
-name to avoid segmentation fault or empty prompt name.
-
+/*  Create the prompt name by joining the username with the current working
+	directory found in the environment variables. For using color, I joined a
+	empty string with the username, then a '/', and finally the directory. Since
+	cwd return a full path (/home/username/folder/) , I splited the directory when
+	we find a '/', then got the last directory to get it displayed next to the name.
+	I reused a Macro to make the arrow green, which is showing after the name and
+	directory. Finally I return this result, so we get a pretty cool prompt name !
+	If we got a problem and didnt get a name or a directory, we return a default
+	name to avoid segmentation fault or empty prompt name.
 */
 char	*ft_get_prompt_name(char *username, char *cwd)
 {
@@ -78,11 +76,9 @@ char	*ft_get_prompt_name(char *username, char *cwd)
 	return ("minishell ➜ ");
 }
 
-/*
-Dup the environment string tab
-
-to do: need to check if we can use it to remove a variable
-with unset and re-add it with export. I didn't try yet.
+/*	Dup the environment string tab
+	to do: need to check if we can use it to remove a variable
+	with unset and re-add it with export. I didn't try yet.
 */
 char	**ft_envdup(char **envp)
 {
@@ -103,15 +99,14 @@ char	**ft_envdup(char **envp)
 	return (env_dup);
 }
 
-/*
-Execute the prompt in a loop and read the input with readline,
-then separe the string in token , search the path and execute the command
-if the path is found. Add_history allow us to click the up arrow key to
-reuse a command. It frees the input after each line so we don't have leaks or
-corrupted data.
+/*	Execute the prompt in a loop and read the input with readline,
+	then separe the string in token , search the path and execute the command
+	if the path is found. Add_history allow us to click the up arrow key to
+	reuse a command. It frees the input after each line so we don't have leaks or
+	corrupted data.
 
-to do (if mandatory) : find a way to keep the history in memory so when we quit and
-want to use a previous command, it show the history from last session
+	to do (if mandatory) : find a way to keep the history in memory so when we quit and
+	want to use a previous command, it show the history from last session
 */
 int	ft_execms(t_minishell *ms, char **envp)
 {

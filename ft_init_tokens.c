@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 00:24:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/07 03:47:00 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/07 14:03:54 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int	ft_normal_token(t_minishell *ms, char *line, int i, int k)
 	(*t).start = i;
 	while (line[i])
 	{
-		if (ft_isspace(line[i]) && !(t)->in_dquotes)
+		if (ft_isspace(line[i]) && !(*t).in_dquotes)
 			break ;
 		if (ft_is_dquote(line[i]))
 		{
@@ -161,9 +161,9 @@ int	ft_create_tokens(t_minishell *ms, char *line, int i, int k)
 	ms->tokens = malloc(sizeof(char *) * BUFFER_SIZE);
 	if (!line)
 		ms->tokens[k] = ft_strdup("");
-	if (ft_charcount(line, '"') % 2 != 0)
+	if (ft_charcount(line, '"') % 2 != 0 || ft_charcount(line, '\'') % 2 != 0)
 	{
-		ft_fprintf(2, "ms: open dbl quote error\n");
+		ft_fprintf(2, "ms: open quote error\n");
 		return (1);
 	}
 	while (ft_isspace(line[i]))

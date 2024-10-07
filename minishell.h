@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/07 04:10:41 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/07 12:37:41 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <unistd.h>
 # include "readline-8.2/history.h"
 # include "readline-8.2/readline.h"
+# include "readline-8.2/tilde.h"
 
 # define SUCCESS 1
 # define FAIL 0
