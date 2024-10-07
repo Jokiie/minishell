@@ -45,7 +45,7 @@ git remote -v
 
 ***DANGER : a ne pas faire sauf si on est de qu'on veut tout effacer***
 
-- Pour remplacer le dépot local par le dépot Github (remplace tout)
+- Pour remplacer le dépot github par le dépot local (remplace tout)
 
     -git status
     -git add .
