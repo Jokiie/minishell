@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/07 03:15:18 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/07 04:10:41 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@
 # include "libft/libft.h"
 # include <dirent.h>
 # include <fcntl.h>
-# include <readline/history.h>
-# include <readline/readline.h>
+# include <readline/tilde.h>
 # include <signal.h>
 # include <stdarg.h>
 # include <stdio.h>
@@ -26,6 +25,8 @@
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
+# include "readline-8.2/history.h"
+# include "readline-8.2/readline.h"
 
 # define SUCCESS 1
 # define FAIL 0

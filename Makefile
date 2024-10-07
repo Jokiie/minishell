@@ -6,7 +6,7 @@
 #    By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/29 04:07:08 by ccodere           #+#    #+#              #
-#    Updated: 2024/10/06 00:24:17 by ccodere          ###   ########.fr        #
+#    Updated: 2024/10/07 04:08:06 by ccodere          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,12 @@ CFLAGS = -Wall -Werror -Wextra
 NAME = minishell
 
 LIBFT_DIR = libft
+
+RL_DIR = readline-8.2
+
+RL_INCLUDES = -I$(RL_DIR)/include
+
+RL_LIB = -L$(RL_DIR)/lib -lreadline -lhistory
 
 LIBFT = $(LIBFT_DIR)/libft.a
 
@@ -35,7 +41,7 @@ $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR) all
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) -lreadline
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(RL_LIB) -o $(NAME)
 
 %.o: %.c 
 	$(CC) $(CFLAGS) -c $< -o $@
