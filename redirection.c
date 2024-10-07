@@ -6,54 +6,68 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:25:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/06 01:50:16 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/07 03:36:22 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_redirection_check(t_minishell *ms)
+/*
+Check if a token contains a redirection character. If so, execute the function
+that redirects input for '<' and output for '>' using the next token, which
+should be a file name. After breaking the loop, a new list of tokens is created
+without the "<>" characters, allowing the command to be executed. Before this,
+the command couldn't execute because it attempted to interpret "<>" as if it
+were a command or an argument to a command.
+*/
+void	ft_exec_redirection(t_minishell *ms)
 {
-	int	k;
+	int	i;
 
-	k = 0;
-	while (ms->tokens[k])
+	i = 0;
+	while (ms->tokens[i])
 	{
-		if (ft_strnstr(ms->tokens[k], ">", 1))
+		if (ft_strncmp(ms->tokens[i], ">", 1) == 0)
 		{
-			ms->redirection_needed = TRUE;
-			return (k);
+			redirect_output(ms, ms->tokens[i + 1]);
+			break ;
 		}
+		else if (ft_strncmp(ms->tokens[i], "<", 1) == 0)
+		{
+			redirect_input(ms, ms->tokens[i + 1]);
+			break ;
+		}
+		i++;
+	}
+	ft_recreate_tokens(ms, i);
+}
+
+/*
+Recreate the tokens list without the redirection characters, as explained above.
+I removed the ft_free_tokens call because it corrupt the list. I didn't find leaks,
+to verify later.
+*/
+void	ft_recreate_tokens(t_minishell *ms, int i)
+{
+	char	**new_tokens;
+	int		k;
+
+	new_tokens = (char **)malloc(sizeof(char *) * (i + 1));
+	k = 0;
+	while (k < i)
+	{
+		if ((ft_strncmp(ms->tokens[k], ">", 1) != 0)
+			&& (ft_strncmp(ms->tokens[k], "<", 1) != 0))
+			new_tokens[k] = ms->tokens[k];
 		k++;
 	}
-	return (-1);
+	new_tokens[k] = NULL;
+	ms->tokens = new_tokens;
 }
-
-int		ft_exec_redirection(t_minishell *ms)
-{
-	int k;
-
-	k = ft_redirection_check(ms);
-	if (k > 0)
-	{
-		if (ft_strnstr(ms->tokens[k], ">", 1) && ms->redirection_needed)
-		{
-			redirect_output(ms, ms->tokens[k + 1]);
-			ms->redirection_needed = FALSE;
-			return (1);
-		}
-		else if (ft_strnstr(ms->tokens[k], "<", 1) && ms->redirection_needed)
-		{
-			redirect_input(ms, ms->tokens[k + 1]);
-			ms->redirection_needed = FALSE;
-			return (1);
-		}
-		return (-1);
-	}
-	else
-		return (-1);
-}
-// <
+/*
+< : redirect input.
+I think input is set back to stdin after closing the file (fdin) but I'm not sure.
+*/
 void	redirect_input(t_minishell *ms, char *file)
 {
 	int	fdin;
@@ -61,19 +75,17 @@ void	redirect_input(t_minishell *ms, char *file)
 	fdin = open(file, O_RDONLY);
 	if (fdin < 0)
 	{
-		ft_fprintf(2, "minishell: %s: No such file or directory\n", file);
-		return ;
+		ft_fprintf(2, "ms: %s: No such file or directory\n", file);
+		exit(EXIT_FAILURE);
 	}
-	if (dup2(fdin, ms->std_in) == -1)
-	{
-		ft_fprintf(2, "minishell: Error dup input\n");
-		close(fdin);
-		return ;
-	}
+	dup2(fdin, ms->std_in);
 	close(fdin);
 }
 
-// >
+/*
+> : redirect output.
+I think output is set back to stdout after closing the file (fdout) but i'm not sure.
+*/
 void	redirect_output(t_minishell *ms, char *file)
 {
 	int	fdout;
@@ -84,11 +96,6 @@ void	redirect_output(t_minishell *ms, char *file)
 		ft_fprintf(2, "minishell: %s: No such file or directory\n", file);
 		return ;
 	}
-	if (dup2(fdout, ms->std_out) == -1)
-	{
-		ft_fprintf(2, "minishell: Error dup output\n");
-		close(fdout);
-		return ;
-	}
+	dup2(fdout, ms->std_out);
 	close(fdout);
 }

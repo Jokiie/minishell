@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/06 01:14:31 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/07 03:18:07 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,20 @@ I removed the custom command because it must be executed by the parent process.
 Need to remove the check when we will finish the project or move it to respect
 the norm.
 */
-void	ft_call_commands(char **tokens, char **envp)
+void	ft_call_commands(t_minishell *ms)
 {
 	int	pid;
 	int	child_ret;
+	
 	//int	exit_code;
 	//int	signal_num;
-
 	pid = fork();
 	if (pid < 0)
 		return ;
 	else if (pid == 0)
 	{
-		if (ft_exec_commands(tokens, envp) != SUCCESS)
+		ft_exec_redirection(ms);
+		if (ft_exec_commands(ms, ms->tokens) != SUCCESS)
 			exit(1);
 	}
 	wait(&child_ret);
@@ -51,14 +52,14 @@ void	ft_call_commands(char **tokens, char **envp)
 	// }
 }
 
-int	ft_call_custom_cmds(char **tokens, char **envp)
+int	ft_call_custom_cmds(t_minishell *ms)
 {
-	if (ft_custom_cmds(tokens, envp) == SUCCESS)
+	if (ft_custom_cmds(ms) == SUCCESS)
 		return (SUCCESS);
 	return (FAIL);
 }
 
-int	ft_exec_commands(char **tokens, char **envp)
+int	ft_exec_commands(t_minishell *ms, char **tokens)
 {
 	char	*path;
 	char	*cmd;
@@ -76,40 +77,41 @@ int	ft_exec_commands(char **tokens, char **envp)
 		}
 		else
 			path = ft_create_n_check_path(tokens[i]);
-		if (execve(path, tokens, envp) == -1)
+		if (execve(path, tokens, ms->env) == -1)
 			return (ERROR);
+		i++;
 	}
 	return (SUCCESS);
 }
 
-int	ft_custom_cmds(char **tokens, char **envp)
+int	ft_custom_cmds(t_minishell *ms)
 {
 	int	i;
 
 	i = 0;
-	if (!tokens)
+	if (!ms->tokens)
 		return (FAIL);
-	while (tokens[i])
+	while (ms->tokens[i])
 	{
-		if (ft_strnstr(tokens[0], "cd", 2))
+		if (ft_strnstr(ms->tokens[0], "cd", 2))
 		{
-			cd(tokens);
+			cd(ms->tokens);
 			return (SUCCESS);
 		}
-		else if (ft_strnstr(tokens[0], "pwd", 3))
+		else if (ft_strnstr(ms->tokens[0], "pwd", 3))
 		{
-			pwd(tokens);
+			pwd(ms->tokens);
 			return (SUCCESS);
 		}
-		if (ft_strnstr(tokens[i], "./", 2))
+		if (ft_strnstr(ms->tokens[i], "./", 2))
 		{
-			execve(tokens[i], tokens, envp);
+			execve(ms->tokens[i], ms->tokens, ms->env);
 			return (SUCCESS);
 		}
-		if (ft_strnstr(tokens[i], "echo", 4) && ft_strnstr(tokens[i + 1], "-n",
+		if (ft_strnstr(ms->tokens[i], "echo", 4) && ft_strnstr(ms->tokens[i + 1], "-n",
 				2))
 		{
-			echo_n(tokens);
+			echo_n(ms->tokens);
 			return (SUCCESS);
 		}
 		i++;

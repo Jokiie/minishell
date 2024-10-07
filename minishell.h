@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/06 23:40:47 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/07 03:15:18 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ typedef struct s_minishell
 	int		std_out;
 	int		std_err;
 	t_token	token;
-	t_bool	redirection_needed;
 }			t_minishell;
 
 // commands.c
@@ -76,10 +75,10 @@ int			ft_isquotes(int c);
 int			ft_isredirect(int c);
 
 // ft_commands.c
-void		ft_call_commands(char **tokens, char **envp);
-int			ft_exec_commands(char **tokens, char **envp);
-int			ft_call_custom_cmds(char **tokens, char **envp);
-int			ft_custom_cmds(char **tokens, char **envp);
+void		ft_call_commands(t_minishell *ms);
+int			ft_exec_commands(t_minishell *ms, char **tokens);
+int			ft_call_custom_cmds(t_minishell *ms);
+int			ft_custom_cmds(t_minishell *ms);
 
 // ft_check_cmd_path.c
 char		*ft_create_full_path(char *dir, char *cmds);
@@ -99,10 +98,8 @@ void		ft_exit_minishell(t_minishell *ms);
 void		ft_free_vars(t_minishell *ms);
 
 // redirection.c
-int			ft_redirection_check(t_minishell *ms);
-int			ft_exec_redirection(t_minishell *ms);
-int			ft_isredirect(int c);
+void		ft_exec_redirection(t_minishell *ms);
+void		ft_recreate_tokens(t_minishell *ms, int i);
 void		redirect_input(t_minishell *ms, char *file);
 void		redirect_output(t_minishell *ms, char *file);
-void		shift_tokens_after_redirect(t_minishell *ms, int k);
 #endif

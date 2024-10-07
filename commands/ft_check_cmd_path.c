@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 04:28:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/05 23:38:38 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/07 01:19:38 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*ft_create_n_check_path(char *cmds)
 		}
 		dir = ft_strtok(NULL, ":");
 	}
-	ft_fprintf(2, "minishell : command not found : %s\n", cmds);
+	ft_fprintf(2, "ms: command not found : %s\n", cmds);
 	free(full_path);
 	free(paths_dup);
 	return (NULL);

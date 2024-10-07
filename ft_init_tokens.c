@@ -6,26 +6,29 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 00:24:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/06 23:57:35 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/07 03:47:00 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 
-/* to do
-handle :
+/* 
 
-➜  ~ echo "hello '$USER'"
-hello 'ccodere'
-➜  ~ echo hello '$USER'
-hello $USER
+I KNOW my file is huge but im currently working on it. -_-
 
- "/usr/bin/ls" -l
-"string" "string"
-  < "ls -l" | wc -l
+Finally handle doublequote and singlequote... but no with this combinaison : 
+ccodere/minishell ➜ echo 'hello'hello"hello"
+expected output : hellohellohello
+
+also need to make the single quote not change the variable if not in a dblquote string :
+ccodere/minishell ➜ echo "hello '$USER'"
+expected output : hello 'ccodere'
+ccodere/minishell ➜ echo hello '$USER'
+expected output : hello $USER
+
 */
-int	ft_trim_quotes(t_minishell *ms, char *line, int i, int k)
+int	ft_trim_dquotes(t_minishell *ms, char *line, int i, int k)
 {
 	t_token	*t;
 	char	*substr;
@@ -41,13 +44,63 @@ int	ft_trim_quotes(t_minishell *ms, char *line, int i, int k)
 	res = ft_strpass(substr, '"', ((*t).end - (*t).start));
 	free(substr);
 	ms->tokens[k] = res;
-	(*t).in_dquotes = FALSE;
+	(*t).in_dquotes = !(*t).in_dquotes;
 	if (line[i + 1])
 		i++;
 	return (i + 1);
 }
 
-int	ft_quotes_token(t_minishell *ms, char *line, int i, int k)
+int	ft_trim_squotes(t_minishell *ms, char *line, int i, int k)
+{
+	t_token	*t;
+	char	*substr;
+	char	*res;
+
+	t = &(ms->token);
+	while (line[i + 1] && ft_is_squote(line[i]))
+		i++;
+	while (line[i + 1] && !ft_isspace(line[i]))
+		i++;
+	(*t).end = i + 1;
+	substr = ft_substr(line, (*t).start, ((*t).end - (*t).start));
+	res = ft_strpass(substr, '\'', ((*t).end - (*t).start));
+	free(substr);
+	ms->tokens[k] = res;
+	(*t).in_squotes = !(*t).in_squotes;
+	if (line[i + 1])
+		i++;
+	return (i + 1);
+}
+
+int	ft_squote_token(t_minishell *ms, char *line, int i, int k)
+{
+	t_token *t;
+
+	t = &(ms->token);
+	while (ft_is_squote(line[i]))
+		i++;
+	(*t).start = i;
+	while(line[i])
+	{
+		if ((ft_is_squote(line[i]) && (ft_is_squote(line[i + 1])))
+			|| (ft_is_squote(line[i]) && !ft_isspace(line[i + 1])))
+		{
+			i = ft_trim_squotes(ms, line, i, k);
+			return (i);
+		}
+		else if (ft_is_squote(line[i]) && ft_isspace(line[i + 1]))
+		{
+			(*t).end = i;
+			ms->tokens[k] = ft_substr(line, (*t).start, ((*t).end - (*t).start));
+			(*t).in_squotes = !(*t).in_squotes;
+			return (i + 1);
+		}
+		i++;
+	}
+	return (i);	
+}
+
+int	ft_dquotes_token(t_minishell *ms, char *line, int i, int k)
 {
 	t_token	*t;
 
@@ -60,14 +113,14 @@ int	ft_quotes_token(t_minishell *ms, char *line, int i, int k)
 		if ((ft_is_dquote(line[i]) && (ft_is_dquote(line[i + 1])))
 			|| (ft_is_dquote(line[i]) && !ft_isspace(line[i + 1])))
 		{
-			i = ft_trim_quotes(ms, line, i, k);
+			i = ft_trim_dquotes(ms, line, i, k);
 			return (i);
 		}
 		else if (ft_is_dquote(line[i]) && ft_isspace(line[i + 1]))
 		{
 			(*t).end = i;
 			ms->tokens[k] = ft_substr(line, (*t).start, ((*t).end - (*t).start));
-			(*t).in_dquotes = FALSE;
+			(*t).in_dquotes = !(*t).in_dquotes;
 			return (i + 1);
 		}
 		i++;
@@ -85,18 +138,15 @@ int	ft_normal_token(t_minishell *ms, char *line, int i, int k)
 	(*t).start = i;
 	while (line[i])
 	{
-		if (!ft_isspace(line[i]) && !ft_is_dquote(line[i]))
-			i++;
 		if (ft_isspace(line[i]) && !(t)->in_dquotes)
 			break ;
-		if (ft_is_dquote(line[i]) && line[i + 1] != '\0')
+		if (ft_is_dquote(line[i]))
 		{
+			(*t).in_dquotes = !(*t).in_dquotes;
 			i++;
-			(*t).in_dquotes = TRUE;
 		}
-		if (line[i] != '\0' && ft_is_dquote(line[i]))
+		else
 			i++;
-		(*t).in_dquotes = FALSE;
 	}
 	(*t).end = i;
 	substr = ft_substr(line, (*t).start, ((*t).end - (*t).start));
@@ -122,10 +172,15 @@ int	ft_create_tokens(t_minishell *ms, char *line, int i, int k)
 	{
 		while (ft_isspace(line[i]))
 			i++;
-		if (ft_isquotes(line[i]))
+		if (ft_is_dquote(line[i]))
 		{
 			ms->token.in_dquotes = !ms->token.in_dquotes;
-			i = ft_quotes_token(ms, line, i, k);
+			i = ft_dquotes_token(ms, line, i, k);
+		}
+		else if (ft_is_squote(line[i]) && !ms->token.in_dquotes)
+		{
+			ms->token.in_squotes = !ms->token.in_squotes;
+			i = ft_squote_token(ms, line, i, k);
 		}
 		else
 			i = ft_normal_token(ms, line, i, k);
