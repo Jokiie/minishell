@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/07 12:37:41 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/08 11:07:35 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,15 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
-# include <dirent.h>
-# include <fcntl.h>
-# include <readline/tilde.h>
-# include <signal.h>
-# include <stdarg.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <termios.h>
 # include <unistd.h>
-# include "readline-8.2/history.h"
-# include "readline-8.2/readline.h"
-# include "readline-8.2/tilde.h"
+# include <stdio.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <string.h>
+# include <sys/wait.h>
+# include "readline/readline.h"
+# include "readline/history.h"
+
 
 # define SUCCESS 1
 # define FAIL 0
