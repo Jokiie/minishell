@@ -19,35 +19,19 @@ RL_L			=	libreadline.a
 
 CMD = commands
 
-#		config		#
+ARCH := $(shell uname -m | sed -e s/i386/x86_64/ -e s/arm.*/arm64/)
 
-# version = \"$(shell cat .config/version)\"
-
-# USER = $(shell whoami)
-# PWD  = \"$(shell pwd)\"
-
-# ifeq ($(shell uname -s), Darwin)
-#     BIN_DIR = \"/Users/$(USER)/Mini_bin/\"
-#     L = "
-# else
-#     BIN_DIR = \"/home/$(USER)/Mini_bin/\"
-#     L = '
-# endif
-
-
-# ifeq ($(shell test -d /Users/$(USER)/.brew/opt/readline; echo $$?), 0)
-# 	BREW = .brew
-# else ifeq ($(shell test -d /Users/$(USER)/homebrew/opt/readline; echo $$?), 0)
-# 	BREW = homebrew
-# endif
-
-# TEST = $(shell test -e include/readline/libreadline.a ; echo "$$?")
-
+ifeq ($(ARCH),x86_64)
+    CC := gcc
+else
+    CC := aarch64-linux-gnu-gcc
+endif
 
 # Compiler and flags
 CC				=	gcc
 FLAGS_SHELL		=	-D MINI_BIN=$(BIN_DIR) -D CONPILE_DIR=$(PWD) -D V_MINI=$(version)
 CFLAGS			=	-Wall -Werror -Wextra -g -fno-common $(FLAGS_SHELL)
+LDFLAGS := -lm
 #-fsanitize=address
 RM				=	rm -f
 
@@ -59,7 +43,6 @@ SRCS	=	minishell.c \
 			ft_init_tokens.c \
 			ft_if_is.c \
 
-#env -i ./minishell
 
 SRCS += $(CMD)/ft_check_cmd_path.c $(CMD)/ft_commands.c $(CMD)/cd.c $(CMD)/pwd.c \
 	   $(CMD)/echo.c
@@ -68,58 +51,15 @@ OBJS	=	$(SRCS:.c=.o)
 
 all: $(LIBFT) $(NAME)
 
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_DIR) all
+
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(RL_LIB) -L readline -l readline -l ncurses \
-	$(RL_DIR)/$(RL_H) $(RL_DIR)/$(RL_L) -o $(NAME)
-
-# rl:
-# 	@if test $(TEST) = 1 ; then \
-# 		cd readline && ./configure && make ; \
-# 	else \
-# 		echo readline all ready make ; sleep 1; \
-# 	fi
-
-# libft:
-# 	@printf $(L)$(GRN)making libft$(WHT)\n$(L)
-# 	@make -s -C $(LIBFT_DIR)
-# 	@printf $(L)$(GRN)libft done$(WHT)\n$(L)
-
-# parse:
-# 	@printf $(L)$(GRN)making parsing$(WHT)\n$(L)
-# 	@make -s -C parsing
-# 	@printf $(L)$(GRN)parsing done$(WHT)\n$(L)
-
-# builtin:
-# 	@printf $(L)$(GRN)making builtin$(WHT)\n$(L)
-# 	@make -s -C built_in
-# 	@printf $(L)$(GRN)builtin done$(WHT)\n$(L)
-
-# exe:
-# 	@printf $(L)$(GRN)making execution$(WHT)\n$(L)
-# 	@make -s -C $(EXECUTION_DIR)
-# 	@printf $(L)$(GRN)execution done$(WHT)\n$(L)
-
-# doc:
-# 	@printf $(L)$(GRN)making doc$(WHT)\n$(L)
-# 	@make -s -C $(HERE_DOC_DIR)
-# 	@printf $(L)$(GRN)doc done$(WHT)\n$(L)
+	$(RL_DIR)/$(RL_H) $(RL_DIR)/$(RL_L) $(LDFLAGS) -o $(NAME)
 
 mem: all
 	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/tmp/supp.txt ./minishell 
-
-# readline:
-# 	cd readline && ./configure && $(MAKE)
-
-# rm_readline:
-# 	cd readline && make distclean
-
-# config:
-# 	cp .config/.msrc $$HOME
-
-# rm_config:
-# 	rm $$HOME/.msrc
-
-#https://github.com/sm222/C_tools
 
 # Removes objects
 clean:
@@ -149,4 +89,4 @@ exp:
 	echo export CPPFLAGS="-I/opt/homebrew/opt/readline/include"
 	echo export LDFLAGS="-L/opt/homebrew/opt/readline/lib"
 
-.PHONY: all libft run mc readline rm_readline
+.PHONY: all libft run mc re cp readline rm_readline
