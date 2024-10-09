@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 00:24:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/07 14:03:54 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/08 21:37:23 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ int	ft_create_tokens(t_minishell *ms, char *line, int i, int k)
 	if (ft_charcount(line, '"') % 2 != 0 || ft_charcount(line, '\'') % 2 != 0)
 	{
 		ft_fprintf(2, "ms: open quote error\n");
-		return (1);
+		return (FAIL);
 	}
 	while (ft_isspace(line[i]))
 		i++;
@@ -187,5 +187,5 @@ int	ft_create_tokens(t_minishell *ms, char *line, int i, int k)
 		k++;
 	}
 	ms->tokens[k] = NULL;
-	return (0);
+	return (SUCCESS);
 }

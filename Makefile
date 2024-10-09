@@ -16,7 +16,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 RL_DIR			=	readline/
 RL_H			=	libhistory.a
 RL_L			=	libreadline.a
-
+RL				=	$(RL_DIR)$(RL_H) $(RL_DIR)$(RL_L)
 CMD = commands
 
 ARCH := $(shell uname -m | sed -e s/i386/x86_64/ -e s/arm.*/arm64/)
@@ -28,7 +28,7 @@ else
 endif
 
 # Compiler and flags
-CC				=	gcc
+#CC				=	gcc
 FLAGS_SHELL		=	-D MINI_BIN=$(BIN_DIR) -D CONPILE_DIR=$(PWD) -D V_MINI=$(version)
 CFLAGS			=	-Wall -Werror -Wextra -g -fno-common $(FLAGS_SHELL)
 LDFLAGS := -lm
@@ -49,28 +49,32 @@ SRCS += $(CMD)/ft_check_cmd_path.c $(CMD)/ft_commands.c $(CMD)/cd.c $(CMD)/pwd.c
 
 OBJS	=	$(SRCS:.c=.o)
 
-all: $(LIBFT) $(NAME)
+all: $(RL) $(LIBFT) $(NAME)
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR) all
 
+$(RL):
+	( cd $(RL_DIR) && ./configure && $(MAKE))
+
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(RL_LIB) -L readline -l readline -l ncurses \
-	$(RL_DIR)/$(RL_H) $(RL_DIR)/$(RL_L) $(LDFLAGS) -o $(NAME)
+	$(RL) $(LDFLAGS) -o $(NAME)
 
 mem: all
-	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/tmp/supp.txt ./minishell 
+#	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/tmp/supp.txt ./minishell 
+	valgrind --leak-check=full --trace-children=yes --track-fds=yes ./minishell 
 
 # Removes objects
 clean:
 	rm -f $(OBJS)
 	$(MAKE) -C $(LIBFT_DIR) fclean
+	$(MAKE) -C $(RL_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
 	$(MAKE) -C $(LIBFT_DIR) fclean
-
-ffclean: rm_readline fclean
+	$(MAKE) -C $(RL_DIR) distclean
 
 run: all
 	@./$(NAME)

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/07 13:24:14 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/08 21:58:33 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,14 @@ void	ft_call_commands(t_minishell *ms)
 	// }
 }
 
-int	ft_call_custom_cmds(t_minishell *ms)
+t_bool	ft_call_custom_cmds(t_minishell *ms)
 {
 	if (ft_custom_cmds(ms) == SUCCESS)
 		return (SUCCESS);
 	return (FAIL);
 }
 
-int	ft_exec_commands(t_minishell *ms, char **tokens)
+t_bool	ft_exec_commands(t_minishell *ms, char **tokens)
 {
 	char	*path;
 	char	*cmd;
@@ -78,13 +78,13 @@ int	ft_exec_commands(t_minishell *ms, char **tokens)
 		else
 			path = ft_create_n_check_path(tokens[i]);
 		if (execve(path, tokens, ms->env) == -1)
-			return (ERROR);
+			return (FAIL);
 		i++;
 	}
 	return (SUCCESS);
 }
 
-int	ft_custom_cmds(t_minishell *ms)
+t_bool	ft_custom_cmds(t_minishell *ms)
 {
 	int	i;
 
@@ -105,13 +105,19 @@ int	ft_custom_cmds(t_minishell *ms)
 		}
 		if (ft_strnstr(ms->tokens[i], "./", 2))
 		{
-			execve(ms->tokens[i], ms->tokens, ms->env);
+			if (execve(ms->tokens[i], ms->tokens, ms->env) == -1)
+				ft_fprintf(2, "ms: no such file or directory: %s\n", ms->tokens[i]);
 			return (SUCCESS);
 		}
-		if (ft_strnstr(ms->tokens[i], "echo", 4) && ft_strnstr(ms->tokens[i + 1], "-n",
-				2))
+		if (ft_strnstr(ms->tokens[i], "echo", 4)
+			&& ft_strnstr(ms->tokens[i + 1], "-n", 2))
 		{
 			echo_n(ms->tokens);
+			return (SUCCESS);
+		}
+		if (ft_strnstr(ms->tokens[i], "echo", 4))
+		{
+			echo(ms->tokens);
 			return (SUCCESS);
 		}
 		i++;

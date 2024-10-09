@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/07 12:47:06 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/08 21:40:58 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int	ft_execms(t_minishell *ms, char **envp)
 		ms->cwd = getcwd(NULL, 0);
 		ms->prompt_name = ft_get_prompt_name(ms->user, ms->cwd);
 		ms->prompt = readline(ms->prompt_name);
-		if (ft_create_tokens(ms, ms->prompt, 0, 0) != 1)
+		if (ft_create_tokens(ms, ms->prompt, 0, 0) != FAIL)
 		{
 			// for (int i = 0; ms->tokens[i]; i++)
 			// 	ft_printf(":%s:\n", ms->tokens[i]);

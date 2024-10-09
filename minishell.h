@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/08 11:07:35 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/10/08 21:35:46 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 # include "readline/history.h"
 
 
-# define SUCCESS 1
-# define FAIL 0
+# define SUCCESS 0
+# define FAIL 1
 # define ERROR -1
 
 # define SURL "\e[7m"
@@ -63,6 +63,7 @@ typedef struct s_minishell
 // commands.c
 void		cd(char **tokens);
 void		pwd(char **tokens);
+void		echo(char **tokens);
 void		echo_n(char **tokens);
 
 // ft_if_is.c
@@ -73,9 +74,9 @@ int			ft_isredirect(int c);
 
 // ft_commands.c
 void		ft_call_commands(t_minishell *ms);
-int			ft_exec_commands(t_minishell *ms, char **tokens);
-int			ft_call_custom_cmds(t_minishell *ms);
-int			ft_custom_cmds(t_minishell *ms);
+t_bool		ft_exec_commands(t_minishell *ms, char **tokens);
+t_bool		ft_call_custom_cmds(t_minishell *ms);
+t_bool		ft_custom_cmds(t_minishell *ms);
 
 // ft_check_cmd_path.c
 char		*ft_create_full_path(char *dir, char *cmds);
