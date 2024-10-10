@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/10 02:36:33 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/10 16:48:52 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 /* /!\ Do not delete realine.supp /!\
 To check if we have leaks while ignoring the leaks from readline :

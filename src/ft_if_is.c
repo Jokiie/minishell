@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_if_is.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 22:18:41 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/05 23:21:43 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/10 16:48:31 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 int	ft_is_dquote(int c)
 {

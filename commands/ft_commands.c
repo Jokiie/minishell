@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_commands.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/08 21:58:33 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/10 16:48:06 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
+#include "commands.h"
 
 /*
 Create a child process to execute a command

@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_check_cmd_path.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 04:28:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/07 13:10:34 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/10 16:48:01 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
+#include "commands.h"
 
 /*
 We append the name of the command to the directory in parameter

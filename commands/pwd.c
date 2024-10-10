@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:52:07 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/05 23:42:35 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/10 16:48:11 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
+#include "commands.h"
 
 /*
 Display the current working directory

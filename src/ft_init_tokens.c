@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_init_tokens.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 00:24:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/10 02:50:24 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/10 16:50:07 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
+#include "../includes/minishell.h"
 
 /* 
 
@@ -84,6 +83,7 @@ void	trim_tokens(t_minishell *ms)
 	int k;
 	int	i;
 	
+	i = 0;
 	k = 0;
 	while (ms->tokens[k])
 	{

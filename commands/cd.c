@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 12:08:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/05 23:42:17 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/10 16:47:48 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
-
+#include "../includes/minishell.h"
+#include "commands.h"
 /*
 Change of current working directory
 */
