@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/08 21:40:58 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/10 02:36:33 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	ft_init_minishell(t_minishell *ms)
 	ms->cwd = NULL;
 	ms->env = NULL;
 	ms->tokens = NULL;
+	ms->pretokens = NULL;
 	ms->tokc = 0;
 	ms->std_in = 0;
 	ms->std_out = 1;
@@ -118,10 +119,10 @@ int	ft_execms(t_minishell *ms, char **envp)
 		ms->cwd = getcwd(NULL, 0);
 		ms->prompt_name = ft_get_prompt_name(ms->user, ms->cwd);
 		ms->prompt = readline(ms->prompt_name);
-		if (ft_create_tokens(ms, ms->prompt, 0, 0) != FAIL)
+		if (ft_create_tokens(ms, ms->prompt) != FAIL)
 		{
-			// for (int i = 0; ms->tokens[i]; i++)
-			// 	ft_printf(":%s:\n", ms->tokens[i]);
+			for (int i = 0; ms->tokens[i]; i++)
+			 	ft_printf(":%s:\n", ms->tokens[i]);
 			if (ft_call_custom_cmds(ms) != SUCCESS)
 				ft_call_commands(ms);
 		}

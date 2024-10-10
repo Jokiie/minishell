@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/08 21:35:46 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/10 02:26:06 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@
 # define BOLD "\033[1m"
 # define BOLDRESET "\033[0m"
 
+#define MB_SIZE 2097152
+#define PTR_SIZE sizeof(char *)
+
 typedef struct s_token
 {
 	char	start;
@@ -53,6 +56,7 @@ typedef struct s_minishell
 	char	*cwd;
 	char	**env;
 	char	**tokens;
+	char	**pretokens;
 	size_t	tokc;
 	int		std_in;
 	int		std_out;
@@ -83,14 +87,18 @@ char		*ft_create_full_path(char *dir, char *cmds);
 char		*ft_get_last_dir(char *cmds);
 char		*ft_create_n_check_path(char *cmds);
 
-// ft_parser.c
-int			ft_create_tokens(t_minishell *ms, char *line, int i, int k);
+// ft_init_tokens.c
+int			ft_create_tokens(t_minishell *ms, char *line);
+char		*characterizer(t_minishell *ms, char *token);
+void		characterize_tokens(t_minishell *ms);
 
 // ft_utils.c
 void		ft_free_tokens(char **tokens);
 int			ft_count_tokens(char **tokens);
 int			ft_charcount(char *line, char to_count);
 char		*ft_strpass(char *str, int to_pass, int len);
+char		*ft_strskip(char *str, char *to_pass, int len);
+
 // ft_exit.c
 void		ft_exit_minishell(t_minishell *ms);
 void		ft_free_vars(t_minishell *ms);

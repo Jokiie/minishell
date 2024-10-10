@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 00:24:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/08 21:37:23 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/10 02:50:24 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,164 +28,172 @@ ccodere/minishell ➜ echo hello '$USER'
 expected output : hello $USER
 
 */
-int	ft_trim_dquotes(t_minishell *ms, char *line, int i, int k)
+
+int	separe_line(t_minishell *ms, char *line, int i, int k)
 {
 	t_token	*t;
-	char	*substr;
-	char	*res;
 
 	t = &(ms->token);
-	while (line[i + 1] && ft_is_dquote(line[i]))
-		i++;
-	while (line[i + 1] && !ft_isspace(line[i]))
-		i++;
-	(*t).end = i + 1;
-	substr = ft_substr(line, (*t).start, ((*t).end - (*t).start));
-	res = ft_strpass(substr, '"', ((*t).end - (*t).start));
-	free(substr);
-	ms->tokens[k] = res;
-	(*t).in_dquotes = !(*t).in_dquotes;
-	if (line[i + 1])
-		i++;
-	return (i + 1);
-}
-
-int	ft_trim_squotes(t_minishell *ms, char *line, int i, int k)
-{
-	t_token	*t;
-	char	*substr;
-	char	*res;
-
-	t = &(ms->token);
-	while (line[i + 1] && ft_is_squote(line[i]))
-		i++;
-	while (line[i + 1] && !ft_isspace(line[i]))
-		i++;
-	(*t).end = i + 1;
-	substr = ft_substr(line, (*t).start, ((*t).end - (*t).start));
-	res = ft_strpass(substr, '\'', ((*t).end - (*t).start));
-	free(substr);
-	ms->tokens[k] = res;
-	(*t).in_squotes = !(*t).in_squotes;
-	if (line[i + 1])
-		i++;
-	return (i + 1);
-}
-
-int	ft_squote_token(t_minishell *ms, char *line, int i, int k)
-{
-	t_token *t;
-
-	t = &(ms->token);
-	while (ft_is_squote(line[i]))
-		i++;
 	(*t).start = i;
-	while(line[i])
+	while (ft_isquotes(line[i]))
 	{
-		if ((ft_is_squote(line[i]) && (ft_is_squote(line[i + 1])))
-			|| (ft_is_squote(line[i]) && !ft_isspace(line[i + 1])))
-		{
-			i = ft_trim_squotes(ms, line, i, k);
-			return (i);
-		}
-		else if (ft_is_squote(line[i]) && ft_isspace(line[i + 1]))
-		{
-			(*t).end = i;
-			ms->tokens[k] = ft_substr(line, (*t).start, ((*t).end - (*t).start));
-			(*t).in_squotes = !(*t).in_squotes;
-			return (i + 1);
-		}
 		i++;
+		(*t).in_quotes = !(*t).in_quotes;
 	}
-	return (i);	
-}
-
-int	ft_dquotes_token(t_minishell *ms, char *line, int i, int k)
-{
-	t_token	*t;
-
-	t = &(ms->token);
-	while (ft_is_dquote(line[i]))
-		i++;
-	(*t).start = i;
 	while (line[i])
-	{
-		if ((ft_is_dquote(line[i]) && (ft_is_dquote(line[i + 1])))
-			|| (ft_is_dquote(line[i]) && !ft_isspace(line[i + 1])))
+	{	
+		if (ft_isquotes(line[i]))
+			(*t).in_quotes = !(*t).in_quotes;
+		if ((ft_isquotes(line[i - 1]) && ft_isspace(line[i]))
+			|| (ft_isquotes(line[i]) && line[i + 1] == '\0')
+			|| (!(*t).in_quotes && ft_isspace(line[i])))
 		{
-			i = ft_trim_dquotes(ms, line, i, k);
-			return (i);
-		}
-		else if (ft_is_dquote(line[i]) && ft_isspace(line[i + 1]))
-		{
-			(*t).end = i;
-			ms->tokens[k] = ft_substr(line, (*t).start, ((*t).end - (*t).start));
-			(*t).in_dquotes = !(*t).in_dquotes;
-			return (i + 1);
-		}
-		i++;
-	}
-	return (i);
-}
-
-int	ft_normal_token(t_minishell *ms, char *line, int i, int k)
-{
-	t_token	*t;
-	char	*substr;
-	char	*res;
-
-	t = &(ms->token);
-	(*t).start = i;
-	while (line[i])
-	{
-		if (ft_isspace(line[i]) && !(*t).in_dquotes)
+			if (ft_isquotes(line[i]))
+				(*t).in_quotes = !(*t).in_quotes;
 			break ;
-		if (ft_is_dquote(line[i]))
-		{
-			(*t).in_dquotes = !(*t).in_dquotes;
-			i++;
 		}
-		else
-			i++;
+		i++;
 	}
-	(*t).end = i;
-	substr = ft_substr(line, (*t).start, ((*t).end - (*t).start));
-	res = ft_strpass(substr, '"', ((*t).end - (*t).start));
-	free(substr);
-	ms->tokens[k] = res;
-	return (i);
+	if (line[i + 1] == '\0' || ft_isspace(line[i + 1]))
+		(*t).end = i + 1;
+	else if (line[i] == '\0' || ft_isspace(line[i]) || ft_isquotes(line[i]))
+		(*t).end = i;
+	ms->tokens[k] = ft_substr(line, (*t).start, ((*t).end - (*t).start));
+	return ((*t).end);
 }
 
-int	ft_create_tokens(t_minishell *ms, char *line, int i, int k)
+void	tokenizer(t_minishell *ms, char *line, int k)
 {
-	ms->tokens = malloc(sizeof(char *) * BUFFER_SIZE);
-	if (!line)
-		ms->tokens[k] = ft_strdup("");
-	if (ft_charcount(line, '"') % 2 != 0 || ft_charcount(line, '\'') % 2 != 0)
-	{
-		ft_fprintf(2, "ms: open quote error\n");
-		return (FAIL);
-	}
+	int	i;
+
+	i = 0;
 	while (ft_isspace(line[i]))
 		i++;
 	while (line[i])
 	{
 		while (ft_isspace(line[i]))
 			i++;
-		if (ft_is_dquote(line[i]))
-		{
-			ms->token.in_dquotes = !ms->token.in_dquotes;
-			i = ft_dquotes_token(ms, line, i, k);
-		}
-		else if (ft_is_squote(line[i]) && !ms->token.in_dquotes)
-		{
-			ms->token.in_squotes = !ms->token.in_squotes;
-			i = ft_squote_token(ms, line, i, k);
-		}
-		else
-			i = ft_normal_token(ms, line, i, k);
+		i = separe_line(ms, line, i, k);
 		k++;
 	}
 	ms->tokens[k] = NULL;
+}
+
+void	trim_tokens(t_minishell *ms)
+{
+	int k;
+	int	i;
+	
+	k = 0;
+	while (ms->tokens[k])
+	{
+		while(ms->tokens[k][i])
+		{
+			if (ft_is_dquote(ms->tokens[k][i]) && !ms->token.in_squotes)
+				ms->token.in_dquotes = !ms->token.in_dquotes;
+			else if (ft_is_squote(ms->tokens[k][i]) && !ms->token.in_dquotes)
+				ms->token.in_squotes = !ms->token.in_dquotes;
+			i++;
+		}
+		if (ms->token.in_squotes)
+			ms->tokens[k] = ft_strskip(ms->tokens[k], "\'", ft_strlen(ms->tokens[k]));
+		else if (ms->token.in_dquotes)
+			ms->tokens[k] = ft_strskip(ms->tokens[k], "\"", ft_strlen(ms->tokens[k]));
+		k++;
+	}
+}
+
+int	ft_create_tokens(t_minishell *ms, char *line)
+{
+	int	nbr_of_ptrs;
+	int	k;
+	
+	nbr_of_ptrs = MB_SIZE / PTR_SIZE; // 2097152 / 8
+	ms->tokens = (char **)malloc(sizeof(char *) * nbr_of_ptrs);
+	k = 0;
+	if (!line)
+	{
+		ms->tokens[0] = ft_strdup("");
+		return (FAIL);
+	}
+	if (ft_charcount(line, '"') % 2 != 0 || ft_charcount(line, '\'') % 2 != 0)
+	{
+		ft_fprintf(2, "ms: open quote error\n");
+		return (FAIL);
+	}
+	tokenizer(ms, line, k); // make ms->tokens
+	characterize_tokens(ms); //need to rework to handle multiple var in a string
+	trim_tokens(ms); // need to handle echo 'one "two" three'four"five"six"seven 'eight' nine"ten
 	return (SUCCESS);
+}
+
+
+void	characterize_tokens(t_minishell *ms)
+{
+	int	k;
+	
+	k = 0;
+	while (ms->tokens[k])
+	{
+		ms->tokens[k] = characterizer(ms, ms->tokens[k]);
+		k++;
+	}
+}
+char	*insert_variable_value(char *before, char *var, char *after)
+{
+	int		new_len;
+	char	*var_value;
+	char	*new_token;
+	
+	var_value = getenv(var);
+	if (!var_value)
+		var_value = "";
+	new_len = ft_strlen(before) + ft_strlen(var_value) + ft_strlen(after) + 1;
+	new_token = (char *)malloc(sizeof(char) * new_len);
+	if (!new_token)
+		return (NULL);
+	ft_strlcpy(new_token, before, new_len);
+	ft_strlcat(new_token, var_value, new_len);
+	ft_strlcat(new_token, after, new_len);
+	return (new_token);
+}
+
+char	*characterizer(t_minishell *ms, char *token)
+{
+	int		i;
+	char	*var;
+	int		var_end;
+	int		var_start;
+	char	*before;
+	char 	*after;
+	char	*new_token;
+	i = 0;
+
+	while (token[i])
+	{
+		if (ft_is_dquote(token[i]) && !ms->token.in_squotes)
+			ms->token.in_dquotes = !ms->token.in_dquotes;
+		else if (ft_is_squote(token[i]) && !ms->token.in_dquotes)
+			ms->token.in_squotes = !ms->token.in_dquotes;
+		if (token[i] == '$' && !ms->token.in_squotes)
+		{
+			i++;
+			var_start = i;
+			while (!ft_isspace(token[i]) && !ft_isquotes(token[i]))
+				i++;
+			var_end = i;
+			before = ft_substr(token, 0, (var_start - 1));
+			//ft_printf("before : %s\n", before);
+			while (token[i])
+				i++;
+			after = ft_substr(token, var_end, (i - var_end));
+			//ft_printf("after : %s\n", after);
+			var = ft_substr(token, var_start, (var_end - var_start));
+			//ft_printf("var : %s\n", var);
+			new_token = insert_variable_value(before, var, after);
+			return (new_token);
+		}
+		i++;
+	}
+	return (token);
 }
