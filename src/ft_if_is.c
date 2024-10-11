@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_if_is.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 22:18:41 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/10 16:48:31 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/10/11 12:29:04 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,3 @@ int	ft_isredirect(int c)
 {
 	return (c == '<' || c == '>');
 }
-

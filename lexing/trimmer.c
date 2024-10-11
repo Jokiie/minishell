@@ -6,11 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/11 11:54:36 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/11 13:35:00 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "lexing.h"
 
 int		ft_quotes_detector(t_minishell *ms, char *str, int i)
 {

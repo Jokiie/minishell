@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/10 16:49:46 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/10/11 13:24:04 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include <sys/wait.h>
 # include "readline/readline.h"
 # include "readline/history.h"
-
 
 # define SUCCESS 0
 # define FAIL 1
@@ -64,17 +63,12 @@ typedef struct s_minishell
 	t_token	token;
 }			t_minishell;
 
-// commands.c
+// commands folder
+
 void		cd(char **tokens);
 void		pwd(char **tokens);
 void		echo(char **tokens);
 void		echo_n(char **tokens);
-
-// ft_if_is.c
-int			ft_is_dquote(int c);
-int			ft_is_squote(int c);
-int			ft_isquotes(int c);
-int			ft_isredirect(int c);
 
 // ft_commands.c
 void		ft_call_commands(t_minishell *ms);
@@ -87,10 +81,31 @@ char		*ft_create_full_path(char *dir, char *cmds);
 char		*ft_get_last_dir(char *cmds);
 char		*ft_create_n_check_path(char *cmds);
 
-// ft_init_tokens.c
-int			ft_create_tokens(t_minishell *ms, char *line);
+// Lexing folder
+
+// trimmer.c
+void		trim_tokens(t_minishell *ms);
+char		*ft_toktrim(t_minishell *ms, char *str, int len);
+
+// characterizer.c
 char		*characterizer(t_minishell *ms, char *token);
+char		*check_quotes(t_minishell *ms, char c);
+char		*var_extractor(char *token, int *i);
+char		*insert_variable_value(char *before, char *var, char *after);
 void		characterize_tokens(t_minishell *ms);
+
+// tokenizer.c
+int			separe_line(t_minishell *ms, char *line, int i, int k);
+void		tokenizer(t_minishell *ms, char *line, int k);
+int			ft_create_tokens(t_minishell *ms, char *line);
+
+// src folder
+
+// ft_if_is.c
+int			ft_is_dquote(int c);
+int			ft_is_squote(int c);
+int			ft_isquotes(int c);
+int			ft_isredirect(int c);
 
 // ft_utils.c
 void		ft_free_tokens(char **tokens);
@@ -108,4 +123,6 @@ void		ft_exec_redirection(t_minishell *ms);
 void		ft_recreate_tokens(t_minishell *ms, int i);
 void		redirect_input(t_minishell *ms, char *file);
 void		redirect_output(t_minishell *ms, char *file);
+
+char		**ft_envdup(char **envp);
 #endif

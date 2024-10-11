@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_check_cmd_path.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 04:28:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/10 16:48:01 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/10/11 13:28:52 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+# include "../libft/libft.h"
 #include "../includes/minishell.h"
 #include "commands.h"
 

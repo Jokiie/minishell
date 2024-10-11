@@ -6,12 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/11 11:50:21 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/11 13:35:03 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
-
+#include "lexing.h"
 
 void	characterize_tokens(t_minishell *ms)
 {

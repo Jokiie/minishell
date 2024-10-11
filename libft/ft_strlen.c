@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <marvin@42quebec.com>              +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 11:24:56 by ccodere           #+#    #+#             */
-/*   Updated: 2023/10/20 10:07:37 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/11 10:38:36 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ size_t	ft_strlen(const char *s)
 
 	len = 0;
 	if (s == NULL)
-		return (0);
+		return (1);
 	while (*s++)
 		len++;
 	return (len);

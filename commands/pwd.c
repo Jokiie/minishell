@@ -3,19 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:52:07 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/10 16:48:11 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/10/11 13:34:09 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
 #include "commands.h"
 
-/*
-Display the current working directory
-*/
+/* Display the current working directory */
 void	pwd(char **tokens)
 {
 	char	cwd[BUFFER_SIZE];

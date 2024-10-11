@@ -10,13 +10,10 @@ CLE 			=	\e[1;1H\e[2J
 
 NAME			=	minishell
 
-
-
 RL_DIR			=	readline/
 RL_H			=	libhistory.a
 RL_L			=	libreadline.a
 RL				=	$(RL_DIR)$(RL_H) $(RL_DIR)$(RL_L)
-CMD = commands
 
 # ARCH := $(shell uname -m | sed -e s/i386/x86_64/ -e s/arm.*/arm64/)
 
@@ -43,19 +40,22 @@ LIBFT = $(LIBFT_DIR)/libft.a
 CMDS_DIR = commands
 CMDS = $(CMDS_DIR)/commands.a
 
+LEX_DIR = lexing
+LEX = $(LEX_DIR)/lexing.a
 
 # Sources are all .c files
 SRC	=		minishell.c \
 			ft_exit.c \
 			ft_utils.c \
 			redirection.c \
-			ft_init_tokens.c \
 			ft_if_is.c \
 			# pipes.c \
 
 
-SRCS += $(CMD)/ft_check_cmd_path.c $(CMD)/ft_commands.c $(CMD)/cd.c $(CMD)/pwd.c \
-	   $(CMD)/echo.c
+SRCS += $(CMD_DIR)/ft_check_cmd_path.c $(CMD_DIR)/ft_commands.c $(CMD_DIR)/cd.c \
+		$(CMD_DIR)/pwd.c $(CMD_DIR)/echo.c
+
+SRCS += $(LEX_DIR)/characterizer.c $(LEX_DIR)/tokenizer.c $(LEX_DIR)/trimmer.c \
 
 SRCS	= $(addprefix $(SRC_PATH), $(SRC))
 OBJ		= $(SRC:.c=.o)
@@ -76,29 +76,31 @@ $(LIBFT):
 $(CMDS):
 	$(MAKE) -C $(CMDS_DIR) all
 
-$(RL):
-	( cd $(RL_DIR) && ./configure && $(MAKE))
+$(LEX):
+	$(MAKE) -C $(LEX_DIR) all
 
-$(NAME): $(OBJS) $(CMDS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(CMDS) $(RL_LIB) -L readline -l readline -l ncurses \
+$(RL):
+	(cd $(RL_DIR) && ./configure && $(MAKE))
+
+$(NAME): $(OBJS) $(CMDS) $(LEX)
+	$(CC) $(CFLAGS) $(OBJS) $(CMDS) $(LEX) $(LIBFT) $(RL_LIB) -L readline -l readline -l ncurses \
 	$(RL) $(LDFLAGS) -o $(NAME)
 
-mem: all
-#	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/tmp/supp.txt ./minishell 
-	valgrind --leak-check=full --trace-children=yes --track-fds=yes ./minishell 
 
 # Removes objects
 clean:
 	# rm -f $(OBJS)
 	rm -rf $(OBJ_PATH)
-	$(MAKE) -C $(LIBFT_DIR) fclean
-	$(MAKE) -C $(CMDS_DIR) fclean
+	$(MAKE) -C $(LIBFT_DIR) clean
+	$(MAKE) -C $(CMDS_DIR) clean
+	$(MAKE) -C $(LEX_DIR) clean
 	$(MAKE) -C $(RL_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
 	$(MAKE) -C $(LIBFT_DIR) fclean
 	$(MAKE) -C $(CMDS_DIR) fclean
+	$(MAKE) -C $(LEX_DIR) fclean
 	$(MAKE) -C $(RL_DIR) distclean
 
 run: all
@@ -111,8 +113,13 @@ re: fclean all
 cp:
 	cp supp.txt /tmp
 
+mem: all
+#	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/tmp/supp.txt ./minishell 
+	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=readline.supp ./minishell 
+
 norm:
 	norminette *.c parsing here_doc/ signal/ execution include built_in lib
+
 
 exp:
 	echo export CPPFLAGS="-I/opt/homebrew/opt/readline/include"
