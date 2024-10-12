@@ -3,22 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:25:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/10 16:48:56 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/10/12 02:35:30 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 /*
-Check if a token contains a redirection character. If so, execute the function
-that redirects input for '<' and output for '>' using the next token, which
-should be a file name. After breaking the loop, a new list of tokens is created
-without the "<>" characters, allowing the command to be executed. Before this,
-the command couldn't execute because it attempted to interpret "<>" as if it
-were a command or an argument to a command.
+	Check if a token contains a redirection character. If so, execute the
+	function that redirects input for '<' and output for '>' using the next
+	token, which should be a file name. After breaking the loop, a new list
+	of tokens is created without the "<>" characters, allowing the command
+	to be executed. Before this, the command couldn't execute because it
+	attempted to interpret "<>" as if it were a command or an argument to
+	a command.
 */
 void	ft_exec_redirection(t_minishell *ms)
 {
@@ -43,9 +44,8 @@ void	ft_exec_redirection(t_minishell *ms)
 }
 
 /*
-Recreate the tokens list without the redirection characters, as explained above.
-I removed the ft_free_tokens call because it corrupt the list. I didn't find leaks,
-to verify later.
+	Recreate the tokens list without the redirection characters,
+	as explained above.
 */
 void	ft_recreate_tokens(t_minishell *ms, int i)
 {
@@ -64,10 +64,8 @@ void	ft_recreate_tokens(t_minishell *ms, int i)
 	new_tokens[k] = NULL;
 	ms->tokens = new_tokens;
 }
-/*
-< : redirect input.
-I think input is set back to stdin after closing the file (fdin) but I'm not sure.
-*/
+
+/* < : redirect input. */
 void	redirect_input(t_minishell *ms, char *file)
 {
 	int	fdin;
@@ -82,10 +80,7 @@ void	redirect_input(t_minishell *ms, char *file)
 	close(fdin);
 }
 
-/*
-> : redirect output.
-I think output is set back to stdout after closing the file (fdout) but i'm not sure.
-*/
+/* > : redirect output. */
 void	redirect_output(t_minishell *ms, char *file)
 {
 	int	fdout;

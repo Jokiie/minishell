@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/10 16:48:52 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/10/12 02:41:19 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-/* /!\ Do not delete realine.supp /!\
-To check if we have leaks while ignoring the leaks from readline :
-valgrind --child-silent-after-fork=yes --leak-check=full --suppressions=readline.supp ./minishell
-*/
 
 /* init the minishell struct variables */
 void	ft_init_minishell(t_minishell *ms)
@@ -38,15 +33,17 @@ void	ft_init_minishell(t_minishell *ms)
 	ms->token.in_quotes = FALSE;
 }
 
-/*  Create the prompt name by joining the username with the current working
+/*
+	Create the prompt name by joining the username with the current working
 	directory found in the environment variables. For using color, I joined a
 	empty string with the username, then a '/', and finally the directory. Since
-	cwd return a full path (/home/username/folder/) , I splited the directory when
-	we find a '/', then got the last directory to get it displayed next to the name.
-	I reused a Macro to make the arrow green, which is showing after the name and
-	directory. Finally I return this result, so we get a pretty cool prompt name !
-	If we got a problem and didnt get a name or a directory, we return a default
-	name to avoid segmentation fault or empty prompt name.
+	cwd return a full path (/home/username/folder/) , I splited the directory
+	when we find a '/', then got the last directory to get it displayed next
+	to the name. I reused a Macro to make the arrow green, which is showing
+	after the name and directory. Finally I return this result, so we get a
+	pretty cool prompt name ! If we got a problem and didnt get a name or a
+	directory, we return a default name to avoid segmentation fault or empty
+	prompt name.
 */
 char	*ft_get_prompt_name(char *username, char *cwd)
 {
@@ -55,17 +52,15 @@ char	*ft_get_prompt_name(char *username, char *cwd)
 	char	*cwd_dup;
 	char	**cwd_split;
 	char	*tmp;
-	int		last_dir;
 
 	cwd_split = ft_split(cwd, '/');
-	last_dir = ft_count_tokens(cwd_split) - 1;
 	if (username && cwd)
 	{
 		color = ft_strjoin(CYAN BOLD "", username);
 		tmp = color;
 		color = ft_strjoin(color, "/");
 		free(tmp);
-		cwd_dup = ft_strjoin(color, cwd_split[last_dir]);
+		cwd_dup = ft_strjoin(color, cwd_split[ft_count_tokens(cwd_split) - 1]);
 		username_dup = ft_strjoin(cwd_dup, GREEN " ➜  " RESET BOLDRESET);
 		free(color);
 		free(cwd_dup);
@@ -77,7 +72,8 @@ char	*ft_get_prompt_name(char *username, char *cwd)
 	return ("minishell ➜ ");
 }
 
-/*	Dup the environment string tab
+/*
+	Dup the environment string tab
 	to do: need to check if we can use it to remove a variable
 	with unset and re-add it with export. I didn't try yet.
 */
@@ -100,14 +96,12 @@ char	**ft_envdup(char **envp)
 	return (env_dup);
 }
 
-/*	Execute the prompt in a loop and read the input with readline,
+/*
+	Execute the prompt in a loop and read the input with readline,
 	then separe the string in token , search the path and execute the command
 	if the path is found. Add_history allow us to click the up arrow key to
-	reuse a command. It frees the input after each line so we don't have leaks or
-	corrupted data.
-
-	to do (if mandatory) : find a way to keep the history in memory so when we quit and
-	want to use a previous command, it show the history from last session
+	reuse a command. It frees the input after each line so we don't have leaks
+	or corrupted data.
 */
 int	ft_execms(t_minishell *ms, char **envp)
 {
@@ -122,7 +116,7 @@ int	ft_execms(t_minishell *ms, char **envp)
 		if (ft_create_tokens(ms, ms->prompt) != FAIL)
 		{
 			for (int i = 0; ms->tokens[i]; i++)
-			 	ft_printf(":%s:\n", ms->tokens[i]);
+				ft_printf(":%s:\n", ms->tokens[i]);
 			if (ft_call_custom_cmds(ms) != SUCCESS)
 				ft_call_commands(ms);
 		}

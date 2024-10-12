@@ -118,7 +118,7 @@ mem: all
 	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=readline.supp ./minishell 
 
 norm:
-	norminette *.c parsing here_doc/ signal/ execution include built_in lib
+	norminette src/*.c $(LIBFT_DIR)/*.c commands/*.c lexing/*.c
 
 
 exp:

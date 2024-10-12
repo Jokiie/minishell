@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/11 13:35:03 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/12 02:29:26 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*characterizer(t_minishell *ms, char *token)
 	i = 0;
 	while (token_dup[i])
 	{
-		check_quotes(ms, token_dup[i]);
+		ft_quotes_detector(ms, token_dup, i);
 		if (token_dup[i] == '$' && !ms->token.in_squotes)
 		{
 			before = ft_substr(token_dup, 0, i);
@@ -66,20 +66,8 @@ char	*characterizer(t_minishell *ms, char *token)
 		else
 			i++;
 	}
-	ms->token.in_dquotes = FALSE;
-	ms->token.in_squotes = FALSE;
 	return (token_dup);
 }
-
-char	*check_quotes(t_minishell *ms, char c)
-{
-	if (ft_is_dquote(c) && !ms->token.in_squotes)
-		ms->token.in_dquotes = !ms->token.in_dquotes;
-	else if (ft_is_squote(c) && !ms->token.in_dquotes)
-		ms->token.in_squotes = !ms->token.in_squotes;
-	return (NULL);
-}
-
 
 char	*var_extractor(char *token, int *i)
 {

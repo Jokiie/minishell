@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/10 16:48:44 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/10/12 02:36:28 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char	*ft_strskip(char *str, char *to_pass, int len)
 	int		i;
 	int		j;
 	int		k;
-	
+
 	if (!str)
 		return (NULL);
 	buffer = malloc(sizeof(char) * (len + 1));

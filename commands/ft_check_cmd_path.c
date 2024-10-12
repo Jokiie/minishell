@@ -6,18 +6,18 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 04:28:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/11 13:28:52 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/12 03:43:09 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../libft/libft.h"
 #include "../includes/minishell.h"
+#include "../libft/libft.h"
 #include "commands.h"
 
 /*
-We append the name of the command to the directory in parameter
-the result will be the full path of the command to search a match
-in the function "ft_create_n_check_path".
+	We append the name of the command to the directory in parameter
+	the result will be the full path of the command to search a match
+	in the function "ft_create_n_check_path".
 */
 char	*ft_create_full_path(char *dir, char *cmds)
 {
@@ -34,13 +34,12 @@ char	*ft_create_full_path(char *dir, char *cmds)
 }
 
 /*
-Handle the case of absolute path token (like /usr/bin/ls"). We split
-the string with the '/' as delimiter, then return the last element as a
-command, because we want to use it to iterate in the directories, like if
-we typed "ls". Maybe this is to change later... Like executing the path
-directly instead of deconstruct it.
+	Handle the case of absolute path token (like /usr/bin/ls"). We split
+	the string with the '/' as delimiter, then return the last element as a
+	command, because we want to use it to iterate in the directories, like if
+	we typed "ls". Maybe this is to change later... Like executing the path
+	directly instead of deconstruct it.
 */
-
 char	*ft_get_last_dir(char *cmds)
 {
 	char	**dir_split;
@@ -55,11 +54,11 @@ char	*ft_get_last_dir(char *cmds)
 }
 
 /*
-Iterate in the paths returned by ft_strtok to find where is the cmd process
-to execute. Ft_strtok replace the delimiter by a null character,
-	creating tokens.
-We recall ft_strtok with NULL, to continue with the next token. If we find a
-match, and we can access it, we return the path to execute.
+	Iterate in the paths returned by ft_strtok to find where is the cmd process
+	to execute. Ft_strtok replace the delimiter by a null character,
+	creating tokens. We recall ft_strtok with NULL, to continue with the next
+	token. If we find a match, and we can access it, we return the path to
+	execute.
 */
 char	*ft_create_n_check_path(char *cmds)
 {

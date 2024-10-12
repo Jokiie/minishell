@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/11 13:33:47 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/12 04:00:01 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,27 @@ I removed the custom command because it must be executed by the parent process.
 Need to remove the check when we will finish the project or move it to respect
 the norm.
 */
+// int	exit_code;
+// int	signal_num;
+// if (WIFEXITED(child_ret))
+// 	ft_printf("Child process terminated gracefully.\n");
+// if (WIFEXITED(child_ret))
+// {
+// 	exit_code = WEXITSTATUS(child_ret);
+// 	ft_printf("Child exit code : %d\n", exit_code);
+// }
+// if (WIFSIGNALED(child_ret))
+// 	ft_printf("Child process got kill by a signal.\n");
+// if (WIFSIGNALED(child_ret))
+// {
+// 	signal_num = WTERMSIG(child_ret);
+// 	ft_printf("Child process got kill by the signal : %d\n", signal_num);
+// }
 void	ft_call_commands(t_minishell *ms)
 {
 	int	pid;
 	int	child_ret;
-	
-	//int	exit_code;
-	//int	signal_num;
+
 	pid = fork();
 	if (pid < 0)
 		return ;
@@ -36,20 +50,6 @@ void	ft_call_commands(t_minishell *ms)
 			exit(1);
 	}
 	wait(&child_ret);
-	// if (WIFEXITED(child_ret))
-	// 	ft_printf("Child process terminated gracefully.\n");
-	// if (WIFEXITED(child_ret))
-	// {
-	// 	exit_code = WEXITSTATUS(child_ret);
-	// 	ft_printf("Child exit code : %d\n", exit_code);
-	// }
-	// if (WIFSIGNALED(child_ret))
-	// 	ft_printf("Child process got kill by a signal.\n");
-	// if (WIFSIGNALED(child_ret))
-	// {
-	// 	signal_num = WTERMSIG(child_ret);
-	// 	ft_printf("Child process got kill by the signal : %d\n", signal_num);
-	// }
 }
 
 t_bool	ft_call_custom_cmds(t_minishell *ms)
@@ -96,28 +96,20 @@ t_bool	ft_custom_cmds(t_minishell *ms)
 		if (ft_strnstr(ms->tokens[0], "cd", 2))
 		{
 			cd(ms->tokens);
-			return (SUCCESS);
+			return (SUCCESS);	
 		}
-		else if (ft_strnstr(ms->tokens[0], "pwd", 3))
+		if (ft_strnstr(ms->tokens[0], "pwd", 3))
 		{
 			pwd(ms->tokens);
 			return (SUCCESS);
 		}
+		if (detect_echo_call(ms->tokens, i) == SUCCESS)
+			return (SUCCESS);
 		if (ft_strnstr(ms->tokens[i], "./", 2))
 		{
 			if (execve(ms->tokens[i], ms->tokens, ms->env) == -1)
-				ft_fprintf(2, "ms: no such file or directory: %s\n", ms->tokens[i]);
-			return (SUCCESS);
-		}
-		if (ft_strnstr(ms->tokens[i], "echo", 4)
-			&& ft_strnstr(ms->tokens[i + 1], "-n", 2))
-		{
-			echo_n(ms->tokens);
-			return (SUCCESS);
-		}
-		if (ft_strnstr(ms->tokens[i], "echo", 4))
-		{
-			echo(ms->tokens);
+				ft_fprintf(2, "ms: no such file or directory: %s\n",
+					ms->tokens[i]);
 			return (SUCCESS);
 		}
 		i++;

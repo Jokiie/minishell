@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:51:50 by matislessar       #+#    #+#             */
-/*   Updated: 2024/10/11 13:33:07 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/12 03:59:44 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,11 @@
 # include "../includes/minishell.h"
 
 void	cd(char **tokens);
+
 void	echo(char **tokens);
 void	echo_n(char **tokens);
+int		detect_echo_call(char **tokens, int i);
+
 void	pwd(char **tokens);
 
 char	*ft_create_full_path(char *dir, char *cmds);

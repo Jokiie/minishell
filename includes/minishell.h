@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/11 13:24:04 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/12 04:01:22 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
-# include <unistd.h>
 # include <stdio.h>
-# include <sys/types.h>
-# include <sys/stat.h>
 # include <string.h>
+# include <sys/stat.h>
+# include <sys/types.h>
 # include <sys/wait.h>
-# include "readline/readline.h"
+# include <unistd.h>
 # include "readline/history.h"
+# include "readline/readline.h"
 
 # define SUCCESS 0
 # define FAIL 1
@@ -33,8 +33,8 @@
 # define BOLD "\033[1m"
 # define BOLDRESET "\033[0m"
 
-#define MB_SIZE 2097152
-#define PTR_SIZE sizeof(char *)
+# define MB_SIZE 2097152
+# define PTR_SIZE sizeof(char *)
 
 typedef struct s_token
 {
@@ -63,13 +63,6 @@ typedef struct s_minishell
 	t_token	token;
 }			t_minishell;
 
-// commands folder
-
-void		cd(char **tokens);
-void		pwd(char **tokens);
-void		echo(char **tokens);
-void		echo_n(char **tokens);
-
 // ft_commands.c
 void		ft_call_commands(t_minishell *ms);
 t_bool		ft_exec_commands(t_minishell *ms, char **tokens);
@@ -80,8 +73,6 @@ t_bool		ft_custom_cmds(t_minishell *ms);
 char		*ft_create_full_path(char *dir, char *cmds);
 char		*ft_get_last_dir(char *cmds);
 char		*ft_create_n_check_path(char *cmds);
-
-// Lexing folder
 
 // trimmer.c
 void		trim_tokens(t_minishell *ms);
@@ -98,8 +89,6 @@ void		characterize_tokens(t_minishell *ms);
 int			separe_line(t_minishell *ms, char *line, int i, int k);
 void		tokenizer(t_minishell *ms, char *line, int k);
 int			ft_create_tokens(t_minishell *ms, char *line);
-
-// src folder
 
 // ft_if_is.c
 int			ft_is_dquote(int c);

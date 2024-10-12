@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 12:08:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/11 13:33:38 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/12 03:56:29 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 /* Change of current working directory */
 void	cd(char **tokens)
 {
-	char	*home;
 	t_bool	found_dir;
 
 	found_dir = FALSE;
@@ -31,11 +30,6 @@ void	cd(char **tokens)
 	}
 	if (chdir(tokens[1]) == 0)
 		found_dir = TRUE;
-	else if (tokens[1] == NULL)
-	{
-		home = getenv("HOME");
-		chdir(home);
-	}
 	else if (found_dir == FALSE)
 	{
 		ft_fprintf(2, "cd: no such file or directory: %s\n", tokens[1]);
