@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:51:50 by matislessar       #+#    #+#             */
-/*   Updated: 2024/10/12 03:59:44 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/13 02:56:48 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ char	*ft_get_last_dir(char *cmds);
 char	*ft_create_n_check_path(char *cmds);
 
 void	ft_call_commands(t_minishell *ms);
-t_bool	ft_call_custom_cmds(t_minishell *ms);
-t_bool	ft_exec_commands(t_minishell *ms, char **tokens);
-t_bool	ft_custom_cmds(t_minishell *ms);
+int		ft_exec_commands(t_minishell *ms, char **tokens);
+int		ft_call_custom_cmds(t_minishell *ms);
+int		ft_custom_cmds(t_minishell *ms);
 
 #endif

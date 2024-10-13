@@ -6,35 +6,20 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/12 04:00:01 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/13 03:49:47 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
 /*
-Create a child process to execute a command
-I added all the macros for child process return value, to check what it does and
-I removed the custom command because it must be executed by the parent process.
-Need to remove the check when we will finish the project or move it to respect
-the norm.
+	Create a child process with fork to execute a command in the environment
+	path variable.
+	to do:
+	- Maybe process the redirection during the lexing, while reading
+		meta-characters.
+		handle "<<" ">>" "|"
 */
-// int	exit_code;
-// int	signal_num;
-// if (WIFEXITED(child_ret))
-// 	ft_printf("Child process terminated gracefully.\n");
-// if (WIFEXITED(child_ret))
-// {
-// 	exit_code = WEXITSTATUS(child_ret);
-// 	ft_printf("Child exit code : %d\n", exit_code);
-// }
-// if (WIFSIGNALED(child_ret))
-// 	ft_printf("Child process got kill by a signal.\n");
-// if (WIFSIGNALED(child_ret))
-// {
-// 	signal_num = WTERMSIG(child_ret);
-// 	ft_printf("Child process got kill by the signal : %d\n", signal_num);
-// }
 void	ft_call_commands(t_minishell *ms)
 {
 	int	pid;
@@ -47,26 +32,26 @@ void	ft_call_commands(t_minishell *ms)
 	{
 		ft_exec_redirection(ms);
 		if (ft_exec_commands(ms, ms->tokens) != SUCCESS)
-			exit(1);
+			exit(FAIL);
 	}
 	wait(&child_ret);
 }
 
-t_bool	ft_call_custom_cmds(t_minishell *ms)
+int	ft_call_custom_cmds(t_minishell *ms)
 {
 	if (ft_custom_cmds(ms) == SUCCESS)
 		return (SUCCESS);
 	return (FAIL);
 }
 
-t_bool	ft_exec_commands(t_minishell *ms, char **tokens)
+int	ft_exec_commands(t_minishell *ms, char **tokens)
 {
 	char	*path;
 	char	*cmd;
 	int		i;
 
 	i = 0;
-	if (!tokens)
+	if (!tokens || !*tokens)
 		return (FAIL);
 	while (tokens[i])
 	{
@@ -74,17 +59,35 @@ t_bool	ft_exec_commands(t_minishell *ms, char **tokens)
 		{
 			cmd = ft_get_last_dir(tokens[i]);
 			path = ft_create_n_check_path(cmd);
+			ft_free(cmd);
 		}
 		else
 			path = ft_create_n_check_path(tokens[i]);
 		if (execve(path, tokens, ms->env) == -1)
+		{
+			ft_free(path);
 			return (FAIL);
+		}
 		i++;
 	}
+	ft_free(path);
 	return (SUCCESS);
 }
 
-t_bool	ft_custom_cmds(t_minishell *ms)
+/*	to do:
+	- add "env" command without option or argument(printf ms->env)
+	- add "exit" without option , which quit minishell like shell.
+	- add unset without option
+	- add export without option
+	- these commands need to be called in call_custom_cmds because it
+		will be called twice if used in the fork(if they dont exist they
+		write both error message from the ft_check_n_create_path and from
+		the related command).
+	- Each command should return a int to get the return value. We will
+		need it for the "$?" commands which print the return value of the
+		last command.
+*/
+int	ft_custom_cmds(t_minishell *ms)
 {
 	int	i;
 
@@ -96,7 +99,7 @@ t_bool	ft_custom_cmds(t_minishell *ms)
 		if (ft_strnstr(ms->tokens[0], "cd", 2))
 		{
 			cd(ms->tokens);
-			return (SUCCESS);	
+			return (SUCCESS);
 		}
 		if (ft_strnstr(ms->tokens[0], "pwd", 3))
 		{
@@ -108,7 +111,7 @@ t_bool	ft_custom_cmds(t_minishell *ms)
 		if (ft_strnstr(ms->tokens[i], "./", 2))
 		{
 			if (execve(ms->tokens[i], ms->tokens, ms->env) == -1)
-				ft_fprintf(2, "ms: no such file or directory: %s\n",
+				ft_fprintf(ms->std_err, "ms: no such file or directory: %s\n",
 					ms->tokens[i]);
 			return (SUCCESS);
 		}

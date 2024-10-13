@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/12 04:01:22 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/13 03:43:43 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include "readline/history.h"
+# include "readline/readline.h"
 # include <stdio.h>
 # include <string.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include "readline/history.h"
-# include "readline/readline.h"
 
 # define SUCCESS 0
 # define FAIL 1
@@ -56,7 +56,7 @@ typedef struct s_minishell
 	char	**env;
 	char	**tokens;
 	char	**pretokens;
-	size_t	tokc;
+	int		tokc;
 	int		std_in;
 	int		std_out;
 	int		std_err;
@@ -65,9 +65,9 @@ typedef struct s_minishell
 
 // ft_commands.c
 void		ft_call_commands(t_minishell *ms);
-t_bool		ft_exec_commands(t_minishell *ms, char **tokens);
-t_bool		ft_call_custom_cmds(t_minishell *ms);
-t_bool		ft_custom_cmds(t_minishell *ms);
+int			ft_exec_commands(t_minishell *ms, char **tokens);
+int			ft_call_custom_cmds(t_minishell *ms);
+int			ft_custom_cmds(t_minishell *ms);
 
 // ft_check_cmd_path.c
 char		*ft_create_full_path(char *dir, char *cmds);
@@ -75,19 +75,19 @@ char		*ft_get_last_dir(char *cmds);
 char		*ft_create_n_check_path(char *cmds);
 
 // trimmer.c
-void		trim_tokens(t_minishell *ms);
-char		*ft_toktrim(t_minishell *ms, char *str, int len);
+char		**trimmer(t_minishell *ms, char **tokens);
+char		*ft_toktrim(t_minishell *ms, char *token, int len);
 
 // characterizer.c
-char		*characterizer(t_minishell *ms, char *token);
+char		**characterizer(t_minishell *ms, char **tokens);
+char		*characterize_token(t_minishell *ms, char *token);
 char		*check_quotes(t_minishell *ms, char c);
 char		*var_extractor(char *token, int *i);
 char		*insert_variable_value(char *before, char *var, char *after);
-void		characterize_tokens(t_minishell *ms);
 
 // tokenizer.c
 int			separe_line(t_minishell *ms, char *line, int i, int k);
-void		tokenizer(t_minishell *ms, char *line, int k);
+char		**tokenizer(t_minishell *ms, char *line);
 int			ft_create_tokens(t_minishell *ms, char *line);
 
 // ft_if_is.c
@@ -97,11 +97,10 @@ int			ft_isquotes(int c);
 int			ft_isredirect(int c);
 
 // ft_utils.c
+void		ft_free(char *str);
 void		ft_free_tokens(char **tokens);
 int			ft_count_tokens(char **tokens);
 int			ft_charcount(char *line, char to_count);
-char		*ft_strpass(char *str, int to_pass, int len);
-char		*ft_strskip(char *str, char *to_pass, int len);
 
 // ft_exit.c
 void		ft_exit_minishell(t_minishell *ms);

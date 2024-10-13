@@ -125,4 +125,4 @@ exp:
 	echo export CPPFLAGS="-I/opt/homebrew/opt/readline/include"
 	echo export LDFLAGS="-L/opt/homebrew/opt/readline/lib"
 
-.PHONY: all libft run mc re cp readline rm_readline
+.PHONY: clean fclean run mc re cp mem norm exp all libft readline rm_readline

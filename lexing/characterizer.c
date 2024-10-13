@@ -6,36 +6,34 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/12 02:29:26 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/13 03:48:51 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexing.h"
 
-void	characterize_tokens(t_minishell *ms)
+char	**characterizer(t_minishell *ms, char **tokens)
 {
 	char	*characterized;
 	int		k;
 
 	k = 0;
-	while (ms->tokens[k])
+	while (tokens[k] && k < ms->tokc)
 	{
-		characterized = characterizer(ms, ms->tokens[k]);
+		characterized = characterize_token(ms, tokens[k]);
 		if (characterized)
 		{
-			free(ms->tokens[k]);
-			ms->tokens[k] = characterized;
+			ft_free(tokens[k]);
+			tokens[k] = characterized;
 		}
 		else
-		{
-			free(ms->tokens[k]);
-			ms->tokens[k] = NULL;
-		}
+			ft_free(tokens[k]);
 		k++;
 	}
+	return (tokens);
 }
 
-char	*characterizer(t_minishell *ms, char *token)
+char	*characterize_token(t_minishell *ms, char *token)
 {
 	int		i;
 	char	*var;
@@ -49,19 +47,20 @@ char	*characterizer(t_minishell *ms, char *token)
 	while (token_dup[i])
 	{
 		ft_quotes_detector(ms, token_dup, i);
-		if (token_dup[i] == '$' && !ms->token.in_squotes)
+		if (token_dup[i] == '$' && !ms->token.in_squotes
+			&& (ft_isalnum(token_dup[i + 1]) || token_dup[i + 1] == '_'))
 		{
 			before = ft_substr(token_dup, 0, i);
 			i++;
 			var = var_extractor(token_dup, &i);
 			after = ft_substr(token_dup, i, ft_strlen(token_dup) - i);
 			new_token_dup = insert_variable_value(before, var, after);
-			free(token_dup);
+			ft_free(token_dup);
 			token_dup = new_token_dup;
 			i = ft_strlen(before) + ft_strlen(getenv(var));
-			free(before);
-			free(var);
-			free(after);
+			ft_free(before);
+			ft_free(var);
+			ft_free(after);
 		}
 		else
 			i++;
@@ -89,9 +88,9 @@ char	*insert_variable_value(char *before, char *var, char *after)
 
 	var_value = getenv(var);
 	if (!var_value)
-		var_value = ft_strdup("");
+		var_value = "";
 	half_token = ft_strjoin(before, var_value);
 	complete_token = ft_strjoin(half_token, after);
-	free(half_token);
+	ft_free(half_token);
 	return (complete_token);
 }

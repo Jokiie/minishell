@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/12 02:41:19 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/13 03:52:58 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,11 @@ char	*ft_get_prompt_name(char *username, char *cwd)
 		color = ft_strjoin(CYAN BOLD "", username);
 		tmp = color;
 		color = ft_strjoin(color, "/");
-		free(tmp);
+		ft_free(tmp);
 		cwd_dup = ft_strjoin(color, cwd_split[ft_count_tokens(cwd_split) - 1]);
 		username_dup = ft_strjoin(cwd_dup, GREEN " ➜  " RESET BOLDRESET);
-		free(color);
-		free(cwd_dup);
+		ft_free(color);
+		ft_free(cwd_dup);
 		ft_free_tokens(cwd_split);
 		return (username_dup);
 	}

@@ -6,19 +6,19 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/12 02:28:19 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/13 03:39:07 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexing.h"
 
-int	ft_quotes_detector(t_minishell *ms, char *str, int i)
+int	ft_quotes_detector(t_minishell *ms, char *line, int i)
 {
-	if (ft_isquotes(str[i]))
+	if (ft_isquotes(line[i]))
 	{
-		if (ft_is_dquote(str[i]) && !ms->token.in_squotes)
+		if (ft_is_dquote(line[i]) && !ms->token.in_squotes)
 			ms->token.in_dquotes = !ms->token.in_dquotes;
-		else if (ft_is_squote(str[i]) && !ms->token.in_dquotes)
+		else if (ft_is_squote(line[i]) && !ms->token.in_dquotes)
 			ms->token.in_squotes = !ms->token.in_squotes;
 		return (i + 1);
 	}
@@ -28,6 +28,7 @@ int	ft_quotes_detector(t_minishell *ms, char *str, int i)
 int	separe_line(t_minishell *ms, char *line, int i, int k)
 {
 	t_token	*t;
+	char	*substr;
 
 	t = &(ms->token);
 	(*t).start = i;
@@ -42,21 +43,26 @@ int	separe_line(t_minishell *ms, char *line, int i, int k)
 		i++;
 	}
 	(*t).end = i;
-	ms->tokens[k] = ft_substr(line, (*t).start, ((*t).end - (*t).start));
+	substr = ft_substr(line, (*t).start, ((*t).end - (*t).start));
+	ms->pretokens[k] = substr;
 	return ((*t).end);
 }
 
 /* MB_SIZE / PTR_SIZE = 2097152 / 8 (max args on Linux env) */
-void	tokenizer(t_minishell *ms, char *line, int k)
+char	**tokenizer(t_minishell *ms, char *line)
 {
-	int	i;
 	int	nbr_of_ptrs;
+	int	i;
+	int	k;
 
+	if (!line)
+		return (NULL);
 	nbr_of_ptrs = MB_SIZE / PTR_SIZE;
-	ms->tokens = (char **)malloc(sizeof(char *) * nbr_of_ptrs);
-	if (!ms->tokens)
-		return ;
+	ms->pretokens = (char **)malloc(sizeof(char *) * nbr_of_ptrs);
+	if (!ms->pretokens)
+		return (NULL);
 	i = 0;
+	k = 0;
 	while (line[i])
 	{
 		while (ft_isspace(line[i]))
@@ -64,7 +70,8 @@ void	tokenizer(t_minishell *ms, char *line, int k)
 		i = separe_line(ms, line, i, k);
 		k++;
 	}
-	ms->tokens[k] = NULL;
+	ms->pretokens[k] = NULL;
+	return (ms->pretokens);
 }
 
 int	ft_open_quotes_checker(t_minishell *ms, char *line)
@@ -72,6 +79,8 @@ int	ft_open_quotes_checker(t_minishell *ms, char *line)
 	int	i;
 
 	i = 0;
+	if (!line)
+		return ('\0');
 	while (line[i])
 	{
 		ft_quotes_detector(ms, line, i);
@@ -84,12 +93,11 @@ int	ft_open_quotes_checker(t_minishell *ms, char *line)
 
 int	ft_create_tokens(t_minishell *ms, char *line)
 {
-	int	k;
+	char	**tmp_pretokens;
 
-	k = 0;
 	if (!line)
 	{
-		ms->tokens[0] = ft_strdup("");
+		ms->tokens = NULL;
 		return (FAIL);
 	}
 	if (ft_open_quotes_checker(ms, line) == ERROR)
@@ -97,10 +105,12 @@ int	ft_create_tokens(t_minishell *ms, char *line)
 		ft_fprintf(2, "ms: open quote error\n");
 		return (FAIL);
 	}
-	ms->token.in_dquotes = FALSE;
-	ms->token.in_squotes = FALSE;
-	tokenizer(ms, line, k);
-	characterize_tokens(ms);
-	trim_tokens(ms);
+	tokenizer(ms, line);
+	ms->tokc = ft_count_tokens(ms->pretokens);
+	tmp_pretokens = ms->pretokens;
+	ms->tokens = ft_envdup(ms->pretokens);
+	ms->pretokens = characterizer(ms, ms->tokens);
+	ms->tokens = trimmer(ms, ms->pretokens);
+	ft_free_tokens(tmp_pretokens);
 	return (SUCCESS);
 }
