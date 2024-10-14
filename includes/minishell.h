@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/13 22:25:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/14 13:52:38 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include <fcntl.h>
+# include <signal.h>
 # include <stdio.h>
 # include <string.h>
 # include <sys/stat.h>
@@ -36,6 +38,8 @@
 # define MB_SIZE 2097152
 # define PTR_SIZE sizeof(char *)
 
+# define MAX_PATH 4096
+
 typedef struct s_token
 {
 	char	start;
@@ -53,6 +57,7 @@ typedef struct s_minishell
 	char	*prompt_name;
 	char	*user;
 	char	*cwd;
+	char	**history;
 	char	**env;
 	char	**tokens;
 	char	**pretokens;
@@ -63,13 +68,18 @@ typedef struct s_minishell
 	t_token	token;
 }			t_minishell;
 
-int			detect_executable(t_minishell *ms, char **tokens, int k);
+
+// ft_signal_handler.c
+
+void		ft_sigint_handler(int sig);
+void		ft_sigquit_handler(int sig);
 
 // ft_commands.c
-void		ft_call_commands(t_minishell *ms);
-int			ft_exec_commands(t_minishell *ms, char **tokens, int i);
-int			ft_call_custom_cmds(t_minishell *ms);
-int			ft_custom_cmds(t_minishell *ms);
+void		parse_prompt(t_minishell *ms, char *prompt);
+void		call_commands(t_minishell *ms);
+int			exec_cmd_in_paths(t_minishell *ms, char **tokens, int i);
+int			external_cmds(t_minishell *ms);
+int			built_in_cmds(t_minishell *ms);
 
 // ft_check_cmd_path.c
 char		*ft_create_full_path(char *dir, char *cmds);
@@ -107,14 +117,18 @@ int			ft_isquotes(int c);
 int			ft_isredirect(int c);
 
 // ft_utils.c
-void		ft_free(char *str);
-void		ft_free_tokens(char **tokens);
 int			ft_count_tokens(char **tokens);
-int			ft_charcount(char *line, char to_count);
+void		ft_print_tokens(char **tokens);
 
 // ft_exit.c
 void		ft_exit_minishell(t_minishell *ms);
+
+// ft_free.c
 void		ft_free_vars(t_minishell *ms);
+void		ft_free(char *str);
+void		ft_free_tokens(char **tokens);
+void		ft_free2(char **str);
+void		ft_free_vars2(t_minishell *ms);
 
 char		**ft_envdup(char **envp);
 #endif

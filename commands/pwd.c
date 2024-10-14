@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:52:07 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/13 22:23:49 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/14 04:22:21 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,20 @@ int	detect_pwd_call(char **tokens)
 /* Display the current working directory */
 void	pwd(char **tokens)
 {
-	char	cwd[BUFFER_SIZE];
+	char	*cwd;
+	char	cwd_buffer[BUFFER_SIZE];
 
 	if (tokens[1] != NULL)
 	{
 		ft_fprintf(2, "pwd: too many arguments\n");
 		return ;
 	}
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		ft_printf("%s\n", cwd);
-	else
+	cwd = getcwd(cwd_buffer, MAX_PATH);
+	if (!cwd)
 	{
-		ft_fprintf(2, "getcwd() error");
+		ft_fprintf(2, "pwd: getcwd\n");
 		return ;
 	}
+	else
+		ft_printf("%s\n", cwd);
 }

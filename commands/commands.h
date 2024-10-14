@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:51:50 by matislessar       #+#    #+#             */
-/*   Updated: 2024/10/13 22:22:17 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/14 13:37:03 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 // Commands
 void	cd(char **tokens);
+int     detect_cd_call(t_minishell *ms);
 
 void	pwd(char **tokens);
 int	    detect_pwd_call(char **tokens);
@@ -33,9 +34,10 @@ char	*ft_get_last_dir(char *cmds);
 char	*ft_create_n_check_path(char *cmds);
 
 // commands.c
-void	ft_call_commands(t_minishell *ms);
-int		ft_exec_commands(t_minishell *ms, char **tokens, int i);
-int		ft_call_custom_cmds(t_minishell *ms);
-int		ft_custom_cmds(t_minishell *ms);
+void	parse_prompt(t_minishell *ms, char *prompt);
+void	call_commands(t_minishell *ms);
+int		exec_cmd_in_paths(t_minishell *ms, char **tokens, int i);
+int		external_cmds(t_minishell *ms);
+int		built_in_cmds(t_minishell *ms);
 
 #endif

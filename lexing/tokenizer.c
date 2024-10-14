@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/13 03:39:07 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/14 03:39:25 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ int	separe_line(t_minishell *ms, char *line, int i, int k)
 
 	t = &(ms->token);
 	(*t).start = i;
-	while (line[i])
+	while (1)
 	{
 		ft_quotes_detector(ms, line, i);
 		if (!(*t).in_dquotes && !(*t).in_squotes)
 		{
-			if (ft_isspace(line[i]))
+			if (ft_isspace(line[i]) || line[i] == '\0')
 				break ;
 		}
 		i++;
@@ -55,14 +55,12 @@ char	**tokenizer(t_minishell *ms, char *line)
 	int	i;
 	int	k;
 
-	if (!line)
-		return (NULL);
+	k = 0;
 	nbr_of_ptrs = MB_SIZE / PTR_SIZE;
 	ms->pretokens = (char **)malloc(sizeof(char *) * nbr_of_ptrs);
 	if (!ms->pretokens)
 		return (NULL);
 	i = 0;
-	k = 0;
 	while (line[i])
 	{
 		while (ft_isspace(line[i]))
@@ -79,8 +77,6 @@ int	ft_open_quotes_checker(t_minishell *ms, char *line)
 	int	i;
 
 	i = 0;
-	if (!line)
-		return ('\0');
 	while (line[i])
 	{
 		ft_quotes_detector(ms, line, i);
@@ -96,21 +92,21 @@ int	ft_create_tokens(t_minishell *ms, char *line)
 	char	**tmp_pretokens;
 
 	if (!line)
-	{
-		ms->tokens = NULL;
 		return (FAIL);
-	}
 	if (ft_open_quotes_checker(ms, line) == ERROR)
 	{
 		ft_fprintf(2, "ms: open quote error\n");
 		return (FAIL);
 	}
 	tokenizer(ms, line);
-	ms->tokc = ft_count_tokens(ms->pretokens);
-	tmp_pretokens = ms->pretokens;
-	ms->tokens = ft_envdup(ms->pretokens);
-	ms->pretokens = characterizer(ms, ms->tokens);
-	ms->tokens = trimmer(ms, ms->pretokens);
-	ft_free_tokens(tmp_pretokens);
+	if (ms->pretokens)
+	{
+		ms->tokc = ft_count_tokens(ms->pretokens);
+		tmp_pretokens = ms->pretokens;
+		ms->tokens = ft_envdup(ms->pretokens);
+		ms->pretokens = characterizer(ms, ms->tokens);
+		ms->tokens = trimmer(ms, ms->pretokens);
+		ft_free_tokens(tmp_pretokens);
+	}
 	return (SUCCESS);
 }

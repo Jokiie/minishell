@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/13 03:30:33 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/14 02:35:51 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,40 +24,14 @@ int	ft_count_tokens(char **tokens)
 	return (count);
 }
 
-void	ft_free(char *str)
+void	ft_print_tokens(char **tokens)
 {
-	if (str)
+	int	k;
+
+	k = 0;
+	while (tokens[k])
 	{
-		free(str);
-		str = NULL;
+		ft_printf(":%s:\n", tokens[k]);
+		k++;
 	}
-}
-
-void	ft_free_tokens(char **tokens)
-{
-	int	i;
-
-	i = 0;
-	while (tokens[i])
-	{
-		ft_free(tokens[i]);
-		i++;
-	}
-	free(tokens);
-}
-
-int	ft_charcount(char *line, char to_count)
-{
-	int	count;
-	int	i;
-
-	count = 0;
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] == to_count)
-			count++;
-		i++;
-	}
-	return (count);
 }

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:25:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/13 11:56:12 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/14 00:03:48 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 	attempted to interpret "<>" as if it were a command or an argument to
 	a command.
 */
+
 void	ft_exec_redirection(t_minishell *ms)
 {
 	int	k;

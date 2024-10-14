@@ -6,11 +6,21 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 12:08:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/12 03:56:29 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/14 12:43:24 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
+
+int	detect_cd_call(t_minishell *ms)
+{
+	if (ft_strnstr(ms->tokens[0], "cd", 2))
+	{
+		cd(ms->tokens);
+		return (SUCCESS);
+	}
+	return (FAIL);
+}
 
 /* Change of current working directory */
 void	cd(char **tokens)

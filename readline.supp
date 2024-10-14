@@ -1,5 +1,0 @@
-{
-   readline
-   Memcheck:Leak
-   obj:./readline.*
-}

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/13 03:52:58 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/14 14:40:31 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ char	**ft_envdup(char **envp)
 	reuse a command. It frees the input after each line so we don't have leaks
 	or corrupted data.
 */
-int	ft_execms(t_minishell *ms, char **envp)
+void	ft_execms(t_minishell *ms, char **envp)
 {
 	while (1)
 	{
@@ -113,17 +113,14 @@ int	ft_execms(t_minishell *ms, char **envp)
 		ms->cwd = getcwd(NULL, 0);
 		ms->prompt_name = ft_get_prompt_name(ms->user, ms->cwd);
 		ms->prompt = readline(ms->prompt_name);
-		if (ft_create_tokens(ms, ms->prompt) != FAIL)
+		if (!ms->prompt)
 		{
-			for (int i = 0; ms->tokens[i]; i++)
-				ft_printf(":%s:\n", ms->tokens[i]);
-			if (ft_call_custom_cmds(ms) != SUCCESS)
-				ft_call_commands(ms);
-		}
-		if (ms->prompt == NULL)
 			ft_exit_minishell(ms);
-		if (*(ms)->prompt)
-			add_history(ms->prompt);
+			break ;
+		}
+		if (*(ms->prompt) != '\0')
+			parse_prompt(ms, ms->prompt);
+		ft_free2(&ms->prompt);
 		ft_free_vars(ms);
 	}
 }
@@ -136,7 +133,10 @@ int	main(int argc, char **argv, char **envp)
 	ms = (t_minishell *)malloc(sizeof(t_minishell));
 	if (!ms)
 		ft_exit_minishell(ms);
+	signal(SIGINT, ft_sigint_handler);
+	signal(SIGQUIT, ft_sigquit_handler);
 	if (argc == 1)
 		ft_execms(ms, envp);
+	free(ms);
 	return (0);
 }

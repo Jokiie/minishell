@@ -46,8 +46,10 @@ LEX = $(LEX_DIR)/lexing.a
 # Sources are all .c files
 SRC	=		minishell.c \
 			ft_exit.c \
+			ft_free.c \
 			ft_utils.c \
 			ft_if_is.c \
+			ft_signal_handler.c \
 			# pipes.c \
 
 
@@ -110,6 +112,8 @@ mc: all clean
 
 re: fclean all
 
+quick: $(LIBFT) $(OBJ_PATH) $(NAME)
+
 cp:
 	cp supp.txt /tmp
 
@@ -126,4 +130,4 @@ exp:
 	echo export CPPFLAGS="-I/opt/homebrew/opt/readline/include"
 	echo export LDFLAGS="-L/opt/homebrew/opt/readline/lib"
 
-.PHONY: clean fclean run mc re cp mem norm exp all libft readline rm_readline
+.PHONY: clean fclean run mc re cp mem norm exp all libft readline rm_readline quick

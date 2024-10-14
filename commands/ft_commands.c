@@ -6,11 +6,22 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/13 22:22:54 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/14 14:40:18 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
+
+void	parse_prompt(t_minishell *ms, char *prompt)
+{
+	if (ft_create_tokens(ms, prompt) != FAIL)
+	{
+		ft_print_tokens(ms->tokens);
+		if (external_cmds(ms) != SUCCESS)
+			call_commands(ms);
+		add_history(prompt);
+	}
+}
 
 /*
 	Create a child process with fork to execute a command in the environment
@@ -20,7 +31,7 @@
 		meta-characters.
 		handle "<<" ">>" "|"
 */
-void	ft_call_commands(t_minishell *ms)
+void	call_commands(t_minishell *ms)
 {
 	int	pid;
 	int	child_ret;
@@ -30,14 +41,20 @@ void	ft_call_commands(t_minishell *ms)
 		return ;
 	else if (pid == 0)
 	{
+		signal(SIGINT, ft_sigint_handler);
+		signal(SIGQUIT, ft_sigquit_handler);
 		ft_exec_redirection(ms);
-		if (ft_exec_commands(ms, ms->tokens, 0) != SUCCESS)
-			exit(FAIL);
+		if (built_in_cmds(ms) != SUCCESS)
+		{
+			exec_cmd_in_paths(ms, ms->tokens, 0);
+			exit(SUCCESS);
+		}
+		exit(FAIL);
 	}
 	wait(&child_ret);
 }
 
-int	ft_exec_commands(t_minishell *ms, char **tokens, int i)
+int	exec_cmd_in_paths(t_minishell *ms, char **tokens, int i)
 {
 	char	*path;
 	char	*cmd;
@@ -54,7 +71,7 @@ int	ft_exec_commands(t_minishell *ms, char **tokens, int i)
 		}
 		else
 			path = ft_create_n_check_path(tokens[i]);
-		if (execve(path, tokens, ms->env) == -1)
+		if (!path || execve(path, tokens, ms->env) == -1)
 		{
 			ft_free(path);
 			return (FAIL);
@@ -65,19 +82,32 @@ int	ft_exec_commands(t_minishell *ms, char **tokens, int i)
 	return (SUCCESS);
 }
 
-int	ft_call_custom_cmds(t_minishell *ms)
+/*
+	commands that must be call in the parent process to work
+	to do :
+	- add "exit" without option , which quit minishell like shell.
+*/
+int	external_cmds(t_minishell *ms)
 {
-	if (ft_custom_cmds(ms) != SUCCESS)
-		return (FAIL);
-	return (SUCCESS);
+	int	k;
+
+	k = 0;
+	while (ms->tokens[k])
+	{
+		if (ft_strnstr(ms->tokens[0], "exit", 4) && !ms->tokens[k + 1])
+			ft_exit_minishell(ms);
+		if (detect_cd_call(ms) == SUCCESS)
+			return (SUCCESS);
+		k++;
+	}
+	return (FAIL);
 }
 
 /*	to do:
 	- add "env" command without option or argument(printf ms->env)
-	- add "exit" without option , which quit minishell like shell.
 	- add unset without option
 	- add export without option
-	- these commands need to be called in call_custom_cmds because it
+	- these commands need to be called in built_in_cmds because it
 		will be called twice if used in the fork(if they dont exist they
 		write both error message from the ft_check_n_create_path and from
 		the related command).
@@ -85,7 +115,7 @@ int	ft_call_custom_cmds(t_minishell *ms)
 		need it for the "$?" commands which print the return value of the
 		last command.
 */
-int	ft_custom_cmds(t_minishell *ms)
+int	built_in_cmds(t_minishell *ms)
 {
 	int	k;
 
@@ -94,11 +124,6 @@ int	ft_custom_cmds(t_minishell *ms)
 		return (FAIL);
 	while (ms->tokens[k])
 	{
-		if (ft_strnstr(ms->tokens[0], "cd", 2))
-		{
-			cd(ms->tokens);
-			return (SUCCESS);
-		}
 		if (detect_pwd_call(ms->tokens) == SUCCESS)
 			return (SUCCESS);
 		if (detect_echo_call(ms->tokens, k) == SUCCESS)
