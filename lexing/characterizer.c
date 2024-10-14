@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/13 03:48:51 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/13 12:06:54 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	**characterizer(t_minishell *ms, char **tokens)
 	k = 0;
 	while (tokens[k] && k < ms->tokc)
 	{
-		characterized = characterize_token(ms, tokens[k]);
+		characterized = characterize_token(ms, tokens[k], 0);
 		if (characterized)
 		{
 			ft_free(tokens[k]);
@@ -33,34 +33,20 @@ char	**characterizer(t_minishell *ms, char **tokens)
 	return (tokens);
 }
 
-char	*characterize_token(t_minishell *ms, char *token)
+char	*characterize_token(t_minishell *ms, char *token, int i)
 {
-	int		i;
-	char	*var;
-	char	*before;
-	char	*after;
 	char	*token_dup;
 	char	*new_token_dup;
 
 	token_dup = ft_strdup(token);
-	i = 0;
 	while (token_dup[i])
 	{
 		ft_quotes_detector(ms, token_dup, i);
 		if (token_dup[i] == '$' && !ms->token.in_squotes
 			&& (ft_isalnum(token_dup[i + 1]) || token_dup[i + 1] == '_'))
 		{
-			before = ft_substr(token_dup, 0, i);
-			i++;
-			var = var_extractor(token_dup, &i);
-			after = ft_substr(token_dup, i, ft_strlen(token_dup) - i);
-			new_token_dup = insert_variable_value(before, var, after);
-			ft_free(token_dup);
+			new_token_dup = apply_var_expansion(token_dup, i);
 			token_dup = new_token_dup;
-			i = ft_strlen(before) + ft_strlen(getenv(var));
-			ft_free(before);
-			ft_free(var);
-			ft_free(after);
 		}
 		else
 			i++;

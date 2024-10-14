@@ -1,43 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   executable.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/30 00:52:07 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/13 22:23:49 by ccodere          ###   ########.fr       */
+/*   Created: 2024/10/13 22:14:31 by ccodere           #+#    #+#             */
+/*   Updated: 2024/10/13 22:25:46 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-/* Call the pwd command */
-int	detect_pwd_call(char **tokens)
+int	detect_executable(t_minishell *ms, char **tokens, int k)
 {
-	if (ft_strnstr(tokens[0], "pwd", 3))
+	if (ft_strnstr(tokens[k], "./", 2))
 	{
-		pwd(tokens);
+		if (execve(tokens[k], tokens, ms->env) == -1)
+			ft_fprintf(2, "ms: no such file or directory: %s\n", tokens[k]);
 		return (SUCCESS);
 	}
 	return (FAIL);
-}
-
-/* Display the current working directory */
-void	pwd(char **tokens)
-{
-	char	cwd[BUFFER_SIZE];
-
-	if (tokens[1] != NULL)
-	{
-		ft_fprintf(2, "pwd: too many arguments\n");
-		return ;
-	}
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		ft_printf("%s\n", cwd);
-	else
-	{
-		ft_fprintf(2, "getcwd() error");
-		return ;
-	}
 }

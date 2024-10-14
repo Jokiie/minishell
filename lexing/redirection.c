@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:25:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/12 02:35:30 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/13 11:56:12 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,24 +23,24 @@
 */
 void	ft_exec_redirection(t_minishell *ms)
 {
-	int	i;
+	int	k;
 
-	i = 0;
-	while (ms->tokens[i])
+	k = 0;
+	while (ms->tokens[k])
 	{
-		if (ft_strncmp(ms->tokens[i], ">", 1) == 0)
+		if (ft_strncmp(ms->tokens[k], ">", 1) == 0)
 		{
-			redirect_output(ms, ms->tokens[i + 1]);
+			redirect_output(ms, ms->tokens[k + 1]);
 			break ;
 		}
-		else if (ft_strncmp(ms->tokens[i], "<", 1) == 0)
+		else if (ft_strncmp(ms->tokens[k], "<", 1) == 0)
 		{
-			redirect_input(ms, ms->tokens[i + 1]);
+			redirect_input(ms, ms->tokens[k + 1]);
 			break ;
 		}
-		i++;
+		k++;
 	}
-	ft_recreate_tokens(ms, i);
+	ft_recreate_tokens(ms, k);
 }
 
 /*
@@ -73,7 +73,7 @@ void	redirect_input(t_minishell *ms, char *file)
 	fdin = open(file, O_RDONLY);
 	if (fdin < 0)
 	{
-		ft_fprintf(2, "ms: %s: No such file or directory\n", file);
+		ft_fprintf(2, "ms: No such file or directory near '<'\n");
 		exit(EXIT_FAILURE);
 	}
 	dup2(fdin, ms->std_in);
@@ -88,7 +88,7 @@ void	redirect_output(t_minishell *ms, char *file)
 	fdout = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fdout < 0)
 	{
-		ft_fprintf(2, "minishell: %s: No such file or directory\n", file);
+		ft_fprintf(2, "ms: No such file or directory near '>'\n", file);
 		return ;
 	}
 	dup2(fdout, ms->std_out);

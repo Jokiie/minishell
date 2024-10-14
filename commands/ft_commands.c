@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/13 03:49:47 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/13 22:22:54 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,26 +31,17 @@ void	ft_call_commands(t_minishell *ms)
 	else if (pid == 0)
 	{
 		ft_exec_redirection(ms);
-		if (ft_exec_commands(ms, ms->tokens) != SUCCESS)
+		if (ft_exec_commands(ms, ms->tokens, 0) != SUCCESS)
 			exit(FAIL);
 	}
 	wait(&child_ret);
 }
 
-int	ft_call_custom_cmds(t_minishell *ms)
-{
-	if (ft_custom_cmds(ms) == SUCCESS)
-		return (SUCCESS);
-	return (FAIL);
-}
-
-int	ft_exec_commands(t_minishell *ms, char **tokens)
+int	ft_exec_commands(t_minishell *ms, char **tokens, int i)
 {
 	char	*path;
 	char	*cmd;
-	int		i;
 
-	i = 0;
 	if (!tokens || !*tokens)
 		return (FAIL);
 	while (tokens[i])
@@ -74,6 +65,13 @@ int	ft_exec_commands(t_minishell *ms, char **tokens)
 	return (SUCCESS);
 }
 
+int	ft_call_custom_cmds(t_minishell *ms)
+{
+	if (ft_custom_cmds(ms) != SUCCESS)
+		return (FAIL);
+	return (SUCCESS);
+}
+
 /*	to do:
 	- add "env" command without option or argument(printf ms->env)
 	- add "exit" without option , which quit minishell like shell.
@@ -89,33 +87,25 @@ int	ft_exec_commands(t_minishell *ms, char **tokens)
 */
 int	ft_custom_cmds(t_minishell *ms)
 {
-	int	i;
+	int	k;
 
-	i = 0;
+	k = 0;
 	if (!ms->tokens)
 		return (FAIL);
-	while (ms->tokens[i])
+	while (ms->tokens[k])
 	{
 		if (ft_strnstr(ms->tokens[0], "cd", 2))
 		{
 			cd(ms->tokens);
 			return (SUCCESS);
 		}
-		if (ft_strnstr(ms->tokens[0], "pwd", 3))
-		{
-			pwd(ms->tokens);
+		if (detect_pwd_call(ms->tokens) == SUCCESS)
 			return (SUCCESS);
-		}
-		if (detect_echo_call(ms->tokens, i) == SUCCESS)
+		if (detect_echo_call(ms->tokens, k) == SUCCESS)
 			return (SUCCESS);
-		if (ft_strnstr(ms->tokens[i], "./", 2))
-		{
-			if (execve(ms->tokens[i], ms->tokens, ms->env) == -1)
-				ft_fprintf(ms->std_err, "ms: no such file or directory: %s\n",
-					ms->tokens[i]);
+		if (detect_executable(ms, ms->tokens, k) == SUCCESS)
 			return (SUCCESS);
-		}
-		i++;
+		k++;
 	}
 	return (FAIL);
 }

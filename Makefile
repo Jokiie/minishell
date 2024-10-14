@@ -47,7 +47,6 @@ LEX = $(LEX_DIR)/lexing.a
 SRC	=		minishell.c \
 			ft_exit.c \
 			ft_utils.c \
-			redirection.c \
 			ft_if_is.c \
 			# pipes.c \
 
@@ -56,6 +55,7 @@ SRCS += $(CMD_DIR)/ft_check_cmd_path.c $(CMD_DIR)/ft_commands.c $(CMD_DIR)/cd.c 
 		$(CMD_DIR)/pwd.c $(CMD_DIR)/echo.c
 
 SRCS += $(LEX_DIR)/characterizer.c $(LEX_DIR)/tokenizer.c $(LEX_DIR)/trimmer.c \
+		$(LEX_DIR)/redirection.c $(LEX_DIR)/var_expansion.c
 
 SRCS	= $(addprefix $(SRC_PATH), $(SRC))
 OBJ		= $(SRC:.c=.o)
@@ -115,7 +115,8 @@ cp:
 
 mem: all
 #	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/tmp/supp.txt ./minishell 
-	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=readline.supp ./minishell 
+#	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=readline.supp ./minishell 
+	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=readline_linux.supp ./minishell
 
 norm:
 	norminette src/*.c $(LIBFT_DIR)/*.c commands/*.c lexing/*.c
