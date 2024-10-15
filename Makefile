@@ -13,7 +13,7 @@ NAME			=	minishell
 RL_DIR			=	readline/
 RL_H			=	libhistory.a
 RL_L			=	libreadline.a
-RL				=	$(RL_DIR)$(RL_H) $(RL_DIR)$(RL_L)
+RL				=	$(RL_DIR)$(RL_L) $(RL_DIR)$(RL_H)
 
 # ARCH := $(shell uname -m | sed -e s/i386/x86_64/ -e s/arm.*/arm64/)
 
@@ -112,15 +112,17 @@ mc: all clean
 
 re: fclean all
 
-quick: $(LIBFT) $(OBJ_PATH) $(NAME)
-
+quick: 
+	$(MAKE) -C $(LIBFT_DIR) all
+	$(MAKE) -C $(CMDS_DIR) all
+	$(MAKE) -C $(LEX_DIR) all
+	
 cp:
 	cp supp.txt /tmp
 
 mem: all
 #	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/tmp/supp.txt ./minishell 
-#	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=readline.supp ./minishell 
-	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=readline_linux.supp ./minishell
+	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=/Users/$(USER)/my_cursus/minishell/readline.supp ./minishell
 
 norm:
 	norminette src/*.c $(LIBFT_DIR)/*.c commands/*.c lexing/*.c

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 14:40:31 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/15 14:59:56 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	ft_execms(t_minishell *ms, char **envp)
 		ms->prompt = readline(ms->prompt_name);
 		if (!ms->prompt)
 		{
-			ft_exit_minishell(ms);
+			exit_minishell(ms);
 			break ;
 		}
 		if (*(ms->prompt) != '\0')
@@ -132,7 +132,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	ms = (t_minishell *)malloc(sizeof(t_minishell));
 	if (!ms)
-		ft_exit_minishell(ms);
+		exit_minishell(ms);
 	signal(SIGINT, ft_sigint_handler);
 	signal(SIGQUIT, ft_sigquit_handler);
 	if (argc == 1)

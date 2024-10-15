@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_signal_handler.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 14:42:57 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/15 14:39:21 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_sigint_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		rl_replace_line("", 0);
+		//rl_replace_line("", 0);
 		rl_on_new_line();
 		write(1, "\n", 1);
 		rl_redisplay();
@@ -33,5 +33,5 @@ void	ft_sigint_handler(int sig)
 void	ft_sigquit_handler(int sig)
 {
 	if (sig == SIGQUIT)
-		exit(0);
+		;
 }

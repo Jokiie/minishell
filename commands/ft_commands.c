@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_commands.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 14:40:18 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/15 17:34:23 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ void	call_commands(t_minishell *ms)
 		if (built_in_cmds(ms) != SUCCESS)
 		{
 			exec_cmd_in_paths(ms, ms->tokens, 0);
-			exit(SUCCESS);
+			exit_child(ms);
 		}
-		exit(FAIL);
+		exit_child(ms);
 	}
 	wait(&child_ret);
 }
@@ -84,8 +84,6 @@ int	exec_cmd_in_paths(t_minishell *ms, char **tokens, int i)
 
 /*
 	commands that must be call in the parent process to work
-	to do :
-	- add "exit" without option , which quit minishell like shell.
 */
 int	external_cmds(t_minishell *ms)
 {
@@ -95,7 +93,7 @@ int	external_cmds(t_minishell *ms)
 	while (ms->tokens[k])
 	{
 		if (ft_strnstr(ms->tokens[0], "exit", 4) && !ms->tokens[k + 1])
-			ft_exit_minishell(ms);
+			exit_minishell(ms);
 		if (detect_cd_call(ms) == SUCCESS)
 			return (SUCCESS);
 		k++;

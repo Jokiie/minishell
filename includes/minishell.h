@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 13:52:38 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/15 14:59:00 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include "readline/history.h"
+# include <locale.h>
 # include "readline/readline.h"
+# include "readline/history.h"
 
 # define SUCCESS 0
 # define FAIL 1
@@ -121,7 +122,8 @@ int			ft_count_tokens(char **tokens);
 void		ft_print_tokens(char **tokens);
 
 // ft_exit.c
-void		ft_exit_minishell(t_minishell *ms);
+void		exit_minishell(t_minishell *ms);
+void		exit_child(t_minishell *ms);
 
 // ft_free.c
 void		ft_free_vars(t_minishell *ms);
