@@ -52,7 +52,9 @@ git remote -v
     -git commit -m "Ecrasement de tout projet github par celui de la maison"
     -git push origin master --force
 
-- Pour merge les changement de git 
+- Pour merge les changement de git
+    -git checkout -b "branch"
+    -git checkout "branch"
     -git init
     -git add .
     -git commit -m ""
