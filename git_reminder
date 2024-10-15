@@ -52,4 +52,10 @@ git remote -v
     -git commit -m "Ecrasement de tout projet github par celui de la maison"
     -git push origin master --force
 
+- Pour merge les changement de git 
+    -git init
+    -git add .
+    -git commit -m ""
+    -git merge "branch"
+    -git push
 *** À l'école, origin est utilisé pour le dépôt de l'école. Si on veux interagir avec GitHub à partir de l'école, on doit remplacer origin par github pour les commandes comme "git push github master" ou "git pull github master". ***
