@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/15 23:04:36 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/16 11:49:41 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,6 @@ void	ft_sigquit_handler(int sig)
 	int child_ret;
 	
 	if (sig == SIGQUIT)
-<<<<<<< HEAD
-		;
-=======
 	{
 		while (waitpid(-1, &child_ret, 0) > 0)
 			;
@@ -45,5 +42,4 @@ void	ft_sigquit_handler(int sig)
 		ft_printf(BOLD GREEN "ms: Goodbye %s!\n" RESET BOLDRESET, getenv("USER"));
 		exit(0);
 	}
->>>>>>> tokenizer
 }
