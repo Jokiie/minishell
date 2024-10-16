@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/13 10:51:50 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/16 03:05:04 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ char	*ft_toktrim(t_minishell *ms, char *token, int len)
 	buffer = malloc(sizeof(char) * (len + 1));
 	if (!buffer)
 		return (NULL);
+	ms->token.in_dquotes = FALSE;
+	ms->token.in_quotes = FALSE;
 	i = 0;
 	j = 0;
 	while (i < len && j < len)

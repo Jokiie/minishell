@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 18:33:13 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/16 03:39:07 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,12 @@ typedef struct s_minishell
 	t_token	token;
 }			t_minishell;
 
-
 // ft_signal_handler.c
 void		ft_sigint_handler(int sig);
 void		ft_sigquit_handler(int sig);
 
 // ft_commands.c
-void		parse_prompt(t_minishell *ms, char *prompt);
+int			parse_prompt(t_minishell *ms, char *prompt);
 void		call_commands(t_minishell *ms);
 int			exec_cmd_in_paths(t_minishell *ms, char **tokens, int i);
 int			external_cmds(t_minishell *ms);
@@ -120,14 +119,15 @@ int			ft_count_tokens(char **tokens);
 void		ft_print_tokens(char **tokens);
 
 // ft_exit.c
-void		ft_exit_minishell(t_minishell *ms);
+void		exit_minishell(t_minishell *ms);
+void		exit_child(t_minishell *ms);
 
 // ft_free.c
 void		ft_free_vars(t_minishell *ms);
 void		ft_free(char *str);
 void		ft_free_tokens(char **tokens);
 void		ft_free2(char **str);
-void		ft_free_vars2(t_minishell *ms);
+void		ft_free_at_exit(t_minishell *ms);
 
 char		**ft_envdup(char **envp);
 #endif

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 18:26:42 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/16 03:47:10 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,22 +105,23 @@ char	**ft_envdup(char **envp)
 */
 void	ft_execms(t_minishell *ms, char **envp)
 {
+	ms->env = ft_envdup(envp);
 	while (1)
 	{
-		ft_init_minishell(ms);
-		ms->env = ft_envdup(envp);
 		ms->user = getenv("USER");
 		ms->cwd = getcwd(NULL, 0);
 		ms->prompt_name = ft_get_prompt_name(ms->user, ms->cwd);
 		ms->prompt = readline(ms->prompt_name);
 		if (!ms->prompt)
 		{
-			ft_exit_minishell(ms);
+			exit_minishell(ms);
 			break ;
 		}
 		if (*(ms->prompt) != '\0')
+		{
 			parse_prompt(ms, ms->prompt);
-		ft_free2(&ms->prompt);
+		    ft_free_tokens(ms->tokens);
+		}
 		ft_free_vars(ms);
 	}
 }
@@ -128,15 +129,19 @@ void	ft_execms(t_minishell *ms, char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	*ms;
-	
+
 	ms = (t_minishell *)malloc(sizeof(t_minishell));
-	(void)argv;
 	if (!ms)
-		ft_exit_minishell(ms);
+		exit_minishell(ms);
+	ft_memset(ms, 0, sizeof(ms));
 	signal(SIGINT, ft_sigint_handler);
 	signal(SIGQUIT, ft_sigquit_handler);
+	(void)argv;
 	if (argc == 1)
+	{
+		ft_init_minishell(ms);
 		ft_execms(ms, envp);
+	}
 	free(ms);
 	return (0);
 }

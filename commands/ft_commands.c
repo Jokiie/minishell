@@ -6,21 +6,22 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 18:32:57 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/16 03:38:43 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-void	parse_prompt(t_minishell *ms, char *prompt)
+int	parse_prompt(t_minishell *ms, char *prompt)
 {
-	if (ft_create_tokens(ms, prompt) != FAIL)
+	if (ft_create_tokens(ms, prompt) == SUCCESS)
 	{
-		//ft_print_tokens(ms->tokens);
+		ft_print_tokens(ms->tokens);
 		if (external_cmds(ms) != SUCCESS)
 			call_commands(ms);
-		add_history(prompt);
 	}
+	add_history(prompt);
+	return (ERROR);
 }
 
 /*
@@ -47,9 +48,9 @@ void	call_commands(t_minishell *ms)
 		if (built_in_cmds(ms) != SUCCESS)
 		{
 			exec_cmd_in_paths(ms, ms->tokens, 0);
-			exit(SUCCESS);
+			exit_child(ms);
 		}
-		exit(FAIL);
+		exit_child(ms);
 	}
 	wait(&child_ret);
 }
@@ -82,11 +83,7 @@ int	exec_cmd_in_paths(t_minishell *ms, char **tokens, int i)
 	return (SUCCESS);
 }
 
-/*
-	commands that must be call in the parent process to work
-	to do :
-	- add "exit" without option , which quit minishell like shell.
-*/
+/* Commands that must be call in the parent process to work */
 int	external_cmds(t_minishell *ms)
 {
 	int	k;
@@ -95,7 +92,7 @@ int	external_cmds(t_minishell *ms)
 	while (ms->tokens[k])
 	{
 		if (ft_strnstr(ms->tokens[0], "exit", 4) && !ms->tokens[k + 1])
-			ft_exit_minishell(ms);
+			exit_minishell(ms);
 		if (detect_cd_call(ms) == SUCCESS)
 			return (SUCCESS);
 		k++;
@@ -124,7 +121,7 @@ int	built_in_cmds(t_minishell *ms)
 		return (FAIL);
 	while (ms->tokens[k])
 	{
-		if (detect_pwd_call(ms->tokens) == SUCCESS)
+		if (detect_pwd_call(ms, ms->tokens) == SUCCESS)
 			return (SUCCESS);
 		if (detect_echo_call(ms->tokens, k) == SUCCESS)
 			return (SUCCESS);
