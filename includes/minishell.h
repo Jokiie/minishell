@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/16 03:39:07 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/16 11:32:54 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include "readline/history.h"
+# include <locale.h>
 # include "readline/readline.h"
+# include "readline/history.h"
 
 # define SUCCESS 0
 # define FAIL 1
