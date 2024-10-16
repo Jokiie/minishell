@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:25:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/15 15:26:15 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/16 11:32:37 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 	attempted to interpret "<>" as if it were a command or an argument to
 	a command.
 */
-
 void	ft_exec_redirection(t_minishell *ms)
 {
 	int	k;
@@ -86,7 +85,7 @@ void	redirect_output(t_minishell *ms, char *file)
 {
 	int	fdout;
 
-	fdout = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fdout = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fdout < 0)
 	{
 		ft_fprintf(2, "ms: No such file or directory near '>'\n", file);

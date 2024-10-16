@@ -6,21 +6,30 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/10/16 11:37:35 by ccodere          ###   ########.fr       */
+=======
+/*   Updated: 2024/10/16 11:32:20 by ccodere          ###   ########.fr       */
+>>>>>>> tokenizer
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-void	parse_prompt(t_minishell *ms, char *prompt)
+int	parse_prompt(t_minishell *ms, char *prompt)
 {
-	if (ft_create_tokens(ms, prompt) != FAIL)
+	if (ft_create_tokens(ms, prompt) == SUCCESS)
 	{
+<<<<<<< HEAD
 		// ft_print_tokens(ms->tokens);
+=======
+		ft_print_tokens(ms->tokens);
+>>>>>>> tokenizer
 		if (external_cmds(ms) != SUCCESS)
 			call_commands(ms);
-		add_history(prompt);
 	}
+	add_history(prompt);
+	return (ERROR);
 }
 
 /*
@@ -82,9 +91,7 @@ int	exec_cmd_in_paths(t_minishell *ms, char **tokens, int i)
 	return (SUCCESS);
 }
 
-/*
-	commands that must be call in the parent process to work
-*/
+/* Commands that must be call in the parent process to work */
 int	external_cmds(t_minishell *ms)
 {
 	int	k;
@@ -122,7 +129,7 @@ int	built_in_cmds(t_minishell *ms)
 		return (FAIL);
 	while (ms->tokens[k])
 	{
-		if (detect_pwd_call(ms->tokens) == SUCCESS)
+		if (detect_pwd_call(ms, ms->tokens) == SUCCESS)
 			return (SUCCESS);
 		if (detect_echo_call(ms->tokens, k) == SUCCESS)
 			return (SUCCESS);
