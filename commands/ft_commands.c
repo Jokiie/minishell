@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/16 14:50:23 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/16 14:59:13 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	parse_prompt(t_minishell *ms, char *prompt)
 		if (external_cmds(ms) != SUCCESS)
 			call_commands(ms);
 		ft_free_tokens(ms->tokens);
-		return (SUCCESS);	
+		return (SUCCESS);
 	}
 	return (FAIL);
 }
