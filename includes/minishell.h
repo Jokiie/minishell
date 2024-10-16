@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 13:52:38 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/14 18:33:13 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ typedef struct s_minishell
 
 
 // ft_signal_handler.c
-
 void		ft_sigint_handler(int sig);
 void		ft_sigquit_handler(int sig);
 

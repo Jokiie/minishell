@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 14:42:57 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/15 00:19:58 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,14 @@ void	ft_sigint_handler(int sig)
 
 void	ft_sigquit_handler(int sig)
 {
+	int child_ret;
+	
 	if (sig == SIGQUIT)
+	{
+		while (waitpid(-1, &child_ret, 0) > 0)
+			;
+		rl_clear_history();
+		ft_printf(BOLD GREEN "ms: Goodbye %s!\n" RESET BOLDRESET, getenv("USER"));
 		exit(0);
+	}
 }

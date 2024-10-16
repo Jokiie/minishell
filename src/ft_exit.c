@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:31:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 14:00:30 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/15 00:19:11 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,13 @@
 */
 void	ft_exit_minishell(t_minishell *ms)
 {
-	int	status;
+	int	child_ret;
 
-	ft_printf(BOLD GREEN "ms: Goodbye %s!\n" RESET BOLDRESET, ms->user);
 	ft_free_vars2(ms);
-	clear_history();
-	while (waitpid(-1, &status, 0) > 0)
+	rl_clear_history();
+	while (waitpid(-1, &child_ret, 0) > 0)
 		;
+	ft_printf(BOLD GREEN "ms: Goodbye %s!\n" RESET BOLDRESET, ms->user);
+	free(ms);
 	exit(0);
 }

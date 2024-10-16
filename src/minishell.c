@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 14:40:31 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/14 18:26:42 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,9 +128,9 @@ void	ft_execms(t_minishell *ms, char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	*ms;
-
-	(void)argv;
+	
 	ms = (t_minishell *)malloc(sizeof(t_minishell));
+	(void)argv;
 	if (!ms)
 		ft_exit_minishell(ms);
 	signal(SIGINT, ft_sigint_handler);
