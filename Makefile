@@ -112,15 +112,27 @@ mc: all clean
 
 re: fclean all
 
+<<<<<<< HEAD
 quick: 
 	$(MAKE) -C $(LIBFT_DIR) all
 	$(MAKE) -C $(CMDS_DIR) all
 	$(MAKE) -C $(LEX_DIR) all
 	
+=======
+quick:
+	$(MAKE) -C $(LIBFT_DIR) all
+	$(MAKE) -C $(CMDS_DIR) all
+	$(MAKE) -C $(LEX_DIR) all
+
+>>>>>>> tokenizer
 cp:
 	cp supp.txt /tmp
 
 mem: all
+<<<<<<< HEAD
+=======
+#	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=/Users/$(USER)/my_cursus/minishell/readline.supp ./minishell
+>>>>>>> tokenizer
 #	valgrind --leak-check=full --trace-children=yes --track-fds=yes --show-leak-kinds=all --suppressions=/home/ccodere/42cursus/minishell/readline.supp ./minishell
 	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/home/ccodere/42cursus/minishell/readline.supp ./minishell
 #	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=/Users/$(USER)/my_cursus/minishell/readline.supp ./minishell

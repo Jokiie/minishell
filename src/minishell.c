@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/16 11:33:53 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/16 13:10:40 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void	ft_execms(t_minishell *ms, char **envp)
 		if (*(ms->prompt) != '\0')
 		{
 			parse_prompt(ms, ms->prompt);
-		    ft_free_tokens(ms->tokens);
+			add_history(ms->prompt);
 		}
 		ft_free_vars(ms);
 	}
@@ -134,12 +134,11 @@ int	main(int argc, char **argv, char **envp)
 	if (!ms)
 		exit_minishell(ms);
 	ft_memset(ms, 0, sizeof(ms));
-	signal(SIGINT, ft_sigint_handler);
-	signal(SIGQUIT, ft_sigquit_handler);
 	(void)argv;
 	if (argc == 1)
 	{
 		ft_init_minishell(ms);
+		ft_init_sigaction();
 		ft_execms(ms, envp);
 	}
 	free(ms);

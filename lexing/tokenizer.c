@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/16 11:33:05 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/16 14:27:21 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,10 @@
 
 int	ft_quotes_detector(t_minishell *ms, char *line, int i)
 {
-	if (ft_isquotes(line[i]))
-	{
-		if (ft_is_dquote(line[i]) && !ms->token.in_squotes)
-			ms->token.in_dquotes = !ms->token.in_dquotes;
-		else if (ft_is_squote(line[i]) && !ms->token.in_dquotes)
-			ms->token.in_squotes = !ms->token.in_squotes;
-		return (i + 1);
-	}
+	if (ft_is_dquote(line[i]) && !ms->token.in_squotes)
+		ms->token.in_dquotes = !ms->token.in_dquotes;
+	else if (ft_is_squote(line[i]) && !ms->token.in_dquotes)
+		ms->token.in_squotes = !ms->token.in_squotes;
 	return (i);
 }
 
@@ -39,6 +35,7 @@ int	ft_open_quotes_checker(t_minishell *ms, char *line)
 		return (ERROR);
 	return (SUCCESS);
 }
+
 int	separe_line(t_minishell *ms, char *line, int i, int k)
 {
 	t_token	*t;
@@ -58,7 +55,10 @@ int	separe_line(t_minishell *ms, char *line, int i, int k)
 	}
 	(*t).end = i;
 	substr = ft_substr(line, (*t).start, ((*t).end - (*t).start));
-	ms->pretokens[k] = substr;
+	if (!substr)
+		ms->pretokens[k] = NULL;
+	else
+		ms->pretokens[k] = substr;
 	return (i);
 }
 
@@ -98,8 +98,8 @@ int	ft_create_tokens(t_minishell *ms, char *line)
 	ms->token.in_quotes = FALSE;
 	if (!line)
 	{
-		ms->tokens = ft_calloc(1, sizeof(char));
-		return (SUCCESS);
+		ms->tokens = NULL;
+		return (FAIL);
 	}
 	if (ft_open_quotes_checker(ms, line) != SUCCESS)
 	{
@@ -115,8 +115,12 @@ int	ft_create_tokens(t_minishell *ms, char *line)
 		ms->pretokens = characterizer(ms, ms->tokens);
 		ms->tokens = trimmer(ms, ms->pretokens);
 		ft_free_tokens(tmp_pretokens);
-		return (SUCCESS);
 	}
-	ft_free_tokens(ms->pretokens);
-	return (FAIL);
+	if (!ms->pretokens || !ms->tokens)
+	{
+		ft_free_tokens(ms->pretokens);
+		ms->tokens = NULL;
+		return (FAIL);
+	}
+	return (SUCCESS);
 }
