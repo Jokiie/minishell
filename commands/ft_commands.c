@@ -6,11 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/10/16 11:37:35 by ccodere          ###   ########.fr       */
-=======
-/*   Updated: 2024/10/16 11:32:20 by ccodere          ###   ########.fr       */
->>>>>>> tokenizer
+/*   Updated: 2024/10/16 11:43:13 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +16,7 @@ int	parse_prompt(t_minishell *ms, char *prompt)
 {
 	if (ft_create_tokens(ms, prompt) == SUCCESS)
 	{
-<<<<<<< HEAD
-		// ft_print_tokens(ms->tokens);
-=======
 		ft_print_tokens(ms->tokens);
->>>>>>> tokenizer
 		if (external_cmds(ms) != SUCCESS)
 			call_commands(ms);
 	}
