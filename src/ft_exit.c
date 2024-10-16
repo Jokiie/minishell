@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:31:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/16 11:33:27 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/16 11:34:59 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,5 @@ void	exit_child(t_minishell *ms)
 {
 	ft_free_at_exit(ms);
 	ft_free_tokens(ms->tokens);
-
 	exit(0);
 }
