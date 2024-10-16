@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_commands.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/15 17:34:23 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/15 23:04:05 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	parse_prompt(t_minishell *ms, char *prompt)
 {
 	if (ft_create_tokens(ms, prompt) != FAIL)
 	{
-		ft_print_tokens(ms->tokens);
+		//ft_print_tokens(ms->tokens);
 		if (external_cmds(ms) != SUCCESS)
 			call_commands(ms);
 		add_history(prompt);
