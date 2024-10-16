@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/16 14:15:46 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/16 14:50:23 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,10 @@ int	external_cmds(t_minishell *ms)
 	while (ms->tokens[k])
 	{
 		if (ft_strnstr(ms->tokens[0], "exit", 4) && !ms->tokens[k + 1])
+		{
+			ft_free_tokens(ms->tokens);
 			exit_minishell(ms);
+		}
 		if (detect_cd_call(ms) == SUCCESS)
 			return (SUCCESS);
 		k++;

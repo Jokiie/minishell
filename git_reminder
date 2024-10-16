@@ -60,4 +60,19 @@ git remote -v
     -git commit -m ""
     -git merge "branch"
     -git push
+
+- Pour merge les changements dune branche a dev :
+
+    - git checkout "branch"   // S'assurer quon est bien sur la bonne branche
+    - git fetch origin        // Recuperer les derniers changements sur dev
+    - git merge origin/dev
+    - resoudre les conflits s'il y en a
+    - git add "fichiers resolus"
+    - git commit
+    
+    - git checkout dev        // Aller sur la branche dev
+    - git merge "branche"     // Fusionner la branche dans dev
+    - git push origin dev     // push les changements sur dev
+    - fini!
+
 *** À l'école, origin est utilisé pour le dépôt de l'école. Si on veux interagir avec GitHub à partir de l'école, on doit remplacer origin par github pour les commandes comme "git push github master" ou "git pull github master". ***
