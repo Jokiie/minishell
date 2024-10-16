@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:25:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/16 11:32:37 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/16 14:18:48 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	ft_exec_redirection(t_minishell *ms)
 	int	k;
 
 	k = 0;
+	if (!ms->tokens || !*(ms->tokens))
+		return ;
 	while (ms->tokens[k])
 	{
 		if (ft_strncmp(ms->tokens[k], ">", 1) == 0)

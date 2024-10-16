@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:31:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/16 11:34:59 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/16 14:04:53 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	exit_minishell(t_minishell *ms)
 {
 	int	child_ret;
 
+	if (ms->tokens)
+		ft_free_tokens(ms->tokens);
 	ft_free_at_exit(ms);
 	rl_clear_history();
 	while (waitpid(-1, &child_ret, 0) > 0)

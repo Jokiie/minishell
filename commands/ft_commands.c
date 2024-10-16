@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/16 11:32:20 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/16 14:15:46 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@ int	parse_prompt(t_minishell *ms, char *prompt)
 		ft_print_tokens(ms->tokens);
 		if (external_cmds(ms) != SUCCESS)
 			call_commands(ms);
+		ft_free_tokens(ms->tokens);
+		return (SUCCESS);	
 	}
-	add_history(prompt);
-	return (ERROR);
+	return (FAIL);
 }
 
 /*
@@ -42,8 +43,6 @@ void	call_commands(t_minishell *ms)
 		return ;
 	else if (pid == 0)
 	{
-		signal(SIGINT, ft_sigint_handler);
-		signal(SIGQUIT, ft_sigquit_handler);
 		ft_exec_redirection(ms);
 		if (built_in_cmds(ms) != SUCCESS)
 		{
@@ -61,7 +60,7 @@ int	exec_cmd_in_paths(t_minishell *ms, char **tokens, int i)
 	char	*cmd;
 
 	if (!tokens || !*tokens)
-		return (FAIL);
+		exit_child(ms);
 	while (tokens[i])
 	{
 		if (*tokens[0] == '/')
@@ -89,6 +88,8 @@ int	external_cmds(t_minishell *ms)
 	int	k;
 
 	k = 0;
+	if (!ms->tokens || !*(ms->tokens))
+		return (FAIL);
 	while (ms->tokens[k])
 	{
 		if (ft_strnstr(ms->tokens[0], "exit", 4) && !ms->tokens[k + 1])
@@ -117,8 +118,8 @@ int	built_in_cmds(t_minishell *ms)
 	int	k;
 
 	k = 0;
-	if (!ms->tokens)
-		return (FAIL);
+	if (!ms->tokens || !(*ms->tokens))
+		exit_child(ms);
 	while (ms->tokens[k])
 	{
 		if (detect_pwd_call(ms, ms->tokens) == SUCCESS)

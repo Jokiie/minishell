@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/16 11:32:54 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/16 13:58:36 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "../libft/libft.h"
 # include <fcntl.h>
+# include <locale.h>
 # include <signal.h>
 # include <stdio.h>
 # include <string.h>
@@ -22,9 +23,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <locale.h>
-# include "readline/readline.h"
 # include "readline/history.h"
+# include "readline/readline.h"
 
 # define SUCCESS 0
 # define FAIL 1
@@ -70,8 +70,8 @@ typedef struct s_minishell
 }			t_minishell;
 
 // ft_signal_handler.c
-void		ft_sigint_handler(int sig);
-void		ft_sigquit_handler(int sig);
+void		ft_init_sigaction(void);
+void		ft_signal_handler(int sig, siginfo_t *siginfo, void *context);
 
 // ft_commands.c
 int			parse_prompt(t_minishell *ms, char *prompt);
