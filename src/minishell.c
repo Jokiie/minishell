@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 14:40:31 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/15 17:06:53 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /* init the minishell struct variables */
 void	ft_init_minishell(t_minishell *ms)
 {
+	ft_bzero(ms, sizeof(*ms));
 	ms->prompt = NULL;
 	ms->prompt_name = NULL;
 	ms->user = NULL;
@@ -113,6 +114,11 @@ void	ft_execms(t_minishell *ms, char **envp)
 		ms->cwd = getcwd(NULL, 0);
 		ms->prompt_name = ft_get_prompt_name(ms->user, ms->cwd);
 		ms->prompt = readline(ms->prompt_name);
+		// for (size_t i = 0; i < ft_strlen(ms->prompt); i++)
+		// {
+		// 	printf("%i\n", ms->prompt[i]);
+		// }
+		
 		if (!ms->prompt)
 		{
 			ft_exit_minishell(ms);
@@ -140,3 +146,18 @@ int	main(int argc, char **argv, char **envp)
 	free(ms);
 	return (0);
 }
+/*
+108
+115
+32
+45
+108
+32
+124
+32
+108
+115
+32
+45
+108
+*/

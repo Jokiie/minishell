@@ -10,7 +10,7 @@ CLE 			=	\e[1;1H\e[2J
 
 NAME			=	minishell
 
-RL_DIR			=	readline/
+RL_DIR			=	 readline/
 RL_H			=	libhistory.a
 RL_L			=	libreadline.a
 RL				=	$(RL_DIR)$(RL_H) $(RL_DIR)$(RL_L)
@@ -25,7 +25,6 @@ RL				=	$(RL_DIR)$(RL_H) $(RL_DIR)$(RL_L)
 
 # Compiler and flags
 CC				=	gcc
-FLAGS_SHELL		=	-D MINI_BIN=$(BIN_DIR) -D CONPILE_DIR=$(PWD) -D V_MINI=$(version)
 CFLAGS			=	-Wall -Werror -Wextra -g -fno-common $(FLAGS_SHELL)
 LDFLAGS := -lm
 #-fsanitize=address
@@ -112,7 +111,10 @@ mc: all clean
 
 re: fclean all
 
-quick: $(LIBFT) $(OBJ_PATH) $(NAME)
+quick:
+	$(MAKE) -C $(LIBFT_DIR) all
+	$(MAKE) -C $(CMDS_DIR) all
+	$(MAKE) -C $(LEX_DIR) all
 
 cp:
 	cp supp.txt /tmp

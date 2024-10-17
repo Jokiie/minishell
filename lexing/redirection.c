@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:25:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 00:03:48 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/15 15:46:06 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

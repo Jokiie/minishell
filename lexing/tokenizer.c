@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 03:39:25 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/15 17:14:19 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ int	separe_line(t_minishell *ms, char *line, int i, int k)
 
 	t = &(ms->token);
 	(*t).start = i;
-	while (1)
+	while (line[i])
 	{
 		ft_quotes_detector(ms, line, i);
 		if (!(*t).in_dquotes && !(*t).in_squotes)
 		{
-			if (ft_isspace(line[i]) || line[i] == '\0')
+			if (ft_isspace(line[i]))
 				break ;
 		}
 		i++;

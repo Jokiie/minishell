@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 13:52:38 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/15 16:41:13 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,4 +131,11 @@ void		ft_free2(char **str);
 void		ft_free_vars2(t_minishell *ms);
 
 char		**ft_envdup(char **envp);
+
+//ft_pipes
+int		ft_has_pipe(char *str);
+int		ft_exect_pipes(t_minishell *ms);
+void	ft_exec_pipes_redirection(t_minishell *ms);
+
+
 #endif
