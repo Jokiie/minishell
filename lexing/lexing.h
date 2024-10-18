@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 12:22:03 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 00:06:42 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/18 02:41:39 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ char	**characterizer(t_minishell *ms, char **tokens);
 char	*characterize_token(t_minishell *ms, char *token, int i);
 char	*var_extractor(char *token, int *i);
 char	*insert_variable_value(char *before, char *var, char *after);
+char	*apply_return_value(t_minishell *ms, char *token_dup, int i);
+char	*insert_return_value(t_minishell *ms, char *before, char *after);
 
 // tokenizer.c
 int		separe_line(t_minishell *ms, char *line, int i, int k);

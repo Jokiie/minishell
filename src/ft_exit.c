@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:31:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/16 14:49:06 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/17 14:43:28 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /*
 	Free our variables, clear the history from readline, wait the child to
-	finish and quit minishell
+	finish and quit minishell with the return status of the last command.
 */
 void	exit_minishell(t_minishell *ms)
 {
@@ -25,7 +25,7 @@ void	exit_minishell(t_minishell *ms)
 	while (waitpid(-1, &child_ret, 0) > 0)
 		;
 	ft_printf(BOLD GREEN "ms: Goodbye %s!\n" RESET BOLDRESET, ms->user);
-	free(ms);
+	//free(ms);
 	exit(0);
 }
 
@@ -33,5 +33,5 @@ void	exit_child(t_minishell *ms)
 {
 	ft_free_at_exit(ms);
 	ft_free_tokens(ms->tokens);
-	exit(0);
+	exit(ms->ret);
 }

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/16 14:27:21 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/18 02:47:08 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,23 +88,16 @@ char	**tokenizer(t_minishell *ms, char *line)
 	return (ms->pretokens);
 }
 
-
 int	ft_create_tokens(t_minishell *ms, char *line)
 {
 	char	**tmp_pretokens;
-	
+
 	ms->token.in_dquotes = FALSE;
 	ms->token.in_squotes = FALSE;
-	ms->token.in_quotes = FALSE;
-	if (!line)
-	{
-		ms->tokens = NULL;
-		return (FAIL);
-	}
 	if (ft_open_quotes_checker(ms, line) != SUCCESS)
 	{
-		ft_fprintf(2, "ms: open quote error\n");
-		return (ERROR);
+		ft_fprintf(2, "ms: open quotes not allowed\n");
+		return (SYNTAXE_ERROR);
 	}
 	tokenizer(ms, line);
 	if (ms->pretokens)
@@ -120,7 +113,6 @@ int	ft_create_tokens(t_minishell *ms, char *line)
 	{
 		ft_free_tokens(ms->pretokens);
 		ms->tokens = NULL;
-		return (FAIL);
 	}
 	return (SUCCESS);
 }

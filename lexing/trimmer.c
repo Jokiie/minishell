@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/16 12:37:08 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/17 22:17:22 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*ft_toktrim(t_minishell *ms, char *token, int len)
 	if (!buffer)
 		return (NULL);
 	ms->token.in_dquotes = FALSE;
-	ms->token.in_quotes = FALSE;
+	ms->token.in_squotes = FALSE;
 	i = 0;
 	j = 0;
 	while (i < len && j < len)

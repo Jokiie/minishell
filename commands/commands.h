@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:51:50 by matislessar       #+#    #+#             */
-/*   Updated: 2024/10/16 11:35:04 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/18 02:46:04 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,29 @@
 # include "../includes/minishell.h"
 
 // Commands
-void	cd(char **tokens);
-int		detect_cd_call(t_minishell *ms);
+int		cd(t_minishell *ms, char **tokens);
+int		detect_cd_call(t_minishell *ms, char **tokens);
 
-void	pwd(t_minishell *ms, char **tokens);
+int		pwd(t_minishell *ms, char **tokens);
 int		detect_pwd_call(t_minishell *ms, char **tokens);
 
 void	echo(char **tokens);
 void	echo_n(char **tokens);
-int		detect_echo_call(char **tokens, int k);
+int		detect_echo_call(t_minishell *ms, char **tokens, int k);
 
 int		detect_executable(t_minishell *ms, char **tokens, int k);
 
 // ft_check_cmd_path.c
-char	*ft_create_full_path(char *dir, char *cmds);
-char	*ft_get_last_dir(char *cmds);
-char	*ft_create_n_check_path(char *cmds);
+char	*create_full_path(char *dir, char *cmds);
+char	*get_last_dir(char *cmds);
+char	*find_executable_path(char *cmds);
 
 // commands.c
-int		parse_prompt(t_minishell *ms, char *prompt);
-void	call_commands(t_minishell *ms);
-int		exec_cmd_in_paths(t_minishell *ms, char **tokens, int i);
+int		parse_input(t_minishell *ms, char *input);
+int		call_commands(t_minishell *ms);
+int		exec_path_cmds(t_minishell *ms, char **tokens, int i);
 int		external_cmds(t_minishell *ms);
 int		built_in_cmds(t_minishell *ms);
 
+int		check_error_cd(t_minishell *ms);
 #endif

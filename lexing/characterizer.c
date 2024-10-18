@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   characterizer.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/15 13:23:57 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/18 02:46:39 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,12 @@ char	*characterize_token(t_minishell *ms, char *token, int i)
 			&& (ft_isalnum(token_dup[i + 1]) || token_dup[i + 1] == '_'))
 		{
 			new_token_dup = apply_var_expansion(token_dup, i);
+			token_dup = new_token_dup;
+		}
+		else if ((token_dup[i] == '$' && token_dup[i + 1] == '?')
+			&& !ms->token.in_squotes)
+		{
+			new_token_dup = apply_return_value(ms, token_dup, i);
 			token_dup = new_token_dup;
 		}
 		else

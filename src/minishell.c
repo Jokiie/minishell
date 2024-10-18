@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/16 13:10:40 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/18 02:51:32 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /* init the minishell struct variables */
 void	ft_init_minishell(t_minishell *ms)
 {
-	ms->prompt = NULL;
+	ms->input = NULL;
 	ms->prompt_name = NULL;
 	ms->user = NULL;
 	ms->cwd = NULL;
@@ -30,7 +30,7 @@ void	ft_init_minishell(t_minishell *ms)
 	ms->token.start = 0;
 	ms->token.in_dquotes = FALSE;
 	ms->token.in_squotes = FALSE;
-	ms->token.in_quotes = FALSE;
+	ms->ret = 0;
 }
 
 /*
@@ -105,22 +105,23 @@ char	**ft_envdup(char **envp)
 */
 void	ft_execms(t_minishell *ms, char **envp)
 {
+	rl_bind_key('\t', rl_complete);
 	ms->env = ft_envdup(envp);
 	while (1)
 	{
 		ms->user = getenv("USER");
 		ms->cwd = getcwd(NULL, 0);
 		ms->prompt_name = ft_get_prompt_name(ms->user, ms->cwd);
-		ms->prompt = readline(ms->prompt_name);
-		if (!ms->prompt)
+		ms->input = readline(ms->prompt_name);
+		if (!ms->input)
 		{
 			exit_minishell(ms);
 			break ;
 		}
-		if (*(ms->prompt) != '\0')
+		if (*(ms->input) != '\0')
 		{
-			parse_prompt(ms, ms->prompt);
-			add_history(ms->prompt);
+			ms->ret = parse_input(ms, ms->input);
+			add_history(ms->input);
 		}
 		ft_free_vars(ms);
 	}

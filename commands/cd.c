@@ -6,43 +6,47 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 12:08:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/15 23:46:11 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/18 01:47:34 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-int	detect_cd_call(t_minishell *ms)
+int	detect_cd_call(t_minishell *ms, char **tokens)
 {
-	if (ft_strnstr(ms->tokens[0], "cd", 2))
+	if (ft_strncmp(ms->tokens[0], "cd\0", 3) == 0)
 	{
-		cd(ms->tokens);
-		return (SUCCESS);
+		ms->ret = cd(ms, tokens);
+		return (ms->ret);
 	}
-	return (FAIL);
+	ms->ret = CMD_NOT_FOUND;
+	return (CMD_NOT_FOUND);
 }
 
 /* Change of current working directory */
-void	cd(char **tokens)
+int	cd(t_minishell *ms, char **tokens)
 {
 	t_bool	found_dir;
 
 	found_dir = FALSE;
-	if (!tokens[1])
+    if (!ms->tokens[1])
 	{
 		ft_fprintf(2, "cd: need a relative or absolute path\n");
-		return ;
-	}
-	if (tokens[2])
+        ms->ret = ERROR;
+		return (ERROR);
+    }
+	if (ms->tokens[2])
 	{
 		ft_fprintf(2, "cd: string not in pwd: %s\n", tokens[1]);
-		return ;
+		ms->ret = ERROR;
+		return (ERROR);
 	}
 	if (chdir(tokens[1]) == 0)
-		found_dir = TRUE;
-	else if (found_dir == FALSE)
 	{
-		ft_fprintf(2, "cd: no such file or directory: %s\n", tokens[1]);
-		return ;
+		found_dir = TRUE;
+		ms->ret = SUCCESS;
 	}
+	else if (found_dir == FALSE)
+		ms->ret = check_error_cd(ms);
+	return (ms->ret);
 }

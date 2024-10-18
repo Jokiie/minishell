@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/16 13:58:36 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/18 02:45:49 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include <errno.h>
 # include <fcntl.h>
 # include <locale.h>
 # include <signal.h>
@@ -27,8 +28,15 @@
 # include "readline/readline.h"
 
 # define SUCCESS 0
-# define FAIL 1
-# define ERROR -1
+# define FAIL -1
+# define ERROR 1
+# define SYNTAXE_ERROR 2
+# define FPERM_DENIED 13
+# define CPERM_DENIED 126
+# define CMD_NOT_FOUND 127
+# define TERM_SIGINT 130
+# define TERM_SIGKILL 137
+# define SEGFAULT 139
 
 # define SURL "\e[7m"
 # define SURLRESET "\e[0m"
@@ -47,14 +55,11 @@ typedef struct s_token
 	char	end;
 	t_bool	in_dquotes;
 	t_bool	in_squotes;
-	t_bool	in_quotes;
-	t_bool	open_dquotes;
-	t_bool	open_squotes;
 }			t_token;
 
 typedef struct s_minishell
 {
-	char	*prompt;
+	char	*input;
 	char	*prompt_name;
 	char	*user;
 	char	*cwd;
@@ -67,6 +72,7 @@ typedef struct s_minishell
 	int		std_out;
 	int		std_err;
 	t_token	token;
+	int		ret;
 }			t_minishell;
 
 // ft_signal_handler.c
@@ -74,16 +80,16 @@ void		ft_init_sigaction(void);
 void		ft_signal_handler(int sig, siginfo_t *siginfo, void *context);
 
 // ft_commands.c
-int			parse_prompt(t_minishell *ms, char *prompt);
-void		call_commands(t_minishell *ms);
-int			exec_cmd_in_paths(t_minishell *ms, char **tokens, int i);
+int			parse_input(t_minishell *ms, char *input);
+int			call_commands(t_minishell *ms);
+int			exec_path_cmds(t_minishell *ms, char **tokens, int i);
 int			external_cmds(t_minishell *ms);
 int			built_in_cmds(t_minishell *ms);
 
 // ft_check_cmd_path.c
-char		*ft_create_full_path(char *dir, char *cmds);
-char		*ft_get_last_dir(char *cmds);
-char		*ft_create_n_check_path(char *cmds);
+char		*create_full_path(char *dir, char *cmds);
+char		*get_last_dir(char *cmds);
+char		*find_executable_path(char *cmds);
 
 // trimmer.c
 char		**trimmer(t_minishell *ms, char **tokens);
@@ -130,5 +136,10 @@ void		ft_free_tokens(char **tokens);
 void		ft_free2(char **str);
 void		ft_free_at_exit(t_minishell *ms);
 
+// ft_error.c
+int			check_error(t_minishell *ms, char *cmd);
+int			check_error_cd(t_minishell *ms);
+
+// minishell.c
 char		**ft_envdup(char **envp);
 #endif
