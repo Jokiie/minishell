@@ -6,12 +6,19 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/18 02:46:39 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/18 14:02:27 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexing.h"
 
+/*
+	FOr each token, iter in it to find a '$' and replace the variable if
+	applicable. Replace the $VAR with a empty str if var do not exist. if '$'
+	is followed by another '$', just write the dollars signs, until a '$' sign
+	is followed by a letter, number, undercase or '?'. In this case, replace
+	the var by the value returned while retrieving this value.
+*/
 char	**characterizer(t_minishell *ms, char **tokens)
 {
 	char	*characterized;

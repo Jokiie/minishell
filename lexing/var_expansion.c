@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:43:35 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/18 02:50:27 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/18 03:06:38 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ char	*insert_return_value(t_minishell *ms, char *before, char *after)
 	half_token = ft_strjoin(before, var_value);
 	complete_token = ft_strjoin(half_token, after);
 	ft_free(half_token);
+	ft_free(var_value);
 	return (complete_token);
 }
 

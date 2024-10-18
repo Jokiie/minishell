@@ -6,7 +6,7 @@
 #    By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/11 12:55:15 by ccodere           #+#    #+#              #
-#    Updated: 2024/10/13 22:14:17 by ccodere          ###   ########.fr        #
+#    Updated: 2024/10/18 13:19:19 by ccodere          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,12 +19,13 @@ NAME = commands.a
 HEADER = commands.h
 
 # Files
-SRCS 	= cd.c \
-		echo.c \
-		ft_check_cmd_path.c \
-		ft_commands.c \
-		pwd.c \
-		executable.c\
+
+SRCS 	= ft_commands.c \
+		  find_executable_path.c \
+		  cd.c \
+		  echo.c \
+		  pwd.c \
+		  executable.c\
 
 OBJECTS = $(SRCS:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/18 02:51:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/18 13:24:58 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ void	ft_init_minishell(t_minishell *ms)
 
 /*
 	Create the prompt name by joining the username with the current working
-	directory found in the environment variables. For using color, I joined a
+	directory found in the environment variables. For using color, we joined a
 	empty string with the username, then a '/', and finally the directory. Since
-	cwd return a full path (/home/username/folder/) , I splited the directory
+	cwd return a full path (/home/username/folder/) , we splited the directory
 	when we find a '/', then got the last directory to get it displayed next
-	to the name. I reused a Macro to make the arrow green, which is showing
-	after the name and directory. Finally I return this result, so we get a
+	to the name. We reused a Macro to make the arrow green, which is showing
+	after the name and directory. Finally we return this result, so we get a
 	pretty cool prompt name ! If we got a problem and didnt get a name or a
 	directory, we return a default name to avoid segmentation fault or empty
 	prompt name.
@@ -75,7 +75,7 @@ char	*ft_get_prompt_name(char *username, char *cwd)
 /*
 	Dup the environment string tab
 	to do: need to check if we can use it to remove a variable
-	with unset and re-add it with export. I didn't try yet.
+	with unset and re-add it with export.
 */
 char	**ft_envdup(char **envp)
 {
@@ -140,6 +140,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		ft_init_minishell(ms);
 		ft_init_sigaction();
+		ms->pid = getpid();
 		ft_execms(ms, envp);
 	}
 	free(ms);

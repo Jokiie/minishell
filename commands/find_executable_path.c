@@ -1,18 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_check_cmd_path.c                                :+:      :+:    :+:   */
+/*   find_executable_path.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/29 04:28:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/18 02:48:31 by ccodere          ###   ########.fr       */
+/*   Created: 2024/10/18 13:18:05 by ccodere           #+#    #+#             */
+/*   Updated: 2024/10/18 13:42:41 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include "../libft/libft.h"
 #include "commands.h"
+
+/*
+	Iterate in the paths returned by ft_strtok to find where is the cmd process
+	to execute. ft_strtok() replace the delimiter(here ':') by a null character,
+	creating tokens. We recall ft_strtok with NULL, to continue with the next
+	token. If we find a match, and we can access it, we return the path to
+	execute.
+
+	to do:
+		paths = (should search in ms->env), not with getenv ?
+*/
+char	*find_executable_path(char *cmds)
+{
+	char	*paths;
+	char	*paths_dup;
+	char	*dir;
+	char	*full_path;
+
+	paths = getenv("PATH");
+	paths_dup = ft_strdup(paths);
+	if (!paths_dup)
+		return (NULL);
+	dir = ft_strtok(paths_dup, ":");
+	while (dir != NULL)
+	{
+		full_path = create_full_path(dir, cmds);
+		if (access(full_path, F_OK | X_OK) == 0)
+		{
+			ft_free(paths_dup);
+			return (full_path);
+		}
+		dir = ft_strtok(NULL, ":");
+		if (full_path)
+			ft_free(full_path);
+	}
+	ft_free(paths_dup);
+	return (NULL);
+}
 
 /*
 	We append the name of the command to the directory in parameter.
@@ -22,11 +60,10 @@
 	we typed "ls" in the command line :
 	find_executable_path extracted the path "/usr/bin" from PATH
 	the current directory to check is "/usr/bin"
-	create_full_path append "/usr/bin" with '/' then append the cmd "ls"
+	create_full_path append "/usr/bin" with '/' then append the cmd "ls". The
 	result will be "/usr/bin/ls". We return this result to find_executable_path
 	so we can check if this path is accessible, if yes, we return this path to
 	exerve in exec_path_cmds().
-
 */
 char	*create_full_path(char *dir, char *cmds)
 {
@@ -59,39 +96,4 @@ char	*get_last_dir(char *cmds)
 	last_dir_dup = ft_strdup(dir_split[dir_count - 1]);
 	ft_free_tokens(dir_split);
 	return (last_dir_dup);
-}
-
-/*
-	Iterate in the paths returned by ft_strtok to find where is the cmd process
-	to execute. Ft_strtok replace the delimiter(here ':') by a null character,
-	creating tokens. We recall ft_strtok with NULL, to continue with the next
-	token. If we find a match, and we can access it, we return the path to
-	execute.
-*/
-char	*find_executable_path(char *cmds)
-{
-	char	*paths;
-	char	*paths_dup;
-	char	*dir;
-	char	*full_path;
-
-	paths = getenv("PATH");
-	paths_dup = ft_strdup(paths);
-	if (!paths_dup)
-		return (NULL);
-	dir = ft_strtok(paths_dup, ":");
-	while (dir != NULL)
-	{
-		full_path = create_full_path(dir, cmds);
-		if (access(full_path, X_OK) == 0)
-		{
-			ft_free(paths_dup);
-			return (full_path);
-		}
-		dir = ft_strtok(NULL, ":");
-		if (full_path)
-			ft_free(full_path);
-	}
-	ft_free(paths_dup);
-	return (NULL);
 }

@@ -6,7 +6,7 @@
 #    By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/11 12:55:17 by ccodere           #+#    #+#              #
-#    Updated: 2024/10/13 09:55:37 by ccodere          ###   ########.fr        #
+#    Updated: 2024/10/18 13:08:37 by ccodere          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ NAME = lexing.a
 HEADER = lexing.h
 
 # Files
-SRCS 	= characterizer.c \
+SRCS 	= tokens_creator.c \
+		characterizer.c \
 		tokenizer.c \
 		trimmer.c \
 		redirection.c \

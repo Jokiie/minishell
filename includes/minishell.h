@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/18 02:45:49 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/18 13:32:05 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,47 +73,12 @@ typedef struct s_minishell
 	int		std_err;
 	t_token	token;
 	int		ret;
+	int		pid;
 }			t_minishell;
 
 // ft_signal_handler.c
 void		ft_init_sigaction(void);
 void		ft_signal_handler(int sig, siginfo_t *siginfo, void *context);
-
-// ft_commands.c
-int			parse_input(t_minishell *ms, char *input);
-int			call_commands(t_minishell *ms);
-int			exec_path_cmds(t_minishell *ms, char **tokens, int i);
-int			external_cmds(t_minishell *ms);
-int			built_in_cmds(t_minishell *ms);
-
-// ft_check_cmd_path.c
-char		*create_full_path(char *dir, char *cmds);
-char		*get_last_dir(char *cmds);
-char		*find_executable_path(char *cmds);
-
-// trimmer.c
-char		**trimmer(t_minishell *ms, char **tokens);
-char		*ft_toktrim(t_minishell *ms, char *token, int len);
-
-// characterizer.c
-char		**characterizer(t_minishell *ms, char **tokens);
-char		*characterize_token(t_minishell *ms, char *token, int i);
-char		*check_quotes(t_minishell *ms, char c);
-char		*var_extractor(char *token, int *i);
-char		*insert_variable_value(char *before, char *var, char *after);
-
-// redirection.c
-void		ft_exec_redirection(t_minishell *ms);
-void		ft_recreate_tokens(t_minishell *ms, int i);
-void		redirect_input(t_minishell *ms, char *file);
-void		redirect_output(t_minishell *ms, char *file);
-
-char		*apply_var_expansion(char *token_dup, int i);
-
-// tokenizer.c
-int			separe_line(t_minishell *ms, char *line, int i, int k);
-char		**tokenizer(t_minishell *ms, char *line);
-int			ft_create_tokens(t_minishell *ms, char *line);
 
 // ft_if_is.c
 int			ft_is_dquote(int c);
@@ -139,7 +104,72 @@ void		ft_free_at_exit(t_minishell *ms);
 // ft_error.c
 int			check_error(t_minishell *ms, char *cmd);
 int			check_error_cd(t_minishell *ms);
+int			wait_children(t_minishell *ms);
 
 // minishell.c
 char		**ft_envdup(char **envp);
+
+/* /lexing */
+
+// redirection.c
+void		ft_exec_redirection(t_minishell *ms);
+void		ft_recreate_tokens(t_minishell *ms, int i);
+void		redirect_input(t_minishell *ms, char *file);
+void		redirect_output(t_minishell *ms, char *file);
+
+// tokens_creator.c
+int			tokens_creator(t_minishell *ms, char *line);
+
+// tokenizer.c
+int			separe_line(t_minishell *ms, char *line, int i, int k);
+char		**tokenizer(t_minishell *ms, char *line);
+int			ft_quotes_detector(t_minishell *ms, char *line, int i);
+int			ft_open_quotes_checker(t_minishell *ms, char *line);
+
+// characterizer.c
+char		**characterizer(t_minishell *ms, char **tokens);
+char		*characterize_token(t_minishell *ms, char *token, int i);
+char		*var_extractor(char *token, int *i);
+char		*insert_variable_value(char *before, char *var, char *after);
+
+// var_expansion.c
+char		*apply_var_expansion(char *token_dup, int i);
+char		*ret_var_extractor(char *token, int *i);
+char		*insert_return_value(t_minishell *ms, char *before, char *after);
+char		*apply_return_value(t_minishell *ms, char *token_dup, int i);
+
+// trimmer.c
+char		**trimmer(t_minishell *ms, char **tokens);
+char		*ft_toktrim(t_minishell *ms, char *token, int len);
+
+/* /commands */
+
+// cd.c
+int			cd(t_minishell *ms, char **tokens);
+int			detect_cd_call(t_minishell *ms, char **tokens);
+
+// pwd.c
+int			pwd(t_minishell *ms, char **tokens);
+int			detect_pwd_call(t_minishell *ms, char **tokens);
+
+// echo.c
+void		echo(char **tokens);
+void		echo_n(char **tokens);
+int			detect_echo_call(t_minishell *ms, char **tokens, int k);
+
+// executable.c
+int			detect_executable(t_minishell *ms, char **tokens, int k);
+
+// find_executable_path.c
+char		*find_executable_path(char *cmds);
+char		*create_full_path(char *dir, char *cmds);
+char		*get_last_dir(char *cmds);
+
+// commands.c
+int			parse_input(t_minishell *ms, char *input);
+int			call_commands(t_minishell *ms);
+int			exec_path_cmds(t_minishell *ms, char **tokens, int i);
+int			external_cmds(t_minishell *ms);
+int			built_in_cmds(t_minishell *ms);
+
 #endif

@@ -6,24 +6,27 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 23:25:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/18 00:56:05 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/18 13:37:00 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-/*	
+/*
 	Detect if the command is echo, currently work if only the first token
-	is echo. But this should work later if a pipe preceed it.
-	as for the example : ls | echo done
-	which should print 'done' and not the result of ls.
-	if the echo call is detected, print the tokens. return 0 is successful,
-	and -1 if the call is not found.
+	is echo.
+	to do :
+		- should work later if a pipe preceed it.
+			as for the example : ls | echo done
+			which should print 'done' and not the result of ls.
+			if the echo call is detected,
+				print the tokens. return 0 is successful,
+			and -1 if the call is not found.
 */
 int	detect_echo_call(t_minishell *ms, char **tokens, int k)
 {
-	if ((ft_strncmp(tokens[0], "echo\0", 5) == 0
-		&& ft_strncmp(tokens[k + 1], "-n\0", 3) == 0))
+	if ((ft_strncmp(tokens[0], "echo\0", 5) == 0 && ft_strncmp(tokens[k + 1],
+				"-n\0", 3) == 0))
 	{
 		echo_n(tokens);
 		ms->ret = SUCCESS;
