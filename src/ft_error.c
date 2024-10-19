@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:47:45 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/19 12:02:27 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/19 12:51:51 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	check_error(t_minishell *ms, char *cmd)
 	}
 	else if (errno == ENOENT)
 	{
-		ft_fprintf(2, "ms: command not found: %s\n", cmd);
+		ft_fprintf(2, "ms: %s: command not found\n", cmd);
 		ms->ret = CMD_NOT_FOUND;
 	}
 	else if (errno == ENAMETOOLONG)
