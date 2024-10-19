@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/18 13:58:29 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/19 01:03:41 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	parse_input(t_minishell *ms, char *input)
 	ms->ret = tokens_creator(ms, input);
 	if (ms->ret == SUCCESS)
 	{
-		ft_print_tokens(ms->tokens);
+		//ft_print_tokens(ms->tokens);
 		ms->ret = external_cmds(ms);
 		if (ms->ret == CMD_NOT_FOUND)
 			ms->ret = call_commands(ms);

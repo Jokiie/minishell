@@ -51,6 +51,7 @@ SRC	=		minishell.c \
 			ft_if_is.c \
 			ft_signal_handler.c \
 			ft_error.c \
+			ft_display.c \
 			# pipes.c \
 
 

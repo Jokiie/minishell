@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:47:45 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/18 13:23:04 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/19 01:16:45 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,9 @@ int	wait_children(t_minishell *ms)
 			last_status = status;
 	}
 	if (WIFSIGNALED(last_status))
+	{
 		status = 128 + WTERMSIG(last_status);
+	}
 	else if (WIFEXITED(last_status) && !WIFSIGNALED(last_status))
 		status = WEXITSTATUS(last_status);
 	else

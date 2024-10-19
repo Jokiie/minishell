@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/18 13:24:58 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/19 01:11:47 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,55 +45,30 @@ void	ft_init_minishell(t_minishell *ms)
 	directory, we return a default name to avoid segmentation fault or empty
 	prompt name.
 */
-char	*ft_get_prompt_name(char *username, char *cwd)
+char	*ft_get_prompt_name(t_minishell *ms, char *username, char *cwd)
 {
 	char	*username_dup;
 	char	*color;
 	char	*cwd_dup;
 	char	**cwd_split;
 	char	*tmp;
-
-	cwd_split = ft_split(cwd, '/');
-	if (username && cwd)
+	
+	if (cwd)
+		cwd_split = ft_split(cwd, '/');
+	if ((username && *username) && cwd)
 	{
-		color = ft_strjoin(CYAN BOLD "", username);
+		color = get_user_color(username);
 		tmp = color;
 		color = ft_strjoin(color, "/");
 		ft_free(tmp);
 		cwd_dup = ft_strjoin(color, cwd_split[ft_count_tokens(cwd_split) - 1]);
-		username_dup = ft_strjoin(cwd_dup, GREEN " ➜  " RESET BOLDRESET);
+		username_dup = get_arrow_color(ms, cwd_dup);
 		ft_free(color);
 		ft_free(cwd_dup);
 		ft_free_tokens(cwd_split);
 		return (username_dup);
 	}
-	else
-		ft_free_tokens(cwd_split);
-	return ("minishell ➜ ");
-}
-
-/*
-	Dup the environment string tab
-	to do: need to check if we can use it to remove a variable
-	with unset and re-add it with export.
-*/
-char	**ft_envdup(char **envp)
-{
-	char	**env_dup;
-	int		i;
-	int		j;
-	int		size;
-
-	size = ft_count_tokens(envp);
-	env_dup = (char **)malloc(sizeof(char *) * (size + 1));
-	if (!env_dup)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (envp[i] && j < (size + 1))
-		env_dup[j++] = ft_strdup(envp[i++]);
-	env_dup[j] = NULL;
-	return (env_dup);
+	return (ft_strdup(CYAN BOLD"minishell ➜  "RESET BOLDRESET));
 }
 
 /*
@@ -105,13 +80,13 @@ char	**ft_envdup(char **envp)
 */
 void	ft_execms(t_minishell *ms, char **envp)
 {
-	rl_bind_key('\t', rl_complete);
 	ms->env = ft_envdup(envp);
+	//rl_bind_key('\t', rl_complete);
 	while (1)
 	{
 		ms->user = getenv("USER");
 		ms->cwd = getcwd(NULL, 0);
-		ms->prompt_name = ft_get_prompt_name(ms->user, ms->cwd);
+		ms->prompt_name = ft_get_prompt_name(ms, ms->user, ms->cwd);
 		ms->input = readline(ms->prompt_name);
 		if (!ms->input)
 		{

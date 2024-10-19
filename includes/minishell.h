@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/18 13:32:05 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/19 00:59:06 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 # define BOLDRESET "\033[0m"
 
 # define MB_SIZE 2097152
-# define PTR_SIZE sizeof(char *)
+# define SIZE_CHAR_PTR sizeof(char *)
 
 # define MAX_PATH 4096
 
@@ -105,6 +105,10 @@ void		ft_free_at_exit(t_minishell *ms);
 int			check_error(t_minishell *ms, char *cmd);
 int			check_error_cd(t_minishell *ms);
 int			wait_children(t_minishell *ms);
+
+// ft_display.c
+char		*get_user_color(char *username);
+char		*get_arrow_color(t_minishell *ms, char *cwd_dup);
 
 // minishell.c
 char		**ft_envdup(char **envp);

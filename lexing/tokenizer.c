@@ -6,22 +6,20 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/18 14:03:50 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/19 01:11:10 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexing.h"
 
-/* MB_SIZE / PTR_SIZE = 2097152 / 8 (max args on Linux env) */
+/* MB_SIZE / sizeof(char *) = 2097152 / 8 (max args on Linux env) */
 char	**tokenizer(t_minishell *ms, char *line)
 {
-	int	nbr_of_ptrs;
 	int	i;
 	int	k;
 
 	k = 0;
-	nbr_of_ptrs = MB_SIZE / PTR_SIZE;
-	ms->pretokens = (char **)malloc(sizeof(char *) * nbr_of_ptrs);
+	ms->pretokens = (char **)malloc(MB_SIZE / sizeof(char *));
 	if (!ms->pretokens)
 		return (NULL);
 	i = 0;
