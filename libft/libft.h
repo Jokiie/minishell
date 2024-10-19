@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 12:20:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/03 14:04:11 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/19 12:34:41 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define GREEN "\033[32m"
 # define YELLOW "\033[33m"
 # define BLUE "\033[34m"
+# define WARLOCK "\033[38;5;19m"
 # define MAGENTA "\033[35m"
 # define PURPLE "\033[35m"
 # define CYAN "\033[36m"

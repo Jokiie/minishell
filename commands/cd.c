@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 12:08:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/18 01:47:34 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/19 12:06:20 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,15 @@ int	cd(t_minishell *ms, char **tokens)
 	t_bool	found_dir;
 
 	found_dir = FALSE;
-    if (!ms->tokens[1])
+    if (!ms->tokens[1] || *(ms->tokens[1]) == '\0')
 	{
-		ft_fprintf(2, "cd: need a relative or absolute path\n");
+		ft_fprintf(2, "ms: cd: need a relative or absolute path\n");
         ms->ret = ERROR;
 		return (ERROR);
     }
-	if (ms->tokens[2])
+	else if (ms->tokens[2])
 	{
-		ft_fprintf(2, "cd: string not in pwd: %s\n", tokens[1]);
+		ft_fprintf(2, "ms: cd: too many arguments\n");
 		ms->ret = ERROR;
 		return (ERROR);
 	}

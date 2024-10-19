@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 22:14:31 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/18 13:41:53 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/19 10:55:34 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int	detect_executable(t_minishell *ms, char **tokens, int k)
 			}
 			else if (errno == ENOENT)
 			{
-				ft_fprintf(2, "ms: no such file or directory: %s\n", tokens[k]);
 				ms->ret = CMD_NOT_FOUND;
 				return (ms->ret);
 			}

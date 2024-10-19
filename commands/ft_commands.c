@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/19 01:03:41 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/19 12:20:30 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	parse_input(t_minishell *ms, char *input)
 	Create a child process with fork to execute a command in the environment
 	path variable. wait_children wait the children processes to finish and
 	save their return value.
+	
 	to do:
 	- handle "<<" ">>" "|"
 */
@@ -65,7 +66,7 @@ int	call_commands(t_minishell *ms)
 
 /*
 	Execute a command in the path returned by find_executable_path.
-	If path is accessible, with execute it and return SUCCESS(0), else, we free
+	If path is accessible, we execute it and return SUCCESS(0), else, we free
 	the path and return the error code returned by check error.
 */
 int	exec_path_cmds(t_minishell *ms, char **tokens, int i)
@@ -99,11 +100,11 @@ int	exec_path_cmds(t_minishell *ms, char **tokens, int i)
 
 /*
 	Commands that must be call in the parent process to work. Return SUCCESS(0) if
-	the command is successful and CMD_NOT_FOUND if the command it not in this
+	the command is successful and CMD_NOT_FOUND(127) if the command it not in this
 	function, so we can use this value to tell the program to search in built-in
-	commands and bash commands. if ms->tokens point to NULL,
-		return CMD_NOT_FOUND,
-	because bash return this because we can't find a empty string, right?
+	commands and bash commands. if ms->tokens point to NULL, return
+	CMD_NOT_FOUND, because bash return this because we can't find a empty string,
+	right?
 */
 int	external_cmds(t_minishell *ms)
 {
@@ -127,19 +128,18 @@ int	external_cmds(t_minishell *ms)
 }
 
 /*
-	These commands need to be called in built_in_cmds because it will be called
-	twice if used in the fork(if they dont exist they write both error message
-	from the find_executable_path and from the related command).
-	Return CMD_NOT_FOUND, if the command is not in this function,
-		so the fork can
-	search the commands in the paths. Else,
-		return 0 for success and 1 for errors.
+	These commands need to be called in call_commands because it will be called
+	twice if not found in our functions and in the bash. If they dont exist they
+	write both error message from the find_executable_path and from the related
+	command. If the command is not in this function, return CMD_NOT_FOUND(127),
+	so the fork can search the commands in the paths. Else, return 0 for success
+	and 1 for errors so the fork dont search in the paths.
 
 	/!\ Each command should return an int to get the return value. We need it
 		for the "$?" commands which print the return value of the last command.
 		We save the return value of a command in ms->ret.
 	to do:
-	- add "env" command without option or argument(printf ms->env)
+	- add "env" command without option or argument(while loop + printf ms->env?)
 	- add unset without option
 	- add export without option
 */

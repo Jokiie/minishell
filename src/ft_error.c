@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:47:45 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/19 01:16:45 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/19 12:02:27 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	check_error(t_minishell *ms, char *cmd)
 {
 	if (errno == EACCES)
 	{
-		ft_fprintf(2, "ms: %s\n", strerror(errno));
+		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), cmd);
 		ms->ret = CPERM_DENIED;
 	}
 	else if (errno == ENOENT)
@@ -24,9 +24,14 @@ int	check_error(t_minishell *ms, char *cmd)
 		ft_fprintf(2, "ms: command not found: %s\n", cmd);
 		ms->ret = CMD_NOT_FOUND;
 	}
+	else if (errno == ENAMETOOLONG)
+	{
+		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), cmd);
+		ms->ret = CMD_NOT_FOUND;
+	}
 	else
 	{
-		ft_fprintf(2, "ms: %s\n", strerror(errno));
+		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), cmd);
 		ms->ret = ERROR;
 	}
 	return (ms->ret);
@@ -36,17 +41,17 @@ int	check_error_cd(t_minishell *ms)
 {
 	if (errno == EACCES)
 	{
-		ft_fprintf(2, "cd: %s\n", strerror(errno));
-		ms->ret = CPERM_DENIED;
+		ft_fprintf(2, "ms: cd: %s: %s \n", ms->tokens[1], strerror(errno));
+		ms->ret = ERROR;
 	}
 	else if (errno == ENOTDIR)
 	{
-		ft_fprintf(2, "cd: %s\n", strerror(errno));
+		ft_fprintf(2, "ms: cd: %s: %s \n", ms->tokens[1], strerror(errno));
 		ms->ret = ERROR;
 	}
 	else
 	{
-		ft_fprintf(2, "cd: %s\n", strerror(errno));
+		ft_fprintf(2, "ms: cd: %s: %s\n", ms->tokens[1], strerror(errno));
 		ms->ret = ERROR;
 	}
 	return (ms->ret);

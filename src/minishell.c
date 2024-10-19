@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/19 01:11:47 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/19 12:42:22 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,12 @@ void	ft_execms(t_minishell *ms, char **envp)
 {
 	ms->env = ft_envdup(envp);
 	//rl_bind_key('\t', rl_complete);
+
 	while (1)
 	{
 		ms->user = getenv("USER");
+		if (!ms->user)
+			ms->user = "human";
 		ms->cwd = getcwd(NULL, 0);
 		ms->prompt_name = ft_get_prompt_name(ms, ms->user, ms->cwd);
 		ms->input = readline(ms->prompt_name);
