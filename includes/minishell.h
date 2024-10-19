@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/19 12:30:08 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/19 13:11:05 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int			check_error_cd(t_minishell *ms);
 int			wait_children(t_minishell *ms);
 
 // ft_display.c
-char		*get_user_color(char *username);
+char		*get_user_color(t_minishell *ms, char *username);
 char		*get_arrow_color(t_minishell *ms, char *cwd_dup);
 
 // minishell.c

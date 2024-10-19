@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/19 12:42:22 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/19 13:24:23 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ char	*ft_get_prompt_name(t_minishell *ms, char *username, char *cwd)
 	
 	if (cwd)
 		cwd_split = ft_split(cwd, '/');
-	if ((username && *username) && cwd)
+	if (cwd)
 	{
-		color = get_user_color(username);
+		color = get_user_color(ms, username);
 		tmp = color;
 		color = ft_strjoin(color, "/");
 		ft_free(tmp);
@@ -82,12 +82,9 @@ void	ft_execms(t_minishell *ms, char **envp)
 {
 	ms->env = ft_envdup(envp);
 	//rl_bind_key('\t', rl_complete);
-
 	while (1)
 	{
 		ms->user = getenv("USER");
-		if (!ms->user)
-			ms->user = "human";
 		ms->cwd = getcwd(NULL, 0);
 		ms->prompt_name = ft_get_prompt_name(ms, ms->user, ms->cwd);
 		ms->input = readline(ms->prompt_name);
