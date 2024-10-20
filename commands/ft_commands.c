@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/19 21:42:55 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/20 13:06:27 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ int	parse_input(t_minishell *ms, char *input)
 	ms->ret = tokens_creator(ms, input);
 	if (ms->ret == SUCCESS)
 	{
-		ft_print_tokens(ms->tokens);
-		ms->ret = external_cmds(ms);
+		// ft_print_tokens(ms->tokens);
+		ms->ret = built_in_cmds(ms);
 		if (ms->ret == CMD_NOT_FOUND)
 			ms->ret = call_commands(ms);
 		ft_free_tokens(ms->tokens);
@@ -38,7 +38,7 @@ int	parse_input(t_minishell *ms, char *input)
 	Create a child process with fork to execute a command in the environment
 	path variable. wait_children wait the children processes to finish and
 	save their return value.
-	
+
 	to do:
 	- handle "<<" ">>" "|"
 */
@@ -52,8 +52,8 @@ int	call_commands(t_minishell *ms)
 	else if (pid == 0)
 	{
 		ft_exec_redirection(ms);
-		ms->ret = built_in_cmds(ms);
-		if (ms->ret == CMD_NOT_FOUND)
+		ms->ret = external_cmds(ms);
+		if (ms->ret == ERROR)
 		{
 			ms->ret = exec_path_cmds(ms, ms->tokens, 0);
 			exit_child(ms);
@@ -103,10 +103,11 @@ int	exec_path_cmds(t_minishell *ms, char **tokens, int i)
 	the command is successful and CMD_NOT_FOUND(127) if the command it not in this
 	function, so we can use this value to tell the program to search in built-in
 	commands and bash commands. if ms->tokens point to NULL, return
-	CMD_NOT_FOUND, because bash return this because we can't find a empty string,
+	CMD_NOT_FOUND,
+		because bash return this because we can't find a empty string,
 	right?
 */
-int	external_cmds(t_minishell *ms)
+int	built_in_cmds(t_minishell *ms)
 {
 	int	k;
 
@@ -115,15 +116,19 @@ int	external_cmds(t_minishell *ms)
 		return (CMD_NOT_FOUND);
 	while (ms->tokens[k])
 	{
-		if (ft_strncmp(ms->tokens[0], "exit\0", 5) == 0 && !ms->tokens[k + 1])
+		if ((k == 0) && ft_strncmp(ms->tokens[k], "exit\0", 5) == 0
+			&& !ms->tokens[k + 1])
 		{
 			ft_free_tokens(ms->tokens);
 			exit_minishell(ms);
 		}
-		if (detect_cd_call(ms, ms->tokens) != CMD_NOT_FOUND)
+		if (detect_cd_call(ms, k) != CMD_NOT_FOUND || detect_pwd_call(ms,
+				k) != CMD_NOT_FOUND || detect_env_call(ms, k) != CMD_NOT_FOUND
+			|| detect_echo_call(ms, k) != CMD_NOT_FOUND)
 			return (ms->ret);
 		k++;
 	}
+	ms->ret = CMD_NOT_FOUND;
 	return (CMD_NOT_FOUND);
 }
 
@@ -143,7 +148,7 @@ int	external_cmds(t_minishell *ms)
 	- add unset without option
 	- add export without option
 */
-int	built_in_cmds(t_minishell *ms)
+int	external_cmds(t_minishell *ms)
 {
 	int	k;
 
@@ -152,11 +157,10 @@ int	built_in_cmds(t_minishell *ms)
 		return (CMD_NOT_FOUND);
 	while (ms->tokens[k])
 	{
-		if (detect_pwd_call(ms, ms->tokens) != CMD_NOT_FOUND
-			|| detect_echo_call(ms, ms->tokens, k) != CMD_NOT_FOUND
-			|| detect_executable(ms, ms->tokens, k) != CMD_NOT_FOUND)
+		if (detect_executable(ms, k) != CMD_NOT_FOUND)
 			return (ms->ret);
 		k++;
 	}
-	return (CMD_NOT_FOUND);
+	ms->ret = CMD_NOT_FOUND;
+	return (ms->ret);
 }

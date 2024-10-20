@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/19 00:13:12 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/20 11:09:02 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_print_tokens(char **tokens)
 		return ;
 	while (tokens[k])
 	{
-		ft_printf(":%s:\n", tokens[k]);
+		ft_printf("%s\n", tokens[k]);
 		k++;
 	}
 }

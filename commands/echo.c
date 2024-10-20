@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 23:25:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/18 13:37:00 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/20 12:13:26 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,34 @@
 
 /*
 	Detect if the command is echo, currently work if only the first token
-	is echo.
+	is echo. If the echo call is detected, call echo. Return 0 is successful,
+	and CMD_NOT_FOUND(127) is the call is not detected.
 	to do :
-		- should work later if a pipe preceed it.
-			as for the example : ls | echo done
-			which should print 'done' and not the result of ls.
-			if the echo call is detected,
-				print the tokens. return 0 is successful,
-			and -1 if the call is not found.
+	- should work later if a pipe preceed it.
+		as for the example : ls | echo done
+		which should print 'done' and not the result of ls.
 */
-int	detect_echo_call(t_minishell *ms, char **tokens, int k)
+int	detect_echo_call(t_minishell *ms, int k)
 {
-	if ((ft_strncmp(tokens[0], "echo\0", 5) == 0 && ft_strncmp(tokens[k + 1],
-				"-n\0", 3) == 0))
+	if (((k == 0) && ft_strncmp(ms->tokens[k], "echo\0", 5) == 0
+			&& ft_strncmp(ms->tokens[k + 1], "-n\0", 3) == 0))
 	{
-		echo_n(tokens);
+		echo_n(ms->tokens);
 		ms->ret = SUCCESS;
-		return (SUCCESS);
 	}
-	else if (ft_strncmp(tokens[0], "echo\0", 5) == 0)
+	else if ((k == 0) && ft_strncmp(ms->tokens[k], "echo\0", 5) == 0)
 	{
-		echo(tokens);
+		echo(ms->tokens);
 		ms->ret = SUCCESS;
-		return (SUCCESS);
 	}
-	return (CMD_NOT_FOUND);
+	else
+	{
+		ms->ret = CMD_NOT_FOUND;
+	}
+	return (ms->ret);
 }
 
-/* Print the tokens after echo */
+/* Prints the tokens after echo */
 void	echo(char **tokens)
 {
 	int	k;
@@ -49,7 +49,7 @@ void	echo(char **tokens)
 	k = 1;
 	if (!tokens[k])
 	{
-		ft_putchar_fd('\n', STDOUT_FILENO);
+		write(1, "\n", 1);
 		return ;
 	}
 	while (tokens[k + 1])
@@ -60,7 +60,7 @@ void	echo(char **tokens)
 	ft_printf("%s\n", tokens[k]);
 }
 
-/* Print the tokens after echo -n */
+/* Prints the tokens after echo -n and print a surligned '%' at the end.*/
 void	echo_n(char **tokens)
 {
 	int	k;

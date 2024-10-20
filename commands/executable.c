@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 22:14:31 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/19 10:55:34 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/20 13:04:38 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,31 @@
 
 /*
 	Detect if the command is an executable. If exerve fail, we check if the
-	error is because we don't have permissions or if the file do not exist.
-	Else if exerve success, we return SUCCESS(0).
-	Else if the the token do not begin with "./", return CMD_NOT_FOUND(127),
-	so we can check the other built-in commands.
+	error is because we don't have permissions , Else if exerve success, we
+	return SUCCESS(0). Else if the the token do not begin with "./", return
+	CMD_NOT_FOUND(127), so we can check the other built-in commands.
 */
-int	detect_executable(t_minishell *ms, char **tokens, int k)
+int	detect_executable(t_minishell *ms, int k)
 {
-	if (tokens[k][0] == '.' && tokens[k][1] == '/')
+	if (ms->tokens[k][0] == '.' && ms->tokens[k][1] == '/')
 	{
-		if (execve(tokens[k], tokens, ms->env) == FAIL)
+		if (execve(ms->tokens[k], ms->tokens, ms->env) == FAIL)
 		{
 			if (errno == EACCES)
 			{
-				ft_fprintf(2, "ms: permission denied: %s\n", tokens[k]);
+				ft_fprintf(2, "ms: %s: %s\n", ms->tokens[k], strerror(errno));
 				ms->ret = CPERM_DENIED;
-				return (ms->ret);
 			}
 			else if (errno == ENOENT)
 			{
+				ft_fprintf(2, "ms: %s: %s\n", ms->tokens[k], strerror(errno));
 				ms->ret = CMD_NOT_FOUND;
-				return (ms->ret);
 			}
 		}
-		ms->ret = SUCCESS;
-		return (ms->ret);
+		else
+			ms->ret = SUCCESS;
 	}
-	ms->ret = CMD_NOT_FOUND;
+	else
+		ms->ret = ERROR;
 	return (ms->ret);
 }

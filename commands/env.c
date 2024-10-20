@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/30 00:52:07 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/20 11:08:01 by ccodere          ###   ########.fr       */
+/*   Created: 2024/10/19 22:04:19 by ccodere           #+#    #+#             */
+/*   Updated: 2024/10/20 11:11:28 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "commands.h"
+#include "../includes/minishell.h"
 
 /*
-	Call the pwd command, Return the 0 is successful, 1 if too many arguments,
-	and CMD_NOT_FOUND(127) if the command(pwd) is not found.
+	Call the env command, return 0 is successfull, 1 for errors and
+	CMD_NOT_FOUND(127) if the command(pwd) is not found.
 */
-int	detect_pwd_call(t_minishell *ms, int k)
+int	detect_env_call(t_minishell *ms, int k)
 {
-	if ((k == 0) && ft_strncmp(ms->tokens[k], "pwd\0", 4) == 0)
+	if ((k == 0) && strncmp(ms->tokens[k], "env\0", 4) == 0)
 	{
-		ms->ret = pwd(ms, k);
+		ms->ret = env(ms, k);
 	}
 	else
 	{
@@ -29,22 +29,22 @@ int	detect_pwd_call(t_minishell *ms, int k)
 	return (ms->ret);
 }
 
-/* Display the current working directory */
-int	pwd(t_minishell *ms, int k)
+/* Display the ms->env */
+int	env(t_minishell *ms, int k)
 {
 	if (ms->tokens[k + 1])
 	{
-		ft_fprintf(2, "ms: pwd: too many arguments\n");
+		ft_fprintf(2, "ms: env: too many arguments\n");
 		ms->ret = ERROR;
 	}
-	else if (!ms->tokens[k + 1] && ms->cwd)
+	else if (!ms->tokens[k + 1] && (ms->env))
 	{
-		ft_printf("%s\n", ms->cwd);
+		ft_print_tokens(ms->env);
 		ms->ret = SUCCESS;
 	}
 	else
 	{
-		ft_printf("ms: pwd: %s\n", strerror(errno));
+		ft_printf("ms: env: %s\n", strerror(errno));
 		ms->ret = ERROR;
 	}
 	return (ms->ret);

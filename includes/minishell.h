@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/19 13:11:05 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/20 13:06:58 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include "readline/history.h"
-# include "readline/readline.h"
+# include <readline/history.h>
+# include <readline/readline.h>
 
 # define SUCCESS 0
 # define FAIL -1
@@ -89,6 +89,8 @@ int			ft_isredirect(int c);
 // ft_utils.c
 int			ft_count_tokens(char **tokens);
 void		ft_print_tokens(char **tokens);
+char		**ft_envdup(char **envp);
+int			wait_children(t_minishell *ms);
 
 // ft_exit.c
 void		exit_minishell(t_minishell *ms);
@@ -103,15 +105,10 @@ void		ft_free_at_exit(t_minishell *ms);
 
 // ft_error.c
 int			check_error(t_minishell *ms, char *cmd);
-int			check_error_cd(t_minishell *ms);
-int			wait_children(t_minishell *ms);
 
 // ft_display.c
 char		*get_user_color(t_minishell *ms, char *username);
 char		*get_arrow_color(t_minishell *ms, char *cwd_dup);
-
-// minishell.c
-char		**ft_envdup(char **envp);
 
 /* /lexing */
 
@@ -149,20 +146,24 @@ char		*ft_toktrim(t_minishell *ms, char *token, int len);
 /* /commands */
 
 // cd.c
-int			cd(t_minishell *ms, char **tokens);
-int			detect_cd_call(t_minishell *ms, char **tokens);
+int			cd(t_minishell *ms, int k);
+int			detect_cd_call(t_minishell *ms, int k);
 
 // pwd.c
-int			pwd(t_minishell *ms, char **tokens);
-int			detect_pwd_call(t_minishell *ms, char **tokens);
+int			pwd(t_minishell *ms, int k);
+int			detect_pwd_call(t_minishell *ms, int k);
 
 // echo.c
 void		echo(char **tokens);
 void		echo_n(char **tokens);
-int			detect_echo_call(t_minishell *ms, char **tokens, int k);
+int			detect_echo_call(t_minishell *ms, int k);
 
 // executable.c
-int			detect_executable(t_minishell *ms, char **tokens, int k);
+int			detect_executable(t_minishell *ms, int k);
+
+// env.c
+int			detect_env_call(t_minishell *ms, int k);
+int			env(t_minishell *ms, int k);
 
 // find_executable_path.c
 char		*find_executable_path(char *cmds);

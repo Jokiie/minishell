@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:14:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/19 13:24:23 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/20 13:06:08 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*ft_get_prompt_name(t_minishell *ms, char *username, char *cwd)
 	char	*cwd_dup;
 	char	**cwd_split;
 	char	*tmp;
-	
+
 	if (cwd)
 		cwd_split = ft_split(cwd, '/');
 	if (cwd)
@@ -68,7 +68,7 @@ char	*ft_get_prompt_name(t_minishell *ms, char *username, char *cwd)
 		ft_free_tokens(cwd_split);
 		return (username_dup);
 	}
-	return (ft_strdup(CYAN BOLD"minishell ➜  "RESET BOLDRESET));
+	return (ft_strdup(CYAN BOLD "minishell ➜  " RESET BOLDRESET));
 }
 
 /*
@@ -81,7 +81,7 @@ char	*ft_get_prompt_name(t_minishell *ms, char *username, char *cwd)
 void	ft_execms(t_minishell *ms, char **envp)
 {
 	ms->env = ft_envdup(envp);
-	//rl_bind_key('\t', rl_complete);
+	// rl_bind_key('\t', rl_complete);
 	while (1)
 	{
 		ms->user = getenv("USER");
@@ -118,6 +118,6 @@ int	main(int argc, char **argv, char **envp)
 		ms->pid = getpid();
 		ft_execms(ms, envp);
 	}
-	free(ms);
+	exit_minishell(ms);
 	return (0);
 }

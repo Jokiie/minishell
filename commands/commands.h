@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:51:50 by matislessar       #+#    #+#             */
-/*   Updated: 2024/10/18 13:29:47 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/20 13:06:36 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,24 @@
 # include "../includes/minishell.h"
 
 // cd.c
-int		cd(t_minishell *ms, char **tokens);
-int		detect_cd_call(t_minishell *ms, char **tokens);
+int		cd(t_minishell *ms, int k);
+int		detect_cd_call(t_minishell *ms, int k);
 
 // pwd.c
-int		pwd(t_minishell *ms, char **tokens);
-int		detect_pwd_call(t_minishell *ms, char **tokens);
+int		pwd(t_minishell *ms, int k);
+int		detect_pwd_call(t_minishell *ms, int k);
 
 // echo.c
 void	echo(char **tokens);
 void	echo_n(char **tokens);
-int		detect_echo_call(t_minishell *ms, char **tokens, int k);
+int		detect_echo_call(t_minishell *ms, int k);
 
 // executable.c
-int		detect_executable(t_minishell *ms, char **tokens, int k);
+int		detect_executable(t_minishell *ms, int k);
+
+// env.c
+int		detect_env_call(t_minishell *ms, int k);
+int		env(t_minishell *ms, int k);
 
 // find_executable_path.c
 char	*find_executable_path(char *cmds);
@@ -43,6 +47,4 @@ int		exec_path_cmds(t_minishell *ms, char **tokens, int i);
 int		external_cmds(t_minishell *ms);
 int		built_in_cmds(t_minishell *ms);
 
-// ft_error.c
-int		check_error_cd(t_minishell *ms);
 #endif
