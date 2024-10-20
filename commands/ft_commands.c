@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/20 13:06:27 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/20 13:32:44 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	call_commands(t_minishell *ms)
 	else if (pid == 0)
 	{
 		ft_exec_redirection(ms);
-		ms->ret = external_cmds(ms);
+		ms->ret = external_builtin_cmds(ms);
 		if (ms->ret == ERROR)
 		{
 			ms->ret = exec_path_cmds(ms, ms->tokens, 0);
@@ -122,9 +122,8 @@ int	built_in_cmds(t_minishell *ms)
 			ft_free_tokens(ms->tokens);
 			exit_minishell(ms);
 		}
-		if (detect_cd_call(ms, k) != CMD_NOT_FOUND || detect_pwd_call(ms,
-				k) != CMD_NOT_FOUND || detect_env_call(ms, k) != CMD_NOT_FOUND
-			|| detect_echo_call(ms, k) != CMD_NOT_FOUND)
+		if (detect_cd_call(ms, k) != CMD_NOT_FOUND
+			|| detect_pwd_call(ms, k) != CMD_NOT_FOUND)
 			return (ms->ret);
 		k++;
 	}
@@ -135,20 +134,21 @@ int	built_in_cmds(t_minishell *ms)
 /*
 	These commands need to be called in call_commands because it will be called
 	twice if not found in our functions and in the bash. If they dont exist they
-	write both error message from the find_executable_path and from the related
-	command. If the command is not in this function, return CMD_NOT_FOUND(127),
-	so the fork can search the commands in the paths. Else, return 0 for success
-	and 1 for errors so the fork dont search in the paths.
+	write both error message from the find_executable_path and from bash. If the
+	command is not in this function, return CMD_NOT_FOUND(127), so the fork can
+	search the commands in the paths. Else, return 0 for success and 1 for
+	errors so the fork dont search in the paths.
 
+
+	echo is here because it do no work with redirection otherwise.
 	/!\ Each command should return an int to get the return value. We need it
 		for the "$?" commands which print the return value of the last command.
 		We save the return value of a command in ms->ret.
 	to do:
-	- add "env" command without option or argument(while loop + printf ms->env?)
 	- add unset without option
 	- add export without option
 */
-int	external_cmds(t_minishell *ms)
+int	external_builtin_cmds(t_minishell *ms)
 {
 	int	k;
 
@@ -157,7 +157,9 @@ int	external_cmds(t_minishell *ms)
 		return (CMD_NOT_FOUND);
 	while (ms->tokens[k])
 	{
-		if (detect_executable(ms, k) != CMD_NOT_FOUND)
+		if (detect_executable(ms, k) != CMD_NOT_FOUND
+			|| detect_env_call(ms, k) != CMD_NOT_FOUND
+			|| detect_echo_call(ms, k) != CMD_NOT_FOUND)
 			return (ms->ret);
 		k++;
 	}
