@@ -99,24 +99,63 @@ int	ft_exect_pipes(t_minishell *ms)
 	return (nbr_pipes);
 }
 
-void	ft_pipes_int_out(t_minishell *ms, int nbr_pipes)
+int	ft_pipes_int_out(t_minishell *ms, int nbr_pipes, int i, int j)
 {
 	int		cmd_start;
 	int		cmd_end;
 	int		cmd_num;
-	int		i;
+	char	args_count;
+	char	**args;
 
 	i = -1;
+	cmd_start = 0;
+	cmd_num = 0;
 	while (++i <= nbr_pipes)
 	{
 		cmd_end = cmd_start;
 		while (ms->tokens[cmd_end] != NULL && ft_strcmp(ms->tokens[cmd_end], "|") != 0)
 			cmd_end++;
+		args_count = cmd_end - cmd_start;
+		args = malloc(sizeof(char *) * (args_count + 1));
+		if (!args)
+			return (EXIT_FAILURE);
+		j = -1;
+		while (++j < args_count)
+			args[j] = ms->tokens[cmd_start + j];
+		args[args_count] = NULL;
 	}
 
 }
 
-void	ft_pipes(t_minishell *ms)
+int	ft_pipes_fork(t_minishell *ms, int cmd_num, int num_pipes, int **pipes)
 {
+	pid_t	pid;
+	int		i;
+	int		j;
 
+	i = -1;
+	j = 0;
+	pid = fork();
+	if (pid < 0)
+		return (EXIT_FAILURE);
+	if (pid == 0)
+	{
+		if (cmd_num > 0)
+		{
+			if (dup2(pipes[cmd_num - 1][0], STDIN_FILENO) == -1)
+				exit (EXIT_FAILURE);
+		}
+		if (cmd_num < num_pipes)
+		{
+			if (dup2(pipes[cmd_num][1], STDOUT_FILENO) == -1)
+				exit (EXIT_FAILURE);
+		}
+		while (++i < num_pipes)
+		{
+			close(pipes[i][0]);
+			close(pipes[i][1]);
+		}
+		execvp(args[0], args);
+		exit(EXIT_FAILURE);
+	}
 }
