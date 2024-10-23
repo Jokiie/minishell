@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/15 16:41:13 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/10/22 17:27:50 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,11 @@ char		**ft_envdup(char **envp);
 
 //ft_pipes
 int		ft_has_pipe(char *str);
+int		ft_count_pipes(char **str);
+int		**ft_allocate_pipes(int num_pipes);
+char	**ft_extract_args(char **tokens, int start, int end);
+void	ft_close_pipes(int **pipes, int num_pipes);
+void	ft_pipes_redirection(int **pipes, int cmd_num, int num_pipes);
 int		ft_exect_pipes(t_minishell *ms);
-void	ft_exec_pipes_redirection(t_minishell *ms);
-
 
 #endif

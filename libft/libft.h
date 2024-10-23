@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 12:20:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/03 14:04:11 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/23 15:52:44 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int					ft_toupper(int c);
 
 int					ft_atoi(const char *str);
 long int			ft_atol(const char *str);
+int					ft_strcmp(const char *s1, const char *s2);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
 

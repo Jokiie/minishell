@@ -49,7 +49,7 @@ SRC	=		minishell.c \
 			ft_utils.c \
 			ft_if_is.c \
 			ft_signal_handler.c \
-			# pipes.c \
+			pipes.c \
 
 
 SRCS += $(CMD_DIR)/ft_check_cmd_path.c $(CMD_DIR)/ft_commands.c $(CMD_DIR)/cd.c \

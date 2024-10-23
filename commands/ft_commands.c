@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_commands.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/14 14:40:18 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/23 15:47:45 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	call_commands(t_minishell *ms)
 		signal(SIGINT, ft_sigint_handler);
 		signal(SIGQUIT, ft_sigquit_handler);
 		ft_exec_redirection(ms);
+		ft_exect_pipes(ms);
 		if (built_in_cmds(ms) != SUCCESS)
 		{
 			exec_cmd_in_paths(ms, ms->tokens, 0);
