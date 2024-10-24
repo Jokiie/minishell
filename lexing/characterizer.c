@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   characterizer.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/20 23:50:33 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/24 12:42:34 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ char	*apply_nbr_expansion(t_minishell *ms, char *token_dup, int i)
 {
 	char	*new_token_dup;
 
+	new_token_dup = NULL;
 	if ((token_dup[i] == '$' && token_dup[i + 1] == '?')
 		&& !ms->token.in_squotes)
 		new_token_dup = apply_nbr_value(token_dup, i, ms->ret);

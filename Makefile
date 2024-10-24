@@ -27,7 +27,8 @@ RL				=	$(RL_DIR)$(RL_L) $(RL_DIR)$(RL_H)
 CC				=	gcc
 FLAGS_SHELL		=	-D MINI_BIN=$(BIN_DIR) -D CONPILE_DIR=$(PWD) -D V_MINI=$(version)
 CFLAGS			=	-Wall -Werror -Wextra -g -fno-common $(FLAGS_SHELL)
-LDFLAGS := -lm
+LDFLAGS			=	-lm -lreadline
+
 #-fsanitize=address
 RM				=	rm -f
 
