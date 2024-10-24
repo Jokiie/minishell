@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/19 21:47:42 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/21 01:13:22 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int	ft_open_quotes_checker(t_minishell *ms, char *line)
 	int	i;
 
 	i = 0;
+	ms->token.in_dquotes = FALSE;
+	ms->token.in_squotes = FALSE;
 	while (line[i])
 	{
 		ft_quotes_detector(ms, line, i);

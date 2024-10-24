@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 22:04:19 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/20 11:11:28 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/23 21:57:43 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	detect_env_call(t_minishell *ms, int k)
 	}
 	else
 	{
-		ms->ret = CMD_NOT_FOUND;
+		ms->ret = ERROR;
 	}
 	return (ms->ret);
 }

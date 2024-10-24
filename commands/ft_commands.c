@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/20 13:32:44 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/23 21:59:21 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	parse_input(t_minishell *ms, char *input)
 	ms->ret = tokens_creator(ms, input);
 	if (ms->ret == SUCCESS)
 	{
-		// ft_print_tokens(ms->tokens);
+		//ft_print_tokens(ms->tokens);
 		ms->ret = built_in_cmds(ms);
 		if (ms->ret == CMD_NOT_FOUND)
 			ms->ret = call_commands(ms);
@@ -37,7 +37,10 @@ int	parse_input(t_minishell *ms, char *input)
 /*
 	Create a child process with fork to execute a command in the environment
 	path variable. wait_children wait the children processes to finish and
-	save their return value.
+	save their return value. We check if forked_builtin_cmds return ERROR
+	because if the token is not executable, it have a special message and
+	if we returned CMD_NOT_FOUND(127), and checkit like for built-in
+	commands, it will show the wrong message. 
 
 	to do:
 	- handle "<<" ">>" "|"
@@ -52,7 +55,7 @@ int	call_commands(t_minishell *ms)
 	else if (pid == 0)
 	{
 		ft_exec_redirection(ms);
-		ms->ret = external_builtin_cmds(ms);
+		ms->ret = forked_builtin_cmds(ms);
 		if (ms->ret == ERROR)
 		{
 			ms->ret = exec_path_cmds(ms, ms->tokens, 0);
@@ -69,43 +72,45 @@ int	call_commands(t_minishell *ms)
 	If path is accessible, we execute it and return SUCCESS(0), else, we free
 	the path and return the error code returned by check error.
 */
-int	exec_path_cmds(t_minishell *ms, char **tokens, int i)
+int	exec_path_cmds(t_minishell *ms, char **tokens, int k)
 {
 	char	*path;
 	char	*cmd;
 
-	if (!tokens || !*tokens)
-		exit_child(ms);
-	while (tokens[i])
+	if (!ms->tokens || !*(ms->tokens))
+		return (0);
+	while (tokens[k])
 	{
 		if (*tokens[0] == '/')
 		{
-			cmd = get_last_dir(tokens[i]);
+			cmd = get_last_dir(tokens[k]);
 			path = find_executable_path(cmd);
 			ft_free(cmd);
 		}
 		else
-			path = find_executable_path(tokens[i]);
+			path = find_executable_path(tokens[k]);
 		if (!path || execve(path, tokens, ms->env) == FAIL)
 		{
 			ft_free(path);
-			ms->ret = check_error(ms, tokens[i]);
+			ms->ret = check_error(ms, tokens[k]);
 			return (ms->ret);
 		}
-		i++;
+		k++;
 	}
 	ft_free(path);
 	return (SUCCESS);
 }
 
 /*
-	Commands that must be call in the parent process to work. Return SUCCESS(0) if
-	the command is successful and CMD_NOT_FOUND(127) if the command it not in this
-	function, so we can use this value to tell the program to search in built-in
-	commands and bash commands. if ms->tokens point to NULL, return
-	CMD_NOT_FOUND,
-		because bash return this because we can't find a empty string,
-	right?
+	Commands that must be call in the parent process to work (for now).
+	Return SUCCESS(0) if the command is successful and CMD_NOT_FOUND(127)
+	if the command it not in this function, so we can use this value to
+	tell the program to search in forked built-in commands and bash
+	commands.
+
+	to do:
+	- add unset without option
+	- add export without option
 */
 int	built_in_cmds(t_minishell *ms)
 {
@@ -113,7 +118,7 @@ int	built_in_cmds(t_minishell *ms)
 
 	k = 0;
 	if (!ms->tokens || !*(ms->tokens))
-		return (CMD_NOT_FOUND);
+		return (SUCCESS);
 	while (ms->tokens[k])
 	{
 		if ((k == 0) && ft_strncmp(ms->tokens[k], "exit\0", 5) == 0
@@ -139,27 +144,25 @@ int	built_in_cmds(t_minishell *ms)
 	search the commands in the paths. Else, return 0 for success and 1 for
 	errors so the fork dont search in the paths.
 
-
-	echo is here because it do no work with redirection otherwise.
+	-> echo and env is here because it do no work with redirection otherwise.
+	
 	/!\ Each command should return an int to get the return value. We need it
 		for the "$?" commands which print the return value of the last command.
 		We save the return value of a command in ms->ret.
-	to do:
-	- add unset without option
-	- add export without option
 */
-int	external_builtin_cmds(t_minishell *ms)
+int	forked_builtin_cmds(t_minishell *ms)
 {
 	int	k;
 
 	k = 0;
 	if (!ms->tokens || !(*ms->tokens))
-		return (CMD_NOT_FOUND);
+		exit_child(ms);
 	while (ms->tokens[k])
 	{
-		if (detect_executable(ms, k) != CMD_NOT_FOUND
-			|| detect_env_call(ms, k) != CMD_NOT_FOUND
-			|| detect_echo_call(ms, k) != CMD_NOT_FOUND)
+		if (detect_executable(ms, k) != ERROR
+			|| detect_executable(ms, k) != ERROR
+			|| detect_env_call(ms, k) != ERROR
+			|| detect_echo_call(ms, k) != ERROR)
 			return (ms->ret);
 		k++;
 	}

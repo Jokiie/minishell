@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/20 13:28:39 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/21 01:01:21 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,14 +130,17 @@ int			ft_open_quotes_checker(t_minishell *ms, char *line);
 // characterizer.c
 char		**characterizer(t_minishell *ms, char **tokens);
 char		*characterize_token(t_minishell *ms, char *token, int i);
-char		*var_extractor(char *token, int *i);
-char		*insert_variable_value(char *before, char *var, char *after);
+char	*apply_nbr_expansion(t_minishell *ms, char *token_dup, int i);
 
 // var_expansion.c
 char		*apply_var_expansion(char *token_dup, int i);
-char		*ret_var_extractor(char *token, int *i);
-char		*insert_return_value(t_minishell *ms, char *before, char *after);
-char		*apply_return_value(t_minishell *ms, char *token_dup, int i);
+char		*insert_variable_value(char *before, char *var, char *after);
+char		*var_extractor(char *token, int *i);
+
+// nbr_expansion.c
+char		*apply_nbr_value(char *token_dup, int i, int nbr);
+char		*insert_nbr_value(char *before, char *after, int nbr);
+char		*single_var_extractor(char *token, int *i);
 
 // trimmer.c
 char		**trimmer(t_minishell *ms, char **tokens);
@@ -173,8 +176,8 @@ char		*get_last_dir(char *cmds);
 // commands.c
 int			parse_input(t_minishell *ms, char *input);
 int			call_commands(t_minishell *ms);
-int			exec_path_cmds(t_minishell *ms, char **tokens, int i);
-int			external_builtin_cmds(t_minishell *ms);
+int			exec_path_cmds(t_minishell *ms, char **tokens, int k);
+int			forked_builtin_cmds(t_minishell *ms);
 int			built_in_cmds(t_minishell *ms);
 
 #endif

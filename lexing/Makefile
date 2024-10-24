@@ -6,7 +6,7 @@
 #    By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/11 12:55:17 by ccodere           #+#    #+#              #
-#    Updated: 2024/10/18 13:08:37 by ccodere          ###   ########.fr        #
+#    Updated: 2024/10/20 22:39:40 by ccodere          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRCS 	= tokens_creator.c \
 		trimmer.c \
 		redirection.c \
 		var_expansion.c \
+		nbr_expansion.c \
 
 OBJECTS = $(SRCS:.c=.o)
 

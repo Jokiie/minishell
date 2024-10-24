@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/18 13:07:35 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/21 02:43:02 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 int	tokens_creator(t_minishell *ms, char *line)
 {
 	char	**tmp_pretokens;
-
-	ms->token.in_dquotes = FALSE;
-	ms->token.in_squotes = FALSE;
+	
 	if (ft_open_quotes_checker(ms, line) != SUCCESS)
 	{
 		ft_fprintf(2, "ms: open quotes not allowed\n");

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:47:45 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/20 13:05:33 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/21 02:16:32 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@ int	check_error(t_minishell *ms, char *cmd)
 		ft_fprintf(2, "ms: %s: %s\n", cmd, strerror(EACCES));
 		ms->ret = CPERM_DENIED;
 	}
+	else if (errno == ENOENT || !*(ms->tokens[0]))
+	{
+		ft_fprintf(2, "ms: %s: command not found\n", cmd);
+		ms->ret = CMD_NOT_FOUND;
+	}
 	else if (errno == EACCES)
 	{
 		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), cmd);
 		ms->ret = CPERM_DENIED;
-	}
-	else if (errno == ENOENT)
-	{
-		ft_fprintf(2, "ms: %s: command not found\n", cmd);
-		ms->ret = CMD_NOT_FOUND;
 	}
 	else if (errno == ENAMETOOLONG)
 	{
