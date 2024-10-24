@@ -13,7 +13,7 @@ int	parse_input(t_minishell *ms, char *input)
 	ms->ret = tokens_creator(ms, input);
 	if (ms->ret == SUCCESS)
 	{
-		//ft_print_tokens(ms->tokens);
+		ft_print_tokens(ms->tokens);
 		ms->ret = built_in_cmds(ms);
 		if (ms->ret == CMD_NOT_FOUND)
 			ms->ret = call_commands(ms);
@@ -44,10 +44,10 @@ int	call_commands(t_minishell *ms)
 	else if (pid == 0)
 	{
 		ft_exec_redirection(ms);
-		ms->ret = forked_builtin_cmds(ms);
-		if (ms->ret == ERROR)
 		ft_exect_pipes(ms);
-		if (built_in_cmds(ms) != SUCCESS)
+		if (ms->ret == CMD_NOT_FOUND)
+			ms->ret = forked_builtin_cmds(ms);
+		if (built_in_cmds(ms) != ERROR)
 		{
 			ms->ret = exec_path_cmds(ms, ms->tokens, 0);
 			exit_child(ms);
@@ -119,12 +119,14 @@ int	built_in_cmds(t_minishell *ms)
 			exit_minishell(ms);
 		}
 		if (detect_cd_call(ms, k) != CMD_NOT_FOUND
-			|| detect_pwd_call(ms, k) != CMD_NOT_FOUND)
+			|| detect_pwd_call(ms, k) != CMD_NOT_FOUND
+			|| detect_env_call(ms, k) != CMD_NOT_FOUND
+			|| detect_echo_call(ms, k) != CMD_NOT_FOUND)
 			return (ms->ret);
 		k++;
 	}
 	ms->ret = CMD_NOT_FOUND;
-	return (CMD_NOT_FOUND);
+	return (ms->ret);
 }
 
 /*
@@ -150,13 +152,10 @@ int	forked_builtin_cmds(t_minishell *ms)
 		exit_child(ms);
 	while (ms->tokens[k])
 	{
-		if (detect_executable(ms, k) != ERROR
-			|| detect_executable(ms, k) != ERROR
-			|| detect_env_call(ms, k) != ERROR
-			|| detect_echo_call(ms, k) != ERROR)
+		if (detect_executable(ms, k) != ERROR)
 			return (ms->ret);
 		k++;
 	}
-	ms->ret = CMD_NOT_FOUND;
+	ms->ret = ERROR;
 	return (ms->ret);
 }

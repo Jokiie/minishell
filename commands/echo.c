@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 23:25:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/23 21:56:21 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/24 13:40:29 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	detect_echo_call(t_minishell *ms, int k)
 	}
 	else
 	{
-		ms->ret = ERROR;
+		ms->ret = CMD_NOT_FOUND;
 	}
 	return (ms->ret);
 }

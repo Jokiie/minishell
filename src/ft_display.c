@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_display.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 00:29:34 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/19 13:21:01 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/24 13:53:58 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*get_user_color(t_minishell *ms, char *username)
     else if (ft_strnstr(username, "matis", ft_strlen(username)))
     {
         ms->user = "Matis";
-		color = ft_strjoin(BLUE BOLD "", ms->user);
+		color = ft_strjoin(GREEN BOLD "", ms->user);
     }
     else if (!username || !ms->user)
     {
