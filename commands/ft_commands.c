@@ -13,7 +13,7 @@ int	parse_input(t_minishell *ms, char *input)
 	ms->ret = tokens_creator(ms, input);
 	if (ms->ret == SUCCESS)
 	{
-		ft_print_tokens(ms->tokens);
+		//ft_print_tokens(ms->tokens);
 		ms->ret = built_in_cmds(ms);
 		if (ms->ret == CMD_NOT_FOUND)
 			ms->ret = call_commands(ms);

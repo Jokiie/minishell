@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/10/24 12:57:00 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/24 15:28:17 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,26 +120,20 @@ int	ft_exect_pipes(t_minishell *ms)
 	num_pipes = ft_count_pipes(ms->tokens);
 	if (num_pipes == 0)
 		return (EXIT_FAILURE);
-
 	pipes = ft_allocate_pipes(num_pipes);
 	if (!pipes)
 		return (EXIT_FAILURE);
-
 	cmd_start = 0;
 	cmd_num = 0;
 	i = 0;
-
-
 	while (ms->tokens[i])
 	{
 		if (ft_strcmp(ms->tokens[i], "|") == 0 || ms->tokens[i + 1] == NULL)
 		{
 			if (ms->tokens[i + 1] == NULL)
 				i++;
-
 			char **args = ft_extract_args(ms->tokens, cmd_start, i);
 			pid = fork();
-
 			if (pid == 0)
 			{
 				if (cmd_num > 0)
@@ -150,7 +144,6 @@ int	ft_exect_pipes(t_minishell *ms)
 						exit(EXIT_FAILURE);
 					}
 				}
-
 				if (cmd_num < num_pipes)
 				{
 					if (dup2(pipes[cmd_num][1], STDOUT_FILENO) == -1)
@@ -159,30 +152,22 @@ int	ft_exect_pipes(t_minishell *ms)
 						exit(EXIT_FAILURE);
 					}
 				}
-
 				ft_close_pipes(pipes, num_pipes);
-
 				execvp(args[0], args);
 				perror("minishell: execvp");
 				exit(EXIT_FAILURE);
 			}
-
 			waitpid(pid, NULL, 0);
-
 			free(args);
-
 			if (cmd_num < num_pipes)
 				close(pipes[cmd_num][1]);
-
 			if (cmd_num > 0)
 				close(pipes[cmd_num - 1][0]);
-
 			cmd_start = i + 1;
 			cmd_num++;
 		}
 		i++;
 	}
-
 	ft_close_pipes(pipes, num_pipes);
 	return (EXIT_SUCCESS);
 }

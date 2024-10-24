@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/24 13:05:35 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/24 14:14:26 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,6 @@ void	ft_init_sigaction(void)
 
 void	ft_signal_handler(int sig, siginfo_t *siginfo, void *context)
 {
-	int	pid;
-
-	pid = getpid();
 	(void)siginfo;
 	(void)context;
 	if (sig == SIGINT)
