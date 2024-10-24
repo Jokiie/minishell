@@ -10,7 +10,7 @@ CLE 			=	\e[1;1H\e[2J
 
 NAME			=	minishell
 
-RL_DIR			=	readline/
+RL_DIR			=	 readline/
 RL_H			=	libhistory.a
 RL_L			=	libreadline.a
 RL				=	$(RL_DIR)$(RL_L) $(RL_DIR)$(RL_H)
@@ -25,7 +25,6 @@ RL				=	$(RL_DIR)$(RL_L) $(RL_DIR)$(RL_H)
 
 # Compiler and flags
 CC				=	gcc
-FLAGS_SHELL		=	-D MINI_BIN=$(BIN_DIR) -D CONPILE_DIR=$(PWD) -D V_MINI=$(version)
 CFLAGS			=	-Wall -Werror -Wextra -g -fno-common $(FLAGS_SHELL)
 LDFLAGS			=	-lm -lreadline
 
@@ -53,7 +52,7 @@ SRC	=		minishell.c \
 			ft_signal_handler.c \
 			ft_error.c \
 			ft_display.c \
-			# pipes.c \
+			pipes.c \
 
 
 SRCS += $(CMD_DIR)/ft_check_cmd_path.c $(CMD_DIR)/ft_commands.c $(CMD_DIR)/cd.c \

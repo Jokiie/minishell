@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/24 12:45:52 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/24 13:05:35 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_signal_handler(int sig, siginfo_t *siginfo, void *context)
 	(void)context;
 	if (sig == SIGINT)
 	{
-		rl_replace_line("", 0);
+		//rl_replace_line("", 0);
 		rl_on_new_line();
 		write(1, "\n", 1);
 		rl_redisplay();

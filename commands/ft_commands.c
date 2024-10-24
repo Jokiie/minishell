@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_commands.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/04 12:40:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/23 21:59:21 by ccodere          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "commands.h"
 
@@ -57,6 +46,8 @@ int	call_commands(t_minishell *ms)
 		ft_exec_redirection(ms);
 		ms->ret = forked_builtin_cmds(ms);
 		if (ms->ret == ERROR)
+		ft_exect_pipes(ms);
+		if (built_in_cmds(ms) != SUCCESS)
 		{
 			ms->ret = exec_path_cmds(ms, ms->tokens, 0);
 			exit_child(ms);

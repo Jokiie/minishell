@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/02 22:08:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/24 12:46:22 by ccodere          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -179,5 +167,16 @@ int			call_commands(t_minishell *ms);
 int			exec_path_cmds(t_minishell *ms, char **tokens, int k);
 int			forked_builtin_cmds(t_minishell *ms);
 int			built_in_cmds(t_minishell *ms);
+
+char		**ft_envdup(char **envp);
+
+//ft_pipes
+int		ft_has_pipe(char *str);
+int		ft_count_pipes(char **str);
+int		**ft_allocate_pipes(int num_pipes);
+char	**ft_extract_args(char **tokens, int start, int end);
+void	ft_close_pipes(int **pipes, int num_pipes);
+void	ft_pipes_redirection(int **pipes, int cmd_num, int num_pipes);
+int		ft_exect_pipes(t_minishell *ms);
 
 #endif
