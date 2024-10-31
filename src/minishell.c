@@ -8,6 +8,7 @@ void	ft_init_minishell(t_minishell *ms)
 	ms->prompt_name = NULL;
 	ms->user = NULL;
 	ms->cwd = NULL;
+	ms->prev_cwd = NULL;
 	ms->env = NULL;
 	ms->tokens = NULL;
 	ms->pretokens = NULL;
@@ -20,7 +21,6 @@ void	ft_init_minishell(t_minishell *ms)
 	ms->token.in_dquotes = FALSE;
 	ms->token.in_squotes = FALSE;
 	ms->ret = 0;
-	ms->pid = getpid();
 }
 
 /*
@@ -43,22 +43,34 @@ char	*ft_get_prompt_name(t_minishell *ms, char *username, char *cwd)
 	char	**cwd_split;
 	char	*tmp;
 
-	if (cwd)
-		cwd_split = ft_split(cwd, '/');
+	if (!cwd)
+		cwd = ms->prev_cwd;
 	if (cwd)
 	{
-		color = get_user_color(ms, username);
-		tmp = color;
-		color = ft_strjoin(color, "/");
-		ft_free(tmp);
-		cwd_dup = ft_strjoin(color, cwd_split[ft_count_tokens(cwd_split) - 1]);
-		username_dup = get_arrow_color(ms, cwd_dup);
-		ft_free(color);
-		ft_free(cwd_dup);
+		cwd_split = ft_split(cwd, '/');
+		// else
+		// 	cwd_split = ft_split("/deleted_dir", '/');
+		if (cwd_split[0] && cwd_split)
+		{
+			color = get_user_color(ms, username);
+			tmp = color;
+			color = ft_strjoin(color, "/");
+			ft_free(tmp);
+			cwd_dup = ft_strjoin(color, cwd_split[ft_count_tokens(cwd_split)
+					- 1]);
+			username_dup = get_arrow_color(ms, cwd_dup);
+			ft_free(color);
+			ft_free(cwd_dup);
+		}
+		else
+			username_dup = ft_strdup(CYAN BOLD "minishell ➜  " RESET BOLDRESET);
 		ft_free_tokens(cwd_split);
-		return (username_dup);
 	}
-	return (ft_strdup(CYAN BOLD "minishell ➜  " RESET BOLDRESET));
+	else
+	{
+		username_dup = ft_strdup(CYAN BOLD "minishell ➜  " RESET BOLDRESET);
+	}
+	return (username_dup);
 }
 
 /*
@@ -68,6 +80,7 @@ char	*ft_get_prompt_name(t_minishell *ms, char *username, char *cwd)
 	reuse a command. It frees the input after each line so we don't have leaks
 	or corrupted data.
 */
+
 void	ft_execms(t_minishell *ms, char **envp)
 {
 	ms->env = ft_envdup(envp);
@@ -105,24 +118,8 @@ int	main(int argc, char **argv, char **envp)
 	{
 		ft_init_minishell(ms);
 		ft_init_sigaction();
-		ms->pid = getpid();
 		ft_execms(ms, envp);
 	}
 	exit_minishell(ms);
 	return (0);
 }
-/*
-108
-115
-32
-45
-108
-32
-124
-32
-108
-115
-32
-45
-108
-*/

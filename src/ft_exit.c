@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:31:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/24 12:43:23 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/31 02:29:42 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	exit_child(t_minishell *ms)
 
 	bash calculate the error return this way : 128 + signum
 */
-int	wait_children(t_minishell *ms)
+int	wait_children(void)
 {
 	pid_t	wait_pid;
 	int		status;
@@ -62,10 +62,7 @@ int	wait_children(t_minishell *ms)
 	while (wait_pid != -1 || errno != ECHILD)
 	{
 		wait_pid = waitpid(-1, &status, 0);
-		if (wait_pid == ms->pid)
-			last_status = status;
-		else if (wait_pid != ms->pid)
-			last_status = status;
+		last_status = status;
 	}
 	if (WIFSIGNALED(last_status))
 	{

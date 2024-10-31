@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 12:08:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/24 13:40:09 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/31 03:47:39 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ int	cd(t_minishell *ms, int k)
 	t_bool	found_dir;
 
 	found_dir = FALSE;
+	if (ms->cwd)
+		ms->prev_cwd = ft_strdup(ms->cwd);
 	if (!ms->tokens[k + 1] || *(ms->tokens[k + 1]) == '\0')
 	{
 		ft_fprintf(2, "ms: cd: need a relative or absolute path\n");

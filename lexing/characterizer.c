@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   characterizer.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/24 12:42:34 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/31 02:29:24 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*characterize_token(t_minishell *ms, char *token, int i)
 			token_dup = new_token_dup;
 		}
 		else if (token_dup[i] == '$' && !ms->token.in_squotes
-			&& (token_dup[i	+ 1] == '$' || token_dup[i + 1] == '?'))
+			&& token_dup[i + 1] == '?')
 		{
 			new_token_dup = apply_nbr_expansion(ms, token_dup, i);
 			token_dup = new_token_dup;
@@ -75,8 +75,5 @@ char	*apply_nbr_expansion(t_minishell *ms, char *token_dup, int i)
 	if ((token_dup[i] == '$' && token_dup[i + 1] == '?')
 		&& !ms->token.in_squotes)
 		new_token_dup = apply_nbr_value(token_dup, i, ms->ret);
-	else if ((token_dup[i] == '$' && token_dup[i + 1] == '$')
-		&& !ms->token.in_squotes)
-		new_token_dup = apply_nbr_value(token_dup, i, ms->pid);
 	return (new_token_dup);
 }
