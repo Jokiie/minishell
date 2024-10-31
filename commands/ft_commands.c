@@ -54,7 +54,7 @@ int	call_commands(t_minishell *ms)
 		}
 		exit_child(ms);
 	}
-	ms->ret = wait_children(ms);
+	ms->ret = wait_children();
 	return (ms->ret);
 }
 

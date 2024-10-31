@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:52:07 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/24 13:41:12 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/31 12:42:42 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,12 @@ int	pwd(t_minishell *ms, int k)
 	else if (!ms->tokens[k + 1] && ms->cwd)
 	{
 		ft_printf("%s\n", ms->cwd);
+		ms->ret = SUCCESS;
+	}
+	else if (!ms->cwd)
+	{
+		chdir(ms->prev_cwd);
+		ft_printf("%s\n", ms->prev_cwd);
 		ms->ret = SUCCESS;
 	}
 	else

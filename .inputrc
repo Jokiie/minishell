@@ -1,0 +1,13 @@
+set enable-bracketed-paste off
+
+set colored-completion-prefix on
+
+set colored-stats on
+
+set mark-directories off
+
+set match-hidden-files off
+
+set horizontal-scroll-mode off
+
+set enable-active-region off

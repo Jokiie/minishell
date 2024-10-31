@@ -51,6 +51,7 @@ typedef struct s_minishell
 	char	*prompt_name;
 	char	*user;
 	char	*cwd;
+	char	*prev_cwd;
 	char	**history;
 	char	**env;
 	char	**tokens;
@@ -61,7 +62,6 @@ typedef struct s_minishell
 	int		std_err;
 	t_token	token;
 	int		ret;
-	int		pid;
 }			t_minishell;
 
 // ft_signal_handler.c
@@ -78,7 +78,7 @@ int			ft_isredirect(int c);
 int			ft_count_tokens(char **tokens);
 void		ft_print_tokens(char **tokens);
 char		**ft_envdup(char **envp);
-int			wait_children(t_minishell *ms);
+int			wait_children(void);
 
 // ft_exit.c
 void		exit_minishell(t_minishell *ms);
