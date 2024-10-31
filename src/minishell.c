@@ -83,6 +83,7 @@ char	*ft_get_prompt_name(t_minishell *ms, char *username, char *cwd)
 
 void	ft_execms(t_minishell *ms, char **envp)
 {
+	setenv("INPUTRC", "./.inputrc", 1);
 	ms->env = ft_envdup(envp);
 	// rl_bind_key('\t', rl_complete);
 	while (1)
