@@ -178,5 +178,8 @@ char	**ft_extract_args(char **tokens, int start, int end);
 void	ft_close_pipes(int **pipes, int num_pipes);
 void	ft_pipes_redirection(int **pipes, int cmd_num, int num_pipes);
 int		ft_exect_pipes(t_minishell *ms);
+void	ft_create_and_manage_process(char **args, int **pipes, int cmd_num, int num_pipes, pid_t *pid);
+void	ft_handle_child_process(char **args, int **pipes, int cmd_num, int num_pipes);
+
 
 #endif

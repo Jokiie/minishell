@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:51:50 by matislessar       #+#    #+#             */
-/*   Updated: 2024/10/21 01:01:27 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/28 14:21:33 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@ int		detect_pwd_call(t_minishell *ms, int k);
 void	echo(char **tokens);
 void	echo_n(char **tokens);
 int		detect_echo_call(t_minishell *ms, int k);
+
+// pecho.c
+void	p_echo(char **tokens);
+void	p_echo_n(char **tokens);
+int		p_detect_echo_call(t_minishell *ms, int k);
 
 // executable.c
 int		detect_executable(t_minishell *ms, int k);

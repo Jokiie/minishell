@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+         #
+#    By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/11 12:55:15 by ccodere           #+#    #+#              #
-#    Updated: 2024/10/20 10:59:46 by ccodere          ###   ########.fr        #
+#    Updated: 2024/10/28 14:20:09 by matislessar      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRCS 	= ft_commands.c \
 		  find_executable_path.c \
 		  cd.c \
 		  echo.c \
+		  pecho.c \
 		  pwd.c \
 		  executable.c\
 		  env.c \

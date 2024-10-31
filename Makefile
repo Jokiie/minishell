@@ -26,7 +26,7 @@ RL				=	$(RL_DIR)$(RL_L) $(RL_DIR)$(RL_H)
 # Compiler and flags
 CC				=	gcc
 CFLAGS			=	-Wall -Werror -Wextra -g -fno-common $(FLAGS_SHELL)
-LDFLAGS			=	-lm -lreadline
+LDFLAGS			=	-lm
 
 #-fsanitize=address
 RM				=	rm -f

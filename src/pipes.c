@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/10/24 15:28:17 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/10/31 12:45:20 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,24 +108,68 @@ void	ft_pipes_redirection(int **pipes, int cmd_num, int num_pipes)
 		dup2(pipes[cmd_num][1], STDOUT_FILENO);
 }
 
+// static int	path(char **envp, t_minishell *ms)
+// {
+// 	pid_t	pid;
+	
+// 	while(ft_strncmp(envp, "PATH=", 5))
+// 		envp++;
+// 	ms->env = *envp;
+// 	return (envp);
+// }
+
+void	ft_handle_child_process(char **args, int **pipes, int cmd_num, int num_pipes)
+{
+	if (cmd_num > 0)
+	{
+		if (dup2(pipes[cmd_num - 1][0], STDIN_FILENO) == -1)
+		{
+			perror("minishell: dup2 stdin");
+			exit(EXIT_FAILURE);
+		}
+	}
+	if (cmd_num < num_pipes)
+	{
+		if (dup2(pipes[cmd_num][1], STDOUT_FILENO) == -1)
+		{
+			perror("minishell: dup2 stdout");
+			exit(EXIT_FAILURE);
+		}
+	}
+	ft_close_pipes(pipes, num_pipes);
+	execvp(args[0], args);
+	perror("minishell: execvp");
+	exit(EXIT_FAILURE);
+}
+
+void	ft_create_and_manage_process(char **args, int **pipes, int cmd_num, int num_pipes, pid_t *pid)
+{
+	*pid = fork();
+	if (*pid == 0)
+	{
+		ft_handle_child_process(args, pipes, cmd_num, num_pipes);
+	}
+	else
+	{
+		waitpid(*pid, NULL, 0);
+		if (cmd_num < num_pipes)
+			close(pipes[cmd_num][1]);
+		if (cmd_num > 0)
+			close(pipes[cmd_num - 1][0]);
+	}
+}
+
 int	ft_exect_pipes(t_minishell *ms)
 {
-	int		i;
-	int		cmd_start;
-	int		cmd_num;
-	int		num_pipes;
+	int		i, cmd_start, cmd_num;
 	pid_t	pid;
 	int		**pipes;
 
-	num_pipes = ft_count_pipes(ms->tokens);
-	if (num_pipes == 0)
+	int num_pipes = ft_count_pipes(ms->tokens);
+	if (num_pipes == 0 || !(pipes = ft_allocate_pipes(num_pipes)))
 		return (EXIT_FAILURE);
-	pipes = ft_allocate_pipes(num_pipes);
-	if (!pipes)
-		return (EXIT_FAILURE);
-	cmd_start = 0;
-	cmd_num = 0;
-	i = 0;
+
+	cmd_start = cmd_num = i = 0;
 	while (ms->tokens[i])
 	{
 		if (ft_strcmp(ms->tokens[i], "|") == 0 || ms->tokens[i + 1] == NULL)
@@ -133,36 +177,8 @@ int	ft_exect_pipes(t_minishell *ms)
 			if (ms->tokens[i + 1] == NULL)
 				i++;
 			char **args = ft_extract_args(ms->tokens, cmd_start, i);
-			pid = fork();
-			if (pid == 0)
-			{
-				if (cmd_num > 0)
-				{
-					if (dup2(pipes[cmd_num - 1][0], STDIN_FILENO) == -1)
-					{
-						perror("minishell: dup2 stdin");
-						exit(EXIT_FAILURE);
-					}
-				}
-				if (cmd_num < num_pipes)
-				{
-					if (dup2(pipes[cmd_num][1], STDOUT_FILENO) == -1)
-					{
-						perror("minishell: dup2 stdout");
-						exit(EXIT_FAILURE);
-					}
-				}
-				ft_close_pipes(pipes, num_pipes);
-				execvp(args[0], args);
-				perror("minishell: execvp");
-				exit(EXIT_FAILURE);
-			}
-			waitpid(pid, NULL, 0);
+			ft_create_and_manage_process(args, pipes, cmd_num, num_pipes, &pid);
 			free(args);
-			if (cmd_num < num_pipes)
-				close(pipes[cmd_num][1]);
-			if (cmd_num > 0)
-				close(pipes[cmd_num - 1][0]);
 			cmd_start = i + 1;
 			cmd_num++;
 		}
