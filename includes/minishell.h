@@ -79,6 +79,7 @@ int			ft_count_tokens(char **tokens);
 void		ft_print_tokens(char **tokens);
 char		**ft_envdup(char **envp);
 int			wait_children(void);
+void		ft_print_debug(char **tokens);
 
 // ft_exit.c
 void		exit_minishell(t_minishell *ms);
@@ -103,14 +104,15 @@ char		*get_arrow_color(t_minishell *ms, char *cwd_dup);
 // redirection.c
 void		ft_exec_redirection(t_minishell *ms);
 void		ft_recreate_tokens(t_minishell *ms, int i);
-void		redirect_input(t_minishell *ms, char *file);
-void		redirect_output(t_minishell *ms, char *file);
+int			redirect_input(t_minishell *ms, char *file);
+int			redirect_output(t_minishell *ms, char *file);
+int			append_output(t_minishell *ms, char *file);
 
 // tokens_creator.c
 int			tokens_creator(t_minishell *ms, char *line);
 
 // tokenizer.c
-int			separe_line(t_minishell *ms, char *line, int i, int k);
+int			separe_line(t_minishell *ms, char *line, int i, int *k);
 char		**tokenizer(t_minishell *ms, char *line);
 int			ft_quotes_detector(t_minishell *ms, char *line, int i);
 int			ft_open_quotes_checker(t_minishell *ms, char *line);

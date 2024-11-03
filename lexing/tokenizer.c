@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/24 13:33:12 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/03 03:08:25 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ char	**tokenizer(t_minishell *ms, char *line)
 		i++;
 	while (line[i])
 	{
-		i = separe_line(ms, line, i, k);
+		i = separe_line(ms, line, i, &k);
 		while (ft_isspace(line[i]))
 			i++;
-		k++;
 	}
 	ms->pretokens[k] = NULL;
+	ft_print_debug(ms->pretokens);
 	return (ms->pretokens);
 }
 
@@ -62,11 +62,12 @@ int	ft_open_quotes_checker(t_minishell *ms, char *line)
 	return (SUCCESS);
 }
 
-int	separe_line(t_minishell *ms, char *line, int i, int k)
+int	separe_line(t_minishell *ms, char *line, int i, int *k)
 {
 	t_token	*t;
-	char	*substr;
+	int		have_meta_chars;
 
+	have_meta_chars = 0;
 	t = &(ms->token);
 	(*t).start = i;
 	while (line[i])
@@ -76,14 +77,48 @@ int	separe_line(t_minishell *ms, char *line, int i, int k)
 		{
 			if (ft_isspace(line[i]))
 				break ;
+			else if (ft_isredirect(line[i]))
+			{
+				have_meta_chars = 1;
+				break ;
+			}
 		}
 		i++;
 	}
-	(*t).end = i;
-	substr = ft_substr(line, (*t).start, ((*t).end - (*t).start));
-	if (!substr)
-		ms->pretokens[k] = NULL;
-	else
-		ms->pretokens[k] = substr;
+	if (i > (*t).start)
+	{
+		(*t).end = i;
+		ms->pretokens[(*k)++] = ft_substr(line, (*t).start, ((*t).end - (*t).start));
+	}
+	if (have_meta_chars)
+		ms->pretokens[(*k)++] = meta_chars_extractor(line, &i);
 	return (i);
+}
+
+char	*meta_chars_extractor(char *line, int *i)
+{
+	char	*substr;
+	int		start;
+
+	start = *i;
+	if ((line[*i] == '>' && line[*i + 1] == '>')
+		|| (line[*i] == '<' && line[*i + 1] == '<'))
+		(*i)+=2;
+	else if ((line[*i] == '>' || line[*i] == '<')
+		&& (!ft_isredirect(line[*i + 1])))
+		(*i)++;
+	else if (line[*i] == '<' && line[*i + 1] == '>')
+		(*i)++;
+	else if (line[*i] == '>' && line[*i + 1] == '<')
+		(*i)++;
+	else if (line[*i] == '|')
+		(*i)++;
+	else if (line[*i] == '|' && ft_isredirect(line[*i + 1]))
+		(*i)++;
+	else if (ft_isredirect(line[*i]) && line[*i] == '|')
+		(*i)++;
+	substr = ft_substr(line, start, *i - start);
+	if (!substr)
+		return (NULL);
+	return (substr);
 }

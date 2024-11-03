@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/20 11:09:02 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/02 12:47:51 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,19 @@ void	ft_print_tokens(char **tokens)
 	}
 }
 
+void	ft_print_debug(char **tokens)
+{
+	int	k;
+
+	k = 0;
+	if (!tokens || !*tokens)
+		return ;
+	while (tokens[k])
+	{
+		ft_printf(":%s:\n", tokens[k]);
+		k++;
+	}
+}
 /*
 	Dup the environment string tab
 	to do: need to check if we can use it to remove a variable

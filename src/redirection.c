@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:25:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/24 12:58:09 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/03 01:36:40 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,19 @@ void	ft_exec_redirection(t_minishell *ms)
 		return ;
 	while (ms->tokens[k])
 	{
-		if (ft_strncmp(ms->tokens[k], ">", 1) == 0)
+		if (ft_strncmp(ms->tokens[k], ">>", 2) == 0)
 		{
-			redirect_output(ms, ms->tokens[k + 1]);
+			ms->ret = append_output(ms, ms->tokens[k + 1]);
+			break ;
+		}
+		else if (ft_strncmp(ms->tokens[k], ">", 1) == 0)
+		{
+			ms->ret = redirect_output(ms, ms->tokens[k + 1]);
 			break ;
 		}
 		else if (ft_strncmp(ms->tokens[k], "<", 1) == 0)
 		{
-			redirect_input(ms, ms->tokens[k + 1]);
+			ms->ret = redirect_input(ms, ms->tokens[k + 1]);
 			break ;
 		}
 		k++;
@@ -59,7 +64,8 @@ void	ft_recreate_tokens(t_minishell *ms, int i)
 	while (k < i)
 	{
 		if ((ft_strncmp(ms->tokens[k], ">", 1) != 0)
-			&& (ft_strncmp(ms->tokens[k], "<", 1) != 0))
+			&& (ft_strncmp(ms->tokens[k], "<", 1) != 0)
+			&& (ft_strncmp(ms->tokens[k], ">>", 2) != 0))
 			new_tokens[k] = ms->tokens[k];
 		k++;
 	}
@@ -68,31 +74,51 @@ void	ft_recreate_tokens(t_minishell *ms, int i)
 }
 
 /* < : redirect input. */
-void	redirect_input(t_minishell *ms, char *file)
+int	redirect_input(t_minishell *ms, char *file)
 {
 	int	fdin;
 
 	fdin = open(file, O_RDONLY);
 	if (fdin < 0)
+		ms->ret = check_error(ms, file);
+	else
 	{
-		ft_fprintf(2, "ms: No such file or directory near '<'\n");
-		exit(EXIT_FAILURE);
+		dup2(fdin, ms->std_in);
+		close(fdin);
+		ms->ret = SUCCESS;
 	}
-	dup2(fdin, ms->std_in);
-	close(fdin);
+	return (ms->ret);
 }
 
 /* > : redirect output. */
-void	redirect_output(t_minishell *ms, char *file)
+int	redirect_output(t_minishell *ms, char *file)
 {
 	int	fdout;
 
 	fdout = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fdout < 0)
+		ms->ret = check_error(ms, file);
+	else
 	{
-		ft_fprintf(2, "ms: No such file or directory near '>'\n", file);
-		return ;
+		dup2(fdout, ms->std_out);
+		close(fdout);
+		ms->ret = SUCCESS;
 	}
-	dup2(fdout, ms->std_out);
-	close(fdout);
+	return (ms->ret);
+}
+
+int	append_output(t_minishell *ms, char *file)
+{
+	int	fdout;
+
+	fdout = open(file, O_WRONLY | O_APPEND | O_CREAT, 0644);
+	if (fdout < 0)
+		ms->ret = check_error(ms, file);
+	else
+	{
+		dup2(fdout, ms->std_out);
+		close(fdout);
+		ms->ret = SUCCESS;
+	}
+	return (ms->ret);
 }
