@@ -6,13 +6,13 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/10/31 12:45:20 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/04 12:13:13 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_has_pipe(char *str)
+int	ft_has_pipe(char **str)
 {
 	int	i;
 
@@ -21,9 +21,9 @@ int	ft_has_pipe(char *str)
 	{
 		while (str[++i])
 		{
-			if (str[i] == '|')
+			if (strcmp(str[i], "|") == 0)
 			{
-				printf("good");
+				printf("pipes detect\n");
 				return (EXIT_SUCCESS);
 			}
 		}
@@ -74,7 +74,8 @@ char	**ft_extract_args(char **tokens, int start, int end)
 	char	**args;
 
 	size = end - start;
-	args = malloc(sizeof(char *) * (size + 1));
+	// args = malloc(sizeof(char *) * (size + 1));
+	args = ft_calloc(size + 1, sizeof(char *));
 	i = 0;
 	while (i < size)
 	{
@@ -146,9 +147,7 @@ void	ft_create_and_manage_process(char **args, int **pipes, int cmd_num, int num
 {
 	*pid = fork();
 	if (*pid == 0)
-	{
 		ft_handle_child_process(args, pipes, cmd_num, num_pipes);
-	}
 	else
 	{
 		waitpid(*pid, NULL, 0);
@@ -159,6 +158,16 @@ void	ft_create_and_manage_process(char **args, int **pipes, int cmd_num, int num
 	}
 }
 
+// void free_args(char** args) {
+//     if (args != NULL) {
+//         for (int i = 0; args[i] != NULL; i++) {
+//             free(args[i]);
+//         }
+//         free(args);
+//         args = NULL;
+//     }
+// }
+
 int	ft_exect_pipes(t_minishell *ms)
 {
 	int		i, cmd_start, cmd_num;
@@ -168,7 +177,6 @@ int	ft_exect_pipes(t_minishell *ms)
 	int num_pipes = ft_count_pipes(ms->tokens);
 	if (num_pipes == 0 || !(pipes = ft_allocate_pipes(num_pipes)))
 		return (EXIT_FAILURE);
-
 	cmd_start = cmd_num = i = 0;
 	while (ms->tokens[i])
 	{
