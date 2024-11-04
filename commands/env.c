@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 22:04:19 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/24 13:40:39 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/03 12:08:25 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	detect_env_call(t_minishell *ms, int k)
 /* Display the ms->env */
 int	env(t_minishell *ms, int k)
 {
-	if (ms->tokens[k + 1])
+	if (ms->tokens[k + 1] && ft_strncmp(ms->tokens[k + 1], "|", 1) != 0)
 	{
 		ft_fprintf(2, "ms: env: too many arguments\n");
 		ms->ret = ERROR;
@@ -42,7 +42,7 @@ int	env(t_minishell *ms, int k)
 		ft_print_tokens(ms->env);
 		ms->ret = SUCCESS;
 	}
-	else
+	else if (ms->ret != SUCCESS)
 	{
 		ft_printf("ms: env: %s\n", strerror(errno));
 		ms->ret = ERROR;

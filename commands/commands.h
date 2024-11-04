@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:51:50 by matislessar       #+#    #+#             */
-/*   Updated: 2024/10/28 14:21:33 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/04 02:56:10 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ int		cd(t_minishell *ms, int k);
 int		detect_cd_call(t_minishell *ms, int k);
 
 // pwd.c
-int		pwd(t_minishell *ms, int k);
+int		pwd(t_minishell *ms);
 int		detect_pwd_call(t_minishell *ms, int k);
 
 // echo.c
-void	echo(char **tokens);
+void	echo(char **tokens, int opt);
 void	echo_n(char **tokens);
 int		detect_echo_call(t_minishell *ms, int k);
 

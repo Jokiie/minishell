@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:52:07 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/31 12:42:42 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/04 02:24:31 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	detect_pwd_call(t_minishell *ms, int k)
 {
 	if ((k == 0) && ft_strncmp(ms->tokens[k], "pwd\0", 4) == 0)
 	{
-		ms->ret = pwd(ms, k);
+		ms->ret = pwd(ms);
 	}
 	else
 	{
@@ -29,29 +29,23 @@ int	detect_pwd_call(t_minishell *ms, int k)
 	return (ms->ret);
 }
 
-/* Display the current working directory */
-int	pwd(t_minishell *ms, int k)
+/*
+	Display the current working directory, if the cwd do not exist,
+	display the previous cwd. But maybe need to enhance this because
+	if we delete a parent directory, it do not display properly. At
+	least it do not segfault...
+*/
+int	pwd(t_minishell *ms)
 {
-	if (ms->tokens[k + 1])
+	if (!ms->cwd)
 	{
-		ft_fprintf(2, "ms: pwd: too many arguments\n");
-		ms->ret = ERROR;
-	}
-	else if (!ms->tokens[k + 1] && ms->cwd)
-	{
-		ft_printf("%s\n", ms->cwd);
-		ms->ret = SUCCESS;
-	}
-	else if (!ms->cwd)
-	{
-		chdir(ms->prev_cwd);
 		ft_printf("%s\n", ms->prev_cwd);
 		ms->ret = SUCCESS;
 	}
-	else
+	else 
 	{
-		ft_printf("ms: pwd: %s\n", strerror(errno));
-		ms->ret = ERROR;
+		ft_printf("%s\n", ms->cwd);
+		ms->ret = SUCCESS;
 	}
 	return (ms->ret);
 }

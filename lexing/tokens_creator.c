@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/21 02:43:02 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/04 04:47:35 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int	tokens_creator(t_minishell *ms, char *line)
 	
 	if (ft_open_quotes_checker(ms, line) != SUCCESS)
 	{
-		ft_fprintf(2, "ms: open quotes not allowed\n");
-		return (SYNTAXE_ERROR);
+		ft_fprintf(2, "ms: syntax error : unclosed quotes\n");
+		return (SYNTAX_ERROR);
 	}
 	tokenizer(ms, line);
 	if (ms->pretokens)
@@ -36,5 +36,7 @@ int	tokens_creator(t_minishell *ms, char *line)
 		ft_free_tokens(ms->pretokens);
 		ms->tokens = NULL;
 	}
+	if (ms->tokens && check_syntax(ms->tokens) == SYNTAX_ERROR)
+		return (SYNTAX_ERROR);
 	return (SUCCESS);
 }

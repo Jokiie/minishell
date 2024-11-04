@@ -43,11 +43,13 @@ int	call_commands(t_minishell *ms)
 		return (ERROR);
 	else if (pid == 0)
 	{
-		ft_exec_redirection(ms);
-		ft_exect_pipes(ms);
+		if (has_pipe(ms->input))
+			ft_exect_pipes(ms);
+		if (has_redirect(ms->tokens))
+			ft_exec_redirection(ms);
 		if (ms->ret == CMD_NOT_FOUND)
 			ms->ret = forked_builtin_cmds(ms);
-		if (built_in_cmds(ms) != ERROR)
+		if (built_in_cmds(ms) == CMD_NOT_FOUND)
 		{
 			ms->ret = exec_path_cmds(ms, ms->tokens, 0);
 			exit_child(ms);
@@ -112,8 +114,7 @@ int	built_in_cmds(t_minishell *ms)
 		return (SUCCESS);
 	while (ms->tokens[k])
 	{
-		if ((k == 0) && ft_strncmp(ms->tokens[k], "exit\0", 5) == 0
-			&& !ms->tokens[k + 1])
+		if ((k == 0) && ft_strncmp(ms->tokens[k], "exit\0", 5) == 0)
 		{
 			ft_free_tokens(ms->tokens);
 			exit_minishell(ms);
@@ -137,8 +138,6 @@ int	built_in_cmds(t_minishell *ms)
 	search the commands in the paths. Else, return 0 for success and 1 for
 	errors so the fork dont search in the paths.
 
-	-> echo and env is here because it do no work with redirection otherwise.
-	
 	/!\ Each command should return an int to get the return value. We need it
 		for the "$?" commands which print the return value of the last command.
 		We save the return value of a command in ms->ret.

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 23:25:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/28 14:23:52 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/03 13:32:44 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,17 @@
 */
 int	detect_echo_call(t_minishell *ms, int k)
 {
+	int	opt;
+
+	opt = 0;
 	if (((k == 0) && ft_strncmp(ms->tokens[k], "echo\0", 5) == 0
 			&& ft_strncmp(ms->tokens[k + 1], "-n\0", 3) == 0))
 	{
-		echo_n(ms->tokens);
-		ms->ret = SUCCESS;
+		opt = 1;
 	}
 	else if ((k == 0) && ft_strncmp(ms->tokens[k], "echo\0", 5) == 0)
 	{
-		echo(ms->tokens);
+		echo(ms->tokens, opt);
 		ms->ret = SUCCESS;
 	}
 	else
@@ -42,7 +44,7 @@ int	detect_echo_call(t_minishell *ms, int k)
 }
 
 /* Prints the tokens after echo */
-void	echo(char **tokens)
+void	echo(char **tokens, int opt)
 {
 	int	k;
 
@@ -52,27 +54,14 @@ void	echo(char **tokens)
 		write(1, "\n", 1);
 		return ;
 	}
-	while (tokens[k + 1])
+	while (tokens[k])
 	{
-		ft_printf("%s ", tokens[k]);
+
+		ft_putstr_fd(tokens[k], 1);
+		if (tokens[k])
+			ft_putstr_fd(" ", 1);
 		k++;
 	}
-	ft_printf("%s\n", tokens[k]);
-}
-
-/* Prints the tokens after echo -n and print a surligned '%' at the end.*/
-void	echo_n(char **tokens)
-{
-	int	k;
-
-	k = 2;
-	if (!tokens[k])
-		return ;
-	while (tokens[k + 1])
-	{
-		ft_printf("%s ", tokens[k]);
-		k++;
-	}
-	ft_printf("%s", tokens[k]);
-	ft_printf(SURL "%%\n" SURLRESET);
+	if (!opt)
+		ft_putstr_fd("\n", 1);
 }

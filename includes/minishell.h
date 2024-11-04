@@ -12,13 +12,13 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include "readline/readline.h"
 # include "readline/history.h"
+# include "readline/readline.h"
 
 # define SUCCESS 0
 # define FAIL -1
 # define ERROR 1
-# define SYNTAXE_ERROR 2
+# define SYNTAX_ERROR 2
 # define FPERM_DENIED 13
 # define CPERM_DENIED 126
 # define CMD_NOT_FOUND 127
@@ -39,8 +39,8 @@
 
 typedef struct s_token
 {
-	char	start;
-	char	end;
+	int		start;
+	int		end;
 	t_bool	in_dquotes;
 	t_bool	in_squotes;
 }			t_token;
@@ -72,7 +72,7 @@ void		ft_signal_handler(int sig, siginfo_t *siginfo, void *context);
 int			ft_is_dquote(int c);
 int			ft_is_squote(int c);
 int			ft_isquotes(int c);
-int			ft_isredirect(int c);
+int			ft_ismeta_chars(int c);
 
 // ft_utils.c
 int			ft_count_tokens(char **tokens);
@@ -114,13 +114,16 @@ int			tokens_creator(t_minishell *ms, char *line);
 // tokenizer.c
 int			separe_line(t_minishell *ms, char *line, int i, int *k);
 char		**tokenizer(t_minishell *ms, char *line);
+char		*meta_chars_extractor(char *line, int *i);
+
+// quotes_detector.c
 int			ft_quotes_detector(t_minishell *ms, char *line, int i);
 int			ft_open_quotes_checker(t_minishell *ms, char *line);
 
 // characterizer.c
 char		**characterizer(t_minishell *ms, char **tokens);
 char		*characterize_token(t_minishell *ms, char *token, int i);
-char	*apply_nbr_expansion(t_minishell *ms, char *token_dup, int i);
+char		*apply_nbr_expansion(t_minishell *ms, char *token_dup, int i);
 
 // var_expansion.c
 char		*apply_var_expansion(char *token_dup, int i);
@@ -136,6 +139,12 @@ char		*single_var_extractor(char *token, int *i);
 char		**trimmer(t_minishell *ms, char **tokens);
 char		*ft_toktrim(t_minishell *ms, char *token, int len);
 
+// has_meta.c
+t_bool		has_redirect(char **tokens);
+t_bool		has_heredoc(char **tokens);
+t_bool		has_pipe(char *input);
+t_bool		is_meta(char *tokens);
+
 /* /commands */
 
 // cd.c
@@ -143,11 +152,11 @@ int			cd(t_minishell *ms, int k);
 int			detect_cd_call(t_minishell *ms, int k);
 
 // pwd.c
-int			pwd(t_minishell *ms, int k);
+int			pwd(t_minishell *ms);
 int			detect_pwd_call(t_minishell *ms, int k);
 
 // echo.c
-void		echo(char **tokens);
+void		echo(char **tokens, int opt);
 void		echo_n(char **tokens);
 int			detect_echo_call(t_minishell *ms, int k);
 
@@ -172,16 +181,17 @@ int			built_in_cmds(t_minishell *ms);
 
 char		**ft_envdup(char **envp);
 
-//ft_pipes
-int		ft_has_pipe(char *str);
-int		ft_count_pipes(char **str);
-int		**ft_allocate_pipes(int num_pipes);
-char	**ft_extract_args(char **tokens, int start, int end);
-void	ft_close_pipes(int **pipes, int num_pipes);
-void	ft_pipes_redirection(int **pipes, int cmd_num, int num_pipes);
-int		ft_exect_pipes(t_minishell *ms);
-void	ft_create_and_manage_process(char **args, int **pipes, int cmd_num, int num_pipes, pid_t *pid);
-void	ft_handle_child_process(char **args, int **pipes, int cmd_num, int num_pipes);
-
+// ft_pipes
+int			ft_has_pipe(char *str);
+int			ft_count_pipes(char **str);
+int			**ft_allocate_pipes(int num_pipes);
+char		**ft_extract_args(char **tokens, int start, int end);
+void		ft_close_pipes(int **pipes, int num_pipes);
+void		ft_pipes_redirection(int **pipes, int cmd_num, int num_pipes);
+int			ft_exect_pipes(t_minishell *ms);
+void		ft_create_and_manage_process(char **args, int **pipes, int cmd_num,
+				int num_pipes, pid_t *pid);
+void		ft_handle_child_process(char **args, int **pipes, int cmd_num,
+				int num_pipes);
 
 #endif

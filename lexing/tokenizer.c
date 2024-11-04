@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/03 03:08:25 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/04 04:53:26 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,32 +36,6 @@ char	**tokenizer(t_minishell *ms, char *line)
 	return (ms->pretokens);
 }
 
-int	ft_quotes_detector(t_minishell *ms, char *line, int i)
-{
-	if (ft_is_dquote(line[i]) && !ms->token.in_squotes)
-		ms->token.in_dquotes = !ms->token.in_dquotes;
-	else if (ft_is_squote(line[i]) && !ms->token.in_dquotes)
-		ms->token.in_squotes = !ms->token.in_squotes;
-	return (i);
-}
-
-int	ft_open_quotes_checker(t_minishell *ms, char *line)
-{
-	int	i;
-
-	i = 0;
-	ms->token.in_dquotes = FALSE;
-	ms->token.in_squotes = FALSE;
-	while (line[i])
-	{
-		ft_quotes_detector(ms, line, i);
-		i++;
-	}
-	if (ms->token.in_dquotes == TRUE || ms->token.in_squotes == TRUE)
-		return (ERROR);
-	return (SUCCESS);
-}
-
 int	separe_line(t_minishell *ms, char *line, int i, int *k)
 {
 	t_token	*t;
@@ -77,7 +51,7 @@ int	separe_line(t_minishell *ms, char *line, int i, int *k)
 		{
 			if (ft_isspace(line[i]))
 				break ;
-			else if (ft_isredirect(line[i]))
+			else if (ft_ismeta_chars(line[i]))
 			{
 				have_meta_chars = 1;
 				break ;
@@ -85,11 +59,9 @@ int	separe_line(t_minishell *ms, char *line, int i, int *k)
 		}
 		i++;
 	}
+	(*t).end = i;
 	if (i > (*t).start)
-	{
-		(*t).end = i;
 		ms->pretokens[(*k)++] = ft_substr(line, (*t).start, ((*t).end - (*t).start));
-	}
 	if (have_meta_chars)
 		ms->pretokens[(*k)++] = meta_chars_extractor(line, &i);
 	return (i);
@@ -97,15 +69,15 @@ int	separe_line(t_minishell *ms, char *line, int i, int *k)
 
 char	*meta_chars_extractor(char *line, int *i)
 {
-	char	*substr;
-	int		start;
+	char *substr;
+	int start;
 
 	start = *i;
-	if ((line[*i] == '>' && line[*i + 1] == '>')
-		|| (line[*i] == '<' && line[*i + 1] == '<'))
-		(*i)+=2;
+	if ((line[*i] == '>' && line[*i + 1] == '>') || (line[*i] == '<' && line[*i
+			+ 1] == '<'))
+		(*i) += 2;
 	else if ((line[*i] == '>' || line[*i] == '<')
-		&& (!ft_isredirect(line[*i + 1])))
+		&& (!ft_ismeta_chars(line[*i + 1])))
 		(*i)++;
 	else if (line[*i] == '<' && line[*i + 1] == '>')
 		(*i)++;
@@ -113,9 +85,9 @@ char	*meta_chars_extractor(char *line, int *i)
 		(*i)++;
 	else if (line[*i] == '|')
 		(*i)++;
-	else if (line[*i] == '|' && ft_isredirect(line[*i + 1]))
+	else if (line[*i] == '|' && ft_ismeta_chars(line[*i + 1]))
 		(*i)++;
-	else if (ft_isredirect(line[*i]) && line[*i] == '|')
+	else if (ft_ismeta_chars(line[*i]) && line[*i] == '|')
 		(*i)++;
 	substr = ft_substr(line, start, *i - start);
 	if (!substr)

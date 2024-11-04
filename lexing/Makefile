@@ -6,7 +6,7 @@
 #    By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/11 12:55:17 by ccodere           #+#    #+#              #
-#    Updated: 2024/11/02 12:05:32 by ccodere          ###   ########.fr        #
+#    Updated: 2024/11/04 04:43:14 by ccodere          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,11 @@ SRCS 	= tokens_creator.c \
 		trimmer.c \
 		var_expansion.c \
 		nbr_expansion.c \
-
+		quotes_detector.c \
+		has_meta.c \
+		is_meta.c \
+		syntax_error.c \
+		
 OBJECTS = $(SRCS:.c=.o)
 
 # Rules

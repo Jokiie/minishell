@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pecho.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 16:35:18 by matislessar       #+#    #+#             */
-/*   Updated: 2024/10/28 14:53:54 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/03 12:57:58 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ int	p_detect_echo_call(t_minishell *ms, int i)
 	if (((i == 0) && ft_strncmp(ms->tokens[i], "pecho\0", 6) == 0
 			&& ft_strncmp(ms->tokens[i + 1], "-n\0", 3) == 0))
 	{
-		echo_n(ms->tokens);
+		p_echo_n(ms->tokens);
 		ms->ret = SUCCESS;
 	}
 	else if ((i == 0) && ft_strncmp(ms->tokens[i], "pecho\0", 6) == 0)
 	{
-		echo(ms->tokens);
+		p_echo(ms->tokens);
 		ms->ret = SUCCESS;
 	}
 	return (ms->ret);
