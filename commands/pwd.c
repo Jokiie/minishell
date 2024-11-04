@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:52:07 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/04 02:24:31 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/04 05:18:22 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	detect_pwd_call(t_minishell *ms, int k)
 	Display the current working directory, if the cwd do not exist,
 	display the previous cwd. But maybe need to enhance this because
 	if we delete a parent directory, it do not display properly. At
-	least it do not segfault...
+	least it do not segfault.
 */
 int	pwd(t_minishell *ms)
 {

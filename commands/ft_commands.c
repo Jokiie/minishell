@@ -32,7 +32,10 @@ int	parse_input(t_minishell *ms, char *input)
 	commands, it will show the wrong message. 
 
 	to do:
-	- handle "<<" ">>" "|"
+	- handle "<<"
+	- create our own get_env (to get added variables from our environment)
+	
+
 */
 int	call_commands(t_minishell *ms)
 {

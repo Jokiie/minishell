@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 12:08:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/31 03:47:39 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/04 05:19:17 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,12 @@ int	detect_cd_call(t_minishell *ms, int k)
 int	cd(t_minishell *ms, int k)
 {
 	t_bool	found_dir;
-
+	
 	found_dir = FALSE;
 	if (ms->cwd)
 		ms->prev_cwd = ft_strdup(ms->cwd);
+	if (!ms->cwd)
+		ms->prev_cwd = ft_strdup("/deleted_dir");
 	if (!ms->tokens[k + 1] || *(ms->tokens[k + 1]) == '\0')
 	{
 		ft_fprintf(2, "ms: cd: need a relative or absolute path\n");

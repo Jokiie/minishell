@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/04 04:53:26 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/04 05:26:12 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,15 +73,19 @@ char	*meta_chars_extractor(char *line, int *i)
 	int start;
 
 	start = *i;
-	if ((line[*i] == '>' && line[*i + 1] == '>') || (line[*i] == '<' && line[*i
-			+ 1] == '<'))
+	if ((line[*i] == '>' && line[*i + 1] == '>')
+		|| (line[*i] == '<' && line[*i + 1] == '<'))
 		(*i) += 2;
 	else if ((line[*i] == '>' || line[*i] == '<')
 		&& (!ft_ismeta_chars(line[*i + 1])))
 		(*i)++;
-	else if (line[*i] == '<' && line[*i + 1] == '>')
+	else if (line[*i] == '<')
 		(*i)++;
-	else if (line[*i] == '>' && line[*i + 1] == '<')
+	else if (line[*i] == '>')
+		(*i)++;
+	else if (line[*i] == '<' && ft_ismeta_chars(line[*i + 1]))
+		(*i)++;
+	else if (line[*i] == '>' && ft_ismeta_chars(line[*i + 1]))
 		(*i)++;
 	else if (line[*i] == '|')
 		(*i)++;
