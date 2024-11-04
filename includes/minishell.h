@@ -171,7 +171,7 @@ int			built_in_cmds(t_minishell *ms);
 char		**ft_envdup(char **envp);
 
 //ft_pipes
-int		ft_has_pipe(char *str);
+int		ft_has_pipe(char **str);
 int		ft_count_pipes(char **str);
 int		**ft_allocate_pipes(int num_pipes);
 char	**ft_extract_args(char **tokens, int start, int end);

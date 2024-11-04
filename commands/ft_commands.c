@@ -44,7 +44,8 @@ int	call_commands(t_minishell *ms)
 	else if (pid == 0)
 	{
 		ft_exec_redirection(ms);
-		ft_exect_pipes(ms);
+		if (ft_has_pipe(ms->tokens) == 0)
+			ft_exect_pipes(ms);
 		if (ms->ret == CMD_NOT_FOUND)
 			ms->ret = forked_builtin_cmds(ms);
 		if (built_in_cmds(ms) != ERROR)

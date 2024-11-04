@@ -11,3 +11,7 @@ set match-hidden-files off
 set horizontal-scroll-mode off
 
 set enable-active-region off
+
+set enable-keypad off
+
+set enable-meta-key off
