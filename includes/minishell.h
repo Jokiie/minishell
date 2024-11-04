@@ -45,6 +45,13 @@ typedef struct s_token
 	t_bool	in_squotes;
 }			t_token;
 
+typedef struct s_pipes
+{
+	char	**p_args;
+	int		**pipes;
+	int		num_pipes;
+	int		cmd_num;
+}			t_pipes;
 typedef struct s_minishell
 {
 	char	*input;
@@ -52,6 +59,7 @@ typedef struct s_minishell
 	char	*user;
 	char	*cwd;
 	char	*prev_cwd;
+	char	*cmd_path;
 	char	**history;
 	char	**env;
 	char	**tokens;
@@ -184,13 +192,12 @@ char		**ft_envdup(char **envp);
 // ft_pipes
 int			ft_has_pipe(char **str);
 int			ft_count_pipes(char **str);
-int			**ft_allocate_pipes(int num_pipes);
+int			**ft_allocate_pipes(t_pipes *p);
 char		**ft_extract_args(char **tokens, int start, int end);
-void		ft_close_pipes(int **pipes, int num_pipes);
-void		ft_pipes_redirection(int **pipes, int cmd_num, int num_pipes);
+void		ft_close_pipes(t_pipes *p);
+void		ft_pipes_redirection(t_pipes *p);
 int			ft_exect_pipes(t_minishell *ms);
-void		ft_create_and_manage_process(char **args, int **pipes, int cmd_num,
-				int num_pipes, pid_t *pid);
-void		ft_handle_child_process(char **args, int **pipes, int cmd_num,
-				int num_pipes);
+void		ft_create_and_manage_process(t_minishell *ms, t_pipes *p, pid_t *pid);
+void		ft_handle_child_process(t_minishell *ms, t_pipes *p);
+
 #endif

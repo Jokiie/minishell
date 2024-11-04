@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 22:04:19 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/03 12:08:25 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/04 13:28:49 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
