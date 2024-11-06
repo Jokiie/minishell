@@ -1,33 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_if_is.c                                         :+:      :+:    :+:   */
+/*   is_meta.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/03 22:18:41 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/03 03:16:25 by ccodere          ###   ########.fr       */
+/*   Created: 2024/11/04 19:13:36 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/05 15:18:16 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "tokenization.h"
 
-int	ft_is_dquote(int c)
+t_bool  is_redirect(char *token)
 {
-	return (c == '\"');
+    if (is_redirect_in(token) || is_redirect_out(token) || is_append(token))
+        return (TRUE);
+    return (FALSE);
 }
 
-int	ft_is_squote(int c)
+t_bool is_meta(char *token)
 {
-	return (c == '\'');
-}
-
-int	ft_isquotes(int c)
-{
-	return (ft_is_dquote(c) || ft_is_squote(c));
-}
-
-int	ft_ismeta_chars(int c)
-{
-	return (c == '<' || c == '>' || c == '|');
+    if (is_redirect(token) || is_append(token) || is_pipe(token))
+        return (TRUE);
+    return (FALSE);
 }

@@ -33,6 +33,7 @@ RM				=	rm -f
 
 SRC_PATH = src/
 OBJ_PATH = obj/
+TMP_PATH = ./tmp/
 
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
@@ -40,34 +41,28 @@ LIBFT = $(LIBFT_DIR)/libft.a
 CMDS_DIR = commands
 CMDS = $(CMDS_DIR)/commands.a
 
-LEX_DIR = lexing
-LEX = $(LEX_DIR)/lexing.a
+TOK_DIR = tokenization
+TOK = $(TOK_DIR)/tokenization.a
 
 # Sources are all .c files
 SRC	=		minishell.c \
-			ft_exit.c \
-			ft_free.c \
-			ft_utils.c \
-			ft_if_is.c \
-			ft_signal_handler.c \
-			ft_error.c \
-			ft_display.c \
+			exit_minishell.c \
+			free.c \
+			utils.c \
+			is.c \
+			signal_handler.c \
+			error.c \
+			prompt_name.c \
 			redirection.c \
 			pipes.c \
-
-
-SRCS += $(CMD_DIR)/ft_check_cmd_path.c $(CMD_DIR)/ft_commands.c $(CMD_DIR)/cd.c \
-		$(CMD_DIR)/pwd.c $(CMD_DIR)/echo.c
-
-SRCS += $(LEX_DIR)/characterizer.c $(LEX_DIR)/tokenizer.c $(LEX_DIR)/trimmer.c \
-		$(LEX_DIR)/var_expansion.c
+			heredoc.c \
 
 SRCS	= $(addprefix $(SRC_PATH), $(SRC))
 OBJ		= $(SRC:.c=.o)
 OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))
 INCS	= -I ./includes/
 
-all: $(RL) $(LIBFT) $(OBJ_PATH) $(NAME)
+all: $(RL) $(LIBFT) $(OBJ_PATH) $(TMP_PATH) $(NAME)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	$(CC) $(CFLAGS) -c $< -o $@ $(INCS)
@@ -75,20 +70,23 @@ $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)
 
+$(TMP_PATH):
+	mkdir -p $(TMP_PATH)
+
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR) all
 
 $(CMDS):
 	$(MAKE) -C $(CMDS_DIR) all
 
-$(LEX):
-	$(MAKE) -C $(LEX_DIR) all
+$(TOK):
+	$(MAKE) -C $(TOK_DIR) all
 
 $(RL):
 	(cd $(RL_DIR) && ./configure && $(MAKE))
 
-$(NAME): $(OBJS) $(CMDS) $(LEX)
-	$(CC) $(CFLAGS) $(OBJS) $(CMDS) $(LEX) $(LIBFT) $(RL_LIB) -L readline -l readline -l ncurses \
+$(NAME): $(OBJS) $(CMDS) $(TOK)
+	$(CC) $(CFLAGS) $(OBJS) $(CMDS) $(TOK) $(LIBFT) $(RL_LIB) -L readline -l readline -l ncurses \
 	$(RL) $(LDFLAGS) -o $(NAME)
 
 
@@ -96,16 +94,17 @@ $(NAME): $(OBJS) $(CMDS) $(LEX)
 clean:
 	# rm -f $(OBJS)
 	rm -rf $(OBJ_PATH)
+	rm -rf $(TMP_PATH)
 	$(MAKE) -C $(LIBFT_DIR) clean
 	$(MAKE) -C $(CMDS_DIR) clean
-	$(MAKE) -C $(LEX_DIR) clean
+	$(MAKE) -C $(TOK_DIR) clean
 	$(MAKE) -C $(RL_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
 	$(MAKE) -C $(LIBFT_DIR) fclean
 	$(MAKE) -C $(CMDS_DIR) fclean
-	$(MAKE) -C $(LEX_DIR) fclean
+	$(MAKE) -C $(TOK_DIR) fclean
 	$(MAKE) -C $(RL_DIR) distclean
 
 run: all
@@ -118,7 +117,7 @@ re: fclean all
 quick:
 	$(MAKE) -C $(LIBFT_DIR) all
 	$(MAKE) -C $(CMDS_DIR) all
-	$(MAKE) -C $(LEX_DIR) all
+	$(MAKE) -C $(TOK_DIR) all
 
 cp:
 	cp supp.txt /tmp

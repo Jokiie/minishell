@@ -8,16 +8,18 @@
 	call_commands is called by the child process. Return value depend of
 	child return value.
 */
-int	parse_input(t_minishell *ms, char *input)
+int	execute_input(t_minishell *ms, char *input)
 {
 	ms->ret = tokens_creator(ms, input);
+	if (ms->ret == SUCCESS && has_heredoc(ms->tokens))
+		ms->ret = execute_heredocs(ms);
+	print_debug(ms->tokens);
 	if (ms->ret == SUCCESS)
 	{
-		//ft_print_tokens(ms->tokens);
 		ms->ret = built_in_cmds(ms);
 		if (ms->ret == CMD_NOT_FOUND)
 			ms->ret = call_commands(ms);
-		ft_free_tokens(ms->tokens);
+		free_tokens(ms->tokens);
 		return (ms->ret);
 	}
 	return (ms->ret);
@@ -46,10 +48,14 @@ int	call_commands(t_minishell *ms)
 		return (ERROR);
 	else if (pid == 0)
 	{
-		if (has_pipe(ms->input))
+		if (has_pipe(ms->tokens))
 			ft_exect_pipes(ms);
 		if (has_redirect(ms->tokens))
-			ft_exec_redirection(ms);
+		{
+			ms->ret = exec_redirection(ms);
+			if (ms->ret != 0)
+				exit_child(ms);
+		}
 		if (ms->ret == CMD_NOT_FOUND)
 			ms->ret = forked_builtin_cmds(ms);
 		if (built_in_cmds(ms) == CMD_NOT_FOUND)
@@ -73,7 +79,7 @@ int	exec_path_cmds(t_minishell *ms, char **tokens, int k)
 	char	*path;
 	char	*cmd;
 
-	if (!ms->tokens || !*(ms->tokens))
+	if (!tokens || !*tokens)
 		return (0);
 	while (tokens[k])
 	{
@@ -94,7 +100,7 @@ int	exec_path_cmds(t_minishell *ms, char **tokens, int k)
 		k++;
 	}
 	ft_free(path);
-	return (SUCCESS);
+	return (ms->ret);
 }
 
 /*
@@ -119,7 +125,7 @@ int	built_in_cmds(t_minishell *ms)
 	{
 		if ((k == 0) && ft_strncmp(ms->tokens[k], "exit\0", 5) == 0)
 		{
-			ft_free_tokens(ms->tokens);
+			free_tokens(ms->tokens);
 			exit_minishell(ms);
 		}
 		if (detect_cd_call(ms, k) != CMD_NOT_FOUND

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/10/31 12:45:20 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/04 15:44:11 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

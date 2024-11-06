@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   redirection.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/02 10:25:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/03 01:36:40 by ccodere          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
@@ -21,40 +10,41 @@
 	attempted to interpret "<>" as if it were a command or an argument to
 	a command.
 */
-void	ft_exec_redirection(t_minishell *ms)
+int	exec_redirection(t_minishell *ms)
 {
 	int	k;
 
 	k = 0;
 	if (!ms->tokens || !*(ms->tokens))
-		return ;
+		return ERROR;
 	while (ms->tokens[k])
 	{
-		if (ft_strncmp(ms->tokens[k], ">>", 2) == 0)
+		if (is_append(ms->tokens[k]))
 		{
 			ms->ret = append_output(ms, ms->tokens[k + 1]);
 			break ;
 		}
-		else if (ft_strncmp(ms->tokens[k], ">", 1) == 0)
+		else if (is_redirect_out(ms->tokens[k]))
 		{
 			ms->ret = redirect_output(ms, ms->tokens[k + 1]);
 			break ;
 		}
-		else if (ft_strncmp(ms->tokens[k], "<", 1) == 0)
+		else if (is_redirect_in(ms->tokens[k]))
 		{
 			ms->ret = redirect_input(ms, ms->tokens[k + 1]);
 			break ;
 		}
 		k++;
 	}
-	ft_recreate_tokens(ms, k);
+	recreate_tokens(ms, k);
+	return (ms->ret);
 }
 
 /*
 	Recreate the tokens list without the redirection characters,
 	as explained above.
 */
-void	ft_recreate_tokens(t_minishell *ms, int i)
+void	recreate_tokens(t_minishell *ms, int i)
 {
 	char	**new_tokens;
 	int		k;
@@ -63,9 +53,7 @@ void	ft_recreate_tokens(t_minishell *ms, int i)
 	k = 0;
 	while (k < i)
 	{
-		if ((ft_strncmp(ms->tokens[k], ">", 1) != 0)
-			&& (ft_strncmp(ms->tokens[k], "<", 1) != 0)
-			&& (ft_strncmp(ms->tokens[k], ">>", 2) != 0))
+		if (!is_redirect(ms->tokens[k]))
 			new_tokens[k] = ms->tokens[k];
 		k++;
 	}
@@ -73,14 +61,17 @@ void	ft_recreate_tokens(t_minishell *ms, int i)
 	ms->tokens = new_tokens;
 }
 
-/* < : redirect input. */
+/* < : redirect input in the specified file */
 int	redirect_input(t_minishell *ms, char *file)
 {
 	int	fdin;
 
 	fdin = open(file, O_RDONLY);
 	if (fdin < 0)
-		ms->ret = check_error(ms, file);
+	{
+		ms->ret = ERROR;
+		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
+	}
 	else
 	{
 		dup2(fdin, ms->std_in);
@@ -90,14 +81,17 @@ int	redirect_input(t_minishell *ms, char *file)
 	return (ms->ret);
 }
 
-/* > : redirect output. */
+/* > : redirect output in the specified file */
 int	redirect_output(t_minishell *ms, char *file)
 {
 	int	fdout;
 
 	fdout = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fdout < 0)
-		ms->ret = check_error(ms, file);
+	{
+		ms->ret = ERROR;
+		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
+	}
 	else
 	{
 		dup2(fdout, ms->std_out);
@@ -107,13 +101,17 @@ int	redirect_output(t_minishell *ms, char *file)
 	return (ms->ret);
 }
 
+/* Append output obtained in the specified file */
 int	append_output(t_minishell *ms, char *file)
 {
 	int	fdout;
 
 	fdout = open(file, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (fdout < 0)
-		ms->ret = check_error(ms, file);
+	{
+		ms->ret = ERROR;
+		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
+	}
 	else
 	{
 		dup2(fdout, ms->std_out);
