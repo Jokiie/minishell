@@ -180,17 +180,21 @@ t_bool			is_heredoc(char *token);
 t_bool			is_pipe(char *token);
 
 // heredoc.c
+int				execute_heredocs(t_minishell *ms);
 int				exec_heredoc(t_minishell *ms);
 int				heredoc(t_minishell *ms, char *delim);
 int				fill_heredoc(int fd, char *delim);
-void			print_heredoc(int tmp_file);
 char			*create_heredoc_name(void);
+
+// heredoc_utils.c
+int				count_heredoc(t_minishell *ms);
+
+// heredoc_reset.c
 void			unlink_heredocs(t_minishell *ms);
 void			clear_heredoc_names(t_minishell *ms);
 void			reset_heredoc(t_minishell *ms);
 
-int				execute_heredocs(t_minishell *ms);
-int				count_heredoc(t_minishell *ms);
+// heredoc_statics.c
 void			reset_heredoc_statics(void);
 int				update_heredoc_index(t_bool reset);
 int				update_heredoc_number(t_bool reset);
