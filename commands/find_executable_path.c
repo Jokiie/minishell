@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:18:05 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/18 13:42:41 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/05 15:09:49 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 	creating tokens. We recall ft_strtok with NULL, to continue with the next
 	token. If we find a match, and we can access it, we return the path to
 	execute.
-
 	to do:
 		paths = (should search in ms->env), not with getenv ?
 */
@@ -92,8 +91,8 @@ char	*get_last_dir(char *cmds)
 	int		dir_count;
 
 	dir_split = ft_split(cmds, '/');
-	dir_count = ft_count_tokens(dir_split);
+	dir_count = count_tokens(dir_split);
 	last_dir_dup = ft_strdup(dir_split[dir_count - 1]);
-	ft_free_tokens(dir_split);
+	free_tokens(dir_split);
 	return (last_dir_dup);
 }

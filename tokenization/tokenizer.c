@@ -6,11 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/04 05:26:12 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/05 19:55:35 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexing.h"
+#include "tokenization.h"
 
 /* MB_SIZE / PTR_SIZE = 2097152 / 8 (max args on Linux env) */
 char	**tokenizer(t_minishell *ms, char *line)
@@ -32,7 +32,6 @@ char	**tokenizer(t_minishell *ms, char *line)
 			i++;
 	}
 	ms->pretokens[k] = NULL;
-	ft_print_debug(ms->pretokens);
 	return (ms->pretokens);
 }
 
@@ -81,9 +80,9 @@ char	*meta_chars_extractor(char *line, int *i)
 		(*i)++;
 	else if (line[*i] == '<')
 		(*i)++;
-	else if (line[*i] == '>')
-		(*i)++;
 	else if (line[*i] == '<' && ft_ismeta_chars(line[*i + 1]))
+		(*i)++;
+	else if (line[*i] == '>')
 		(*i)++;
 	else if (line[*i] == '>' && ft_ismeta_chars(line[*i + 1]))
 		(*i)++;
@@ -91,7 +90,7 @@ char	*meta_chars_extractor(char *line, int *i)
 		(*i)++;
 	else if (line[*i] == '|' && ft_ismeta_chars(line[*i + 1]))
 		(*i)++;
-	else if (ft_ismeta_chars(line[*i]) && line[*i] == '|')
+	else if (ft_ismeta_chars(line[*i]) && line[*i + 1] == '|')
 		(*i)++;
 	substr = ft_substr(line, start, *i - start);
 	if (!substr)

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 22:14:31 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/20 13:04:38 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/06 21:59:18 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 */
 int	detect_executable(t_minishell *ms, int k)
 {
-	if (ms->tokens[k][0] == '.' && ms->tokens[k][1] == '/')
+	if (ms->tokens[k][0] == '.' && ms->tokens[k][1] == '/' && !ft_strnstr(ms->tokens[k], "./tmp", 5))
 	{
 		if (execve(ms->tokens[k], ms->tokens, ms->env) == FAIL)
 		{

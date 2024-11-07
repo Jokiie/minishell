@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 22:04:19 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/03 12:08:25 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/05 15:08:31 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	env(t_minishell *ms, int k)
 	}
 	else if (!ms->tokens[k + 1] && (ms->env))
 	{
-		ft_print_tokens(ms->env);
+		print_tokens(ms->env);
 		ms->ret = SUCCESS;
 	}
 	else if (ms->ret != SUCCESS)

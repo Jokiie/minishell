@@ -1,33 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_if_is.c                                         :+:      :+:    :+:   */
+/*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/03 22:18:41 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/03 03:16:25 by ccodere          ###   ########.fr       */
+/*   Created: 2024/11/06 22:07:44 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/06 22:08:16 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_is_dquote(int c)
+int	count_heredoc(t_minishell *ms)
 {
-	return (c == '\"');
-}
+	int	k;
+	int	count;
 
-int	ft_is_squote(int c)
-{
-	return (c == '\'');
-}
-
-int	ft_isquotes(int c)
-{
-	return (ft_is_dquote(c) || ft_is_squote(c));
-}
-
-int	ft_ismeta_chars(int c)
-{
-	return (c == '<' || c == '>' || c == '|');
+	count = 0;
+	k = 0;
+	while (ms->tokens[k])
+	{
+		if (is_heredoc(ms->tokens[k]))
+			count++;
+		k++;
+	}
+	return (count);
 }

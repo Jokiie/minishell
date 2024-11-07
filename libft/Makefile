@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+         #
+#    By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/22 12:04:14 by ccodere           #+#    #+#              #
-#    Updated: 2024/10/23 15:52:07 by matislessar      ###   ########.fr        #
+#    Updated: 2024/11/05 16:24:50 by ccodere          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
