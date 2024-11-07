@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:51:50 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/04 17:29:32 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/05 16:14:11 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int		detect_pwd_call(t_minishell *ms, int k);
 
 // echo.c
 void	echo(char **tokens, int opt);
-void	echo_n(char **tokens);
 int		detect_echo_call(t_minishell *ms, int k);
 
 // pecho.c

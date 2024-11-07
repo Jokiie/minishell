@@ -6,13 +6,13 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/04 17:50:07 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/07 13:20:39 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_has_pipe(char **str)
+int	has_pipes(char **str)
 {
 	int i;
 
@@ -31,7 +31,7 @@ int	ft_has_pipe(char **str)
 	return (EXIT_FAILURE);
 }
 
-int	ft_count_pipes(char **str)
+int	count_pipes(char **str)
 {
 	int i;
 	int num_pipes;
@@ -47,7 +47,7 @@ int	ft_count_pipes(char **str)
 	return (num_pipes);
 }
 
-int	**ft_allocate_pipes(t_pipes *p)
+int	**allocate_pipes(t_pipes *p)
 {
 	int i;
 
@@ -55,7 +55,7 @@ int	**ft_allocate_pipes(t_pipes *p)
 	i = 0;
 	while (i < p->num_pipes)
 	{
-		p->pipes[i] = malloc(sizeof(int) * 2);
+		p->pipes[i] = ft_calloc(2, sizeof(int));
 		if (pipe(p->pipes[i]) == -1)
 		{
 			perror("minishell: pipe");
@@ -66,9 +66,10 @@ int	**ft_allocate_pipes(t_pipes *p)
 	return (p->pipes);
 }
 
-char	**ft_extract_args(char **tokens, int start, int end)
+char	**extract_args(char **tokens, int start, int end)
 {
-	int i, size;
+	int i;
+	int size;
 	char **args;
 
 	size = end - start;
@@ -83,7 +84,7 @@ char	**ft_extract_args(char **tokens, int start, int end)
 	return (args);
 }
 
-void	ft_close_pipes(t_pipes *p)
+void	close_pipes(t_pipes *p)
 {
 	int i;
 
@@ -98,7 +99,7 @@ void	ft_close_pipes(t_pipes *p)
 	free(p->pipes);
 }
 
-void	ft_pipes_redirection(t_pipes *p)
+void	pipes_redirection(t_pipes *p)
 {
 	if (p->cmd_num > 0)
 		dup2(p->pipes[p->cmd_num - 1][0], STDIN_FILENO);
@@ -106,7 +107,7 @@ void	ft_pipes_redirection(t_pipes *p)
 		dup2(p->pipes[p->cmd_num][1], STDOUT_FILENO);
 }
 
-void	ft_handle_child_process(t_minishell *ms, t_pipes *p)
+void	handle_child_process(t_minishell *ms, t_pipes *p)
 {
 	if (p->cmd_num > 0)
 	{
@@ -124,7 +125,7 @@ void	ft_handle_child_process(t_minishell *ms, t_pipes *p)
 			exit(EXIT_FAILURE);
 		}
 	}
-	ft_close_pipes(p);
+	close_pipes(p);
 	ms->cmd_path = find_executable_path(p->p_args[0]);
 	execve(ms->cmd_path, p->p_args, ms->env);
 	perror("minishell: execve");
@@ -132,11 +133,11 @@ void	ft_handle_child_process(t_minishell *ms, t_pipes *p)
 	exit(EXIT_FAILURE);
 }
 
-void	ft_create_and_manage_process(t_minishell *ms, t_pipes *p, pid_t *pid)
+void	create_and_manage_process(t_minishell *ms, t_pipes *p, pid_t *pid)
 {
 	*pid = fork();
 	if (*pid == 0)
-		ft_handle_child_process(ms, p);
+		handle_child_process(ms, p);
 	else
 	{
 		waitpid(*pid, NULL, 0);
@@ -155,32 +156,54 @@ void init_pipes(t_pipes *p)
 	p->pipes = NULL;
 }
 
-int ft_exect_pipes(t_minishell *ms)
-{
-	int i, cmd_start;
-	pid_t pid;
-	t_pipes p;
+// void tokenize_input1(t_minishell *ms)
+// {
+//     ms->tokens = malloc(sizeof(char *) * 1024);  // Allocate memory for tokens array
+//     int i = 0;
+//     char *token = strtok(ms->input, " \t\n|");
 
+//     while (token)
+//     {
+//         ms->tokens[i++] = strdup(token);  // Duplicate each token and store it in tokens array
+//         token = strtok(NULL, " \t\n|");
+//     }
+//     ms->tokens[i] = NULL;  // Null-terminate the tokens array
+// }
+
+int exect_pipes(t_minishell *ms)
+{
+	int	i;
+	int	cmd_start;
+	pid_t pid;
+	t_pipes	p;
+
+	i = 0;
 	init_pipes(&p);
-	p.num_pipes = ft_count_pipes(ms->tokens);
-	if (p.num_pipes == 0 || !(p.pipes = ft_allocate_pipes(&p)))
+	p.num_pipes = count_pipes(ms->tokens);
+	if (p.num_pipes == 0 || !(p.pipes = allocate_pipes(&p)))
 		return (EXIT_FAILURE);
-	cmd_start = i = 0;
+	cmd_start = i;
 	p.cmd_num = 0;
 	while (ms->tokens[i])
 	{
+		printf("Loop - i: %d, cmd_start: %d, cmd_num: %d, token: %s\n", i, cmd_start, p.cmd_num, ms->tokens[i]);
 		if (ft_strcmp(ms->tokens[i], "|") == 0 || ms->tokens[i + 1] == NULL)
 		{
 			if (ms->tokens[i + 1] == NULL)
-				i++;
-			p.p_args = ft_extract_args(ms->tokens, cmd_start, i);
-			ft_create_and_manage_process(ms, &p,&pid);
+			i++;
+			printf("Extracting args from cmd_start: %d to i: %d\n", cmd_start, i);
+			p.p_args = extract_args(ms->tokens, cmd_start, i);
+			printf("Creating and managing process\n\n");
+			create_and_manage_process(ms, &p, &pid);
+			printf("Freeing args\n");
 			free(p.p_args);
 			cmd_start = i + 1;
+			printf("Updated cmd_start to %d\n", cmd_start);
 			p.cmd_num++;
 		}
 		i++;
 	}
-	ft_close_pipes(&p);
-	return (EXIT_SUCCESS);
+printf("Exiting while loop\n");
+close_pipes(&p);
+return (EXIT_SUCCESS);
 }

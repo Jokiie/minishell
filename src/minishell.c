@@ -4,6 +4,7 @@
 /* init the minishell struct variables */
 void	ft_init_minishell(t_minishell *ms)
 {
+	ms->p_input = NULL;
 	ms->input = NULL;
 	ms->prompt_name = NULL;
 	ms->user = NULL;

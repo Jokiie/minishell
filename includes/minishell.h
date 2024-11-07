@@ -54,6 +54,7 @@ typedef struct s_pipes
 }			t_pipes;
 typedef struct s_minishell
 {
+	char	**p_input;
 	char	*input;
 	char	*prompt_name;
 	char	*user;
@@ -190,14 +191,15 @@ int			built_in_cmds(t_minishell *ms);
 char		**ft_envdup(char **envp);
 
 // ft_pipes
-int			ft_has_pipe(char **str);
-int			ft_count_pipes(char **str);
-int			**ft_allocate_pipes(t_pipes *p);
-char		**ft_extract_args(char **tokens, int start, int end);
-void		ft_close_pipes(t_pipes *p);
-void		ft_pipes_redirection(t_pipes *p);
-int			ft_exect_pipes(t_minishell *ms);
-void		ft_create_and_manage_process(t_minishell *ms, t_pipes *p, pid_t *pid);
-void		ft_handle_child_process(t_minishell *ms, t_pipes *p);
+int			has_pipes(char **str);
+int			count_pipes(char **str);
+int			**allocate_pipes(t_pipes *p);
+char		**extract_args(char **tokens, int start, int end);
+void		close_pipes(t_pipes *p);
+void		pipes_redirection(t_pipes *p);
+int			exect_pipes(t_minishell *ms);
+void		create_and_manage_process(t_minishell *ms, t_pipes *p, pid_t *pid);
+void		handle_child_process(t_minishell *ms, t_pipes *p);
+void		tokenize_input1(t_minishell *ms);
 
 #endif
