@@ -13,7 +13,7 @@
 	directory, we return a default name to avoid segmentation fault or empty
 	prompt name.
 */
-char	*get_prompt_name(t_minishell *ms, char *username, char *cwd)
+char	*get_prompt_name(t_minishell *ms)
 {
 	char	*username_dup;
 	char	*color;
@@ -21,10 +21,10 @@ char	*get_prompt_name(t_minishell *ms, char *username, char *cwd)
 	char	**split;
 	char	*tmp;
 
-	split = get_splitted_cwd(cwd);
-	if (split[0] && split)
+	split = get_cwdsplit(ms);
+	if (split && *split)
 	{
-		color = get_user_color(ms, username);
+		color = get_user_color(ms);
 		tmp = color;
 		color = ft_strjoin(color, "/");
 		ft_free(tmp);
@@ -32,61 +32,61 @@ char	*get_prompt_name(t_minishell *ms, char *username, char *cwd)
 		username_dup = get_arrow_color(ms, cwd_dup);
 		ft_free(color);
 		ft_free(cwd_dup);
-		free_tokens(split);
 	}
 	else
 		username_dup = ft_strdup(CYAN BOLD "minishell ➜  " RESET BOLDRESET);
+	free_tokens(split);
 	return (username_dup);
 }
 
-char    **get_splitted_cwd(char *cwd)
+char	**get_cwdsplit(t_minishell *ms)
 {
-    char **cwd_split;
+	char	**splitted;
 
-    if(!cwd)
-        cwd = "/deleted_dir";
-    cwd_split = ft_split(cwd, '/');
-    return (cwd_split);
+	ms->cwd = getcwd(NULL, 0);
+	if (!ms->cwd)
+		ms->cwd = ft_strdup("/deleted_dir");
+	if (ms->cwd)
+		splitted = ft_split(ms->cwd, '/');
+	return (splitted);
 }
 
 char	*get_arrow_color(t_minishell *ms, char *cwd_dup)
 {
 	char	*arrow_color;
 	
-    arrow_color = NULL;
-	if (ms->ret != 0)
-    {
-        arrow_color = ft_strjoin(cwd_dup, RED " ➜  " RESET BOLDRESET);
-    }
-    else
-	{
+	arrow_color = NULL;
+	if (ms->ret == 0)
 		arrow_color = ft_strjoin(cwd_dup, GREEN " ➜  " RESET BOLDRESET);
-    }
-    return (arrow_color);
+	else
+		arrow_color = ft_strjoin(cwd_dup, RED " ➜  " RESET BOLDRESET);
+	return (arrow_color);
 }
 
-char	*get_user_color(t_minishell *ms, char *username)
+char	*get_user_color(t_minishell *ms)
 {
 	char	*color;
-	
+
+	ms->user = getenv("USER");
+	color = NULL;
 	if (ft_strncmp(ms->user, "ccodere", 7) == 0)
 	{
-        ms->user = "Celia";
-    	color = ft_strjoin(MAGENTA BOLD "", ms->user);
-    }
-    else if (ft_strnstr(username, "matis", ft_strlen(username)))
-    {
-        ms->user = "Matis";
+		ms->user = "Celia";
+		color = ft_strjoin(MAGENTA BOLD "", ms->user);
+	}
+	else if (ft_strnstr(ms->user, "matis", ft_strlen(ms->user)))
+	{
+		ms->user = "Matis";
 		color = ft_strjoin(GREEN BOLD "", ms->user);
-    }
-    else if (!username || !ms->user)
-    {
-        ms->user = "Human";
-        color = ft_strjoin(YELLOW BOLD "", ms->user);
-    }
-    else
-    {
-        color = ft_strjoin(CYAN BOLD "", ms->user);
-    }
-    return (color);
+	}
+	else if (!ms->user)
+	{
+		ms->user = "Human";
+		color = ft_strjoin(YELLOW BOLD "", ms->user);
+	}
+	else
+	{
+		color = ft_strjoin(CYAN BOLD "", ms->user);
+	}
+	return (color);
 }

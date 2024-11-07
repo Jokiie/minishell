@@ -6,6 +6,7 @@ void	free_vars(t_minishell *ms)
 	free_at_adress(&ms->prompt_name);
 	free_at_adress(&ms->input);
 	free_at_adress(&ms->cwd);
+	//free_tokens(ms->tokens);
 }
 
 void	ft_free(char *str)
@@ -30,7 +31,7 @@ void	free_at_adress(char **str)
 	if (str && *str)
 	{
 		free(*str);
-		str = NULL;
+		*str = NULL;
 	}
 }
 

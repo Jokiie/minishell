@@ -49,11 +49,10 @@ typedef struct s_heredoc
 {
 	char		*infile;
 	char		*outfile;
-	char		*fd_name[42][42];
+	char		*fd_name[42];
 	char		*delim;
 	int			count;
-	int			fd_in;
-	int			fd_out;
+	int			index;
 }				t_heredoc;
 
 typedef struct s_minishell
@@ -73,6 +72,7 @@ typedef struct s_minishell
 	int			std_err;
 	t_token		token;
 	t_heredoc	heredoc;
+	t_bool		handled_heredoc;
 	int			ret;
 	t_bool		interactive;
 }				t_minishell;
@@ -112,10 +112,10 @@ void			free_at_exit(t_minishell *ms);
 int				check_error(t_minishell *ms, char *cmd);
 
 // prompt_name.c
-char			*get_prompt_name(t_minishell *ms, char *username, char *cwd);
-char			*get_user_color(t_minishell *ms, char *username);
+char			*get_prompt_name(t_minishell *ms);
+char			*get_user_color(t_minishell *ms);
 char			*get_arrow_color(t_minishell *ms, char *cwd_dup);
-char   			**get_splitted_cwd(char *cwd);
+char			**get_cwdsplit(t_minishell *ms);
 
 // redirection.c
 int				exec_redirection(t_minishell *ms);
@@ -185,9 +185,16 @@ int				heredoc(t_minishell *ms, char *delim);
 int				fill_heredoc(int fd, char *delim);
 void			print_heredoc(int tmp_file);
 char			*create_heredoc_name(void);
-void    		unlink_heredocs(t_minishell *ms);
+void			unlink_heredocs(t_minishell *ms);
+void			clear_heredoc_names(t_minishell *ms);
+void			reset_heredoc(t_minishell *ms);
+
 int				execute_heredocs(t_minishell *ms);
 int				count_heredoc(t_minishell *ms);
+void			reset_heredoc_statics(void);
+int				update_heredoc_index(t_bool reset);
+int				update_heredoc_number(t_bool reset);
+int				update_heredoc_count(t_bool reset);
 
 /* /commands */
 

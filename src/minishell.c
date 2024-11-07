@@ -4,13 +4,12 @@
 /* init heredocs related data */
 void	init_heredoc_data(t_minishell *ms)
 {
-	ms->heredoc.fd_name[0][0] = NULL;
+	ft_bzero(ms->heredoc.fd_name, sizeof(ms->heredoc.fd_name));
 	ms->heredoc.infile = NULL;
 	ms->heredoc.outfile = NULL;
 	ms->heredoc.delim = NULL;
 	ms->heredoc.count = 0;
-	ms->heredoc.fd_in = 0;
-	ms->heredoc.fd_out = 0;
+	ms->heredoc.index = 0;
 }
 /* init the minishell struct variables */
 void	init_minishell(t_minishell *ms)
@@ -33,6 +32,7 @@ void	init_minishell(t_minishell *ms)
 	ms->token.start = 0;
 	ms->token.in_dquotes = FALSE;
 	ms->token.in_squotes = FALSE;
+	ms->handled_heredoc = FALSE;
 	init_heredoc_data(ms);
 }
 
@@ -51,9 +51,7 @@ void	execms(t_minishell *ms, char **envp)
 	// rl_bind_key('\t', rl_complete);
 	while (1)
 	{
-		ms->user = getenv("USER");
-		ms->cwd = getcwd(NULL, 0);
-		ms->prompt_name = get_prompt_name(ms, ms->user, ms->cwd);
+		ms->prompt_name = get_prompt_name(ms);
 		ms->input = readline(ms->prompt_name);
 		if (!ms->input)
 		{
@@ -64,8 +62,7 @@ void	execms(t_minishell *ms, char **envp)
 		{
 			ms->ret = execute_input(ms, ms->input);
 			add_history(ms->input);
-			if (*ms->heredoc.fd_name[0])
-				unlink_heredocs(ms);
+			reset_heredoc(ms);
 		}
 		free_vars(ms);
 	}
