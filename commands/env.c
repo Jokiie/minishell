@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 22:04:19 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/04 13:28:49 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/07 13:28:05 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	env(t_minishell *ms, int k)
 	}
 	else if (!ms->tokens[k + 1] && (ms->env))
 	{
-		ft_print_tokens(ms->env);
+		print_tokens(ms->env);
 		ms->ret = SUCCESS;
 	}
 	else if (ms->ret != SUCCESS)

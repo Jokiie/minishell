@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:51:50 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/05 16:14:11 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/07 13:27:12 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*create_full_path(char *dir, char *cmds);
 char	*get_last_dir(char *cmds);
 
 // commands.c
-int		parse_input(t_minishell *ms, char *input);
+int		execute_input(t_minishell *ms, char *input);
 int		call_commands(t_minishell *ms);
 int		exec_path_cmds(t_minishell *ms, char **tokens, int k);
 int     forked_builtin_cmds(t_minishell *ms);

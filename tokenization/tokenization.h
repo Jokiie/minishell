@@ -1,17 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lexing.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/11 12:22:03 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/04 04:46:08 by ccodere          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
-#ifndef LEXING_H
-# define LEXING_H
+#ifndef TOKENIZATION_H
+# define TOKENIZATION_H
 
 # include "../includes/minishell.h"
 
@@ -48,13 +37,25 @@ char	*ft_toktrim(t_minishell *ms, char *token, int len);
 
 // has_meta.c
 t_bool	has_redirect(char **tokens);
+t_bool	has_meta(char **tokens);
+
+// has_one_meta.c
+t_bool	has_redirect_in(char **tokens);
+t_bool	has_redirect_out(char **tokens);
+t_bool	has_append(char **tokens);
 t_bool	has_heredoc(char **tokens);
-t_bool	has_pipe(char *input);
+t_bool	has_pipe(char **tokens);
 
 // is_meta.c
-t_bool	is_pipe(char *token);
+t_bool  is_redirect(char *token);
+t_bool  is_meta(char *token);
+
+// is_one_meta.c
+t_bool  is_redirect_in(char *token);
+t_bool  is_redirect_out(char *token);
+t_bool	is_append(char *token);
 t_bool	is_heredoc(char *token);
-t_bool	is_redirect(char *token);
+t_bool	is_pipe(char *token);
 
 // syntax_error.c
 int		check_syntax(char **tokens);

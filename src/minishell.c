@@ -1,10 +1,21 @@
 
 #include "../includes/minishell.h"
 
+/* init heredocs related data */
+void	init_heredoc_data(t_minishell *ms)
+{
+	ft_bzero(ms->heredoc.fd_name, sizeof(ms->heredoc.fd_name));
+	ms->heredoc.infile = NULL;
+	ms->heredoc.outfile = NULL;
+	ms->heredoc.delim = NULL;
+	ms->heredoc.count = 0;
+	ms->heredoc.index = 0;
+}
 /* init the minishell struct variables */
-void	ft_init_minishell(t_minishell *ms)
+void	init_minishell(t_minishell *ms)
 {
 	ms->p_input = NULL;
+	ms->cmd_path = NULL;
 	ms->input = NULL;
 	ms->prompt_name = NULL;
 	ms->user = NULL;
@@ -17,61 +28,14 @@ void	ft_init_minishell(t_minishell *ms)
 	ms->std_in = 0;
 	ms->std_out = 1;
 	ms->std_err = 2;
+	ms->ret = 0;
+	ms->interactive = TRUE;
 	ms->token.end = 0;
 	ms->token.start = 0;
 	ms->token.in_dquotes = FALSE;
 	ms->token.in_squotes = FALSE;
-	ms->ret = 0;
-}
-
-/*
-	Create the prompt name by joining the username with the current working
-	directory found in the environment variables. For using color, we joined a
-	empty string with the username, then a '/', and finally the directory. Since
-	cwd return a full path (/home/username/folder/) , we splited the directory
-	when we find a '/', then got the last directory to get it displayed next
-	to the name. We reused a Macro to make the arrow green, which is showing
-	after the name and directory. Finally we return this result, so we get a
-	pretty cool prompt name ! If we got a problem and didnt get a name or a
-	directory, we return a default name to avoid segmentation fault or empty
-	prompt name.
-*/
-char	*ft_get_prompt_name(t_minishell *ms, char *username, char *cwd)
-{
-	char	*username_dup;
-	char	*color;
-	char	*cwd_dup;
-	char	**cwd_split;
-	char	*tmp;
-
-	if (!cwd)
-		cwd = ms->prev_cwd;
-	if (cwd)
-	{
-		cwd_split = ft_split(cwd, '/');
-		// else
-		// 	cwd_split = ft_split("/deleted_dir", '/');
-		if (cwd_split[0] && cwd_split)
-		{
-			color = get_user_color(ms, username);
-			tmp = color;
-			color = ft_strjoin(color, "/");
-			ft_free(tmp);
-			cwd_dup = ft_strjoin(color, cwd_split[ft_count_tokens(cwd_split)
-					- 1]);
-			username_dup = get_arrow_color(ms, cwd_dup);
-			ft_free(color);
-			ft_free(cwd_dup);
-		}
-		else
-			username_dup = ft_strdup(CYAN BOLD "minishell ➜  " RESET BOLDRESET);
-		ft_free_tokens(cwd_split);
-	}
-	else
-	{
-		username_dup = ft_strdup(CYAN BOLD "minishell ➜  " RESET BOLDRESET);
-	}
-	return (username_dup);
+	ms->handled_heredoc = FALSE;
+	init_heredoc_data(ms);
 }
 
 /*
@@ -82,16 +46,14 @@ char	*ft_get_prompt_name(t_minishell *ms, char *username, char *cwd)
 	or corrupted data.
 */
 
-void	ft_execms(t_minishell *ms, char **envp)
+void	execms(t_minishell *ms, char **envp)
 {
 	setenv("INPUTRC", "./.inputrc", 1);
 	ms->env = ft_envdup(envp);
-	//rl_bind_key('\t', rl_complete);
+	// rl_bind_key('\t', rl_complete);
 	while (1)
 	{
-		ms->user = getenv("USER");
-		ms->cwd = getcwd(NULL, 0);
-		ms->prompt_name = ft_get_prompt_name(ms, ms->user, ms->cwd);
+		ms->prompt_name = get_prompt_name(ms);
 		ms->input = readline(ms->prompt_name);
 		if (!ms->input)
 		{
@@ -100,10 +62,11 @@ void	ft_execms(t_minishell *ms, char **envp)
 		}
 		if (*(ms->input) != '\0')
 		{
-			ms->ret = parse_input(ms, ms->input);
+			ms->ret = execute_input(ms, ms->input);
 			add_history(ms->input);
+			reset_heredoc(ms);
 		}
-		ft_free_vars(ms);
+		free_vars(ms);
 	}
 }
 
@@ -118,9 +81,9 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if (argc == 1)
 	{
-		ft_init_minishell(ms);
-		ft_init_sigaction();
-		ft_execms(ms, envp);
+		init_minishell(ms);
+		init_signals_interactive();
+		execms(ms, envp);
 	}
 	exit_minishell(ms);
 	return (0);

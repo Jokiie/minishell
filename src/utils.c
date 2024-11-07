@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_utils.c                                         :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/02 12:47:51 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/05 15:22:56 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_count_tokens(char **tokens)
+int	count_tokens(char **tokens)
 {
 	int	count;
 
@@ -24,7 +24,7 @@ int	ft_count_tokens(char **tokens)
 	return (count);
 }
 
-void	ft_print_tokens(char **tokens)
+void	print_tokens(char **tokens)
 {
 	int	k;
 
@@ -38,7 +38,7 @@ void	ft_print_tokens(char **tokens)
 	}
 }
 
-void	ft_print_debug(char **tokens)
+void	print_debug(char **tokens)
 {
 	int	k;
 
@@ -63,7 +63,7 @@ char	**ft_envdup(char **envp)
 	int		j;
 	int		size;
 
-	size = ft_count_tokens(envp);
+	size = count_tokens(envp);
 	env_dup = (char **)malloc(sizeof(char *) * (size + 1));
 	if (!env_dup)
 		return (NULL);

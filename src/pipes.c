@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/07 13:20:39 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/07 14:51:08 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,19 +156,19 @@ void init_pipes(t_pipes *p)
 	p->pipes = NULL;
 }
 
-// void tokenize_input1(t_minishell *ms)
-// {
-//     ms->tokens = malloc(sizeof(char *) * 1024);  // Allocate memory for tokens array
-//     int i = 0;
-//     char *token = strtok(ms->input, " \t\n|");
+void tokenize_input1(t_minishell *ms)
+{
+	ms->tokens = malloc(sizeof(char *) * 1024);
+	int i = 0;
+	char *token = strtok(ms->input, " \t\n|");
 
-//     while (token)
-//     {
-//         ms->tokens[i++] = strdup(token);  // Duplicate each token and store it in tokens array
-//         token = strtok(NULL, " \t\n|");
-//     }
-//     ms->tokens[i] = NULL;  // Null-terminate the tokens array
-// }
+	while (token)
+	{
+		ms->tokens[i++] = strdup(token);
+		token = strtok(NULL, " \t\n|");
+	}
+	ms->tokens[i] = NULL;
+}
 
 int exect_pipes(t_minishell *ms)
 {

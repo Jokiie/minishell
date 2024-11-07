@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_exit.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/29 23:31:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/10/31 02:29:42 by ccodere          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
@@ -20,7 +9,7 @@ void	exit_minishell(t_minishell *ms)
 {
 	int	child_ret;
 
-	ft_free_at_exit(ms);
+	free_at_exit(ms);
 	clear_history();
 	while (waitpid(-1, &child_ret, 0) > 0)
 		;
@@ -31,8 +20,8 @@ void	exit_minishell(t_minishell *ms)
 
 void	exit_child(t_minishell *ms)
 {
-	ft_free_at_exit(ms);
-	ft_free_tokens(ms->tokens);
+	free_at_exit(ms);
+	free_tokens(ms->tokens);
 	exit(ms->ret);
 }
 
