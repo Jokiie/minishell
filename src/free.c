@@ -1,12 +1,13 @@
 
 #include "../includes/minishell.h"
 
-void	free_vars(t_minishell *ms)
+void	free_data(t_minishell *ms)
 {
 	free_at_adress(&ms->prompt_name);
 	free_at_adress(&ms->input);
 	free_at_adress(&ms->cwd);
-	//free_tokens(ms->tokens);
+	free(ms->token.protected);
+	reset_heredoc(ms);
 }
 
 void	ft_free(char *str)
@@ -23,6 +24,8 @@ void	free_at_exit(t_minishell *ms)
 	ft_free(ms->prompt_name);
 	ft_free(ms->input);
 	ft_free(ms->cwd);
+	ft_free(ms->path);
+	free(ms->token.protected);
 	free_tokens(ms->env);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/06 22:24:06 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/07 15:16:42 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,8 +139,7 @@ void	ft_handle_child_process(char **args, int **pipes, int cmd_num, int num_pipe
 	}
 	ft_close_pipes(pipes, num_pipes);
 	execvp(args[0], args);
-	perror("minishell: execvp");
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 }
 
 void	ft_create_and_manage_process(char **args, int **pipes, int cmd_num, int num_pipes, pid_t *pid)

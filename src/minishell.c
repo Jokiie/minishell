@@ -5,12 +5,12 @@
 void	init_heredoc_data(t_minishell *ms)
 {
 	ft_bzero(ms->heredoc.fd_name, sizeof(ms->heredoc.fd_name));
-	ms->heredoc.infile = NULL;
-	ms->heredoc.outfile = NULL;
 	ms->heredoc.delim = NULL;
 	ms->heredoc.count = 0;
 	ms->heredoc.index = 0;
+	ms->heredoc.in_quotes = FALSE;
 }
+
 /* init the minishell struct variables */
 void	init_minishell(t_minishell *ms)
 {
@@ -27,12 +27,18 @@ void	init_minishell(t_minishell *ms)
 	ms->std_out = 1;
 	ms->std_err = 2;
 	ms->ret = 0;
+	ms->path = NULL;
 	ms->interactive = TRUE;
 	ms->token.end = 0;
 	ms->token.start = 0;
 	ms->token.in_dquotes = FALSE;
 	ms->token.in_squotes = FALSE;
+	ms->token.protected = NULL;
 	ms->handled_heredoc = FALSE;
+	ms->fd.fdin = NULL;
+	ms->fd.fdout = NULL;
+	ms->fd.saved_stdin = 0;
+	ms->fd.saved_stdout = 0;
 	init_heredoc_data(ms);
 }
 
@@ -46,6 +52,9 @@ void	init_minishell(t_minishell *ms)
 
 void	execms(t_minishell *ms, char **envp)
 {
+	ms->path = getcwd(NULL, 0);
+	if (!ms->path)
+		exit(EXIT_FAILURE);
 	setenv("INPUTRC", "./.inputrc", 1);
 	ms->env = ft_envdup(envp);
 	// rl_bind_key('\t', rl_complete);
@@ -62,9 +71,8 @@ void	execms(t_minishell *ms, char **envp)
 		{
 			ms->ret = execute_input(ms, ms->input);
 			add_history(ms->input);
-			reset_heredoc(ms);
 		}
-		free_vars(ms);
+		free_data(ms);
 	}
 }
 

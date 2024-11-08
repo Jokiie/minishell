@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:25:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/06 22:24:54 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/08 14:49:24 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,23 @@ int	exec_redirection(t_minishell *ms)
 		if (is_append(ms->tokens[k]))
 		{
 			ms->ret = append_output(ms, ms->tokens[k + 1]);
+			recreate_tokens(ms, k);
 			break ;
 		}
 		else if (is_redirect_out(ms->tokens[k]))
 		{
 			ms->ret = redirect_output(ms, ms->tokens[k + 1]);
+			recreate_tokens(ms, k);
 			break ;
 		}
 		else if (is_redirect_in(ms->tokens[k]))
 		{
 			ms->ret = redirect_input(ms, ms->tokens[k + 1]);
+			recreate_tokens(ms, k);
 			break ;
 		}
 		k++;
 	}
-	recreate_tokens(ms, k);
 	return (ms->ret);
 }
 

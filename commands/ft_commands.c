@@ -11,9 +11,9 @@
 int	execute_input(t_minishell *ms, char *input)
 {
 	ms->ret = tokens_creator(ms, input);
-	if (ms->ret == SUCCESS && has_heredoc(ms->tokens))
+	if (ms->ret == SUCCESS && has_heredoc(ms, ms->tokens))
 		ms->ret = execute_heredocs(ms);
-	print_debug(ms->tokens);
+	//print_debug(ms->tokens);
 	if (ms->ret == SUCCESS)
 	{
 		ms->ret = built_in_cmds(ms);
@@ -48,9 +48,9 @@ int	call_commands(t_minishell *ms)
 		return (ERROR);
 	else if (pid == 0)
 	{
-		if (has_pipe(ms->tokens))
+		if (has_pipe(ms, ms->tokens))
 			ft_exect_pipes(ms);
-		if (has_redirect(ms->tokens))
+		if (has_redirect(ms, ms->tokens) && !has_pipe(ms, ms->tokens))
 		{
 			ms->ret = exec_redirection(ms);
 			if (ms->ret != 0)

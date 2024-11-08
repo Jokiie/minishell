@@ -33,7 +33,7 @@ RM				=	rm -f
 
 SRC_PATH = src/
 OBJ_PATH = obj/
-TMP_PATH = ./tmp/
+TMP_PATH = tmp/
 
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a

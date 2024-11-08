@@ -41,19 +41,27 @@ typedef struct s_token
 {
 	int			start;
 	int			end;
+	int			*protected;
 	t_bool		in_dquotes;
 	t_bool		in_squotes;
 }				t_token;
 
 typedef struct s_heredoc
 {
-	char		*infile;
-	char		*outfile;
 	char		*fd_name[42];
 	char		*delim;
 	int			count;
 	int			index;
+	t_bool		in_quotes;
 }				t_heredoc;
+
+typedef struct s_fd
+{
+	char		*fdin;
+	char		*fdout;
+	int			saved_stdin;
+	int			saved_stdout;
+}				t_fd;
 
 typedef struct s_minishell
 {
@@ -70,10 +78,12 @@ typedef struct s_minishell
 	int			std_in;
 	int			std_out;
 	int			std_err;
+	int			ret;
+	char		*path;
 	t_token		token;
 	t_heredoc	heredoc;
+	t_fd		fd;
 	t_bool		handled_heredoc;
-	int			ret;
 	t_bool		interactive;
 }				t_minishell;
 
@@ -102,11 +112,14 @@ void			exit_minishell(t_minishell *ms);
 void			exit_child(t_minishell *ms);
 
 // free.c
-void			free_vars(t_minishell *ms);
+void			free_data(t_minishell *ms);
 void			ft_free(char *str);
 void			free_tokens(char **tokens);
 void			free_at_adress(char **str);
 void			free_at_exit(t_minishell *ms);
+
+// free_protected_array.c
+void    		free_protected_array(int **array);
 
 // error.c
 int				check_error(t_minishell *ms, char *cmd);
@@ -158,15 +171,16 @@ char			**trimmer(t_minishell *ms, char **tokens);
 char			*ft_toktrim(t_minishell *ms, char *token, int len);
 
 // has_meta.c
-t_bool			has_redirect(char **tokens);
-t_bool			has_meta(char **tokens);
+t_bool			has_redirect(t_minishell *ms, char **tokens);
+t_bool			has_meta(t_minishell *ms, char **tokens);
+t_bool			has_quotes(char *token);
 
 // has_one_meta.c
-t_bool			has_redirect_in(char **tokens);
-t_bool			has_redirect_out(char **tokens);
-t_bool			has_append(char **tokens);
-t_bool			has_heredoc(char **tokens);
-t_bool			has_pipe(char **tokens);
+t_bool			has_redirect_in(t_minishell *ms, char **tokens);
+t_bool			has_redirect_out(t_minishell *ms, char **tokens);
+t_bool			has_append(t_minishell *ms, char **tokens);
+t_bool			has_heredoc(t_minishell *ms, char **tokens);
+t_bool			has_pipe(t_minishell *ms, char **tokens);
 
 // is_meta.c
 t_bool			is_redirect(char *token);
@@ -183,8 +197,12 @@ t_bool			is_pipe(char *token);
 int				execute_heredocs(t_minishell *ms);
 int				exec_heredoc(t_minishell *ms);
 int				heredoc(t_minishell *ms, char *delim);
-int				fill_heredoc(int fd, char *delim);
-char			*create_heredoc_name(void);
+int				fill_heredoc(t_minishell *ms, int fd, char *delim);
+char			*create_heredoc_name(t_minishell *ms);
+char			*expand_line(t_minishell *ms, char *line);
+char			*expander(t_minishell *ms, char *line);
+t_bool			check_line(char *line, char *delim);
+char			*check_delim(t_minishell *ms, char *delim);
 
 // heredoc_utils.c
 int				count_heredoc(t_minishell *ms);
