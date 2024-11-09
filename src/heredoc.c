@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 12:01:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/08 14:41:18 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/08 23:00:11 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,6 @@ char	*check_delim(t_minishell *ms, char *delim)
 		new_delim = ft_strdup(delim);
 		ms->heredoc.in_quotes = FALSE;
 	}
-	ft_printf("heredoc in quotes?: %d\n", ms->heredoc.in_quotes);
 	return (new_delim);
 }
 

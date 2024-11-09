@@ -6,16 +6,16 @@ void	free_data(t_minishell *ms)
 	free_at_adress(&ms->prompt_name);
 	free_at_adress(&ms->input);
 	free_at_adress(&ms->cwd);
-	free(ms->token.protected);
+	ft_free(ms->token.protected);
 	reset_heredoc(ms);
 }
 
-void	ft_free(char *str)
+void	ft_free(void *ptr)
 {
-	if (str)
+	if (ptr)
 	{
-		free(str);
-		str = NULL;
+		free(ptr);
+		ptr = NULL;
 	}
 }
 

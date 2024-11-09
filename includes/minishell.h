@@ -113,7 +113,7 @@ void			exit_child(t_minishell *ms);
 
 // free.c
 void			free_data(t_minishell *ms);
-void			ft_free(char *str);
+void			ft_free(void *ptr);
 void			free_tokens(char **tokens);
 void			free_at_adress(char **str);
 void			free_at_exit(t_minishell *ms);
