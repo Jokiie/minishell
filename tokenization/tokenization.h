@@ -6,7 +6,9 @@
 
 // tokens_creator.c
 int		tokens_creator(t_minishell *ms, char *line);
+void 	transformer(t_minishell *ms);
 void	fill_protected_arr(t_minishell *ms, char **tokens);
+
 // tokenizer.c
 int		separe_line(t_minishell *ms, char *line, int i, int *k);
 char	**tokenizer(t_minishell *ms, char *line);

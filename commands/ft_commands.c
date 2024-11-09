@@ -48,7 +48,7 @@ int	call_commands(t_minishell *ms)
 		return (ERROR);
 	else if (pid == 0)
 	{
-		if (has_pipe(ms, ms->tokens))
+		if (has_pipe(ms, ms->tokens) == TRUE)
 			ft_exect_pipes(ms);
 		if (has_redirect(ms, ms->tokens) && !has_pipe(ms, ms->tokens))
 		{

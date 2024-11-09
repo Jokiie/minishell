@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/08 15:19:36 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/09 00:40:52 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,22 @@
 
 int	tokens_creator(t_minishell *ms, char *line)
 {
-	char	**tmp_pretokens;
-	
 	if (ft_open_quotes_checker(ms, line) != SUCCESS)
 	{
 		ft_fprintf(2, "ms: syntax error near unclosed quotes\n");
 		return (SYNTAX_ERROR);
 	}
 	tokenizer(ms, line);
+	transformer(ms);
+	if (ms->tokens && check_syntax(ms->tokens) == SYNTAX_ERROR)
+		return (SYNTAX_ERROR);
+	return (SUCCESS);
+}
+
+void 	transformer(t_minishell *ms)
+{
+	char **tmp_pretokens;
+
 	if (ms->pretokens)
 	{
 		ms->tokc = count_tokens(ms->pretokens);
@@ -30,7 +38,6 @@ int	tokens_creator(t_minishell *ms, char *line)
 		ms->pretokens = characterizer(ms, ms->tokens);
 		fill_protected_arr(ms, ms->pretokens);
 		ms->tokens = trimmer(ms, ms->pretokens);
-		ms->tokc = count_tokens(ms->tokens);
 		free_tokens(tmp_pretokens);
 	}
 	if (!ms->pretokens || !ms->tokens)
@@ -38,11 +45,7 @@ int	tokens_creator(t_minishell *ms, char *line)
 		free_tokens(ms->pretokens);
 		ms->tokens = NULL;
 	}
-	if (ms->tokens && check_syntax(ms->tokens) == SYNTAX_ERROR)
-		return (SYNTAX_ERROR);
-	return (SUCCESS);
 }
-
 void	fill_protected_arr(t_minishell *ms, char **tokens)
 {
 	int k;
@@ -65,4 +68,10 @@ void	fill_protected_arr(t_minishell *ms, char **tokens)
 		k++;
 		i++;
 	}
+	// k = 0;
+	// for (int j = 0; j < i ; j ++)
+	// {
+	// 	ft_printf("protected: [%d][%d]\n", k, ms->token.protected[j]);
+	// 	k++;
+	// }
 }

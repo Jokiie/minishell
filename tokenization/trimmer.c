@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/08 13:27:44 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/09 01:17:24 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,8 @@ char	**trimmer(t_minishell *ms, char **tokens)
 	k = 0;
 	if (!tokens || !*tokens)
 		return (NULL);
-	while (tokens[k] && k < ms->tokc)
+	while (tokens[k])
 	{
-		if (have_heredoc(tokens[k], tokens[k + 1]))
-		{
-			k += 2;
-		}
 		trimmed = ft_toktrim(ms, tokens[k], ft_strlen(tokens[k]));
 		if (trimmed)
 		{

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 19:08:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/08 14:52:55 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/08 23:39:40 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_bool	has_meta(t_minishell *ms, char **tokens)
 
 t_bool	has_quotes(char *token)
 {
-	if (ft_strnstr(token, "\'", 1) != NULL || ft_strnstr(token, "\"", 1) != NULL)
+	if (ft_strchr(token, '\'') != NULL || ft_strchr(token, '\"') != NULL)
 		return (TRUE);
 	return (FALSE);
 }

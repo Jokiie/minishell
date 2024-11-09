@@ -59,6 +59,7 @@ SRC	=		minishell.c \
 			heredoc_statics.c \
 			heredoc_reset.c \
 			heredoc_utils.c \
+			heredoc_expander.c \
 
 SRCS	= $(addprefix $(SRC_PATH), $(SRC))
 OBJ		= $(SRC:.c=.o)

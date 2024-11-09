@@ -113,11 +113,10 @@ void			exit_child(t_minishell *ms);
 
 // free.c
 void			free_data(t_minishell *ms);
-void			ft_free(void *ptr);
+void			ft_free(char *str);
 void			free_tokens(char **tokens);
-void			free_at_address(char **str);
+void			free_at_adress(char **str);
 void			free_at_exit(t_minishell *ms);
-void			free_int_array(int **arr);
 
 // free_protected_array.c
 void    		free_protected_array(int **array);
@@ -141,7 +140,9 @@ int				append_output(t_minishell *ms, char *file);
 /* /lexing */
 
 // tokens_creator.c
-int				tokens_creator(t_minishell *ms, char *line);
+int		tokens_creator(t_minishell *ms, char *line);
+void 	transformer(t_minishell *ms);
+void	fill_protected_arr(t_minishell *ms, char **tokens);
 
 // tokenizer.c
 int				separe_line(t_minishell *ms, char *line, int i, int *k);
@@ -200,13 +201,16 @@ int				exec_heredoc(t_minishell *ms);
 int				heredoc(t_minishell *ms, char *delim);
 int				fill_heredoc(t_minishell *ms, int fd, char *delim);
 char			*create_heredoc_name(t_minishell *ms);
+
+// heredoc_expander.c
 char			*expand_line(t_minishell *ms, char *line);
 char			*expander(t_minishell *ms, char *line);
-t_bool			check_line(char *line, char *delim);
-char			*check_delim(t_minishell *ms, char *delim);
 
 // heredoc_utils.c
 int				count_heredoc(t_minishell *ms);
+int				shift_tokens(t_minishell *ms, int *index);
+void			check_delim(t_minishell *ms, int pos);
+t_bool			check_line(char *line, char *delim);
 
 // heredoc_reset.c
 void			unlink_heredocs(t_minishell *ms);
