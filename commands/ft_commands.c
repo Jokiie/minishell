@@ -11,10 +11,10 @@
 int	execute_input(t_minishell *ms, char *input)
 {
 	ms->ret = tokens_creator(ms, input);
-	if (ms->ret == SUCCESS && has_heredoc(ms, ms->tokens))
+	if (ms->ret == SUCCESS && ms->tokens && has_heredoc(ms, ms->tokens))
 		ms->ret = execute_heredocs(ms);
 	//print_debug(ms->tokens);
-	if (ms->ret == SUCCESS)
+	if (ms->ret == SUCCESS && ms->tokens)
 	{
 		ms->ret = built_in_cmds(ms);
 		if (ms->ret == CMD_NOT_FOUND)

@@ -3,10 +3,10 @@
 
 void	free_data(t_minishell *ms)
 {
-	free_at_adress(&ms->prompt_name);
-	free_at_adress(&ms->input);
-	free_at_adress(&ms->cwd);
-	ft_free(ms->token.protected);
+	free_at_address(&ms->prompt_name);
+	free_at_address(&ms->input);
+	free_at_address(&ms->cwd);
+	free_int_array(&ms->token.protected);
 	reset_heredoc(ms);
 }
 
@@ -25,11 +25,20 @@ void	free_at_exit(t_minishell *ms)
 	ft_free(ms->input);
 	ft_free(ms->cwd);
 	ft_free(ms->path);
-	free(ms->token.protected);
+	ft_free(ms->token.protected);
 	free_tokens(ms->env);
 }
 
-void	free_at_adress(char **str)
+void	free_int_array(int **arr)
+{
+	if (arr && *arr)
+	{
+		free(*arr);
+		*arr = NULL;
+	}
+}
+
+void	free_at_address(char **str)
 {
 	if (str && *str)
 	{
