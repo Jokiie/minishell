@@ -6,13 +6,13 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/07 15:16:42 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/09 13:13:28 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_has_pipe(char **str)
+int	ft_has_pipe(t_minishell *ms, char **str)
 {
 	int	i;
 
@@ -21,9 +21,9 @@ int	ft_has_pipe(char **str)
 	{
 		while (str[++i])
 		{
-			if (strcmp(str[i], "|") == 0)
+			if (ms->token.protected[i] == 0 && ft_strcmp(str[i], "|") == 0)
 			{
-				printf("pipes detect\n");
+				ft_fprintf(2, "pipes detect\n");
 				return (EXIT_SUCCESS);
 			}
 		}
@@ -31,7 +31,7 @@ int	ft_has_pipe(char **str)
 	return (EXIT_FAILURE);
 }
 
-int	ft_count_pipes(char **str)
+int	ft_count_pipes(t_minishell *ms, char **str)
 {
 	int	i;
 	int	num_pipes;
@@ -40,7 +40,7 @@ int	ft_count_pipes(char **str)
 	num_pipes = 0;
 	while (str[i])
 	{
-		if (ft_strcmp(str[i], "|") == 0)
+		if (ms->token.protected[i] == 0 && ft_strcmp(str[i], "|") == 0)
 			num_pipes++;
 		i++;
 	}
@@ -173,13 +173,13 @@ int	ft_exect_pipes(t_minishell *ms)
 	pid_t	pid;
 	int		**pipes;
 
-	int num_pipes = ft_count_pipes(ms->tokens);
+	int num_pipes = ft_count_pipes(ms, ms->tokens);
 	if (num_pipes == 0 || !(pipes = ft_allocate_pipes(num_pipes)))
 		return (EXIT_FAILURE);
 	cmd_start = cmd_num = i = 0;
 	while (ms->tokens[i])
 	{
-		if (ft_strcmp(ms->tokens[i], "|") == 0 || ms->tokens[i + 1] == NULL)
+		if ((!ms->token.protected[i] && ft_strcmp(ms->tokens[i], "|") == 0) || ms->tokens[i + 1] == NULL)
 		{
 			if (ms->tokens[i + 1] == NULL)
 				i++;

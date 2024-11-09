@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 22:14:31 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/07 22:14:44 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/09 12:51:57 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,9 @@ int	detect_executable(t_minishell *ms, int k)
 				ft_fprintf(2, "ms: %s: %s\n", ms->tokens[k], strerror(errno));
 				ms->ret = CMD_NOT_FOUND;
 			}
+			return (ms->ret);
 		}
-		else
-			ms->ret = SUCCESS;
+		return (SUCCESS);
 	}
-	else
-		ms->ret = ERROR;
-	return (ms->ret);
+	return (EXE_NOT_FOUND);
 }

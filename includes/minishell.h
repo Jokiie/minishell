@@ -20,6 +20,7 @@
 # define ERROR 1
 # define SYNTAX_ERROR 2
 # define FPERM_DENIED 13
+# define EXE_NOT_FOUND 125
 # define CPERM_DENIED 126
 # define CMD_NOT_FOUND 127
 # define TERM_SIGINT 130
@@ -261,8 +262,8 @@ int				built_in_cmds(t_minishell *ms);
 char			**ft_envdup(char **envp);
 
 // ft_pipes
-int			ft_has_pipe(char **str);
-int			ft_count_pipes(char **str);
+int			ft_has_pipe(t_minishell *ms, char **str);
+int			ft_count_pipes(t_minishell *ms, char **str);
 int			**ft_allocate_pipes(int num_pipes);
 char		**ft_extract_args(char **tokens, int start, int end);
 void		ft_close_pipes(int **pipes, int num_pipes);

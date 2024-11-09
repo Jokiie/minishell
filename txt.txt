@@ -1,0 +1,17 @@
+commands
+git_reminder
+includes
+libft
+Makefile
+minishell
+obj
+pipes
+protected_dir
+readline
+readline.supp
+src
+testdir
+tmp
+tokenization
+txt
+txt.txt
