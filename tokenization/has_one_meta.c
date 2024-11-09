@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 19:08:21 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/09 01:13:19 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/09 01:39:55 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,13 @@ t_bool	has_pipe(t_minishell *ms, char **tokens)
 	i = 0;
 	while (tokens[i])
 	{
-		if (ms->token.protected[i] == 0 && is_pipe(tokens[i]))
+		if (!ms->token.protected[i] && is_pipe(tokens[i]))
 		{
+			ft_printf("pipe is not protected by quotes\n");
 			return (TRUE);
 		}
 		i++;
 	}
+	ft_printf("pipe is protected by quotes or do not exist\n");
 	return (FALSE);
 }

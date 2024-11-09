@@ -113,10 +113,11 @@ void			exit_child(t_minishell *ms);
 
 // free.c
 void			free_data(t_minishell *ms);
-void			ft_free(char *str);
+void			ft_free(void *ptr);
 void			free_tokens(char **tokens);
-void			free_at_adress(char **str);
+void			free_at_address(char **str);
 void			free_at_exit(t_minishell *ms);
+void			free_int_array(int **arr);
 
 // free_protected_array.c
 void    		free_protected_array(int **array);
