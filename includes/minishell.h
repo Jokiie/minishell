@@ -124,13 +124,14 @@ void			free_int_array(int **arr);
 void    		free_protected_array(int **array);
 
 // error.c
-int				check_error(t_minishell *ms, char *cmd);
+int				check_error(char *cmd);
 
 // prompt_name.c
 char			*get_prompt_name(t_minishell *ms);
 char			*get_user_color(t_minishell *ms);
 char			*get_arrow_color(t_minishell *ms, char *cwd_dup);
 char			**get_cwdsplit(t_minishell *ms);
+char			*get_last_dir(char *path);
 
 // redirection.c
 int				exec_redirection(t_minishell *ms);
@@ -228,24 +229,25 @@ int				update_heredoc_count(t_bool reset);
 /* /commands */
 
 // cd.c
-int				cd(t_minishell *ms, int k);
-int				detect_cd_call(t_minishell *ms, int k);
+int				cd(t_minishell *ms);
+int				detect_cd_call(t_minishell *ms);
 
 // pwd.c
 int				pwd(t_minishell *ms);
-int				detect_pwd_call(t_minishell *ms, int k);
+int				detect_pwd_call(t_minishell *ms);
 
 // echo.c
 void			echo(char **tokens, int opt);
 void			echo_n(char **tokens);
-int				detect_echo_call(t_minishell *ms, int k);
+int				detect_echo_call(t_minishell *ms);
 
 // executable.c
-int				detect_executable(t_minishell *ms, int k);
+int				detect_executable(t_minishell *ms);
+int				check_error_executable(char *executable);
 
 // env.c
-int				detect_env_call(t_minishell *ms, int k);
-int				env(t_minishell *ms, int k);
+int				detect_env_call(t_minishell *ms);
+int				env(t_minishell *ms);
 
 //exit.c
 t_bool			is_exit(char *token);
@@ -258,11 +260,9 @@ char			*get_last_dir(char *cmds);
 // commands.c
 int				execute_input(t_minishell *ms, char *input);
 int				call_commands(t_minishell *ms);
-int				exec_path_cmds(t_minishell *ms, char **tokens, int k);
-int				forked_builtin_cmds(t_minishell *ms);
-int				built_in_cmds(t_minishell *ms);
+int				ft_execvp(char **tokens, char **envp);
+int				exec_builtin(t_minishell *ms);
 
-char			**ft_envdup(char **envp);
 
 // ft_pipes
 int			ft_has_pipe(t_minishell *ms, char **str);

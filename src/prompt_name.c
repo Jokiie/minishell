@@ -90,3 +90,16 @@ char	*get_user_color(t_minishell *ms)
 	}
 	return (color);
 }
+
+char	*get_last_dir(char *path)
+{
+	char	**dir_split;
+	char	*last_dir;
+	int		dir_count;
+
+	dir_split = ft_split(path, '/');
+	dir_count = count_tokens(dir_split);
+	last_dir = ft_strdup(dir_split[dir_count - 1]);
+	free_tokens(dir_split);
+	return (last_dir);
+}

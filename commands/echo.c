@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 23:25:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/04 13:00:09 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/10 02:40:50 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,26 +21,19 @@
 		as for the example : ls | echo done
 		which should print 'done' and not the result of ls.
 */
-int	detect_echo_call(t_minishell *ms, int k)
+int	detect_echo_call(t_minishell *ms)
 {
 	int	opt;
 
 	opt = 0;
-	if (((k == 0) && ft_strncmp(ms->tokens[k], "echo\0", 5) == 0
-			&& ft_strncmp(ms->tokens[k + 1], "-n\0", 3) == 0))
+	if (ft_strncmp(ms->tokens[0], "echo\0", 5) == 0)
 	{
-		opt = 1;
-	}
-	else if ((k == 0) && ft_strncmp(ms->tokens[k], "echo\0", 5) == 0)
-	{
+		if (ft_strncmp(ms->tokens[1], "-n\0", 3) == 0)
+			opt = 1;
 		echo(ms->tokens, opt);
-		ms->ret = SUCCESS;
+		return (SUCCESS);
 	}
-	else
-	{
-		ms->ret = CMD_NOT_FOUND;
-	}
-	return (ms->ret);
+	return (CMD_NOT_FOUND);
 }
 
 /* Prints the tokens after echo */
@@ -48,7 +41,10 @@ void	echo(char **tokens, int opt)
 {
 	int	k;
 
-	k = 1;
+	if (opt == 0)
+		k = 1;
+	else
+		k = 2;
 	if (!tokens[k])
 	{
 		write(1, "\n", 1);

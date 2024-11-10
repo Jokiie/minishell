@@ -16,7 +16,7 @@ int	execute_input(t_minishell *ms, char *input)
 		if (execute_heredocs(ms) == ERROR)
 			return (ERROR);
 		//print_debug(ms->tokens);
-		ms->ret = built_in_cmds(ms);
+		ms->ret = exec_builtin(ms);
 		if (ms->ret == CMD_NOT_FOUND)
 			ms->ret = call_commands(ms);
 		free_tokens(ms->tokens);
@@ -56,13 +56,15 @@ int	call_commands(t_minishell *ms)
 			if (exec_redirection(ms) != SUCCESS)
 				exit_child(ms);
 		}
-		if (ms->ret == CMD_NOT_FOUND)
-			ms->ret = forked_builtin_cmds(ms);
-		if (built_in_cmds(ms) == CMD_NOT_FOUND)
+		ms->ret = detect_executable(ms);
+		if (ms->ret == EXE_NOT_FOUND)
 		{
-			ms->ret = exec_path_cmds(ms, ms->tokens, 0);
-			exit_child(ms);
+			ms->ret = exec_builtin(ms);
+			if (ms->ret == CMD_NOT_FOUND)
+				ms->ret = ft_execvp(ms->tokens, ms->env);
 		}
+		else
+			exit_child(ms);
 		exit_child(ms);
 	}
 	ms->ret = wait_children();
@@ -74,33 +76,27 @@ int	call_commands(t_minishell *ms)
 	If path is accessible, we execute it and return SUCCESS(0), else, we free
 	the path and return the error code returned by check error.
 */
-int	exec_path_cmds(t_minishell *ms, char **tokens, int k)
+int	ft_execvp(char **tokens, char **envp)
 {
 	char	*path;
-	char	*cmd;
+	int		k;
 
-	if (!tokens || !*tokens)
-		return (0);
+	k = 0;
 	while (tokens[k])
 	{
-		if (*tokens[0] == '/')
-		{
-			cmd = get_last_dir(tokens[k]);
-			path = find_executable_path(cmd);
-			ft_free(cmd);
-		}
+		if (tokens[k][0] == '/')
+			path = ft_strdup(tokens[k]);
 		else
 			path = find_executable_path(tokens[k]);
-		if (!path || execve(path, tokens, ms->env) == FAIL)
+		if (!path || execve(path, tokens, envp) == FAIL)
 		{
 			ft_free(path);
-			ms->ret = check_error(ms, tokens[k]);
-			return (ms->ret);
+			return (check_error(tokens[k]));
 		}
 		k++;
 	}
 	ft_free(path);
-	return (ms->ret);
+	return (SUCCESS);
 }
 
 /*
@@ -114,56 +110,25 @@ int	exec_path_cmds(t_minishell *ms, char **tokens, int k)
 	- add unset without option
 	- add export without option
 */
-int	built_in_cmds(t_minishell *ms)
+int	exec_builtin(t_minishell *ms)
 {
-	int	k;
-
-	k = 0;
-	if (!ms->tokens || !*(ms->tokens))
-		return (SUCCESS);
-	while (ms->tokens[k])
+	if (is_exit(ms->tokens[0]))
 	{
-		if (is_exit(ms->tokens[0]))
-		{
-			free_tokens(ms->tokens);
-			exit_minishell(ms);
-		}
-		if (detect_cd_call(ms, k) != CMD_NOT_FOUND
-			|| detect_pwd_call(ms, k) != CMD_NOT_FOUND
-			|| detect_env_call(ms, k) != CMD_NOT_FOUND
-			|| detect_echo_call(ms, k) != CMD_NOT_FOUND)
-			return (ms->ret);
-		k++;
+		free_tokens(ms->tokens);
+		exit_minishell(ms);
 	}
-	ms->ret = CMD_NOT_FOUND;
-	return (ms->ret);
-}
-
-/*
-	These commands need to be called in call_commands because it will be called
-	twice if not found in our functions and in the bash. If they dont exist they
-	write both error message from the find_executable_path and from bash. If the
-	command is not in this function, return CMD_NOT_FOUND(127), so the fork can
-	search the commands in the paths. Else, return 0 for success and 1 for
-	errors so the fork dont search in the paths.
-
-	/!\ Each command should return an int to get the return value. We need it
-		for the "$?" commands which print the return value of the last command.
-		We save the return value of a command in ms->ret.
-*/
-int	forked_builtin_cmds(t_minishell *ms)
-{
-	int	k;
-
-	k = 0;
-	if (!ms->tokens || !(*ms->tokens))
-		exit_child(ms);
-	while (ms->tokens[k])
+	ms->ret = detect_cd_call(ms);
+	if (ms->ret == CMD_NOT_FOUND)
 	{
-		if (detect_executable(ms, k) != ERROR)
-			return (ms->ret);
-		k++;
+		ms->ret = detect_pwd_call(ms);
 	}
-	ms->ret = ERROR;
+	if (ms->ret == CMD_NOT_FOUND)
+	{
+		ms->ret = detect_env_call(ms);
+	}
+	if (ms->ret == CMD_NOT_FOUND)
+	{
+		ms->ret = detect_echo_call(ms);
+	}
 	return (ms->ret);
 }

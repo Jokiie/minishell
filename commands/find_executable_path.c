@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:18:05 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/05 15:09:49 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/10 02:30:57 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,23 +76,4 @@ char	*create_full_path(char *dir, char *cmds)
 	ft_strlcat(full_path, "/", BUFFER_SIZE);
 	ft_strlcat(full_path, cmds, BUFFER_SIZE);
 	return (full_path);
-}
-
-/*
-	Handle the case of absolute path token (like /usr/bin/ls"). We split
-	the string with the '/' as delimiter, then return the last element as a
-	command, because we want to use it to iterate in the directories, like if
-	we typed "ls".
-*/
-char	*get_last_dir(char *cmds)
-{
-	char	**dir_split;
-	char	*last_dir_dup;
-	int		dir_count;
-
-	dir_split = ft_split(cmds, '/');
-	dir_count = count_tokens(dir_split);
-	last_dir_dup = ft_strdup(dir_split[dir_count - 1]);
-	free_tokens(dir_split);
-	return (last_dir_dup);
 }

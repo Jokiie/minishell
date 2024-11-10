@@ -6,37 +6,57 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 22:14:31 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/09 12:51:57 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/10 03:02:21 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
 /*
-	Detect if the command is an executable. If exerve fail, we check if the
-	error is because we don't have permissions , Else if exerve success, we
-	return SUCCESS(0). Else if the the token do not begin with "./", return
-	CMD_NOT_FOUND(127), so we can check the other built-in commands.
+	Detect if the command is an executable. If execve is successful, we return
+	success, else we return the corresponding error code from check_error_exec.
+	If the command do not begin with "./" we return EXE_NOT_FOUND.
 */
-int	detect_executable(t_minishell *ms, int k)
+int	detect_executable(t_minishell *ms)
 {
-	if (ms->tokens[k][0] == '.' && ms->tokens[k][1] == '/')
+	struct stat	s;
+
+	if (ms->tokens[0][0] == '.' && ms->tokens[0][1] == '/')
 	{
-		if (execve(ms->tokens[k], ms->tokens, ms->env) == FAIL)
+		if (stat(ms->tokens[0], &s) == 0)
 		{
-			if (errno == EACCES)
+			if (S_ISDIR(s.st_mode))
 			{
-				ft_fprintf(2, "ms: %s: %s\n", ms->tokens[k], strerror(errno));
-				ms->ret = CPERM_DENIED;
+				ft_fprintf(2, "ms: %s: Is a directory\n", ms->tokens[0]);
+				return (CPERM_DENIED);
 			}
-			else if (errno == ENOENT)
-			{
-				ft_fprintf(2, "ms: %s: %s\n", ms->tokens[k], strerror(errno));
-				ms->ret = CMD_NOT_FOUND;
-			}
-			return (ms->ret);
 		}
-		return (SUCCESS);
+		if (execve(ms->tokens[0], ms->tokens, ms->env) != FAIL)
+			return (SUCCESS);
+		return (check_error_executable(ms->tokens[0]));
 	}
 	return (EXE_NOT_FOUND);
+}
+
+int	check_error_executable(char *executable)
+{
+	int return_value;
+
+	return_value = 0;
+	if (errno == EACCES)
+	{
+		ft_fprintf(2, "ms: %s: %s\n", executable, strerror(errno));
+		return_value = CPERM_DENIED;
+	}
+	else if (errno == ENOENT)
+	{
+		ft_fprintf(2, "ms: %s: %s\n", executable, strerror(errno));
+		return_value = CMD_NOT_FOUND;
+	}
+	else
+	{
+		ft_fprintf(2, "ms: %s: %s\n", executable, strerror(errno));
+		return_value = ERROR;
+	}
+	return (return_value);
 }
