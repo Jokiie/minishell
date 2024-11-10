@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:51:50 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/05 15:29:54 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/10 00:12:15 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ int		detect_executable(t_minishell *ms, int k);
 // env.c
 int		detect_env_call(t_minishell *ms, int k);
 int		env(t_minishell *ms, int k);
+
+//exit.c
+t_bool  is_exit(char *line);
 
 // find_executable_path.c
 char	*find_executable_path(char *cmds);

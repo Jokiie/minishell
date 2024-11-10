@@ -247,6 +247,9 @@ int				detect_executable(t_minishell *ms, int k);
 int				detect_env_call(t_minishell *ms, int k);
 int				env(t_minishell *ms, int k);
 
+//exit.c
+t_bool			is_exit(char *line);
+
 // find_executable_path.c
 char			*find_executable_path(char *cmds);
 char			*create_full_path(char *dir, char *cmds);

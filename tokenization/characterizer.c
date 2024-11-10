@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/05 15:17:52 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/10 00:03:27 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,21 @@
 char	**characterizer(t_minishell *ms, char **tokens)
 {
 	char	*characterized;
+	char	*tmp;
 	int		k;
 
 	k = 0;
 	while (tokens[k] && k < ms->tokc)
 	{
+		tmp = tokens[k];
 		characterized = characterize_token(ms, tokens[k], 0);
 		if (characterized)
 		{
-			ft_free(tokens[k]);
 			tokens[k] = characterized;
+			ft_free(tmp);
 		}
 		else
-			ft_free(tokens[k]);
+			ft_free(tmp);
 		k++;
 	}
 	return (tokens);

@@ -62,7 +62,7 @@ void	execms(t_minishell *ms, char **envp)
 	{
 		ms->prompt_name = get_prompt_name(ms);
 		ms->input = readline(ms->prompt_name);
-		if (!ms->input)
+		if (!ms->input || is_exit(ms->input) == TRUE)
 		{
 			exit_minishell(ms);
 			break ;
@@ -82,7 +82,7 @@ int	main(int argc, char **argv, char **envp)
 
 	ms = (t_minishell *)malloc(sizeof(t_minishell));
 	if (!ms)
-		exit_minishell(ms);
+		exit(EXIT_FAILURE);
 	ft_memset(ms, 0, sizeof(ms));
 	(void)argv;
 	if (argc == 1)

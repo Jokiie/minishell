@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/09 23:28:51 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/10 00:07:20 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ int	tokens_creator(t_minishell *ms, char *line)
 		return (SYNTAX_ERROR);
 	}
 	tokenizer(ms, line);
-	fill_protected_arr(ms);
 	if (ms->pretokens)
 	{
+		fill_protected_arr(ms);
 		ms->tokc = count_tokens(ms->pretokens);
 		tmp_pretokens = ms->pretokens;
 		ms->tokens = ft_envdup(ms->pretokens);

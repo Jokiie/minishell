@@ -123,11 +123,6 @@ int	built_in_cmds(t_minishell *ms)
 		return (SUCCESS);
 	while (ms->tokens[k])
 	{
-		if ((k == 0) && ft_strncmp(ms->tokens[k], "exit\0", 5) == 0)
-		{
-			free_tokens(ms->tokens);
-			exit_minishell(ms);
-		}
 		if (detect_cd_call(ms, k) != CMD_NOT_FOUND
 			|| detect_pwd_call(ms, k) != CMD_NOT_FOUND
 			|| detect_env_call(ms, k) != CMD_NOT_FOUND

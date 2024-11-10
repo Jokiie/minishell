@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+         #
+#    By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/11 12:55:15 by ccodere           #+#    #+#              #
-#    Updated: 2024/10/28 14:20:09 by matislessar      ###   ########.fr        #
+#    Updated: 2024/11/10 00:15:46 by ccodere          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SRCS 	= ft_commands.c \
 		  pwd.c \
 		  executable.c\
 		  env.c \
+		  exit.c \
 
 OBJECTS = $(SRCS:.c=.o)
 

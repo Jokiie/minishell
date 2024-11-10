@@ -26,6 +26,7 @@ void	free_at_exit(t_minishell *ms)
 	ft_free(ms->cwd);
 	ft_free(ms->path);
 	ft_free(ms->token.protected);
+	free_tokens(ms->tokens);
 	free_tokens(ms->env);
 }
 
