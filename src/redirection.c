@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:25:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/09 13:16:28 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/09 23:16:47 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,16 +80,12 @@ int	redirect_input(t_minishell *ms, char *file)
 	fdin = open(file, O_RDONLY);
 	if (fdin < 0)
 	{
-		ms->ret = ERROR;
 		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
+		return (ERROR);
 	}
-	else
-	{
-		dup2(fdin, ms->std_in);
-		close(fdin);
-		ms->ret = SUCCESS;
-	}
-	return (ms->ret);
+	dup2(fdin, ms->std_in);
+	close(fdin);
+	return (SUCCESS);
 }
 
 /* > : redirect output in the specified file */
@@ -100,16 +96,12 @@ int	redirect_output(t_minishell *ms, char *file)
 	fdout = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fdout < 0)
 	{
-		ms->ret = ERROR;
 		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
+		return (ERROR);
 	}
-	else
-	{
-		dup2(fdout, ms->std_out);
-		close(fdout);
-		ms->ret = SUCCESS;
-	}
-	return (ms->ret);
+	dup2(fdout, ms->std_out);
+	close(fdout);
+	return (SUCCESS);
 }
 
 /* Append output obtained in the specified file */
@@ -120,14 +112,11 @@ int	append_output(t_minishell *ms, char *file)
 	fdout = open(file, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (fdout < 0)
 	{
-		ms->ret = ERROR;
 		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
+		return (ERROR);
 	}
-	else
-	{
-		dup2(fdout, ms->std_out);
-		close(fdout);
-		ms->ret = SUCCESS;
-	}
-	return (ms->ret);
+	if (dup2(fdout, ms->std_out) == -1)
+		return (ERROR);
+	close(fdout);
+	return (SUCCESS);
 }

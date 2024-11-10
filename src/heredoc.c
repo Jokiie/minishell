@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 12:01:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/09 01:42:11 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/09 23:02:01 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,15 @@ int	execute_heredocs(t_minishell *ms)
 		ft_fprintf(2, "ms: reached maximum of heredocs(42)\n");
 		return (ERROR);
 	}
+	else if (ms->heredoc.count == 0)
+		return (SUCCESS);
 	count = ms->heredoc.count;
-	if (count > 1)
+	while (count > 1)
 	{
-		while (count != 0)
-		{
-			ms->ret = exec_heredoc(ms);
-			count--;
-		}
-	}
-	else
 		ms->ret = exec_heredoc(ms);
+		count--;
+	}
+	ms->ret = exec_heredoc(ms);
 	return (ms->ret);
 }
 
@@ -52,8 +50,7 @@ int	exec_heredoc(t_minishell *ms)
 			tmp = ms->tokens[k];
 			delim = ms->tokens[k + 1];
 			check_delim(ms, k + 1);
-			ms->ret = heredoc(ms, delim);
-			if (ms->ret != SUCCESS)
+			if (heredoc(ms, delim) != SUCCESS)
 				return (ERROR);
 			ms->tokens[k] = ft_strdup(ms->heredoc.fd_name[i]);
 			k = shift_tokens(ms, &k);
@@ -78,12 +75,12 @@ int	heredoc(t_minishell *ms, char *delim)
 		ft_fprintf(2, "Error tmp_fd\n");
 		return (ERROR);
 	}
-	ms->ret = fill_heredoc(ms, tmp_fd, delim);
+	fill_heredoc(ms, tmp_fd, delim);
 	close(tmp_fd);
-	return (ms->ret);
+	return (SUCCESS);
 }
 
-int	fill_heredoc(t_minishell *ms, int fd, char *delim)
+void	fill_heredoc(t_minishell *ms, int fd, char *delim)
 {
 	char	*line;
 	char	*tmp_line;
@@ -99,7 +96,6 @@ int	fill_heredoc(t_minishell *ms, int fd, char *delim)
 		ft_putendl_fd(tmp_line, fd);
 		ft_free(tmp_line);
 	}
-	return (SUCCESS);
 }
 
 char	*create_heredoc_name(t_minishell *ms)

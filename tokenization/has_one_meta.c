@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 19:08:21 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/09 13:00:35 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/09 23:28:19 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,18 @@ t_bool	has_heredoc(t_minishell *ms, char **tokens)
 	int	i;
 
 	i = 0;
+	if (!tokens || *tokens)
+		return (FALSE);
 	while (tokens[i])
 	{
-		if (ms->token.protected[i] == 0 && is_heredoc(tokens[i]))
+		if (!ms->token.protected[i] && is_heredoc(tokens[i]) && tokens[i + 1])
+		{
+			ft_fprintf(2, "have heredoc\n");	
 			return (TRUE);
+		}
 		i++;
 	}
+	ft_fprintf(2, "have no heredoc\n");
 	return (FALSE);
 }
 

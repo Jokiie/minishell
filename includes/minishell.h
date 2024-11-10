@@ -142,9 +142,9 @@ int				append_output(t_minishell *ms, char *file);
 /* /lexing */
 
 // tokens_creator.c
-int		tokens_creator(t_minishell *ms, char *line);
-void 	transformer(t_minishell *ms);
-void	fill_protected_arr(t_minishell *ms, char **tokens);
+int				tokens_creator(t_minishell *ms, char *line);
+void 			transformer(t_minishell *ms);
+void			fill_protected_arr(t_minishell *ms);
 
 // tokenizer.c
 int				separe_line(t_minishell *ms, char *line, int i, int *k);
@@ -201,7 +201,7 @@ t_bool			is_pipe(char *token);
 int				execute_heredocs(t_minishell *ms);
 int				exec_heredoc(t_minishell *ms);
 int				heredoc(t_minishell *ms, char *delim);
-int				fill_heredoc(t_minishell *ms, int fd, char *delim);
+void			fill_heredoc(t_minishell *ms, int fd, char *delim);
 char			*create_heredoc_name(t_minishell *ms);
 
 // heredoc_expander.c

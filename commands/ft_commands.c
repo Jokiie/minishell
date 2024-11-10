@@ -10,17 +10,15 @@
 */
 int	execute_input(t_minishell *ms, char *input)
 {
-	ms->ret = tokens_creator(ms, input);
-	if (ms->ret == SUCCESS && has_heredoc(ms, ms->tokens))
-		ms->ret = execute_heredocs(ms);
-	//print_debug(ms->tokens);
-	if (ms->ret == SUCCESS)
+	if (tokens_creator(ms, input) == SUCCESS && ms->tokens)
 	{
+		if (execute_heredocs(ms) == ERROR)
+			return (ERROR);
+		//print_debug(ms->tokens);
 		ms->ret = built_in_cmds(ms);
 		if (ms->ret == CMD_NOT_FOUND)
 			ms->ret = call_commands(ms);
 		free_tokens(ms->tokens);
-		return (ms->ret);
 	}
 	return (ms->ret);
 }
@@ -43,20 +41,19 @@ int	call_commands(t_minishell *ms)
 {
 	int	pid;
 
+	if (has_pipe(ms, ms->tokens) == TRUE)
+	{
+		ms->ret = ft_exect_pipes(ms);
+		return (ms->ret);
+	}
 	pid = fork();
 	if (pid < 0)
 		return (ERROR);
 	else if (pid == 0)
 	{
-		if (has_pipe(ms, ms->tokens) == TRUE)
+		if (has_redirect(ms, ms->tokens))
 		{
-			ms->ret = ft_exect_pipes(ms);
-			exit_child(ms);
-		}
-		if (has_redirect(ms, ms->tokens) && !has_pipe(ms, ms->tokens))
-		{
-			ms->ret = exec_redirection(ms);
-			if (ms->ret != 0)
+			if (exec_redirection(ms) != SUCCESS)
 				exit_child(ms);
 		}
 		if (ms->ret == CMD_NOT_FOUND)
