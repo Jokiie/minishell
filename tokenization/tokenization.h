@@ -36,7 +36,6 @@ char	*single_var_extractor(char *token, int *i);
 // trimmer.c
 char	**trimmer(t_minishell *ms, char **tokens);
 char	*ft_toktrim(t_minishell *ms, char *token, int len);
-t_bool  have_heredoc(char *heredoc, char *delim);
 
 // has_meta.c
 t_bool	has_redirect(t_minishell *ms, char **tokens);

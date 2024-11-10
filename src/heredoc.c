@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 12:01:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/09 23:02:01 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/10 01:09:29 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	exec_heredoc(t_minishell *ms)
 		}
 		k++;
 	}
+	ms->tokc = count_tokens(ms->tokens);
 	return (SUCCESS);
 }
 

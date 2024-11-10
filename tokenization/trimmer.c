@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/10 00:02:59 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/10 01:13:57 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,6 @@ char	**trimmer(t_minishell *ms, char **tokens)
 		k++;
 	}
 	return (tokens);
-}
-
-t_bool	have_heredoc(char *heredoc, char *delim)
-{
-	if (!has_quotes(heredoc) && is_heredoc(heredoc))
-	{
-		if (has_quotes(delim))
-		{
-			return (TRUE);
-		}
-	}
-	return (FALSE);
 }
 
 char	*ft_toktrim(t_minishell *ms, char *token, int len)

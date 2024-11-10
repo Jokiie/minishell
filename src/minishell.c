@@ -62,11 +62,8 @@ void	execms(t_minishell *ms, char **envp)
 	{
 		ms->prompt_name = get_prompt_name(ms);
 		ms->input = readline(ms->prompt_name);
-		if (!ms->input || is_exit(ms->input) == TRUE)
-		{
-			exit_minishell(ms);
+		if (!ms->input)
 			break ;
-		}
 		if (*(ms->input) != '\0')
 		{
 			ms->ret = execute_input(ms, ms->input);

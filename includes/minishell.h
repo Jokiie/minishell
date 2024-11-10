@@ -139,7 +139,7 @@ int				redirect_input(t_minishell *ms, char *file);
 int				redirect_output(t_minishell *ms, char *file);
 int				append_output(t_minishell *ms, char *file);
 
-/* /lexing */
+/* Tokenization */
 
 // tokens_creator.c
 int				tokens_creator(t_minishell *ms, char *line);
@@ -248,7 +248,7 @@ int				detect_env_call(t_minishell *ms, int k);
 int				env(t_minishell *ms, int k);
 
 //exit.c
-t_bool			is_exit(char *line);
+t_bool			is_exit(char *token);
 
 // find_executable_path.c
 char			*find_executable_path(char *cmds);

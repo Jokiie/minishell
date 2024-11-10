@@ -10,7 +10,8 @@
 */
 int	execute_input(t_minishell *ms, char *input)
 {
-	if (tokens_creator(ms, input) == SUCCESS && ms->tokens)
+	ms->ret = tokens_creator(ms, input);
+	if (ms->ret == SUCCESS && ms->tokens)
 	{
 		if (execute_heredocs(ms) == ERROR)
 			return (ERROR);
@@ -22,7 +23,6 @@ int	execute_input(t_minishell *ms, char *input)
 	}
 	return (ms->ret);
 }
-
 /*
 	Create a child process with fork to execute a command in the environment
 	path variable. wait_children wait the children processes to finish and
@@ -123,6 +123,11 @@ int	built_in_cmds(t_minishell *ms)
 		return (SUCCESS);
 	while (ms->tokens[k])
 	{
+		if (is_exit(ms->tokens[0]))
+		{
+			free_tokens(ms->tokens);
+			exit_minishell(ms);
+		}
 		if (detect_cd_call(ms, k) != CMD_NOT_FOUND
 			|| detect_pwd_call(ms, k) != CMD_NOT_FOUND
 			|| detect_env_call(ms, k) != CMD_NOT_FOUND
