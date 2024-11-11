@@ -6,7 +6,7 @@
 
 // tokens_creator.c
 int		tokens_creator(t_minishell *ms, char *line);
-
+void	fill_protected_arr(t_minishell *ms, char **tokens);
 // tokenizer.c
 int		separe_line(t_minishell *ms, char *line, int i, int *k);
 char	**tokenizer(t_minishell *ms, char *line);
@@ -34,17 +34,19 @@ char	*single_var_extractor(char *token, int *i);
 // trimmer.c
 char	**trimmer(t_minishell *ms, char **tokens);
 char	*ft_toktrim(t_minishell *ms, char *token, int len);
+t_bool  have_heredoc(char *heredoc, char *delim);
 
 // has_meta.c
-t_bool	has_redirect(char **tokens);
-t_bool	has_meta(char **tokens);
+t_bool	has_redirect(t_minishell *ms, char **tokens);
+t_bool	has_meta(t_minishell *ms, char **tokens);
+t_bool  has_quotes(char *token);
 
 // has_one_meta.c
-t_bool	has_redirect_in(char **tokens);
-t_bool	has_redirect_out(char **tokens);
-t_bool	has_append(char **tokens);
-t_bool	has_heredoc(char **tokens);
-t_bool	has_pipe(char **tokens);
+t_bool	has_redirect_in(t_minishell *ms, char **tokens);
+t_bool	has_redirect_out(t_minishell *ms, char **tokens);
+t_bool	has_append(t_minishell *ms, char **tokens);
+t_bool	has_heredoc(t_minishell *ms, char **tokens);
+t_bool	has_pipe(t_minishell *ms, char **tokens);
 
 // is_meta.c
 t_bool  is_redirect(char *token);

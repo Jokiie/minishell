@@ -56,7 +56,8 @@ void	echo(char **tokens, int opt)
 	}
 	while (tokens[k])
 	{
-
+		if (ft_strcmp(tokens[k], "|"))
+			exit(-1);
 		ft_putstr_fd(tokens[k], 1);
 		if (tokens[k])
 			ft_putstr_fd(" ", 1);

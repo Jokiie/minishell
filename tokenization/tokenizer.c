@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/07 13:33:01 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/08 15:46:49 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,10 @@ char	*meta_chars_extractor(char *line, int *i)
 		(*i) += 2;
 	else if ((line[*i] == '>' || line[*i] == '<')
 		&& (!ft_ismeta_chars(line[*i + 1])))
+		(*i)++;
+	else if ((line[*i] == '<' && line[*i + 1] == '>'))
+		(*i)++;
+	else if ((line[*i] == '>' && line[*i + 1] == '<'))
 		(*i)++;
 	else if (line[*i] == '<')
 		(*i)++;

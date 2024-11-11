@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/05 15:19:08 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/08 13:27:44 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@ char	**trimmer(t_minishell *ms, char **tokens)
 		return (NULL);
 	while (tokens[k] && k < ms->tokc)
 	{
+		if (have_heredoc(tokens[k], tokens[k + 1]))
+		{
+			k += 2;
+		}
 		trimmed = ft_toktrim(ms, tokens[k], ft_strlen(tokens[k]));
 		if (trimmed)
 		{
@@ -35,6 +39,18 @@ char	**trimmer(t_minishell *ms, char **tokens)
 	return (tokens);
 }
 
+t_bool	have_heredoc(char *heredoc, char *delim)
+{
+	if (!has_quotes(heredoc) && is_heredoc(heredoc))
+	{
+		if (has_quotes(delim))
+		{
+			return (TRUE);
+		}
+	}
+	return (FALSE);
+}
+
 char	*ft_toktrim(t_minishell *ms, char *token, int len)
 {
 	char	*buffer;
@@ -46,8 +62,6 @@ char	*ft_toktrim(t_minishell *ms, char *token, int len)
 	buffer = malloc(sizeof(char) * (len + 1));
 	if (!buffer)
 		return (NULL);
-	ms->token.in_dquotes = FALSE;
-	ms->token.in_squotes = FALSE;
 	i = 0;
 	j = 0;
 	while (i < len && j < len)

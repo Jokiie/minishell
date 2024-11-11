@@ -10,6 +10,7 @@ void	exit_minishell(t_minishell *ms)
 	int	child_ret;
 
 	free_at_exit(ms);
+	reset_heredoc(ms);
 	clear_history();
 	while (waitpid(-1, &child_ret, 0) > 0)
 		;
@@ -21,7 +22,6 @@ void	exit_minishell(t_minishell *ms)
 void	exit_child(t_minishell *ms)
 {
 	free_at_exit(ms);
-	free_tokens(ms->tokens);
 	exit(ms->ret);
 }
 
