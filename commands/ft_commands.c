@@ -2,39 +2,17 @@
 #include "commands.h"
 
 /*
-	tokens_creator -> 0 : Success / 1 : Error / 2 : Syntaxe
-	external_cmds  -> 0 : Success / 1 : Error / 127 : CmdNotfound
-	call_commands  -> if built-in commands return CMD_NOT_FOUND(127),
-	call_commands is called by the child process. Return value depend of
-	child return value.
-*/
-int	execute_input(t_minishell *ms, char *input)
-{
-	ms->ret = tokens_creator(ms, input);
-	if (ms->ret == SUCCESS && ms->tokens)
-	{
-		if (execute_heredocs(ms) == ERROR)
-			return (ERROR);
-		//print_debug(ms->tokens);
-		ms->ret = exec_builtin(ms);
-		if (ms->ret == CMD_NOT_FOUND)
-			ms->ret = call_commands(ms);
-		free_tokens(ms->tokens);
-	}
-	return (ms->ret);
-}
-/*
-	Create a child process with fork to execute a command in the environment
-	path variable. wait_children wait the children processes to finish and
-	save their return value. We check if forked_builtin_cmds return ERROR
-	because if the token is not executable, it have a special message and
-	if we returned CMD_NOT_FOUND(127), and checkit like for built-in
-	commands, it will show the wrong message. 
+	Check if there if the tokens contains a pipe, if yes, execute all the commands.
+	If there is no pipes, execute redirections if applicable, check if the command is
+	an executable. If its not an executable, search the command in the paths. Return the
+	exit status of the child process.
 
 	to do:
-	- handle "<<"
-	- create our own get_env (to get added variables from our environment)
-	
+	- ft_getenv
+	- ft_setenv
+	- export
+	- unset
+	- rework all commands (unless exit and executable)
 
 */
 int	call_commands(t_minishell *ms)
@@ -58,13 +36,7 @@ int	call_commands(t_minishell *ms)
 		}
 		ms->ret = detect_executable(ms);
 		if (ms->ret == EXE_NOT_FOUND)
-		{
-			ms->ret = exec_builtin(ms);
-			if (ms->ret == CMD_NOT_FOUND)
-				ms->ret = ft_execvp(ms->tokens, ms->env);
-		}
-		else
-			exit_child(ms);
+			ms->ret = ft_execvp(ms->tokens, ms->env);
 		exit_child(ms);
 	}
 	ms->ret = wait_children();
@@ -87,7 +59,7 @@ int	ft_execvp(char **tokens, char **envp)
 		if (tokens[k][0] == '/')
 			path = ft_strdup(tokens[k]);
 		else
-			path = find_executable_path(tokens[k]);
+			path = get_path(tokens[k]);
 		if (!path || execve(path, tokens, envp) == FAIL)
 		{
 			ft_free(path);

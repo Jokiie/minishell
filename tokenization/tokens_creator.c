@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/10 01:05:04 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/11 18:02:52 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,46 +14,71 @@
 
 int	tokens_creator(t_minishell *ms, char *line)
 {
+	if (!line || is_only_spaces(line) == TRUE)
+	{
+		ms->tokens = NULL;
+		return (0);
+	}
 	if (ft_open_quotes_checker(ms, line) != SUCCESS)
 	{
 		ft_fprintf(2, "ms: syntax error near unclosed quotes\n");
 		return (SYNTAX_ERROR);
 	}
 	tokenizer(ms, line);
-	transformer(ms);
+	ms->tokens = transformer(ms);
 	if (ms->tokens && check_syntax(ms->tokens) == SYNTAX_ERROR)
 	{
-		free_tokens(ms->tokens);	
+		free_tokens(ms->tokens);
 		return (SYNTAX_ERROR);
 	}
 	return (SUCCESS);
 }
 
-void	transformer(t_minishell *ms)
+t_bool	is_only_spaces(char *line)
 {
-	char **tmp_pretokens;
+	int	i;
 
-	if (ms->pretokens)
+	i = 0;
+	while (line[i])
 	{
-		fill_protected_arr(ms);
-		ms->tokc = count_tokens(ms->pretokens);
-		tmp_pretokens = ms->pretokens;
-		ms->tokens = ft_envdup(ms->pretokens);
-		ms->pretokens = characterizer(ms, ms->tokens);
-		ms->tokens = trimmer(ms, ms->pretokens);
+		if (!ft_isspace(line[i]))
+			return (FALSE);
+		i++;
+	}
+	return (TRUE);
+}
+
+char	**transformer(t_minishell *ms)
+{
+	char	**tmp_pretokens;
+	char	**tmp_tokens;
+
+	if (!ms->pretokens && !*ms->pretokens)
+		return (NULL);
+	fill_protected_arr(ms);
+	ms->tokc = count_tokens(ms->pretokens);
+	tmp_pretokens = ms->pretokens;
+	ms->tokens = ft_envdup(ms->pretokens);
+	tmp_tokens = ms->tokens;
+	ms->pretokens = characterizer(ms, ms->tokens);
+	if (!*ms->pretokens[0])
+	{
 		free_tokens(tmp_pretokens);
+		free_tokens(tmp_tokens);
+		ms->pretokens = NULL;
+		return (NULL);
 	}
-	if (!ms->pretokens || !ms->tokens)
-	{
-		free_tokens(ms->pretokens);
-		ms->tokens = NULL;
-	}
+	ms->tokens = trimmer(ms, ms->pretokens);
+	free_tokens(tmp_pretokens);
+	if (!*ms->tokens[0] && !ms->token.protected[0])
+		return (NULL);
+	return (ms->tokens);
 }
 
 void	fill_protected_arr(t_minishell *ms)
 {
 	int k;
-	int	i;
+	int i;
 
 	i = 0;
 	k = 0;
@@ -72,10 +97,4 @@ void	fill_protected_arr(t_minishell *ms)
 		k++;
 		i++;
 	}
-	// k = 0;
-	// for (int j = 0; j < i ; j ++)
-	// {
-	// 	ft_printf("protected: [%d][%d]\n", k, ms->token.protected[j]);
-	// 	k++;
-	// }
 }

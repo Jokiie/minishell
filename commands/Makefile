@@ -6,7 +6,7 @@
 #    By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/11 12:55:15 by ccodere           #+#    #+#              #
-#    Updated: 2024/11/10 00:15:46 by ccodere          ###   ########.fr        #
+#    Updated: 2024/11/11 17:07:09 by ccodere          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ HEADER = commands.h
 # Files
 
 SRCS 	= ft_commands.c \
-		  find_executable_path.c \
+		  get_path.c \
 		  cd.c \
 		  echo.c \
 		  pecho.c \

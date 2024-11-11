@@ -50,6 +50,30 @@ void	init_minishell(t_minishell *ms)
 	or corrupted data.
 */
 
+/*
+	tokens_creator -> 0 : Success / 1 : Error / 2 : Syntaxe
+	external_cmds  -> 0 : Success / 1 : Error / 127 : CmdNotfound
+	call_commands  -> if built-in commands return CMD_NOT_FOUND(127),
+	call_commands is called by the child process. Return value depend of
+	child return value.
+*/
+int	execute_input(t_minishell *ms, char *input)
+{
+	if (tokens_creator(ms, input) == SYNTAX_ERROR)
+		return (SYNTAX_ERROR);
+	else if (ms->tokens && *ms->tokens)
+	{
+		if (execute_heredocs(ms) == ERROR)
+			return (ERROR);
+		//print_debug(ms->tokens);
+		ms->ret = exec_builtin(ms);
+		if (ms->ret == CMD_NOT_FOUND)
+			ms->ret = call_commands(ms);
+		free_tokens(ms->tokens);
+	}
+	return (ms->ret);
+}
+
 void	execms(t_minishell *ms, char **envp)
 {
 	ms->path = getcwd(NULL, 0);

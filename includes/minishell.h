@@ -121,7 +121,7 @@ void			free_at_exit(t_minishell *ms);
 void			free_int_array(int **arr);
 
 // free_protected_array.c
-void    		free_protected_array(int **array);
+void			free_protected_array(int **array);
 
 // error.c
 int				check_error(char *cmd);
@@ -131,7 +131,6 @@ char			*get_prompt_name(t_minishell *ms);
 char			*get_user_color(t_minishell *ms);
 char			*get_arrow_color(t_minishell *ms, char *cwd_dup);
 char			**get_cwdsplit(t_minishell *ms);
-char			*get_last_dir(char *path);
 
 // redirection.c
 int				exec_redirection(t_minishell *ms);
@@ -144,8 +143,9 @@ int				append_output(t_minishell *ms, char *file);
 
 // tokens_creator.c
 int				tokens_creator(t_minishell *ms, char *line);
-void 			transformer(t_minishell *ms);
+char			**transformer(t_minishell *ms);
 void			fill_protected_arr(t_minishell *ms);
+t_bool			is_only_spaces(char *line);
 
 // tokenizer.c
 int				separe_line(t_minishell *ms, char *line, int i, int *k);
@@ -243,37 +243,35 @@ int				detect_echo_call(t_minishell *ms);
 
 // executable.c
 int				detect_executable(t_minishell *ms);
-int				check_error_executable(char *executable);
 
 // env.c
 int				detect_env_call(t_minishell *ms);
 int				env(t_minishell *ms);
 
-//exit.c
+// exit.c
 t_bool			is_exit(char *token);
 
 // find_executable_path.c
-char			*find_executable_path(char *cmds);
+char			*get_path(char *cmds);
 char			*create_full_path(char *dir, char *cmds);
 char			*get_last_dir(char *cmds);
 
 // commands.c
-int				execute_input(t_minishell *ms, char *input);
 int				call_commands(t_minishell *ms);
 int				ft_execvp(char **tokens, char **envp);
 int				exec_builtin(t_minishell *ms);
-
+int				built_in_cmds(t_minishell *ms);
 
 // ft_pipes
-int			ft_has_pipe(t_minishell *ms, char **str);
-int			ft_count_pipes(t_minishell *ms, char **str);
-int			**ft_allocate_pipes(int num_pipes);
-char		**ft_extract_args(char **tokens, int start, int end);
-void		ft_close_pipes(int **pipes, int num_pipes);
-void		ft_pipes_redirection(int **pipes, int cmd_num, int num_pipes);
-int			ft_exect_pipes(t_minishell *ms);
-void		ft_create_and_manage_process(char **args, int **pipes, int cmd_num,
-				int num_pipes, pid_t *pid);
-void		ft_handle_child_process(char **args, int **pipes, int cmd_num,
-				int num_pipes);
+int				ft_has_pipe(t_minishell *ms, char **str);
+int				ft_count_pipes(t_minishell *ms, char **str);
+int				**ft_allocate_pipes(int num_pipes);
+char			**ft_extract_args(char **tokens, int start, int end);
+void			ft_close_pipes(int **pipes, int num_pipes);
+void			ft_pipes_redirection(int **pipes, int cmd_num, int num_pipes);
+int				ft_exect_pipes(t_minishell *ms);
+void			ft_create_and_manage_process(char **args, int **pipes,
+					int cmd_num, int num_pipes, pid_t *pid);
+void			ft_handle_child_process(char **args, int **pipes, int cmd_num,
+					int num_pipes);
 #endif

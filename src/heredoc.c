@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 12:01:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/10 01:09:29 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/11 17:50:04 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	execute_heredocs(t_minishell *ms)
 	ms->heredoc.count = count_heredoc(ms);
 	if (ms->heredoc.count > 42)
 	{
-		ft_fprintf(2, "ms: reached maximum of heredocs(42)\n");
+		ft_fprintf(2, GREY"ms: reached maximum of heredocs(42)\n"RESET);
 		return (ERROR);
 	}
 	else if (ms->heredoc.count == 0)

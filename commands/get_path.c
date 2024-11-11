@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:18:05 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/10 02:30:57 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/11 17:06:39 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 	to do:
 		paths = (should search in ms->env), not with getenv ?
 */
-char	*find_executable_path(char *cmds)
+char	*get_path(char *cmds)
 {
 	char	*paths;
 	char	*paths_dup;

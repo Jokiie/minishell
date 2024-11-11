@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/09 23:48:03 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/11 16:52:46 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,19 @@ char	**tokenizer(t_minishell *ms, char *line)
 	int	k;
 
 	k = 0;
+	if (!line)
+	{
+		ms->pretokens = NULL;
+		return (NULL);
+	}
 	ms->pretokens = (char **)malloc(MB_SIZE / sizeof(char *));
 	if (!ms->pretokens)
 		return (NULL);
 	i = 0;
-	while (ft_isspace(line[i]))
-		i++;
 	while (line[i])
 	{
+		while (ft_isspace(line[i]))
+			i++;
 		i = separe_line(ms, line, i, &k);
 		while (ft_isspace(line[i]))
 			i++;
@@ -61,7 +66,7 @@ int	separe_line(t_minishell *ms, char *line, int i, int *k)
 	(*t).end = i;
 	if (i > (*t).start)
 		ms->pretokens[(*k)++] = ft_substr(line, (*t).start, ((*t).end - (*t).start));
-	if (have_meta_chars)
+	else if (have_meta_chars)
 		ms->pretokens[(*k)++] = meta_chars_extractor(line, &i);
 	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:51:50 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/10 02:48:15 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/11 17:07:25 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,11 @@ int		env(t_minishell *ms);
 //exit.c
 t_bool  is_exit(char *token);
 
-// find_executable_path.c
-char	*find_executable_path(char *cmds);
+// get_path.c
+char	*get_path(char *cmds);
 char	*create_full_path(char *dir, char *cmds);
 
 // commands.c
-int		execute_input(t_minishell *ms, char *input);
 int		call_commands(t_minishell *ms);
 int		ft_execvp(char **tokens, char **envp);
 int		exec_builtin(t_minishell *ms);
