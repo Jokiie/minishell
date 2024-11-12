@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/10 22:03:02 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/12 04:51:35 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	ft_count_pipes(t_minishell *ms, char **str)
 	num_pipes = 0;
 	while (str[i])
 	{
-		if (ms->token.protected[i] == 0 && ft_strcmp(str[i], "|") == 0)
+		if (ms->token.protected[i] == 0 && is_pipe(str[i]))
 			num_pipes++;
 		i++;
 	}
@@ -76,6 +76,8 @@ char	**ft_extract_args(char **tokens, int start, int end)
 	size = end - start;
 	// args = malloc(sizeof(char *) * (size + 1));
 	args = ft_calloc(size + 1, sizeof(char *));
+	if (!args)
+		return (NULL);
 	i = 0;
 	while (i < size)
 	{
@@ -172,22 +174,31 @@ int	ft_exect_pipes(t_minishell *ms)
 	int		i, cmd_start, cmd_num;
 	pid_t	pid;
 	int		**pipes;
-
+	int		last_cmd;
+	
+	last_cmd = 0;
 	int num_pipes = ft_count_pipes(ms, ms->tokens);
 	if (num_pipes == 0 || !(pipes = ft_allocate_pipes(num_pipes)))
 		return (EXIT_FAILURE);
 	cmd_start = cmd_num = i = 0;
 	while (ms->tokens[i])
 	{
-		if ((!ms->token.protected[i] && ft_strcmp(ms->tokens[i], "|") == 0) || ms->tokens[i + 1] == NULL)
+		if ((ms->token.protected[i] == 0 && is_pipe(ms->tokens[i])) || !ms->tokens[i + 1])
 		{
 			if (ms->tokens[i + 1] == NULL)
+			{
 				i++;
+				last_cmd = 1;
+			}
 			char **args = ft_extract_args(ms->tokens, cmd_start, i);
+			if (!args)
+				return (EXIT_FAILURE);
 			ft_create_and_manage_process(args, pipes, cmd_num, num_pipes, &pid);
 			free(args);
 			cmd_start = i + 1;
 			cmd_num++;
+			if (last_cmd)
+				break ;
 		}
 		i++;
 	}
