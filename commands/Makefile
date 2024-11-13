@@ -6,7 +6,7 @@
 #    By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/11 12:55:15 by ccodere           #+#    #+#              #
-#    Updated: 2024/10/28 14:20:09 by matislessar      ###   ########.fr        #
+#    Updated: 2024/11/13 12:07:59 by matislessar      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,8 @@ SRCS 	= ft_commands.c \
 		  pwd.c \
 		  executable.c\
 		  env.c \
+		  unset.c \
+		  export.c \
 
 OBJECTS = $(SRCS:.c=.o)
 

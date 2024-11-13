@@ -30,6 +30,9 @@ int	detect_echo_call(t_minishell *ms, int k)
 			&& ft_strncmp(ms->tokens[k + 1], "-n\0", 3) == 0))
 	{
 		opt = 1;
+		echo(&ms->tokens[k + 1], opt);
+		ms->ret = SUCCESS;
+		return (ms->ret);
 	}
 	else if ((k == 0) && ft_strncmp(ms->tokens[k], "echo\0", 5) == 0)
 	{
@@ -51,18 +54,20 @@ void	echo(char **tokens, int opt)
 	k = 1;
 	if (!tokens[k])
 	{
-		write(1, "\n", 1);
+		write(STDOUT_FILENO, "\n", 1);
 		return ;
 	}
 	while (tokens[k])
 	{
-		if (ft_strcmp(tokens[k], "|"))
-			exit(-1);
-		ft_putstr_fd(tokens[k], 1);
+		if (ft_strcmp(tokens[k], "|") == 0)
+		{
+			break ;
+		}
+		ft_putstr_fd(tokens[k], STDOUT_FILENO);
 		if (tokens[k])
-			ft_putstr_fd(" ", 1);
+			ft_putstr_fd(" ", STDOUT_FILENO);
 		k++;
 	}
 	if (!opt)
-		ft_putstr_fd("\n", 1);
+		ft_putstr_fd("\n", STDOUT_FILENO);
 }

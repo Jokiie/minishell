@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:51:50 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/07 13:27:12 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/12 18:04:41 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,12 @@ int		detect_executable(t_minishell *ms, int k);
 // env.c
 int		detect_env_call(t_minishell *ms, int k);
 int		env(t_minishell *ms, int k);
+
+// unset.c
+int	detect_unset_call(t_minishell *ms, int k);
+void	unset_handling(t_minishell *ms, int i);
+int	find_env_index(char **env, const char *var_name);
+void	remove_env_var(char **env, int index);
 
 // find_executable_path.c
 char	*find_executable_path(char *cmds);

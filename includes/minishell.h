@@ -239,7 +239,7 @@ int				detect_pwd_call(t_minishell *ms, int k);
 
 // echo.c
 void			echo(char **tokens, int opt);
-void			echo_n(char **tokens);
+// void			echo_n(char **tokens);
 int				detect_echo_call(t_minishell *ms, int k);
 
 // executable.c
@@ -248,6 +248,12 @@ int				detect_executable(t_minishell *ms, int k);
 // env.c
 int				detect_env_call(t_minishell *ms, int k);
 int				env(t_minishell *ms, int k);
+
+// unset.c
+int	detect_unset_call(t_minishell *ms, int k);
+void	unset_handling(t_minishell *ms, int i);
+int	find_env_index(char **env, const char *var_name);
+void	remove_env_var(char **env, int index);
 
 // find_executable_path.c
 char			*find_executable_path(char *cmds);

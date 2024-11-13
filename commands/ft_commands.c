@@ -135,7 +135,8 @@ int	built_in_cmds(t_minishell *ms)
 		if (detect_cd_call(ms, k) != CMD_NOT_FOUND
 			|| detect_pwd_call(ms, k) != CMD_NOT_FOUND
 			|| detect_env_call(ms, k) != CMD_NOT_FOUND
-			|| detect_echo_call(ms, k) != CMD_NOT_FOUND)
+			|| detect_echo_call(ms, k) != CMD_NOT_FOUND
+			|| detect_unset_call(ms, k) != CMD_NOT_FOUND)
 			return (ms->ret);
 		k++;
 	}

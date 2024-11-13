@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/11 13:22:28 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/12 16:52:51 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,9 +176,9 @@ int exect_pipes(t_minishell *ms)
 	int	cmd_start;
 	pid_t pid;
 	t_pipes	p;
-	int		loop;
-
-	loop = 0;
+	int		last_cmd;
+	
+	last_cmd = 0;
 	i = 0;
 	init_pipes(&p);
 	p.num_pipes = count_pipes(ms->tokens);
@@ -188,28 +188,29 @@ int exect_pipes(t_minishell *ms)
 	p.cmd_num = 0;
 	while (ms->tokens[i])
 	{
-		// printf("Loop - i: %d, cmd_start: %d, cmd_num: %d, token: %s\n", i, cmd_start, p.cmd_num, ms->tokens[i]);
 		if (ft_strcmp(ms->tokens[i], "|") == 0 || ms->tokens[i + 1] == NULL)
 		{
 			if (ms->tokens[i + 1] == NULL)
+			{
+				last_cmd = 1;
 				i++;
-			// printf("Extracting args from cmd_start: %d to i: %d\n", cmd_start, i);
+			}
 			p.p_args = extract_args(ms->tokens, cmd_start, i);
-			// printf("Creating and managing process\n\n");
+			if (!p.p_args)
+				return (EXIT_FAILURE);
 			create_and_manage_process(ms, &p, &pid);
-			// printf("Freeing args\n");
 			free(p.p_args);
 			cmd_start = i + 1;
-			// printf("Updated cmd_start to %d\n", cmd_start);
 			p.cmd_num++;
+			if (last_cmd)
+				break ;
 		}
 		i++;
-		loop++;
 	}
 	if (p.num_pipes != 0)
 		ms->ret = ERROR;
-	if (loop % 2 != 0)
-		exit(-1);
+	else
+		ms->ret = SUCCESS;
 	printf("Exiting while loop\n");
 	close_pipes(&p);
 	return (ms->ret);
