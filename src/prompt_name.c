@@ -41,7 +41,7 @@ char	*get_prompt_name(t_minishell *ms)
 
 char	**get_cwdsplit(t_minishell *ms)
 {
-	char	**splitted;
+	char	**splitted = NULL;
 
 	ms->cwd = getcwd(NULL, 0);
 	if (!ms->cwd)
