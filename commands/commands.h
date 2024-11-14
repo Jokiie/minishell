@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:51:50 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/12 18:04:41 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/13 15:30:18 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,16 @@ int		detect_executable(t_minishell *ms, int k);
 int		detect_env_call(t_minishell *ms, int k);
 int		env(t_minishell *ms, int k);
 
+// export.c
+int		detect_export_call(t_minishell *ms, int k);
+void	export_handling(t_minishell *ms, int i);
+int		count_en_var(char **env, int count);
+void	set_env_var(t_minishell *ms, const char *var_name, const char *value);
+
 // unset.c
-int	detect_unset_call(t_minishell *ms, int k);
+int		detect_unset_call(t_minishell *ms, int k);
 void	unset_handling(t_minishell *ms, int i);
-int	find_env_index(char **env, const char *var_name);
+int		find_env_index(char **env, const char *var_name);
 void	remove_env_var(char **env, int index);
 
 // find_executable_path.c
@@ -54,7 +60,7 @@ char	*get_last_dir(char *cmds);
 int		execute_input(t_minishell *ms, char *input);
 int		call_commands(t_minishell *ms);
 int		exec_path_cmds(t_minishell *ms, char **tokens, int k);
-int     forked_builtin_cmds(t_minishell *ms);
+int		forked_builtin_cmds(t_minishell *ms);
 int		built_in_cmds(t_minishell *ms);
 
 #endif

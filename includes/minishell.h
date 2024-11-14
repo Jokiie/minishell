@@ -81,6 +81,9 @@ typedef struct s_minishell
 	char		*prev_cwd;
 	char		**history;
 	char		**env;
+	
+	char		**test;
+
 	char		**tokens;
 	char		**pretokens;
 	int			tokc;
@@ -249,11 +252,17 @@ int				detect_executable(t_minishell *ms, int k);
 int				detect_env_call(t_minishell *ms, int k);
 int				env(t_minishell *ms, int k);
 
+// export.c
+int				detect_export_call(t_minishell *ms, int k);
+void			export_handling(t_minishell *ms, int i);
+int				count_en_var(char **env, int count);
+void			set_env_var(t_minishell *ms, const char *var_name, const char *value);
+
 // unset.c
-int	detect_unset_call(t_minishell *ms, int k);
-void	unset_handling(t_minishell *ms, int i);
-int	find_env_index(char **env, const char *var_name);
-void	remove_env_var(char **env, int index);
+int				detect_unset_call(t_minishell *ms, int k);
+void			unset_handling(t_minishell *ms, int i);
+int				find_env_index(char **env, const char *var_name);
+void			remove_env_var(char **env, int index);
 
 // find_executable_path.c
 char			*find_executable_path(char *cmds);

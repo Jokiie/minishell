@@ -136,7 +136,9 @@ int	built_in_cmds(t_minishell *ms)
 			|| detect_pwd_call(ms, k) != CMD_NOT_FOUND
 			|| detect_env_call(ms, k) != CMD_NOT_FOUND
 			|| detect_echo_call(ms, k) != CMD_NOT_FOUND
+			|| detect_export_call(ms, k) != CMD_NOT_FOUND
 			|| detect_unset_call(ms, k) != CMD_NOT_FOUND)
+			// )
 			return (ms->ret);
 		k++;
 	}
