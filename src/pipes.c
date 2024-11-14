@@ -3,32 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/13 14:56:12 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/14 12:05:42 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 static int return_value = 0;
-
-int	has_pipes(t_minishell *ms, char **str)
-{
-	int i;
-
-	i = -1;
-	if (str)
-	{
-		while (str[++i])
-		{
-			if (ms->token.protected[i] == 0 && ft_strcmp(str[i], "|") == 0)
-				return (TRUE);
-		}
-	}
-	return (FALSE);
-}
 
 int	count_pipes(t_minishell *ms, char **str)
 {
