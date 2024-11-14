@@ -8,7 +8,6 @@
 	because if the token is not executable, it have a special message and
 	if we returned CMD_NOT_FOUND(127), and checkit like for built-in
 	commands, it will show the wrong message. 
->>>>>>> origin/commands
 
 	to do:
 	- ft_getenv
@@ -104,6 +103,14 @@ int	exec_builtin(t_minishell *ms)
 	if (ms->ret == CMD_NOT_FOUND)
 	{
 		ms->ret = detect_echo_call(ms);
+	}
+	if (ms->ret == CMD_NOT_FOUND)
+	{
+		ms->ret = detect_export_call(ms, 0);
+	}
+	if (ms->ret == CMD_NOT_FOUND)
+	{
+		ms->ret = detect_unset_call(ms, 0);
 	}
 	return (ms->ret);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:51:50 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/13 13:30:21 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/14 12:28:58 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,8 @@ int		pwd(t_minishell *ms);
 int		detect_pwd_call(t_minishell *ms);
 
 // echo.c
-void	echo(char **tokens, int opt);
-void	echo_n(char **tokens);
+void	echo(t_minishell *ms, char **tokens, int opt);
 int		detect_echo_call(t_minishell *ms);
-
-// pecho.c
-void	p_echo(char **tokens);
-void	p_echo_n(char **tokens);
-int		p_detect_echo_call(t_minishell *ms, int k);
 
 // executable.c
 int		detect_executable(t_minishell *ms);
@@ -48,9 +42,22 @@ t_bool  is_exit(char *token);
 char	*get_path(char *cmds);
 char	*create_full_path(char *dir, char *cmds);
 
+// export.c
+int		detect_export_call(t_minishell *ms, int k);
+void	export_handling(t_minishell *ms, int i);
+int		count_en_var(char **env, int count);
+void	set_env_var(t_minishell *ms, const char *var_name, const char *value);
+
+// unset.c
+int		detect_unset_call(t_minishell *ms, int k);
+void	unset_handling(t_minishell *ms, int i);
+int		find_env_index(char **env, const char *var_name);
+void	remove_env_var(char **env, int index);
+
+
 // commands.c
 int		call_commands(t_minishell *ms);
-int		ft_execvp(char **tokens, char **envp);
 int		exec_builtin(t_minishell *ms);
+int     ft_execvp(char **tokens, char **envp);
 
 #endif

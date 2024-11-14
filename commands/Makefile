@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+         #
+#    By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/11 12:55:15 by ccodere           #+#    #+#              #
-#    Updated: 2024/11/11 17:07:09 by ccodere          ###   ########.fr        #
+#    Updated: 2024/11/14 12:31:50 by ccodere          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,11 +24,12 @@ SRCS 	= ft_commands.c \
 		  get_path.c \
 		  cd.c \
 		  echo.c \
-		  pecho.c \
 		  pwd.c \
 		  executable.c\
 		  env.c \
 		  exit.c \
+		  unset.c \
+		  export.c \
 
 OBJECTS = $(SRCS:.c=.o)
 

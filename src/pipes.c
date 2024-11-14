@@ -6,18 +6,18 @@
 /*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/14 12:05:42 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/14 12:14:05 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int return_value = 0;
+static int	return_value = 0;
 
 int	count_pipes(t_minishell *ms, char **str)
 {
-	int i;
-	int num_pipes;
+	int	i;
+	int	num_pipes;
 
 	i = 0;
 	num_pipes = 0;
@@ -32,7 +32,7 @@ int	count_pipes(t_minishell *ms, char **str)
 
 int	**allocate_pipes(t_pipes *p)
 {
-	int i;
+	int	i;
 
 	p->pipes = malloc(sizeof(int *) * p->num_pipes);
 	i = 0;
@@ -51,9 +51,9 @@ int	**allocate_pipes(t_pipes *p)
 
 char	**extract_args(char **tokens, int start, int end)
 {
-	int i;
-	int size;
-	char **args;
+	int		i;
+	int		size;
+	char	**args;
 
 	size = end - start;
 	args = ft_calloc(size + 1, sizeof(char *));
@@ -71,7 +71,7 @@ char	**extract_args(char **tokens, int start, int end)
 
 void	close_pipes(t_pipes *p)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < p->num_pipes)
@@ -112,9 +112,7 @@ void	handle_child_process(t_minishell *ms, t_pipes *p)
 	}
 	close_pipes(p);
 	ms->cmd_path = get_path(p->p_args[0]);
-	//execve(ms->cmd_path, p->p_args, ms->env);
 	return_value = call_commands_pipes(ms, p);
-	//perror("minishell: execve");
 	free(ms->cmd_path);
 	exit(return_value);
 }
@@ -135,7 +133,7 @@ int	create_and_manage_process(t_minishell *ms, t_pipes *p, pid_t *pid)
 	return (return_value);
 }
 
-void init_pipes(t_pipes *p)
+void	init_pipes(t_pipes *p)
 {
 	p->p_args = NULL;
 	p->num_pipes = 0;
@@ -143,12 +141,14 @@ void init_pipes(t_pipes *p)
 	p->pipes = NULL;
 }
 
-void tokenize_input1(t_minishell *ms)
+void	tokenize_input1(t_minishell *ms)
 {
-	ms->tokens = malloc(sizeof(char *) * 1024);
-	int i = 0;
-	char *token = ft_strtok(ms->input, " \t\n|");
+	int		i;
+	char	*token;
 
+	ms->tokens = malloc(sizeof(char *) * 1024);
+	i = 0;
+	token = ft_strtok(ms->input, " \t\n|");
 	while (token)
 	{
 		ms->tokens[i++] = strdup(token);
@@ -219,47 +219,42 @@ int	call_commands_pipes(t_minishell *ms, t_pipes *p)
 	return (return_value);
 }
 
-int exect_pipes(t_minishell *ms)
+int	exect_pipes(t_minishell *ms)
 {
-	pid_t pid;
+	pid_t	pid;
 	t_pipes	p;
-	int	i;
-	int	cmd_start;
-	int last_cmd;
+	int		i;
+	int		cmd_start;
+	int		last_cmd;
 
 	i = 0;
 	last_cmd = 0;
 	init_pipes(&p);
 	p.num_pipes = count_pipes(ms, ms->tokens);
 	if (p.num_pipes == 0 || !(p.pipes = allocate_pipes(&p)))
-		return (EXIT_FAILURE);
+		return (ERROR);
 	cmd_start = i;
 	p.cmd_num = 0;
 	while (ms->tokens[i])
 	{
-		// printf("Loop - i: %d, cmd_start: %d, cmd_num: %d, token: %s\n", i, cmd_start, p.cmd_num, ms->tokens[i]);
-		if ((ms->token.protected[i] == 0 && ft_strcmp(ms->tokens[i], "|") == 0) || ms->tokens[i + 1] == NULL)
+		if ((ms->token.protected[i] == 0 && ft_strcmp(ms->tokens[i], "|") == 0)
+			|| ms->tokens[i + 1] == NULL)
 		{
 			if (ms->tokens[i + 1] == NULL)
 			{
 				i++;
 				last_cmd = 1;
 			}
-			// printf("Extracting args from cmd_start: %d to i: %d\n", cmd_start, i);
 			p.p_args = extract_args(ms->tokens, cmd_start, i);
-			// printf("Creating and managing process\n\n");
 			return_value = create_and_manage_process(ms, &p, &pid);
-			// printf("Freeing args\n");
 			free(p.p_args);
 			cmd_start = i + 1;
-			// printf("Updated cmd_start to %d\n", cmd_start);
 			p.cmd_num++;
 			if (last_cmd)
 				break ;
 		}
 		i++;
 	}
-	//printf("Exiting while loop\n");
 	close_pipes(&p);
 	return (return_value);
 }

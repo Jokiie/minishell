@@ -1,17 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   find_executable_path.c                             :+:      :+:    :+:   */
+/*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/18 13:18:05 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/11 17:06:39 by ccodere          ###   ########.fr       */
+/*   Created: 2024/11/14 12:29:15 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/14 12:29:44 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-#include "../libft/libft.h"
 #include "commands.h"
 
 /*
