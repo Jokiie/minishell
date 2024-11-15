@@ -37,7 +37,7 @@ void	init_minishell(t_minishell *ms)
 	ms->token.in_dquotes = FALSE;
 	ms->token.in_squotes = FALSE;
 	ms->token.protected = NULL;
-	ms->handled_heredoc = FALSE;
+	ms->token.isheredoc = NULL;
 	ms->fd.fdin = NULL;
 	ms->fd.fdout = NULL;
 	ms->fd.saved_stdin = 0;
@@ -69,9 +69,7 @@ int	execute_input(t_minishell *ms, char *input)
 		if (execute_heredocs(ms) == ERROR)
 			return (ERROR);
 		//print_debug(ms->tokens);
-		ms->ret = exec_builtin(ms);
-		if (ms->ret == CMD_NOT_FOUND)
-			ms->ret = call_commands(ms);
+		ms->ret = call_commands(ms);
 		free_tokens(ms->tokens);
 	}
 	return (ms->ret);
@@ -90,7 +88,9 @@ void	execms(t_minishell *ms, char **envp)
 		ms->prompt_name = get_prompt_name(ms);
 		ms->input = readline(ms->prompt_name);
 		if (!ms->input)
+		{
 			break ;
+		}
 		if (*(ms->input) != '\0')
 		{
 			ms->ret = execute_input(ms, ms->input);
@@ -115,6 +115,6 @@ int	main(int argc, char **argv, char **envp)
 		init_signals_interactive();
 		execms(ms, envp);
 	}
-	exit_minishell(ms);
+	exit_minishell(ms, 0);
 	return (0);
 }

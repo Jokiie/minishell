@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:52:07 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/10 02:44:36 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/14 23:09:44 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,16 @@
 	Call the pwd command, Return the 0 is successful, 1 if too many arguments,
 	and CMD_NOT_FOUND(127) if the command(pwd) is not found.
 */
-int	detect_pwd_call(t_minishell *ms)
+int	detect_pwd_call(t_minishell *ms, char **tokens)
 {
-	if (ft_strncmp(ms->tokens[0], "pwd\0", 4) == 0)
-	{
-		ms->ret = pwd(ms);
-	}
+	int	return_value;
+
+	return_value = 0;
+	if (ft_strncmp(tokens[0], "pwd\0", 4) == 0)
+		return_value = pwd(ms);
 	else
-	{
-		ms->ret = CMD_NOT_FOUND;
-	}
-	return (ms->ret);
+		return_value = CMD_NOT_FOUND;
+	return (return_value);
 }
 
 /*
@@ -37,16 +36,20 @@ int	detect_pwd_call(t_minishell *ms)
 */
 int	pwd(t_minishell *ms)
 {
+	int	return_value;
+
+	return_value = 0;
 	if (!ms->cwd)
 	{
+		//should print the deleted directory
 		ft_putstr_fd("You are in a deleted directory, ", 2);
 		ft_putstr_fd("please 'cd ..' until you are in a valid directory\n", 2);
-		ms->ret = SUCCESS;
+		return_value = SUCCESS;
 	}
-	else
+	else 
 	{
 		ft_printf("%s\n", ms->cwd);
-		ms->ret = SUCCESS;
+		return_value = SUCCESS;
 	}
-	return (ms->ret);
+	return (return_value);
 }

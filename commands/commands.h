@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:51:50 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/14 12:28:58 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/15 03:55:05 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,28 @@
 # include "../includes/minishell.h"
 
 // cd.c
-int		cd(t_minishell *ms);
-int		detect_cd_call(t_minishell *ms);
+int		cd(char **tokens);
+int		detect_cd_call(char **tokens);
 
 // pwd.c
 int		pwd(t_minishell *ms);
-int		detect_pwd_call(t_minishell *ms);
+int		detect_pwd_call(t_minishell *ms, char **tokens);
 
 // echo.c
 void	echo(t_minishell *ms, char **tokens, int opt);
-int		detect_echo_call(t_minishell *ms);
+int		detect_echo_call(t_minishell *ms, char **tokens);
 
 // executable.c
-int		detect_executable(t_minishell *ms);
+int		detect_executable(t_minishell *ms, char **tokens);
 int     check_error_executable(char *executable);
 
 // env.c
-int		detect_env_call(t_minishell *ms);
-int		env(t_minishell *ms);
+int		detect_env_call(t_minishell *ms, char **tokens);
+int		env(t_minishell *ms, char **tokens);
 
 //exit.c
-t_bool  is_exit(char *token);
+int     detect_exit_call(t_minishell *ms, char **tokens,  int is_child);
+int  	ft_exit(t_minishell *ms, char **tokens, int is_child);
 
 // get_path.c
 char	*get_path(char *cmds);
@@ -57,7 +58,7 @@ void	remove_env_var(char **env, int index);
 
 // commands.c
 int		call_commands(t_minishell *ms);
-int		exec_builtin(t_minishell *ms);
+int		exec_builtin(t_minishell *ms, char **tokens, int is_child);
 int     ft_execvp(char **tokens, char **envp);
 
 #endif

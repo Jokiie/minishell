@@ -5,24 +5,24 @@
 	Free our variables, clear the history from readline, wait the child to
 	finish and quit minishell with the return status of the last command.
 */
-void	exit_minishell(t_minishell *ms)
+void	exit_minishell(t_minishell *ms, int return_code)
 {
 	int	child_ret;
 
+	ft_printf(BOLD GREEN "ms: Goodbye %s!\n" RESET BOLDRESET, ms->user);
 	free_at_exit(ms);
 	reset_heredoc(ms);
 	clear_history();
 	while (waitpid(-1, &child_ret, 0) > 0)
 		;
-	ft_printf(BOLD GREEN "ms: Goodbye %s!\n" RESET BOLDRESET, ms->user);
 	free(ms);
-	exit(0);
+	exit(return_code);
 }
 
-void	exit_child(t_minishell *ms)
+void	exit_child(t_minishell *ms, int return_code)
 {
 	free_at_exit(ms);
-	exit(ms->ret);
+	exit(return_code);
 }
 
 /*

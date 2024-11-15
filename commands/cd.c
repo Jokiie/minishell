@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 12:08:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/10 02:35:46 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/14 23:09:20 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,44 +16,45 @@
 	Call cd , return 0 for success, 1 for errors, CMD_NOT_FOUND if
 	cd command is not detected.
 */
-int	detect_cd_call(t_minishell *ms)
+int	detect_cd_call(char **tokens)
 {
-	if (ft_strncmp(ms->tokens[0], "cd\0", 3) == 0)
-	{
-		ms->ret = cd(ms);
-	}
+	int	return_value;
+
+	return_value = 0;
+	if (ft_strncmp(tokens[0], "cd\0", 3) == 0)
+		return_value = cd(tokens);
 	else
-	{
-		ms->ret = CMD_NOT_FOUND;
-	}
-	return (ms->ret);
+		return_value = CMD_NOT_FOUND;
+	return (return_value);
 }
 
 /* Change of current working directory */
-int	cd(t_minishell *ms)
+int	cd(char **tokens)
 {
 	t_bool	found_dir;
-	
+	int		return_value;
+
 	found_dir = FALSE;
-	if (!ms->tokens[1] || *(ms->tokens[1]) == '\0')
+	return_value = 0;
+	if (!tokens[1] || !*tokens[1])
 	{
-		ft_fprintf(2, "ms: cd: need a relative or absolute path\n");
-		ms->ret = ERROR;
+		ft_putstr_fd("ms: cd: need a relative or absolute path\n", 2);
+		return_value = ERROR;
 	}
-	else if (ms->tokens[2])
+	else if (tokens[2])
 	{
-		ft_fprintf(2, "ms: cd: too many arguments\n");
-		ms->ret = ERROR;
+		ft_putstr_fd("ms: cd: too many arguments\n", 2);
+		return_value = ERROR;
 	}
-	else if (ms->ret != ERROR && chdir(ms->tokens[1]) == 0)
+	else if (return_value != ERROR && chdir(tokens[1]) == 0)
 	{
 		found_dir = TRUE;
-		ms->ret = SUCCESS;
+		return_value = SUCCESS;
 	}
 	else if (found_dir == FALSE)
 	{
-		ft_fprintf(2, "ms: cd: %s: %s\n", ms->tokens[1], strerror(errno));
-		ms->ret = ERROR;
+		ft_fprintf(2, "ms: cd: %s: %s\n", tokens[1], strerror(errno));
+		return_value = ERROR;
 	}
-	return (ms->ret);
+	return (return_value);
 }

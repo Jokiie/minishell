@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 22:04:19 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/14 12:26:07 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/15 02:23:11 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,36 +16,50 @@
 	Call the env command, return 0 is successfull, 1 for errors and
 	CMD_NOT_FOUND(127) if the command(pwd) is not found.
 */
-int	detect_env_call(t_minishell *ms)
+int	detect_env_call(t_minishell *ms, char **tokens)
 {
-	if (ft_strncmp(ms->tokens[0], "env\0", 4) == 0)
-	{
-		ms->ret = env(ms);
-	}
+	int return_value;
+
+	return_value = 0;
+	if (ft_strncmp(tokens[0], "env\0", 4) == 0)
+		return_value = env(ms, tokens);
 	else
-	{
-		ms->ret = CMD_NOT_FOUND;
-	}
-	return (ms->ret);
+		return_value = CMD_NOT_FOUND;
+	return (return_value);
 }
 
 /* Display the ms->env */
-int	env(t_minishell *ms)
+int	env(t_minishell *ms, char **tokens)
 {
-	if (ms->tokens[1])
+	int	return_value;
+
+	(void)tokens;
+	return_value = 0;
+	if (tokens[1])
 	{
+		// if it a valid argument, execute it
+		// examples:
+		//
+		// env VAR1=value1 VAR2=value2 command
+		//
+		// env PATH=/custom/path ls - > execute ls in a custom path without modify
+		// permanently the path in the env variables.
+		//
+		// env LANG=fr_FR.UTF-8 date -> date is executed in free but this do not affect
+		// the global environment.
 		ft_fprintf(2, "ms: env: too many arguments\n");
-		ms->ret = ERROR;
+		return_value = ERROR;
 	}
-	else if (!ms->tokens[1] && (ms->env))
+	if (ms->env)
 	{
 		print_tokens(ms->env);
-		ms->ret = SUCCESS;
+		return_value = SUCCESS;
 	}
-	else if (ms->ret != SUCCESS)
+	else if (return_value != SUCCESS)
 	{
+		// should print access denied if the argument is not valid(bash do that)
 		ft_printf("ms: env: %s\n", strerror(errno));
-		ms->ret = ERROR;
+		return_value = ERROR;
 	}
-	return (ms->ret);
+	return (return_value);
 }

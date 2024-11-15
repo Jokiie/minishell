@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/14 12:14:05 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/15 03:55:37 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-static int	return_value = 0;
 
 int	count_pipes(t_minishell *ms, char **str)
 {
@@ -94,6 +92,9 @@ void	pipes_redirection(t_pipes *p)
 
 void	handle_child_process(t_minishell *ms, t_pipes *p)
 {
+	int	return_value;
+
+	return_value = 0;
 	if (p->cmd_num > 0)
 	{
 		if (dup2(p->pipes[p->cmd_num - 1][0], STDIN_FILENO) == -1)
@@ -119,6 +120,9 @@ void	handle_child_process(t_minishell *ms, t_pipes *p)
 
 int	create_and_manage_process(t_minishell *ms, t_pipes *p, pid_t *pid)
 {
+	int	return_value;
+
+	return_value = 0;
 	*pid = fork();
 	if (*pid == 0)
 		handle_child_process(ms, p);
@@ -208,14 +212,20 @@ int	exec_redirection_pipes(t_pipes *p)
 
 int	call_commands_pipes(t_minishell *ms, t_pipes *p)
 {
+	int	return_value;
+
+	return_value = 0;
 	if (has_redirect(ms, p->p_args))
 	{
 		if (exec_redirection_pipes(p) != SUCCESS)
-			exit_child(ms);
+			exit_child(ms, 0);
 	}
-	return_value = detect_executable(ms);
+	return_value = exec_builtin(ms, p->p_args, 1);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_executable(ms, p->p_args);
 	if (return_value == EXE_NOT_FOUND)
 		return_value = ft_execvp(p->p_args, ms->env);
+	exit_child(ms, return_value);
 	return (return_value);
 }
 
@@ -226,8 +236,10 @@ int	exect_pipes(t_minishell *ms)
 	int		i;
 	int		cmd_start;
 	int		last_cmd;
+	int		return_value;
 
 	i = 0;
+	return_value = 0;
 	last_cmd = 0;
 	init_pipes(&p);
 	p.num_pipes = count_pipes(ms, ms->tokens);
@@ -237,8 +249,7 @@ int	exect_pipes(t_minishell *ms)
 	p.cmd_num = 0;
 	while (ms->tokens[i])
 	{
-		if ((ms->token.protected[i] == 0 && ft_strcmp(ms->tokens[i], "|") == 0)
-			|| ms->tokens[i + 1] == NULL)
+		if ((is_pipe(ms->tokens[i]) && ms->token.protected[i] == 0) || ms->tokens[i + 1] == NULL)
 		{
 			if (ms->tokens[i + 1] == NULL)
 			{

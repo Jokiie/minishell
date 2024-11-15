@@ -8,7 +8,7 @@
 int		tokens_creator(t_minishell *ms, char *line);
 char 	**transformer(t_minishell *ms);
 void	fill_protected_arr(t_minishell *ms);
-t_bool	is_only_spaces(char *line);
+void	fill_isheredoc_arr(t_minishell *ms);
 
 // tokenizer.c
 int		separe_line(t_minishell *ms, char *line, int i, int *k);
@@ -65,5 +65,9 @@ t_bool	is_pipe(char *token);
 int		check_syntax(char **tokens);
 int		errors_redirect(char **tokens);
 int		error_pipes(char **tokens);
+
+// contains_only.c
+t_bool  contains_only_digits(char *line);
+t_bool	contains_only_spaces(char *line);
 
 #endif

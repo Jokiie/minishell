@@ -43,6 +43,7 @@ typedef struct s_token
 	int			start;
 	int			end;
 	int			*protected;
+	int			*isheredoc;
 	t_bool		in_dquotes;
 	t_bool		in_squotes;
 }				t_token;
@@ -97,7 +98,6 @@ typedef struct s_minishell
 	t_token		token;
 	t_heredoc	heredoc;
 	t_fd		fd;
-	t_bool		handled_heredoc;
 	t_bool		interactive;
 }				t_minishell;
 
@@ -122,8 +122,8 @@ int				wait_children(void);
 void			print_debug(char **tokens);
 
 // exit_minishell.c
-void			exit_minishell(t_minishell *ms);
-void			exit_child(t_minishell *ms);
+void			exit_minishell(t_minishell *ms, int return_code);
+void			exit_child(t_minishell *ms, int return_code);
 
 // free.c
 void			free_data(t_minishell *ms);
@@ -151,7 +151,6 @@ char			**get_cwdsplit(t_minishell *ms);
 int				tokens_creator(t_minishell *ms, char *line);
 char			**transformer(t_minishell *ms);
 void			fill_protected_arr(t_minishell *ms);
-t_bool			is_only_spaces(char *line);
 
 // tokenizer.c
 int				separe_line(t_minishell *ms, char *line, int i, int *k);
@@ -204,6 +203,10 @@ t_bool			is_append(char *token);
 t_bool			is_heredoc(char *token);
 t_bool			is_pipe(char *token);
 
+// contains_only.c
+t_bool  contains_only_digits(char *line);
+t_bool	contains_only_spaces(char *line);
+
 // heredoc.c
 int				execute_heredocs(t_minishell *ms);
 int				exec_heredoc(t_minishell *ms);
@@ -235,26 +238,32 @@ int				update_heredoc_count(t_bool reset);
 /* /commands */
 
 // cd.c
-int				cd(t_minishell *ms);
-int				detect_cd_call(t_minishell *ms);
+int				cd(char **tokens);
+int				detect_cd_call(char **tokens);
 
 // pwd.c
 int				pwd(t_minishell *ms);
-int				detect_pwd_call(t_minishell *ms);
+int				detect_pwd_call(t_minishell *ms, char **tokens);
 
 // echo.c
 void			echo(t_minishell *ms, char **tokens, int opt);
-int				detect_echo_call(t_minishell *ms);
+int				detect_echo_call(t_minishell *ms, char **tokens);
 
 // executable.c
-int				detect_executable(t_minishell *ms);
+int				detect_executable(t_minishell *ms, char **tokens);
+int				check_error_executable(char *executable);
 
 // env.c
-int				detect_env_call(t_minishell *ms);
-int				env(t_minishell *ms);
+int				detect_env_call(t_minishell *ms, char **tokens);
+int				env(t_minishell *ms, char **tokens);
 
-// exit.c
-t_bool			is_exit(char *token);
+//exit.c
+int     detect_exit_call(t_minishell *ms, char **tokens,  int is_child);
+int  	ft_exit(t_minishell *ms, char **tokens, int is_child);
+
+// get_path.c
+char			*get_path(char *cmds);
+char			*create_full_path(char *dir, char *cmds);
 
 // export.c
 int				detect_export_call(t_minishell *ms, int k);
@@ -269,15 +278,10 @@ void			unset_handling(t_minishell *ms, int i);
 int				find_env_index(char **env, const char *var_name);
 void			remove_env_var(char **env, int index);
 
-// find_executable_path.c
-char			*get_path(char *cmds);
-char			*create_full_path(char *dir, char *cmds);
-char			*get_last_dir(char *cmds);
-
 // commands.c
 int				call_commands(t_minishell *ms);
+int				exec_builtin(t_minishell *ms, char **tokens, int is_child);
 int				ft_execvp(char **tokens, char **envp);
-int				exec_builtin(t_minishell *ms);
 
 // redirection.c
 int				exec_redirection(t_minishell *ms);

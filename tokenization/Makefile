@@ -19,6 +19,7 @@ SRCS 	= tokens_creator.c \
 		is_one_meta.c \
 		is_meta.c \
 		syntax_error.c \
+		contains_only.c \
 		
 OBJECTS = $(SRCS:.c=.o)
 

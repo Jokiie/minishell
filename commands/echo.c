@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 23:25:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/14 12:23:43 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/15 03:44:16 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@
 		as for the example : ls | echo done
 		which should print 'done' and not the result of ls.
 */
-int	detect_echo_call(t_minishell *ms)
+int	detect_echo_call(t_minishell *ms, char **tokens)
 {
 	int	opt;
 
 	opt = 0;
-	if (ft_strncmp(ms->tokens[0], "echo\0", 5) == 0)
+	if (ft_strncmp(tokens[0], "echo\0", 5) == 0)
 	{
-		if (ft_strncmp(ms->tokens[1], "-n\0", 3) == 0)
+		if (ft_strncmp(tokens[1], "-n\0", 3) == 0)
 			opt = 1;
-		echo(ms, ms->tokens, opt);
+		echo(ms, tokens, opt);
 		return (SUCCESS);
 	}
 	return (CMD_NOT_FOUND);
@@ -50,12 +50,8 @@ void	echo(t_minishell *ms, char **tokens, int opt)
 		write(STDOUT_FILENO, "\n", 1);
 		return ;
 	}
-	while (tokens[k])
+	while (tokens[k] && ms->token.isheredoc[k] == 0)
 	{
-		if (ms->token.protected[k] && ft_strcmp(tokens[k], "|") == 0)
-		{
-			break ;
-		}
 		ft_putstr_fd(tokens[k], STDOUT_FILENO);
 		if (tokens[k])
 			ft_putstr_fd(" ", STDOUT_FILENO);

@@ -12,9 +12,6 @@
 	to do:
 	- ft_getenv
 	- ft_setenv
-	- export
-	- unset
-	- rework all commands (unless executable)
 
 */
 int	call_commands(t_minishell *ms)
@@ -26,29 +23,36 @@ int	call_commands(t_minishell *ms)
 		ms->ret = exect_pipes(ms);
 		return (ms->ret);
 	}
-	pid = fork();
-	if (pid < 0)
-		return (ERROR);
-	else if (pid == 0)
+	ms->ret = exec_builtin(ms, ms->tokens, 0);
+	if (ms->ret == CMD_NOT_FOUND)
 	{
-		if (has_redirect(ms, ms->tokens))
+		pid = fork();
+		if (pid < 0)
+			return (ERROR);
+		else if (pid == 0)
 		{
-			if (exec_redirection(ms) != SUCCESS)
-				exit_child(ms);
+			if (has_redirect(ms, ms->tokens))
+			{
+				if (exec_redirection(ms) != SUCCESS)
+					exit_child(ms, 0);
+			}
+			ms->ret = detect_executable(ms, ms->tokens);
+			if (ms->ret == EXE_NOT_FOUND)
+				ms->ret = ft_execvp(ms->tokens, ms->env);
+			exit_child(ms, ms->ret);
 		}
-		ms->ret = detect_executable(ms);
-		if (ms->ret == EXE_NOT_FOUND)
-			ms->ret = ft_execvp(ms->tokens, ms->env);
-		exit_child(ms);
+		ms->ret = wait_children();
 	}
-	ms->ret = wait_children();
 	return (ms->ret);
 }
 
 /*
-	Execute a command in the path returned by find_executable_path.
+	Execute a command in the path returned by get_path.
 	If path is accessible, we execute it and return SUCCESS(0), else, we free
 	the path and return the error code returned by check error.
+	to do:
+	- Verify if all errors return the correct value and add the errors missing
+	  if applicable
 */
 int	ft_execvp(char **tokens, char **envp)
 {
@@ -85,37 +89,25 @@ int	ft_execvp(char **tokens, char **envp)
 	- rework pwd to display the same pwd in the environment variables
 	  and need to work (not crash minishell) when we deleted the current directory
 	- rework cd (need to update the pwd and old pwd in the environment variables)
-	- rework exit (need to no exit the minishell if in pipe(exit child instead))
-	- rework echo (should not display the path of heredocs and redirections)
-	- rework env (should not display "env: success" if the first command in pipe
 */
-int	exec_builtin(t_minishell *ms)
+int	exec_builtin(t_minishell *ms, char **tokens, int is_child)
 {
-	if (is_exit(ms->tokens[0]))
-	{
-		free_tokens(ms->tokens);
-		exit_minishell(ms);
-	}
-	ms->ret = detect_cd_call(ms);
-	if (ms->ret == CMD_NOT_FOUND)
-	{
-		ms->ret = detect_pwd_call(ms);
-	}
-	if (ms->ret == CMD_NOT_FOUND)
-	{
-		ms->ret = detect_env_call(ms);
-	}
-	if (ms->ret == CMD_NOT_FOUND)
-	{
-		ms->ret = detect_echo_call(ms);
-	}
-	if (ms->ret == CMD_NOT_FOUND)
-	{
-		ms->ret = detect_export_call(ms, 0);
-	}
-	if (ms->ret == CMD_NOT_FOUND)
-	{
-		ms->ret = detect_unset_call(ms, 0);
-	}
-	return (ms->ret);
+	int	return_value;
+
+	return_value = 0;
+		return_value = detect_exit_call(ms, tokens, is_child);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_cd_call(tokens);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_pwd_call(ms, tokens);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_env_call(ms, tokens);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_echo_call(ms, tokens);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_export_call(ms, 0);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_unset_call(ms, 0);
+	return (return_value);
 }
+
