@@ -92,33 +92,22 @@ int	ft_execvp(char **tokens, char **envp)
 */
 int	exec_builtin(t_minishell *ms, char **tokens, int is_child)
 {
-	if (is_exit(ms->tokens[0]))
-	{
-		free_tokens(ms->tokens);
-		exit_minishell(ms);
-	}
-	ms->ret = detect_cd_call(ms);
-	if (ms->ret == CMD_NOT_FOUND)
-	{
-		ms->ret = detect_pwd_call(ms);
-	}
-	if (ms->ret == CMD_NOT_FOUND)
-	{
-		ms->ret = detect_env_call(ms);
-	}
-	if (ms->ret == CMD_NOT_FOUND)
-	{
-		ms->ret = detect_echo_call(ms);
-	}
-	if (ms->ret == CMD_NOT_FOUND)
-	{
-		ms->ret = detect_export_call(ms);
-	}
-	if (ms->ret == CMD_NOT_FOUND)
-	{
-		ms->ret = detect_unset_call(ms);
-	}
-	return (ms->ret);
->>>>>>> origin/commands
+	int	return_value;
+
+	return_value = 0;
+		return_value = detect_exit_call(ms, tokens, is_child);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_cd_call(tokens);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_pwd_call(ms, tokens);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_env_call(ms, tokens);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_echo_call(ms, tokens);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_export_call(ms, 0);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_unset_call(ms, 0);
+	return (return_value);
 }
 
