@@ -12,7 +12,7 @@
 	- ft_setenv
 	- export
 	- unset
-	- rework all commands (unless exit and executable)
+	- rework all commands (unless executable)
 
 */
 int	call_commands(t_minishell *ms)
@@ -75,12 +75,17 @@ int	ft_execvp(char **tokens, char **envp)
 	Commands that must be call in the parent process to work (for now).
 	Return SUCCESS(0) if the command is successful and CMD_NOT_FOUND(127)
 	if the command it not in this function, so we can use this value to
-	tell the program to search in forked built-in commands and bash
-	commands.
+	tell the program to search in paths.
 
 	to do:
 	- add unset without option
 	- add export without option
+	- rework pwd to display the same pwd in the environment variables
+	  and need to work (not crash minishell) when we deleted the current directory
+	- rework cd (need to update the pwd and old pwd in the environment variables)
+	- rework exit (need to no exit the minishell if in pipe(exit child instead))
+	- rework echo (should not display the path of heredocs and redirections)
+	- rework env (should not display "env: success" if the first command in pipe
 */
 int	exec_builtin(t_minishell *ms)
 {

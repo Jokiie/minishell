@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/10 03:25:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/13 16:12:00 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	handle_sigquit(void)
 void	reset_prompt(int sig)
 {
 	(void)sig;
-	// rl_replace_line("", 0);
+	rl_replace_line("", 0);
 	rl_on_new_line();
 	write(1, "\n", 1);
 	rl_redisplay();
@@ -57,7 +57,7 @@ void	put_newline(int sig)
 void	init_signals_noninteractive(void)
 {
 	struct sigaction	sa;
-
+	
 	ft_memset(&sa, 0, sizeof(sa));
 	sa.sa_handler = &put_newline;
 	sigaction(SIGINT, &sa, NULL);
