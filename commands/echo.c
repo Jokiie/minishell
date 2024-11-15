@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 23:25:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/15 03:44:16 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/15 04:11:54 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,15 @@ void	echo(t_minishell *ms, char **tokens, int opt)
 		write(STDOUT_FILENO, "\n", 1);
 		return ;
 	}
-	while (tokens[k] && ms->token.isheredoc[k] == 0)
+	while (tokens[k])
 	{
-		ft_putstr_fd(tokens[k], STDOUT_FILENO);
-		if (tokens[k])
-			ft_putstr_fd(" ", STDOUT_FILENO);
+		if (ms->token.isheredoc[k] == 0)
+		{
+			ft_putstr_fd(tokens[k], STDOUT_FILENO);
+			if (tokens[k])
+				ft_putstr_fd(" ", STDOUT_FILENO);
+		}
+		ft_putstr_fd("", STDOUT_FILENO);
 		k++;
 	}
 	if (!opt)
