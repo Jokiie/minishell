@@ -14,6 +14,9 @@ void	init_heredoc_data(t_minishell *ms)
 /* init the minishell struct variables */
 void	init_minishell(t_minishell *ms)
 {
+	ms->test = NULL;
+	ms->p_input = NULL;
+	ms->cmd_path = NULL;
 	ms->input = NULL;
 	ms->prompt_name = NULL;
 	ms->user = NULL;

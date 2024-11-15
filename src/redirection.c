@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:25:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/11 04:21:36 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/13 14:56:02 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,22 @@ int	exec_redirection(t_minishell *ms)
 
 	k = 0;
 	if (!ms->tokens || !*(ms->tokens))
-		return ERROR;
+		return (ERROR);
 	while (ms->tokens[k])
 	{
 		if (is_append(ms->tokens[k]))
 		{
-			ms->ret = append_output(ms, ms->tokens[k + 1]);
+			ms->ret = append_output(ms->tokens[k + 1]);
 			break ;
 		}
 		else if (is_redirect_out(ms->tokens[k]))
 		{
-			ms->ret = redirect_output(ms, ms->tokens[k + 1]);
+			ms->ret = redirect_output(ms->tokens[k + 1]);
 			break ;
 		}
 		else if (is_redirect_in(ms->tokens[k]))
 		{
-			ms->ret = redirect_input(ms, ms->tokens[k + 1]);
+			ms->ret = redirect_input(ms->tokens[k + 1]);
 			break ;
 		}
 		k++;
@@ -73,7 +73,7 @@ void	recreate_tokens(t_minishell *ms, int i)
 }
 
 /* < : redirect input in the specified file */
-int	redirect_input(t_minishell *ms, char *file)
+int	redirect_input(char *file)
 {
 	int	fdin;
 
@@ -83,13 +83,13 @@ int	redirect_input(t_minishell *ms, char *file)
 		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
 		return (ERROR);
 	}
-	dup2(fdin, ms->std_in);
+	dup2(fdin, STDIN_FILENO);
 	close(fdin);
 	return (SUCCESS);
 }
 
 /* > : redirect output in the specified file */
-int	redirect_output(t_minishell *ms, char *file)
+int	redirect_output(char *file)
 {
 	int	fdout;
 
@@ -99,13 +99,13 @@ int	redirect_output(t_minishell *ms, char *file)
 		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
 		return (ERROR);
 	}
-	dup2(fdout, ms->std_out);
+	dup2(fdout, STDOUT_FILENO);
 	close(fdout);
 	return (SUCCESS);
 }
 
 /* Append output obtained in the specified file */
-int	append_output(t_minishell *ms, char *file)
+int	append_output(char *file)
 {
 	int	fdout;
 
@@ -115,7 +115,7 @@ int	append_output(t_minishell *ms, char *file)
 		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
 		return (ERROR);
 	}
-	if (dup2(fdout, ms->std_out) == -1)
+	if (dup2(fdout, STDOUT_FILENO) == -1)
 		return (ERROR);
 	close(fdout);
 	return (SUCCESS);

@@ -2,10 +2,12 @@
 #include "commands.h"
 
 /*
-	Check if there if the tokens contains a pipe, if yes, execute all the commands.
-	If there is no pipes, execute redirections if applicable, check if the command is
-	an executable. If its not an executable, search the command in the paths. Return the
-	exit status of the child process.
+	Create a child process with fork to execute a command in the environment
+	path variable. wait_children wait the children processes to finish and
+	save their return value. We check if forked_builtin_cmds return ERROR
+	because if the token is not executable, it have a special message and
+	if we returned CMD_NOT_FOUND(127), and checkit like for built-in
+	commands, it will show the wrong message. 
 
 	to do:
 	- ft_getenv
@@ -21,7 +23,7 @@ int	call_commands(t_minishell *ms)
 
 	if (has_pipe(ms, ms->tokens) == TRUE)
 	{
-		ms->ret = ft_exect_pipes(ms);
+		ms->ret = exect_pipes(ms);
 		return (ms->ret);
 	}
 	pid = fork();
@@ -106,6 +108,14 @@ int	exec_builtin(t_minishell *ms)
 	if (ms->ret == CMD_NOT_FOUND)
 	{
 		ms->ret = detect_echo_call(ms);
+	}
+	if (ms->ret == CMD_NOT_FOUND)
+	{
+		ms->ret = detect_export_call(ms, 0);
+	}
+	if (ms->ret == CMD_NOT_FOUND)
+	{
+		ms->ret = detect_unset_call(ms, 0);
 	}
 	return (ms->ret);
 }

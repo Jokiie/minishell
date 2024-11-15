@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 23:25:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/10 02:40:50 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/14 12:23:43 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ int	detect_echo_call(t_minishell *ms)
 	{
 		if (ft_strncmp(ms->tokens[1], "-n\0", 3) == 0)
 			opt = 1;
-		echo(ms->tokens, opt);
+		echo(ms, ms->tokens, opt);
 		return (SUCCESS);
 	}
 	return (CMD_NOT_FOUND);
 }
 
 /* Prints the tokens after echo */
-void	echo(char **tokens, int opt)
+void	echo(t_minishell *ms, char **tokens, int opt)
 {
 	int	k;
 
@@ -47,17 +47,20 @@ void	echo(char **tokens, int opt)
 		k = 2;
 	if (!tokens[k])
 	{
-		write(1, "\n", 1);
+		write(STDOUT_FILENO, "\n", 1);
 		return ;
 	}
 	while (tokens[k])
 	{
-
-		ft_putstr_fd(tokens[k], 1);
+		if (ms->token.protected[k] && ft_strcmp(tokens[k], "|") == 0)
+		{
+			break ;
+		}
+		ft_putstr_fd(tokens[k], STDOUT_FILENO);
 		if (tokens[k])
-			ft_putstr_fd(" ", 1);
+			ft_putstr_fd(" ", STDOUT_FILENO);
 		k++;
 	}
 	if (!opt)
-		ft_putstr_fd("\n", 1);
+		ft_putstr_fd("\n", STDOUT_FILENO);
 }

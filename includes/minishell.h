@@ -64,8 +64,18 @@ typedef struct s_fd
 	int			saved_stdout;
 }				t_fd;
 
+typedef struct s_pipes
+{
+	char		**p_args;
+	int			**pipes;
+	int			num_pipes;
+	int			cmd_num;
+}				t_pipes;
+
 typedef struct s_minishell
 {
+	char		*cmd_path;
+	char		**p_input;
 	char		*input;
 	char		*prompt_name;
 	char		*user;
@@ -73,6 +83,9 @@ typedef struct s_minishell
 	char		*prev_cwd;
 	char		**history;
 	char		**env;
+
+	char		**test;
+
 	char		**tokens;
 	char		**pretokens;
 	int			tokc;
@@ -131,13 +144,6 @@ char			*get_prompt_name(t_minishell *ms);
 char			*get_user_color(t_minishell *ms);
 char			*get_arrow_color(t_minishell *ms, char *cwd_dup);
 char			**get_cwdsplit(t_minishell *ms);
-
-// redirection.c
-int				exec_redirection(t_minishell *ms);
-void			recreate_tokens(t_minishell *ms, int i);
-int				redirect_input(t_minishell *ms, char *file);
-int				redirect_output(t_minishell *ms, char *file);
-int				append_output(t_minishell *ms, char *file);
 
 /* Tokenization */
 
@@ -237,8 +243,7 @@ int				pwd(t_minishell *ms);
 int				detect_pwd_call(t_minishell *ms);
 
 // echo.c
-void			echo(char **tokens, int opt);
-void			echo_n(char **tokens);
+void			echo(t_minishell *ms, char **tokens, int opt);
 int				detect_echo_call(t_minishell *ms);
 
 // executable.c
@@ -251,6 +256,19 @@ int				env(t_minishell *ms);
 // exit.c
 t_bool			is_exit(char *token);
 
+// export.c
+int				detect_export_call(t_minishell *ms, int k);
+void			export_handling(t_minishell *ms, int i);
+int				count_en_var(char **env, int count);
+void			set_env_var(t_minishell *ms, const char *var_name,
+					const char *value);
+
+// unset.c
+int				detect_unset_call(t_minishell *ms, int k);
+void			unset_handling(t_minishell *ms, int i);
+int				find_env_index(char **env, const char *var_name);
+void			remove_env_var(char **env, int index);
+
 // find_executable_path.c
 char			*get_path(char *cmds);
 char			*create_full_path(char *dir, char *cmds);
@@ -260,18 +278,29 @@ char			*get_last_dir(char *cmds);
 int				call_commands(t_minishell *ms);
 int				ft_execvp(char **tokens, char **envp);
 int				exec_builtin(t_minishell *ms);
-int				built_in_cmds(t_minishell *ms);
+
+// redirection.c
+int				exec_redirection(t_minishell *ms);
+void			recreate_tokens(t_minishell *ms, int i);
+int				redirect_input(char *file);
+int				redirect_output(char *file);
+int				append_output(char *file);
 
 // ft_pipes
-int				ft_has_pipe(t_minishell *ms, char **str);
-int				ft_count_pipes(t_minishell *ms, char **str);
-int				**ft_allocate_pipes(int num_pipes);
-char			**ft_extract_args(char **tokens, int start, int end);
-void			ft_close_pipes(int **pipes, int num_pipes);
-void			ft_pipes_redirection(int **pipes, int cmd_num, int num_pipes);
-int				ft_exect_pipes(t_minishell *ms);
-void			ft_create_and_manage_process(char **args, int **pipes,
-					int cmd_num, int num_pipes, pid_t *pid);
-void			ft_handle_child_process(char **args, int **pipes, int cmd_num,
-					int num_pipes);
+
+int				has_pipes(t_minishell *ms, char **str);
+int				count_pipes(t_minishell *ms, char **str);
+int				**allocate_pipes(t_pipes *p);
+char			**extract_args(char **tokens, int start, int end);
+void			close_pipes(t_pipes *p);
+void			pipes_redirection(t_pipes *p);
+int				exect_pipes(t_minishell *ms);
+int				create_and_manage_process(t_minishell *ms, t_pipes *p,
+					pid_t *pid);
+void			handle_child_process(t_minishell *ms, t_pipes *p);
+void			tokenize_input1(t_minishell *ms);
+int				call_commands_pipes(t_minishell *ms, t_pipes *p);
+int				exec_redirection_pipes(t_pipes *p);
+void			recreate_pipes_args(t_pipes *p, int i);
+
 #endif

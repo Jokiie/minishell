@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 12:01:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/11 17:50:04 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/14 12:17:34 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ int	execute_heredocs(t_minishell *ms)
 	int	count;
 
 	ms->heredoc.count = count_heredoc(ms);
-	if (ms->heredoc.count > 42)
+	if (ms->heredoc.count > 1024)
 	{
-		ft_fprintf(2, GREY"ms: reached maximum of heredocs(42)\n"RESET);
+		ft_fprintf(2, GREY"ms: reached maximum of heredocs(1024)\n"RESET);
 		return (ERROR);
 	}
 	else if (ms->heredoc.count == 0)
