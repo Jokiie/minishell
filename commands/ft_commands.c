@@ -106,11 +106,11 @@ int	exec_builtin(t_minishell *ms)
 	}
 	if (ms->ret == CMD_NOT_FOUND)
 	{
-		ms->ret = detect_export_call(ms, 0);
+		ms->ret = detect_export_call(ms);
 	}
 	if (ms->ret == CMD_NOT_FOUND)
 	{
-		ms->ret = detect_unset_call(ms, 0);
+		ms->ret = detect_unset_call(ms);
 	}
 	return (ms->ret);
 }

@@ -257,14 +257,14 @@ int				env(t_minishell *ms);
 t_bool			is_exit(char *token);
 
 // export.c
-int				detect_export_call(t_minishell *ms, int k);
+int				detect_export_call(t_minishell *ms);
 void			export_handling(t_minishell *ms, int i);
 int				count_en_var(char **env, int count);
 void			set_env_var(t_minishell *ms, const char *var_name,
 					const char *value);
 
 // unset.c
-int				detect_unset_call(t_minishell *ms, int k);
+int				detect_unset_call(t_minishell *ms);
 void			unset_handling(t_minishell *ms, int i);
 int				find_env_index(char **env, const char *var_name);
 void			remove_env_var(char **env, int index);

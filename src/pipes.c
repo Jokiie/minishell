@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/14 12:14:05 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/14 13:28:17 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,6 +213,8 @@ int	call_commands_pipes(t_minishell *ms, t_pipes *p)
 		if (exec_redirection_pipes(p) != SUCCESS)
 			exit_child(ms);
 	}
+	return_value = exec_builtin(ms);
+	if (return_value == CMD_NOT_FOUND)
 	return_value = detect_executable(ms);
 	if (return_value == EXE_NOT_FOUND)
 		return_value = ft_execvp(p->p_args, ms->env);

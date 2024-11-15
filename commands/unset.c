@@ -6,15 +6,15 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:28:23 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/13 15:36:16 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/14 15:20:29 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-int	detect_unset_call(t_minishell *ms, int k)
+int	detect_unset_call(t_minishell *ms)
 {
-	if ((k == 0) && strncmp(ms->tokens[k], "unset\0", 6) == 0)
+	if (ft_strncmp(ms->tokens[0], "unset", 6) == 0)
 	{
 		unset_handling(ms, 1);
 		ms->ret = SUCCESS;
@@ -30,7 +30,7 @@ void	unset_handling(t_minishell *ms, int i)
 	while (ms->tokens[i])
 	{
 		env_index = find_env_index(ms->env, ms->tokens[i]);
-		if (env_index >= 0)
+		if (env_index <= 0)
 		{
 			remove_env_var(ms->env, env_index);
 			printf("Unset variable: %s\n", ms->tokens[i]);
@@ -50,7 +50,7 @@ int	find_env_index(char **env, const char *var_name)
 	len = ft_strlen(var_name);
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], var_name, len) == 0 && env[i][len]== '=')
+		if (ft_strncmp(env[i], var_name, len) == 0 && env[i][len] == '=')
 			return (i);
 		i++;
 	}

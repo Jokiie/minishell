@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 10:51:50 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/14 12:28:58 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/14 13:51:36 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,13 @@ char	*get_path(char *cmds);
 char	*create_full_path(char *dir, char *cmds);
 
 // export.c
-int		detect_export_call(t_minishell *ms, int k);
+int		detect_export_call(t_minishell *ms);
 void	export_handling(t_minishell *ms, int i);
 int		count_en_var(char **env, int count);
 void	set_env_var(t_minishell *ms, const char *var_name, const char *value);
 
 // unset.c
-int		detect_unset_call(t_minishell *ms, int k);
+int		detect_unset_call(t_minishell *ms);
 void	unset_handling(t_minishell *ms, int i);
 int		find_env_index(char **env, const char *var_name);
 void	remove_env_var(char **env, int index);

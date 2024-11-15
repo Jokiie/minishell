@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 23:25:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/14 12:23:43 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/15 13:42:27 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,8 @@ void	echo(t_minishell *ms, char **tokens, int opt)
 	}
 	while (tokens[k])
 	{
-		if (ms->token.protected[k] && ft_strcmp(tokens[k], "|") == 0)
-		{
+		if ((ms->token.protected[k] == 0) && ft_strcmp(tokens[k], "|") == 0)
 			break ;
-		}
 		ft_putstr_fd(tokens[k], STDOUT_FILENO);
 		if (tokens[k])
 			ft_putstr_fd(" ", STDOUT_FILENO);
