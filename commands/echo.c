@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 23:25:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/15 04:11:54 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/18 02:39:48 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ int	detect_echo_call(t_minishell *ms, char **tokens)
 void	echo(t_minishell *ms, char **tokens, int opt)
 {
 	int	k;
+	int	first_word;
 
+	(void)ms;
+	first_word = 1;
 	if (opt == 0)
 		k = 1;
 	else
@@ -52,13 +55,10 @@ void	echo(t_minishell *ms, char **tokens, int opt)
 	}
 	while (tokens[k])
 	{
-		if (ms->token.isheredoc[k] == 0)
-		{
-			ft_putstr_fd(tokens[k], STDOUT_FILENO);
-			if (tokens[k])
-				ft_putstr_fd(" ", STDOUT_FILENO);
-		}
-		ft_putstr_fd("", STDOUT_FILENO);
+		if (!first_word)
+			ft_putstr_fd(" ", STDOUT_FILENO);
+		ft_putstr_fd(tokens[k], STDOUT_FILENO);
+		first_word = 0;
 		k++;
 	}
 	if (!opt)

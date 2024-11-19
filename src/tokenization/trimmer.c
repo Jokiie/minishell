@@ -6,11 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/10 01:13:57 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/19 00:12:00 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tokenization.h"
+#include "../../includes/minishell.h"
 
 char	**trimmer(t_minishell *ms, char **tokens)
 {

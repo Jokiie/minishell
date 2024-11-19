@@ -3,63 +3,77 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 12:01:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/14 12:17:34 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/18 23:59:23 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
+
+volatile sig_atomic_t	g_heredoc_signal;
+
+void	heredoc_signal_handler(int signum)
+{
+	if (signum == SIGINT)
+	{
+		g_heredoc_signal = 1;
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	}
+}
+
+void	init_heredoc_signals(void)
+{
+	struct sigaction	sa;
+
+	sa.sa_handler = heredoc_signal_handler;
+	sa.sa_flags = 0;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGINT, &sa, NULL);
+	signal(SIGQUIT, SIG_IGN);
+}
 
 int	execute_heredocs(t_minishell *ms)
 {
 	int	count;
+	int	executed;
 
-	ms->heredoc.count = count_heredoc(ms);
-	if (ms->heredoc.count > 1024)
-	{
-		ft_fprintf(2, GREY"ms: reached maximum of heredocs(1024)\n"RESET);
-		return (ERROR);
-	}
-	else if (ms->heredoc.count == 0)
-		return (SUCCESS);
-	count = ms->heredoc.count;
-	while (count > 1)
+	executed = 0;
+	count = count_heredoc(ms);
+	ms->heredoc.count = count;
+	while (executed < count)
 	{
 		ms->ret = exec_heredoc(ms);
-		count--;
+		if (g_heredoc_signal == 1)
+			return (130);
+		executed++;
 	}
-	ms->ret = exec_heredoc(ms);
+	if (g_heredoc_signal == 1)
+		return (130);
 	return (ms->ret);
 }
 
 int	exec_heredoc(t_minishell *ms)
 {
-	int		i;
 	int		k;
-	char	*tmp;
 	char	*delim;
 
 	k = 0;
-	i = update_heredoc_count(FALSE);
 	while (ms->tokens[k])
 	{
 		if (is_heredoc(ms->tokens[k]) && ms->token.protected[k] == 0)
 		{
-			tmp = ms->tokens[k];
 			delim = ms->tokens[k + 1];
 			check_delim(ms, k + 1);
 			if (heredoc(ms, delim) != SUCCESS)
 				return (ERROR);
-			ms->tokens[k] = ft_strdup(ms->heredoc.fd_name[i]);
-			k = shift_tokens(ms, &k);
-			ft_free(delim);
-			ft_free(tmp);
-		}
+			return (SUCCESS);
+		}	
 		k++;
 	}
-	ms->tokc = count_tokens(ms->tokens);
 	return (SUCCESS);
 }
 
@@ -86,10 +100,13 @@ void	fill_heredoc(t_minishell *ms, int fd, char *delim)
 	char	*line;
 	char	*tmp_line;
 
-	while (1)
+	g_heredoc_signal = 0;
+	while (g_heredoc_signal == 0)
 	{
-		init_signals_interactive();
+		init_heredoc_signals();
 		line = readline("> ");
+		if (!line || g_heredoc_signal == 1)
+			break ;
 		init_signals_noninteractive();
 		tmp_line = expand_line(ms, line);
 		if (check_line(tmp_line, delim) == FALSE)
@@ -97,6 +114,8 @@ void	fill_heredoc(t_minishell *ms, int fd, char *delim)
 		ft_putendl_fd(tmp_line, fd);
 		ft_free(tmp_line);
 	}
+	if (g_heredoc_signal == 1)
+		ms->ret = 130;
 }
 
 char	*create_heredoc_name(t_minishell *ms)

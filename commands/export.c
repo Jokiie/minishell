@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/13 19:28:57 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/19 00:52:18 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-int detect_export_call(t_minishell *ms, int k)
+int detect_export_call(t_minishell *ms)
 {
-	if ((k == 0) && ft_strncmp(ms->tokens[k], "export", 7) == 0)
+	if (ft_strncmp(ms->tokens[0], "export\0", 7) == 0)
 	{
 		export_handling(ms, 1);
 		ms->ret = SUCCESS;

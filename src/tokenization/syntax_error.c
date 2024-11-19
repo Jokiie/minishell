@@ -6,11 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 03:19:33 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/11 17:52:38 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/19 00:11:47 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tokenization.h"
+#include "../../includes/minishell.h"
 
 int check_syntax(char **tokens)
 {
@@ -38,7 +38,7 @@ int error_pipes(char **tokens)
                 ft_fprintf(2, "ms: syntax error near unexpected token '||'\n");
                 return (SYNTAX_ERROR);
             }
-            else if (is_redirect(tokens[k + 1]) || is_heredoc(tokens[k + 1]))
+            else if (is_redirect(tokens[k + 1])) // || is_heredoc(tokens[k + 1])
             {
                 ft_fprintf(2, "ms: syntax error near unexpected token '|'\n");
                 return (SYNTAX_ERROR);

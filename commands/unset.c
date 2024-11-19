@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:28:23 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/13 15:36:16 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/19 00:52:37 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-int	detect_unset_call(t_minishell *ms, int k)
+int	detect_unset_call(t_minishell *ms)
 {
-	if ((k == 0) && strncmp(ms->tokens[k], "unset\0", 6) == 0)
+	if (ft_strncmp(ms->tokens[0], "unset\0", 6) == 0)
 	{
 		unset_handling(ms, 1);
 		ms->ret = SUCCESS;

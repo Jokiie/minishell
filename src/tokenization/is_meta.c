@@ -6,11 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 19:13:36 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/07 22:45:37 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/19 03:43:53 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tokenization.h"
+#include "../../includes/minishell.h"
 
 t_bool  is_redirect(char *token)
 {
@@ -21,7 +21,7 @@ t_bool  is_redirect(char *token)
 
 t_bool is_meta(char *token)
 {
-    if (is_redirect(token) || is_append(token) || is_pipe(token))
+    if (is_heredoc(token) || is_redirect(token) || is_pipe(token))
         return (TRUE);
     return (FALSE);
 }

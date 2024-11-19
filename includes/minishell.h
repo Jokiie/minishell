@@ -8,9 +8,11 @@
 # include <signal.h>
 # include <stdio.h>
 # include <string.h>
+# include <sys/ioctl.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <termios.h>
 # include <unistd.h>
 # include "readline/history.h"
 # include "readline/readline.h"
@@ -71,6 +73,10 @@ typedef struct s_pipes
 	int			**pipes;
 	int			num_pipes;
 	int			cmd_num;
+	int			cmd_start;
+	t_bool		last_cmd;
+	int			ret;
+	int			*arg_protected;
 }				t_pipes;
 
 typedef struct s_minishell
@@ -99,6 +105,7 @@ typedef struct s_minishell
 	t_heredoc	heredoc;
 	t_fd		fd;
 	t_bool		interactive;
+	t_pipes		p;
 }				t_minishell;
 
 // ft_signal_handler.c
@@ -203,37 +210,15 @@ t_bool			is_append(char *token);
 t_bool			is_heredoc(char *token);
 t_bool			is_pipe(char *token);
 
+// syntax_error.c
+int				check_syntax(char **tokens);
+int				errors_redirect(char **tokens);
+int				error_pipes(char **tokens);
+
 // contains_only.c
-t_bool  contains_only_digits(char *line);
-t_bool	contains_only_spaces(char *line);
-
-// heredoc.c
-int				execute_heredocs(t_minishell *ms);
-int				exec_heredoc(t_minishell *ms);
-int				heredoc(t_minishell *ms, char *delim);
-void			fill_heredoc(t_minishell *ms, int fd, char *delim);
-char			*create_heredoc_name(t_minishell *ms);
-
-// heredoc_expander.c
-char			*expand_line(t_minishell *ms, char *line);
-char			*expander(t_minishell *ms, char *line);
-
-// heredoc_utils.c
-int				count_heredoc(t_minishell *ms);
-int				shift_tokens(t_minishell *ms, int *index);
-void			check_delim(t_minishell *ms, int pos);
-t_bool			check_line(char *line, char *delim);
-
-// heredoc_reset.c
-void			unlink_heredocs(t_minishell *ms);
-void			clear_heredoc_names(t_minishell *ms);
-void			reset_heredoc(t_minishell *ms);
-
-// heredoc_statics.c
-void			reset_heredoc_statics(void);
-int				update_heredoc_index(t_bool reset);
-int				update_heredoc_number(t_bool reset);
-int				update_heredoc_count(t_bool reset);
+t_bool			contains_only_digits(char *line);
+t_bool			contains_only_spaces(char *line);
+t_bool			contains_heredoc(t_minishell *ms);
 
 /* /commands */
 
@@ -257,23 +242,23 @@ int				check_error_executable(char *executable);
 int				detect_env_call(t_minishell *ms, char **tokens);
 int				env(t_minishell *ms, char **tokens);
 
-//exit.c
-int     detect_exit_call(t_minishell *ms, char **tokens,  int is_child);
-int  	ft_exit(t_minishell *ms, char **tokens, int is_child);
+// exit.c
+int				detect_exit_call(t_minishell *ms, char **tokens, int is_child);
+int				ft_exit(t_minishell *ms, char **tokens, int is_child);
 
 // get_path.c
 char			*get_path(char *cmds);
 char			*create_full_path(char *dir, char *cmds);
 
 // export.c
-int				detect_export_call(t_minishell *ms, int k);
+int				detect_export_call(t_minishell *ms);
 void			export_handling(t_minishell *ms, int i);
 int				count_en_var(char **env, int count);
 void			set_env_var(t_minishell *ms, const char *var_name,
 					const char *value);
 
 // unset.c
-int				detect_unset_call(t_minishell *ms, int k);
+int				detect_unset_call(t_minishell *ms);
 void			unset_handling(t_minishell *ms, int i);
 int				find_env_index(char **env, const char *var_name);
 void			remove_env_var(char **env, int index);
@@ -282,29 +267,78 @@ void			remove_env_var(char **env, int index);
 int				call_commands(t_minishell *ms);
 int				exec_builtin(t_minishell *ms, char **tokens, int is_child);
 int				ft_execvp(char **tokens, char **envp);
+int				exec_builtin2(t_minishell *ms, char **tokens, int is_child);
+
+/* redirections*/
+
+// exec_redirections.c
+int				exec_redirections(t_minishell *ms);
 
 // redirection.c
-int				exec_redirection(t_minishell *ms);
-void			recreate_tokens(t_minishell *ms, int i);
+int				redirect(t_minishell *ms, int return_value, int k, int *i);
 int				redirect_input(char *file);
 int				redirect_output(char *file);
 int				append_output(char *file);
+int				redirect_heredoc(t_minishell *ms, int i);
 
-// ft_pipes
+// redirection_utils.c
+int				count_tokens_left(t_minishell *ms);
+void			recreate_tokens(t_minishell *ms, int tokens_count);
 
-int				has_pipes(t_minishell *ms, char **str);
-int				count_pipes(t_minishell *ms, char **str);
+// heredoc.c
+int				execute_heredocs(t_minishell *ms);
+int				exec_heredoc(t_minishell *ms);
+int				heredoc(t_minishell *ms, char *delim);
+void			fill_heredoc(t_minishell *ms, int fd, char *delim);
+char			*create_heredoc_name(t_minishell *ms);
+
+// heredoc_expander.c
+char			*expand_line(t_minishell *ms, char *line);
+char			*expander(t_minishell *ms, char *line);
+
+// heredoc_utils.c
+int				count_heredoc(t_minishell *ms);
+void			check_delim(t_minishell *ms, int pos);
+t_bool			check_line(char *line, char *delim);
+
+// heredoc_reset.c
+void			unlink_heredocs(t_minishell *ms);
+void			clear_heredoc_names(t_minishell *ms);
+void			reset_heredoc(t_minishell *ms);
+
+// heredoc_statics.c
+void			reset_heredoc_statics(void);
+int				update_heredoc_index(t_bool reset);
+int				update_heredoc_number(t_bool reset);
+int				update_heredoc_count(t_bool reset);
+
+/* pipes */
+
+// pipes.c
+void			init_pipes(t_pipes *p);
 int				**allocate_pipes(t_pipes *p);
-char			**extract_args(char **tokens, int start, int end);
 void			close_pipes(t_pipes *p);
 void			pipes_redirection(t_pipes *p);
+
+// exec_pipes.c
 int				exect_pipes(t_minishell *ms);
+char			**extract_args(char **tokens, int start, int end);
+void			handle_child_process(t_minishell *ms, t_pipes *p);
 int				create_and_manage_process(t_minishell *ms, t_pipes *p,
 					pid_t *pid);
-void			handle_child_process(t_minishell *ms, t_pipes *p);
-void			tokenize_input1(t_minishell *ms);
 int				call_commands_pipes(t_minishell *ms, t_pipes *p);
-int				exec_redirection_pipes(t_pipes *p);
-void			recreate_pipes_args(t_pipes *p, int i);
+
+// pipes_redirections.c
+int				exec_redirection_pipes(t_pipes *p, t_minishell *ms);
+int				count_args_left(t_pipes *p);
+void			recreate_pipes_args(t_pipes *p, int args_count);
+int				redirect_pipes(t_minishell *ms, t_pipes *p, int return_value, int k, int *i);
+
+// pipes_utils.c
+void			print_arg_protected_array(t_pipes *p);
+int				count_pipes(t_minishell *ms, char **str);
+void			fill_pipes_protected_array(t_minishell *ms, t_pipes *p,
+					int cmd_start);
+t_bool			pipes_has_redirect(t_pipes *p);
 
 #endif

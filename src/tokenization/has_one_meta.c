@@ -6,11 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 19:08:21 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/09 23:28:19 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/19 00:11:23 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tokenization.h"
+#include "../../includes/minishell.h"
 
 t_bool	has_redirect_in(t_minishell *ms, char **tokens)
 {
@@ -59,18 +59,12 @@ t_bool	has_heredoc(t_minishell *ms, char **tokens)
 	int	i;
 
 	i = 0;
-	if (!tokens || *tokens)
-		return (FALSE);
 	while (tokens[i])
 	{
-		if (!ms->token.protected[i] && is_heredoc(tokens[i]) && tokens[i + 1])
-		{
-			ft_fprintf(2, "have heredoc\n");	
+		if (ms->token.protected[i] == 0 && is_heredoc(tokens[i]))
 			return (TRUE);
-		}
 		i++;
 	}
-	ft_fprintf(2, "have no heredoc\n");
 	return (FALSE);
 }
 
@@ -81,13 +75,9 @@ t_bool	has_pipe(t_minishell *ms, char **tokens)
 	i = 0;
 	while (tokens[i])
 	{
-		if (!ms->token.protected[i] && is_pipe(tokens[i]))
-		{
-			//ft_fprintf(2, "pipe is not protected by quotes\n");
+		if (ms->token.protected[i] == 0 && is_pipe(tokens[i]))
 			return (TRUE);
-		}
 		i++;
 	}
-	//ft_fprintf(2, "pipe is protected by quotes or there is no pipes\n");
 	return (FALSE);
 }

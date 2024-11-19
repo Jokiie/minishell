@@ -7,7 +7,7 @@
 	save their return value. We check if forked_builtin_cmds return ERROR
 	because if the token is not executable, it have a special message and
 	if we returned CMD_NOT_FOUND(127), and checkit like for built-in
-	commands, it will show the wrong message. 
+	commands, it will show the wrong message.
 
 	to do:
 	- ft_getenv
@@ -31,14 +31,19 @@ int	call_commands(t_minishell *ms)
 			return (ERROR);
 		else if (pid == 0)
 		{
-			if (has_redirect(ms, ms->tokens))
+			if (has_heredoc(ms, ms->tokens) == TRUE || has_redirect(ms, ms->tokens) == TRUE)
 			{
-				if (exec_redirection(ms) != SUCCESS)
+				if (exec_redirections(ms) != SUCCESS || !ms->tokens)
 					exit_child(ms, 0);
 			}
+			if (!*ms->tokens[0])
+				exit_child(ms, 0);	
 			ms->ret = detect_executable(ms, ms->tokens);
 			if (ms->ret == EXE_NOT_FOUND)
+				ms->ret = exec_builtin2(ms, ms->tokens, 1);
+			if (ms->ret == CMD_NOT_FOUND)
 				ms->ret = ft_execvp(ms->tokens, ms->env);
+			
 			exit_child(ms, ms->ret);
 		}
 		ms->ret = wait_children();
@@ -52,7 +57,7 @@ int	call_commands(t_minishell *ms)
 	the path and return the error code returned by check error.
 	to do:
 	- Verify if all errors return the correct value and add the errors missing
-	  if applicable
+		if applicable
 */
 int	ft_execvp(char **tokens, char **envp)
 {
@@ -87,7 +92,7 @@ int	ft_execvp(char **tokens, char **envp)
 	- add unset without option
 	- add export without option
 	- rework pwd to display the same pwd in the environment variables
-	  and need to work (not crash minishell) when we deleted the current directory
+		and need to work (not crash minishell) when we deleted the current directory
 	- rework cd (need to update the pwd and old pwd in the environment variables)
 */
 int	exec_builtin(t_minishell *ms, char **tokens, int is_child)
@@ -95,7 +100,26 @@ int	exec_builtin(t_minishell *ms, char **tokens, int is_child)
 	int	return_value;
 
 	return_value = 0;
-		return_value = detect_exit_call(ms, tokens, is_child);
+	return_value = detect_exit_call(ms, tokens, is_child);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_cd_call(tokens);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_pwd_call(ms, tokens);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_env_call(ms, tokens);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_export_call(ms);
+	if (return_value == CMD_NOT_FOUND)
+		return_value = detect_unset_call(ms);
+	return (return_value);
+}
+
+int	exec_builtin2(t_minishell *ms, char **tokens, int is_child)
+{
+	int	return_value;
+
+	return_value = 0;
+	return_value = detect_exit_call(ms, tokens, is_child);
 	if (return_value == CMD_NOT_FOUND)
 		return_value = detect_cd_call(tokens);
 	if (return_value == CMD_NOT_FOUND)
@@ -105,9 +129,8 @@ int	exec_builtin(t_minishell *ms, char **tokens, int is_child)
 	if (return_value == CMD_NOT_FOUND)
 		return_value = detect_echo_call(ms, tokens);
 	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_export_call(ms, 0);
+		return_value = detect_export_call(ms);
 	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_unset_call(ms, 0);
+		return_value = detect_unset_call(ms);
 	return (return_value);
 }
-

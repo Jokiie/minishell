@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/13 16:12:00 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/16 00:49:38 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,6 @@ void	init_signals_noninteractive(void)
 	
 	ft_memset(&sa, 0, sizeof(sa));
 	sa.sa_handler = &put_newline;
-	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
+	sigaction(SIGINT, &sa, NULL);
 }

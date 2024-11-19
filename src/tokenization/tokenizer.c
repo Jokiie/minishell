@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/14 12:17:56 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/19 00:11:53 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tokenization.h"
+#include "../../includes/minishell.h"
 
 /* MB_SIZE / PTR_SIZE = 2097152 / 8 (max args on Linux env) */
 char	**tokenizer(t_minishell *ms, char *line)

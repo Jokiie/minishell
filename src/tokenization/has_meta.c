@@ -6,11 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 19:08:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/08 23:39:40 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/19 03:42:49 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tokenization.h"
+#include "../../includes/minishell.h"
 
 t_bool	has_redirect(t_minishell *ms, char **tokens)
 {
@@ -19,8 +19,7 @@ t_bool	has_redirect(t_minishell *ms, char **tokens)
 	i = 0;
 	while (tokens[i])
 	{
-		if (ms->token.protected[i] == 0 && (is_redirect_in(tokens[i]) || is_redirect_out(tokens[i])
-			|| is_append(tokens[i])))
+		if (ms->token.protected[i] == 0 && is_redirect(tokens[i]))
 			return (TRUE);
 		i++;
 	}
@@ -34,8 +33,7 @@ t_bool	has_meta(t_minishell *ms, char **tokens)
 	i = 0;
 	while (tokens[i])
 	{
-		if (ms->token.protected[i] == 0 && (is_redirect(tokens[i]) || is_pipe(tokens[i])
-			|| is_heredoc(tokens[i])))
+		if (ms->token.protected[i] == 0 && (is_redirect(tokens[i]) || is_pipe(tokens[i])))
 			return (TRUE);
 		i++;
 	}
