@@ -36,7 +36,7 @@ int	call_commands(t_minishell *ms)
 				if (exec_redirections(ms) != SUCCESS || !ms->tokens)
 					exit_child(ms, 0);
 			}
-			if (!*ms->tokens[0])
+			if (!ms->tokens || !*ms->tokens)
 				exit_child(ms, 0);	
 			ms->ret = detect_executable(ms, ms->tokens);
 			if (ms->ret == EXE_NOT_FOUND)
