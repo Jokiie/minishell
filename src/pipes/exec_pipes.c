@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 00:19:36 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/19 06:26:18 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/20 16:39:48 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

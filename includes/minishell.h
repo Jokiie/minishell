@@ -247,8 +247,12 @@ int				detect_exit_call(t_minishell *ms, char **tokens, int is_child);
 int				ft_exit(t_minishell *ms, char **tokens, int is_child);
 
 // get_path.c
-char			*get_path(char *cmds);
+char			*get_path(char **envp, char *cmds);
 char			*create_full_path(char *dir, char *cmds);
+
+// get_env.c
+char			*get_env(char **env, char *var_name);
+
 
 // export.c
 int				detect_export_call(t_minishell *ms, char **tokens);
@@ -256,8 +260,8 @@ void			export_handling(t_minishell *ms, int i);
 int				count_en_var(char **env, int count);
 void			set_env_var(t_minishell *ms, const char *var_name,
 					const char *value);
-void		print_env(char **env);
-char **realloc_env(char **env, int new_size);
+void			print_env(char **env);
+char			**realloc_env(char **env, int new_size);
 
 
 // unset.c

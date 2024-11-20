@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 12:29:15 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/14 12:29:44 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/20 16:36:58 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "commands.h"
+#include "../../includes/minishell.h"
 
 /*
 	Iterate in the paths returned by ft_strtok to find where is the cmd process
@@ -21,14 +21,14 @@
 	to do:
 		paths = (should search in ms->env), not with getenv ?
 */
-char	*get_path(char *cmds)
+char	*get_path(char **envp, char *cmds)
 {
 	char	*paths;
 	char	*paths_dup;
 	char	*dir;
 	char	*full_path;
 
-	paths = getenv("PATH");
+	paths = get_env(envp, "PATH");
 	paths_dup = ft_strdup(paths);
 	if (!paths_dup)
 		return (NULL);

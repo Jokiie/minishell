@@ -38,13 +38,25 @@ TMP_PATH = tmp/
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-CMDS_DIR = commands
-CMDS = $(CMDS_DIR)/commands.a
+# CMDS_DIR = commands
+# CMDS = $(CMDS_DIR)/commands.a
 
 SRC_PIPES = pipes/pipes.c \
 			pipes/pipes_utils.c \
 			pipes/exec_pipes.c \
 			pipes/pipes_redirections.c
+
+SRC_CMDS = commands/cd.c \
+		   commands/echo.c \
+		   commands/env.c \
+		   commands/executable.c\
+		   commands/exit.c \
+		   commands/export.c \
+		   commands/ft_commands.c \
+		   commands/get_env.c \
+		   commands/get_path.c \
+		   commands/pwd.c \
+		   commands/unset.c \
 
 SRC_TOK = tokenization/tokens_creator.c \
 		  tokenization/characterizer.c \
@@ -79,7 +91,8 @@ SRC	=		minishell.c \
 			prompt_name.c \
 			$(SRC_PIPES) \
 			$(SRC_REDIR) \
-			$(SRC_TOK)
+			$(SRC_TOK) \
+			$(SRC_CMDS)
 
 SRCS	= $(addprefix $(SRC_PATH), $(SRC))
 OBJ		= $(SRC:.c=.o)
@@ -94,6 +107,7 @@ $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)
 	mkdir -p $(OBJ_PATH)/pipes
+	mkdir -p $(OBJ_PATH)/commands
 	mkdir -p $(OBJ_PATH)/redirections
 	mkdir -p $(OBJ_PATH)/tokenization
 
@@ -120,13 +134,11 @@ clean:
 	rm -rf $(OBJ_PATH)
 	rm -rf $(TMP_PATH)
 	$(MAKE) -C $(LIBFT_DIR) clean
-	$(MAKE) -C $(CMDS_DIR) clean
 	$(MAKE) -C $(RL_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
 	$(MAKE) -C $(LIBFT_DIR) fclean
-	$(MAKE) -C $(CMDS_DIR) fclean
 	$(MAKE) -C $(RL_DIR) distclean
 
 run: all

@@ -1,5 +1,5 @@
 
-#include "commands.h"
+#include "../../includes/minishell.h"
 
 /*
 	Create a child process with fork to execute a command in the environment
@@ -70,7 +70,7 @@ int	ft_execvp(char **tokens, char **envp)
 		if (tokens[k][0] == '/')
 			path = ft_strdup(tokens[k]);
 		else
-			path = get_path(tokens[k]);
+			path = get_path(envp, tokens[k]);
 		if (!path || execve(path, tokens, envp) == FAIL)
 		{
 			ft_free(path);

@@ -6,11 +6,11 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:28:23 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/20 15:48:57 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/20 16:07:17 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "commands.h"
+#include "../../includes/minishell.h"
 
 int	detect_unset_call(t_minishell *ms, char **tokens)
 {

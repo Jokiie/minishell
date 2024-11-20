@@ -6,11 +6,11 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/20 15:09:22 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/20 16:06:58 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "commands.h"
+#include "../../includes/minishell.h"
 
 int detect_export_call( t_minishell *ms, char **tokens)
 {

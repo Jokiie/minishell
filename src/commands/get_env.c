@@ -6,11 +6,11 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 14:22:49 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/20 15:11:58 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/20 16:07:10 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "commands.h"
+#include "../../includes/minishell.h"
 
 char	*get_env(char **env, char *var_name)
 {
