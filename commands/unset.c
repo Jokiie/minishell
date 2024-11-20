@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:28:23 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/18 15:32:22 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/20 13:57:18 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	detect_unset_call(t_minishell *ms)
 {
-	if (ft_strncmp(ms->tokens[0], "unset", 6) == 0)
+	if (ft_strncmp(ms->tokens[0], "unset\0", 6) == 0)
 	{
 		unset_handling(ms, 1);
 		ms->ret = SUCCESS;

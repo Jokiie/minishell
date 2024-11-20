@@ -41,10 +41,34 @@ LIBFT = $(LIBFT_DIR)/libft.a
 CMDS_DIR = commands
 CMDS = $(CMDS_DIR)/commands.a
 
-TOK_DIR = tokenization
-TOK = $(TOK_DIR)/tokenization.a
+SRC_PIPES = pipes/pipes.c \
+			pipes/pipes_utils.c \
+			pipes/exec_pipes.c \
+			pipes/pipes_redirections.c
 
-# Sources are all .c files
+SRC_TOK = tokenization/tokens_creator.c \
+		  tokenization/characterizer.c \
+		  tokenization/tokenizer.c \
+		  tokenization/trimmer.c \
+		  tokenization/var_expansion.c \
+		  tokenization/nbr_expansion.c \
+		  tokenization/quotes_detector.c \
+		  tokenization/has_one_meta.c \
+		  tokenization/has_meta.c \
+		  tokenization/is_one_meta.c \
+		  tokenization/is_meta.c \
+		  tokenization/syntax_error.c \
+		  tokenization/contains_only.c
+
+SRC_REDIR = redirections/exec_redirections.c \
+			redirections/redirection.c \
+			redirections/redirection_utils.c \
+			redirections/heredoc.c \
+			redirections/heredoc_utils.c \
+			redirections/heredoc_expander.c \
+			redirections/heredoc_statics.c \
+			redirections/heredoc_reset.c
+
 SRC	=		minishell.c \
 			exit_minishell.c \
 			free.c \
@@ -53,15 +77,9 @@ SRC	=		minishell.c \
 			signal_handler.c \
 			error.c \
 			prompt_name.c \
-			redirection.c \
-			pipes.c \
-			pipes_utils.c \
-			pipes_utils2.c \
-			heredoc.c \
-			heredoc_statics.c \
-			heredoc_reset.c \
-			heredoc_utils.c \
-			heredoc_expander.c \
+			$(SRC_PIPES) \
+			$(SRC_REDIR) \
+			$(SRC_TOK)
 
 SRCS	= $(addprefix $(SRC_PATH), $(SRC))
 OBJ		= $(SRC:.c=.o)
@@ -75,6 +93,9 @@ $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 
 $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)
+	mkdir -p $(OBJ_PATH)/pipes
+	mkdir -p $(OBJ_PATH)/redirections
+	mkdir -p $(OBJ_PATH)/tokenization
 
 $(TMP_PATH):
 	mkdir -p $(TMP_PATH)
@@ -85,14 +106,11 @@ $(LIBFT):
 $(CMDS):
 	$(MAKE) -C $(CMDS_DIR) all
 
-$(TOK):
-	$(MAKE) -C $(TOK_DIR) all
-
 $(RL):
 	(cd $(RL_DIR) && ./configure && $(MAKE))
 
-$(NAME): $(OBJS) $(CMDS) $(TOK)
-	$(CC) $(CFLAGS) $(OBJS) $(CMDS) $(TOK) $(LIBFT) $(RL_LIB) -L readline -l readline -l ncurses \
+$(NAME): $(OBJS) $(CMDS)
+	$(CC) $(CFLAGS) $(OBJS) $(CMDS) $(LIBFT) $(RL_LIB) -L readline -l readline -l ncurses \
 	$(RL) $(LDFLAGS) -o $(NAME)
 
 
@@ -103,14 +121,12 @@ clean:
 	rm -rf $(TMP_PATH)
 	$(MAKE) -C $(LIBFT_DIR) clean
 	$(MAKE) -C $(CMDS_DIR) clean
-	$(MAKE) -C $(TOK_DIR) clean
 	$(MAKE) -C $(RL_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
 	$(MAKE) -C $(LIBFT_DIR) fclean
 	$(MAKE) -C $(CMDS_DIR) fclean
-	$(MAKE) -C $(TOK_DIR) fclean
 	$(MAKE) -C $(RL_DIR) distclean
 
 run: all
@@ -123,7 +139,6 @@ re: fclean all
 quick:
 	$(MAKE) -C $(LIBFT_DIR) all
 	$(MAKE) -C $(CMDS_DIR) all
-	$(MAKE) -C $(TOK_DIR) all
 
 cp:
 	cp supp.txt /tmp

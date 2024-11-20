@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/18 15:40:11 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/20 13:57:28 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int detect_export_call(t_minishell *ms)
 {
-	if (ft_strncmp(ms->tokens[0], "export", 7) == 0)
+	if (ft_strncmp(ms->tokens[0], "export\0", 7) == 0)
 	{
 		export_handling(ms, 1);
 		print_env(ms->test);

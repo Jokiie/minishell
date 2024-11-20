@@ -6,11 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/15 02:01:45 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/19 00:11:57 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tokenization.h"
+#include "../../includes/minishell.h"
 
 int	tokens_creator(t_minishell *ms, char *line)
 {
@@ -58,7 +58,6 @@ char	**transformer(t_minishell *ms)
 	free_tokens(tmp_pretokens);
 	if (!*ms->tokens[0] && !ms->token.protected[0])
 		return (NULL);
-	fill_isheredoc_arr(ms);
 	return (ms->tokens);
 }
 
@@ -81,30 +80,6 @@ void	fill_protected_arr(t_minishell *ms)
 			ms->token.protected[i] = 1;
 		else
 			ms->token.protected[i] = 0;
-		k++;
-		i++;
-	}
-}
-
-void	fill_isheredoc_arr(t_minishell *ms)
-{
-	int k;
-	int i;
-
-	i = 0;
-	k = 0;
-	while (ms->tokens[k])
-		k++;
-	ms->token.isheredoc = malloc(sizeof(int) * k);
-	if (!ms->token.isheredoc)
-		return ;
-	k = 0;
-	while (ms->tokens[k])
-	{
-		if (ms->token.protected[i] == 0 && is_heredoc(ms->tokens[k]))
-			ms->token.isheredoc[i] = 1;
-		else
-			ms->token.isheredoc[i] = 0;
 		k++;
 		i++;
 	}

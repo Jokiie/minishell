@@ -7,7 +7,6 @@ void	free_data(t_minishell *ms)
 	free_at_address(&ms->input);
 	free_at_address(&ms->cwd);
 	free_int_array(&ms->token.protected);
-	free_int_array(&ms->token.isheredoc);
 	reset_heredoc(ms);
 }
 
@@ -27,7 +26,6 @@ void	free_at_exit(t_minishell *ms)
 	ft_free(ms->cwd);
 	ft_free(ms->path);
 	free_int_array(&ms->token.protected);
-	free_int_array(&ms->token.isheredoc);
 	free_tokens(ms->env);
 }
 

@@ -6,11 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 00:29:35 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/09 00:30:24 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/18 23:59:44 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 char	*expand_line(t_minishell *ms, char *line)
 {

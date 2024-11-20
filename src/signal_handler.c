@@ -6,7 +6,11 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/11/18 11:45:58 by matislessar      ###   ########.fr       */
+=======
+/*   Updated: 2024/11/16 00:49:38 by ccodere          ###   ########.fr       */
+>>>>>>> origin/dev
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +64,6 @@ void	init_signals_noninteractive(void)
 	
 	ft_memset(&sa, 0, sizeof(sa));
 	sa.sa_handler = &put_newline;
-	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
+	sigaction(SIGINT, &sa, NULL);
 }

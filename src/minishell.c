@@ -37,7 +37,6 @@ void	init_minishell(t_minishell *ms)
 	ms->token.in_dquotes = FALSE;
 	ms->token.in_squotes = FALSE;
 	ms->token.protected = NULL;
-	ms->token.isheredoc = NULL;
 	ms->fd.fdin = NULL;
 	ms->fd.fdout = NULL;
 	ms->fd.saved_stdin = 0;
@@ -66,9 +65,12 @@ int	execute_input(t_minishell *ms, char *input)
 		return (SYNTAX_ERROR);
 	else if (ms->tokens && *ms->tokens)
 	{
-		if (execute_heredocs(ms) == ERROR)
-			return (ERROR);
-		//print_debug(ms->tokens);
+		if (has_heredoc(ms, ms->tokens) == TRUE)
+		{
+			ms->ret = execute_heredocs(ms);
+			if (ms->ret == ERROR || ms->ret == TERM_SIGINT)
+				return (ms->ret);
+		}
 		ms->ret = call_commands(ms);
 		free_tokens(ms->tokens);
 	}

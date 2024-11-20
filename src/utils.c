@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/11 12:40:10 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/19 03:52:24 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,13 @@ void	print_debug(char **tokens)
 
 	k = 0;
 	if (!tokens || !*tokens)
+	{
+		ft_fprintf(2, GREEN"[0] = (null)\n"RESET);
 		return ;
+	}
 	while (tokens[k])
 	{
-		ft_printf(":%s:\n", tokens[k]);
+		ft_fprintf(2, GREEN"[%d] = :%s:\n"RESET, k, tokens[k]);
 		k++;
 	}
 }

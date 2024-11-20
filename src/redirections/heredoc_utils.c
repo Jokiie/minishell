@@ -6,11 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 22:07:44 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/09 01:11:05 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/18 23:59:28 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	count_heredoc(t_minishell *ms)
 {
@@ -21,30 +21,11 @@ int	count_heredoc(t_minishell *ms)
 	k = 0;
 	while (ms->tokens[k])
 	{
-		if (is_heredoc(ms->tokens[k]))
+		if (is_heredoc(ms->tokens[k]) && ms->token.protected[k] == 0)
 			count++;
 		k++;
 	}
 	return (count);
-}
-
-int	shift_tokens(t_minishell *ms, int *index)
-{
-	int	i;
-
-	i = *index;
-	while (ms->tokens[i + 1])
-	{
-		if (ms->tokens[i + 2])
-		{
-			ms->tokens[i + 1] = ms->tokens[i + 2];
-			ms->token.protected[i + 1] = ms->token.protected[i + 2];
-		}
-		i++;
-	}
-	ms->tokens[i] = NULL;
-	ms->token.protected[i] = '\0';
-	return (i);
 }
 
 void	check_delim(t_minishell *ms, int pos)

@@ -6,11 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 22:02:55 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/06 22:09:44 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/18 23:59:33 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void	reset_heredoc_statics(void)
 {

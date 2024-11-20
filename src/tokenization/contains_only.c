@@ -6,11 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 01:59:12 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/15 02:01:39 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/19 00:11:06 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 t_bool  contains_only_digits(char *line)
 {
@@ -34,6 +34,20 @@ t_bool	contains_only_spaces(char *line)
 	while (line[i])
 	{
 		if (!ft_isspace(line[i]))
+			return (FALSE);
+		i++;
+	}
+	return (TRUE);
+}
+
+t_bool	contains_heredoc(t_minishell *ms)
+{
+	int	i;
+
+	i = 0;
+	while (ms->tokens[i])
+	{
+		if (!ms->token.isheredoc[i])
 			return (FALSE);
 		i++;
 	}
