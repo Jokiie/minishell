@@ -108,9 +108,9 @@ int	exec_builtin(t_minishell *ms, char **tokens, int is_child)
 	if (return_value == CMD_NOT_FOUND)
 		return_value = detect_env_call(ms, tokens);
 	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_export_call(ms);
+		return_value = detect_export_call(ms, tokens);
 	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_unset_call(ms);
+		return_value = detect_unset_call(ms, tokens);
 	return (return_value);
 }
 
@@ -129,8 +129,8 @@ int	exec_builtin2(t_minishell *ms, char **tokens, int is_child)
 	if (return_value == CMD_NOT_FOUND)
 		return_value = detect_echo_call(ms, tokens);
 	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_export_call(ms);
+		return_value = detect_export_call(ms, tokens);
 	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_unset_call(ms);
+		return_value = detect_unset_call(ms, tokens);
 	return (return_value);
 }

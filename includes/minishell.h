@@ -251,7 +251,7 @@ char			*get_path(char *cmds);
 char			*create_full_path(char *dir, char *cmds);
 
 // export.c
-int				detect_export_call(t_minishell *ms);
+int				detect_export_call(t_minishell *ms, char **tokens);
 void			export_handling(t_minishell *ms, int i);
 int				count_en_var(char **env, int count);
 void			set_env_var(t_minishell *ms, const char *var_name,
@@ -261,7 +261,7 @@ char **realloc_env(char **env, int new_size);
 
 
 // unset.c
-int				detect_unset_call(t_minishell *ms);
+int				detect_unset_call(t_minishell *ms, char **tokens);
 void			unset_handling(t_minishell *ms, int i);
 int				find_env_index(char **env, const char *var_name);
 void			remove_env_var(char **env, int index);

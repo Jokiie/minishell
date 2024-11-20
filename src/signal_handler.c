@@ -6,11 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/11/18 11:45:58 by matislessar      ###   ########.fr       */
-=======
-/*   Updated: 2024/11/16 00:49:38 by ccodere          ###   ########.fr       */
->>>>>>> origin/dev
+/*   Updated: 2024/11/20 14:19:58 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
