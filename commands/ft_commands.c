@@ -105,9 +105,9 @@ int	exec_builtin(t_minishell *ms, char **tokens, int is_child)
 	if (return_value == CMD_NOT_FOUND)
 		return_value = detect_echo_call(ms, tokens);
 	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_export_call(ms, 0);
+		return_value = detect_export_call(ms);
 	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_unset_call(ms, 0);
+		return_value = detect_unset_call(ms);
 	return (return_value);
 }
 

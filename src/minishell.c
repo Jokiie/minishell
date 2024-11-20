@@ -82,6 +82,7 @@ void	execms(t_minishell *ms, char **envp)
 		exit(EXIT_FAILURE);
 	setenv("INPUTRC", "./.inputrc", 1);
 	ms->env = ft_envdup(envp);
+	ms->test = ft_envdup(envp);
 	// rl_bind_key('\t', rl_complete);
 	while (1)
 	{

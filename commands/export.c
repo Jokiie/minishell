@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/14 16:23:19 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/18 15:40:11 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int detect_export_call(t_minishell *ms)
 	if (ft_strncmp(ms->tokens[0], "export", 7) == 0)
 	{
 		export_handling(ms, 1);
+		print_env(ms->test);
 		ms->ret = SUCCESS;
 		return (ms->ret);
 	}
@@ -57,7 +58,7 @@ void	set_env_var(t_minishell *ms, const char *var_name, const char *value)
 	int		index;
 	int		env_count;
 
-	index = find_env_index(ms->env, var_name);
+	index = find_env_index(ms->test, var_name);
 	entry = malloc(ft_strlen(var_name) + ft_strlen(value) + 2);
 	if (!entry)
 		exit(FAIL);
@@ -66,13 +67,43 @@ void	set_env_var(t_minishell *ms, const char *var_name, const char *value)
 	ft_strcat(entry, value);
 	if (index >= 0)
 	{
-		free(ms->env[index]);
-		ms->env[index] = entry;
+		free(ms->test[index]);
+		ms->test[index] = entry;
 	}
 	else
 	{
-		env_count = count_env_var(ms->env, 0);
-		ms->env[env_count] = entry;
-		ms->env[env_count + 1] = NULL;
+		env_count = count_env_var(ms->test, 0);
+		ms->test = realloc_env(ms->test, env_count + 2);
+		ms->test[env_count] = entry;
+		ms->test[env_count + 1] = NULL;
+	}
+}
+char **realloc_env(char **env, int new_size)
+{
+	char **new_env;
+	int i;
+
+	i = 0;
+	new_env = malloc(new_size * sizeof(char *));
+	if (!new_env)
+		exit(FAIL);
+	while (env && env[i])
+	{
+		new_env[i] = env[i];
+		i++;
+	}
+	new_env[i] = NULL;
+	free(env);
+	return new_env;
+}
+
+void print_env(char **env)
+{
+	int i = 0;
+
+	while (env && env[i])
+	{
+		printf("%s\n", env[i]);
+		i++;
 	}
 }

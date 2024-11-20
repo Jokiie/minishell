@@ -271,6 +271,9 @@ void			export_handling(t_minishell *ms, int i);
 int				count_en_var(char **env, int count);
 void			set_env_var(t_minishell *ms, const char *var_name,
 					const char *value);
+void		print_env(char **env);
+char **realloc_env(char **env, int new_size);
+
 
 // unset.c
 int				detect_unset_call(t_minishell *ms);
@@ -295,6 +298,7 @@ int				append_output(char *file);
 int				has_pipes(t_minishell *ms, char **str);
 int				count_pipes(t_minishell *ms, char **str);
 int				**allocate_pipes(t_pipes *p);
+void			init_pipes(t_pipes *p);
 char			**extract_args(char **tokens, int start, int end);
 void			close_pipes(t_pipes *p);
 void			pipes_redirection(t_pipes *p);
@@ -304,7 +308,8 @@ int				create_and_manage_process(t_minishell *ms, t_pipes *p,
 void			handle_child_process(t_minishell *ms, t_pipes *p);
 void			tokenize_input1(t_minishell *ms);
 int				call_commands_pipes(t_minishell *ms, t_pipes *p);
-int				exec_redirection_pipes(t_pipes *p);
+int			exec_redirection_pipes(t_pipes *p, int k, int return_value);
 void			recreate_pipes_args(t_pipes *p, int i);
+
 
 #endif

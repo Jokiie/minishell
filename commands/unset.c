@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:28:23 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/14 15:20:29 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/18 15:32:22 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	find_env_index(char **env, const char *var_name)
 
 	i = 0;
 	len = ft_strlen(var_name);
-	while (env[i])
+	while (env && env[i])
 	{
 		if (ft_strncmp(env[i], var_name, len) == 0 && env[i][len] == '=')
 			return (i);

@@ -55,6 +55,8 @@ SRC	=		minishell.c \
 			prompt_name.c \
 			redirection.c \
 			pipes.c \
+			pipes_utils.c \
+			pipes_utils2.c \
 			heredoc.c \
 			heredoc_statics.c \
 			heredoc_reset.c \
