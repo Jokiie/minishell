@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 01:59:12 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/19 00:11:06 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/20 14:54:02 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,17 @@ t_bool	contains_only_spaces(char *line)
 	return (TRUE);
 }
 
-t_bool	contains_heredoc(t_minishell *ms)
+t_bool	contains_only_type(char **tokens, int **protected, t_bool (*is_type)(char *))
 {
 	int	i;
 
 	i = 0;
-	while (ms->tokens[i])
+	while (tokens[i])
 	{
-		if (!ms->token.isheredoc[i])
+		if ((*protected)[i] == 0 && !is_type(tokens[i]))
 			return (FALSE);
-		i++;
+		i+=2;
 	}
 	return (TRUE);
 }
+

@@ -43,8 +43,7 @@ CMDS = $(CMDS_DIR)/commands.a
 
 SRC_PIPES = pipes/pipes.c \
 			pipes/pipes_utils.c \
-			pipes/exec_pipes.c \
-			pipes/pipes_redirections.c
+			pipes/exec_pipes.c
 
 SRC_TOK = tokenization/tokens_creator.c \
 		  tokenization/characterizer.c \
@@ -58,7 +57,8 @@ SRC_TOK = tokenization/tokens_creator.c \
 		  tokenization/is_one_meta.c \
 		  tokenization/is_meta.c \
 		  tokenization/syntax_error.c \
-		  tokenization/contains_only.c
+		  tokenization/contains_only.c \
+		  tokenization/count.c \
 
 SRC_REDIR = redirections/exec_redirections.c \
 			redirections/redirection.c \
@@ -72,11 +72,13 @@ SRC_REDIR = redirections/exec_redirections.c \
 SRC	=		minishell.c \
 			exit_minishell.c \
 			free.c \
+			free_array_tab.c \
 			utils.c \
 			is.c \
 			signal_handler.c \
 			error.c \
 			prompt_name.c \
+			debug.c \
 			$(SRC_PIPES) \
 			$(SRC_REDIR) \
 			$(SRC_TOK)

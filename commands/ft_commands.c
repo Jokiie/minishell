@@ -18,7 +18,7 @@ int	call_commands(t_minishell *ms)
 {
 	int	pid;
 
-	if (has_pipe(ms, ms->tokens) == TRUE)
+	if (has_type(ms->tokens, &ms->token.protected, is_pipe))
 	{
 		ms->ret = exect_pipes(ms);
 		return (ms->ret);
@@ -31,12 +31,13 @@ int	call_commands(t_minishell *ms)
 			return (ERROR);
 		else if (pid == 0)
 		{
-			if (has_heredoc(ms, ms->tokens) == TRUE || has_redirect(ms, ms->tokens) == TRUE)
+			if (has_type(ms->tokens, &ms->token.protected, is_heredoc) || has_type(ms->tokens, &ms->token.protected, is_redirect))
 			{
-				if (exec_redirections(ms) != SUCCESS || !ms->tokens)
-					exit_child(ms, 0);
+				ms->ret = exec_redirections(ms, ms->tokens, &ms->token.protected, FALSE);
+				if (ms->ret != 0)
+					exit_child(ms, ms->ret);
 			}
-			if (!*ms->tokens[0])
+			if (!ms->tokens || !*ms->tokens)
 				exit_child(ms, 0);	
 			ms->ret = detect_executable(ms, ms->tokens);
 			if (ms->ret == EXE_NOT_FOUND)
@@ -128,9 +129,9 @@ int	exec_builtin2(t_minishell *ms, char **tokens, int is_child)
 		return_value = detect_env_call(ms, tokens);
 	if (return_value == CMD_NOT_FOUND)
 		return_value = detect_echo_call(ms, tokens);
-	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_export_call(ms);
-	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_unset_call(ms);
+	// if (return_value == CMD_NOT_FOUND)
+	// 	return_value = detect_export_call(ms);
+	// if (return_value == CMD_NOT_FOUND)
+	// 	return_value = detect_unset_call(ms);
 	return (return_value);
 }

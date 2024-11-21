@@ -21,6 +21,8 @@ void	exit_minishell(t_minishell *ms, int return_code)
 
 void	exit_child(t_minishell *ms, int return_code)
 {
+	// if (has_type(ms->tokens, &ms->token.protected, is_pipe))
+	// 	close_pipes(ms);
 	free_at_exit(ms);
 	exit(return_code);
 }

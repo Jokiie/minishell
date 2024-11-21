@@ -6,57 +6,86 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 01:52:01 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/19 06:25:19 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/21 03:06:39 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	count_tokens_left(t_minishell *ms)
+char	**recreate_tokens(char **tokens, int **protected, int count, t_bool in_pipe)
+{
+	char	**new_tokens;
+	int		*new_protected;
+	int		i;
+	int		j;
+	
+	(void)in_pipe;
+    new_protected = malloc(sizeof(int) * (count + 1));
+    if (!new_protected)
+	    return (NULL);
+	new_tokens = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!new_tokens)
+		return (NULL);
+	j = 0;
+	i = 0;
+	while (tokens[i] && j < count)
+	{
+		while ((is_redirect(tokens[i]) || is_heredoc(tokens[i])) && (*protected)[i] == 0)
+		{
+			i += 2;
+		}
+		if (!tokens[i])
+			break ;
+		new_tokens[j] = ft_strdup(tokens[i]);
+		new_protected[j] = (*protected)[i];
+		j++;
+		i++;
+	}
+	new_tokens[j] = NULL;
+	new_protected[j] = '\0';
+	free(*protected);
+	*protected = new_protected;
+	return (new_tokens);
+}
+
+int	get_filtered_tokc(char **tokens, int **protected)
 {
 	int	count;
 	int	i;
 
 	i = 0;
-	count = ms->tokc;
-	while (ms->tokens[i])
+	count = count_tokens(tokens);
+	while (tokens[i])
 	{
-		if ((is_redirect(ms->tokens[i]) || is_heredoc(ms->tokens[i])) && ms->token.protected[i] == 0)
+		if ((is_redirect(tokens[i]) || is_heredoc(tokens[i])) && (*protected)[i] == 0)
 		{
 			count = count - 2;
 		}
 		i++;
 	}
 	if (count == 0)
-		return (1);
+		return (0);
 	return (count);
 }
 
-void	recreate_tokens(t_minishell *ms, int tokens_count)
+int	cat_heredoc(char *file)
 {
-	char	**new_tokens;
-	int		i;
-	int		j;
-
-	new_tokens = (char **)malloc(sizeof(char *) * (tokens_count + 1));
-	if (!new_tokens)
-		return ;
-	j = 0;
-	i = 0;
-	while (ms->tokens[i])
+	int		fd;
+	char	*line;
+	
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
 	{
-		while ((is_redirect(ms->tokens[i]) || is_heredoc(ms->tokens[i])) && ms->token.protected[i] == 0)
-			i += 2;
-		if (!ms->tokens[i])
-			break;
-		new_tokens[j] = ft_strdup(ms->tokens[i]);
-		j++;
-		i++;
+		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
+		return (FAIL);
 	}
-  	if (j == 0 && has_redirect(ms, ms->tokens))
-        new_tokens[j++] = ft_strdup("cat");
-	new_tokens[j] = NULL;
-	free_tokens(ms->tokens);
-	ms->tokens = new_tokens;
-	ms->tokc = count_tokens(ms->tokens);
+	line = get_next_line(fd);
+	while (line)
+	{
+		ft_putstr_fd(line, STDOUT_FILENO);
+		free(line);
+		line = get_next_line(fd);
+	}
+	close(fd);
+	return (SUCCESS);	
 }
