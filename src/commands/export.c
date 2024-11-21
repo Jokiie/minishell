@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/21 13:35:22 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/21 15:45:09 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ int detect_export_call( t_minishell *ms, char **tokens)
 {
 	if (ft_strncmp(tokens[0], "export\0", 7) == 0)
 	{
-		export_handling(ms, 1);
-		// print_env(ms->env);
+		export_handling(ms, tokens, 1);
 		ms->ret = SUCCESS;
 		return (ms->ret);
 	}
@@ -25,14 +24,14 @@ int detect_export_call( t_minishell *ms, char **tokens)
 	return (ms->ret);
 }
 
-void	export_handling(t_minishell *ms, int i)
+void	export_handling(t_minishell *ms, char **tokens, int i)
 {
 	char	*var_name;
 	char	*value;
 	
-	while (ms->tokens[i])
+	while (tokens[i])
 	{
-		var_name = ft_strtok(ms->tokens[i], "=");
+		var_name = ft_strtok(tokens[i], "=");
 		value = ft_strtok(NULL, "=");
 		if (var_name && value)
 		{
@@ -40,16 +39,9 @@ void	export_handling(t_minishell *ms, int i)
 			printf("Set variable: %s=%s\n", var_name, value);
 		}
 		else
-			printf("minishell: export: %s: not found\n", ms->tokens[i]);
+			printf("minishell: export: %s: not found\n", tokens[i]);
 		i++;
 	}
-}
-
-int	count_env_var(char **env, int count)
-{
-	while (env[count])
-		count++;
-	return (count);
 }
 
 void	set_env_var(t_minishell *ms, const char *var_name, const char *value)
@@ -59,20 +51,18 @@ void	set_env_var(t_minishell *ms, const char *var_name, const char *value)
 	int		env_count;
 
 	index = find_env_index(ms->env, var_name);
-	entry = malloc(ft_strlen(var_name) + ft_strlen(value) + 2);
-	if (!entry)
-		exit(FAIL);
+	entry = ft_calloc(ft_strlen(var_name), ft_strlen(value) + 2);
 	ft_strcpy(entry, var_name);
 	ft_strcat(entry, "=");
 	ft_strcat(entry, value);
 	if (index >= 0)
 	{
-		free(ms->env[index]);
+		free_ptr(ms->env[index]);
 		ms->env[index] = entry;
 	}
 	else
 	{
-		env_count = count_env_var(ms->env, 0);
+		env_count = env_var_count(ms->env);
 		ms->env = realloc_env(ms->env, env_count + 2);
 		ms->env[env_count] = entry;
 		ms->env[env_count + 1] = NULL;
@@ -84,9 +74,7 @@ char **realloc_env(char **env, int new_size)
 	int i;
 
 	i = 0;
-	new_env = malloc(new_size * sizeof(char *));
-	if (!new_env)
-		exit(FAIL);
+	new_env = ft_calloc(new_size, sizeof(char *));
 	while (env && env[i])
 	{
 		new_env[i] = env[i];
@@ -94,16 +82,6 @@ char **realloc_env(char **env, int new_size)
 	}
 	new_env[i] = NULL;
 	free(env);
-	return new_env;
+	return (new_env);
 }
 
-void print_env(char **env)
-{
-	int i = 0;
-
-	while (env && env[i])
-	{
-		printf("%s\n", env[i]);
-		i++;
-	}
-}

@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:28:23 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/21 14:46:25 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/21 15:05:42 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,23 +46,17 @@ void	unset_handling(t_minishell *ms, char **tokens, int i)
 {
 	int	env_index;
 
-	printf("debug1\n");
 	while (tokens[i])
 	{
-		printf("debug2\n");
 		env_index = find_env_index(ms->env, tokens[i]);
-		printf("debug3\n");
 		if (env_index >= 0)
 		{
-			printf("debug4\n");
 			remove_env_var1(ms, env_index);
-			printf("debug5\n");
 			printf("Unset variable: %s\n", tokens[i]);
 		}
 		else
 			printf("minishell: unset: %s: not found\n", tokens[i]);
 		i++;
-		printf("debug6\n");
 	}
 }
 

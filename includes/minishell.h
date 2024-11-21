@@ -276,8 +276,7 @@ char			*get_env(char **env, char *var_name);
 
 // export.c
 int				detect_export_call(t_minishell *ms, char **tokens);
-void			export_handling(t_minishell *ms, int i);
-int				count_en_var(char **env, int count);
+void			export_handling(t_minishell *ms, char **tokens, int i);
 void			set_env_var(t_minishell *ms, const char *var_name,
 					const char *value);
 void			print_env(char **env);
@@ -291,9 +290,6 @@ bool			remove_env_var1(t_minishell *ms, int idx);
 void			free_ptr(void *ptr);
 int				env_var_count(char **env);
 
-
-
-
 // commands.c
 int				call_commands(t_minishell *ms);
 int				exec_builtin(t_minishell *ms, char **tokens, int is_child);
@@ -304,8 +300,6 @@ int				exec_builtin2(t_minishell *ms, char **tokens, int is_child);
 
 // exec_redirections.c
 int				exec_redirections(t_minishell *ms, char **tokens,
-					int **protected, t_bool in_pipe);
-int				exec_redirect_heredocs(t_minishell *ms, char **tokens,
 					int **protected, t_bool in_pipe);
 int				redirect(char *tokens, char *file);
 int				redirect_heredocs(t_minishell *ms);
