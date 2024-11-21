@@ -3,17 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 12:01:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 15:26:08 by ccodere          ###   ########.fr       */
-=======
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/02 12:01:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/20 14:20:17 by matislessar      ###   ########.fr       */
->>>>>>> origin/cmd
+/*   Updated: 2024/11/21 16:01:45 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

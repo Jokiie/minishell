@@ -3,17 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 00:19:36 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 14:15:45 by ccodere          ###   ########.fr       */
-=======
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 00:19:36 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/20 16:39:48 by matislessar      ###   ########.fr       */
->>>>>>> origin/cmd
+/*   Updated: 2024/11/21 16:01:38 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

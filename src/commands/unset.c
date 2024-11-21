@@ -3,23 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:28:23 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/21 03:46:25 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/21 16:05:56 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static char	**realloc_env_vars(t_minishell *ms, int size)
+{
+	char	**new_env;
+	int		i;
+
+	new_env = ft_calloc(size + 1, sizeof * new_env);
+	if (!new_env)
+		return (NULL);
+	i = 0;
+	while (ms->env[i] && i < size)
+	{
+		new_env[i] = ft_strdup(ms->env[i]);
+		free_ptr(ms->env[i]);
+		i++;
+	}
+	free(ms->env);
+	return (new_env);
+}
 
 int	detect_unset_call(t_minishell *ms, char **tokens)
 {
 	if (ft_strncmp(tokens[0], "unset\0", 6) == 0)
 	{
 		unset_handling(ms, tokens, 1);
-		return (SUCCESS);
+		ms->ret = SUCCESS;
+		return (ms->ret);
 	}
-	return (CMD_NOT_FOUND);
+	ms->ret = CMD_NOT_FOUND;
+	return (ms->ret);
 }
 void	unset_handling(t_minishell *ms, char **tokens, int i)
 {
@@ -28,9 +49,9 @@ void	unset_handling(t_minishell *ms, char **tokens, int i)
 	while (tokens[i])
 	{
 		env_index = find_env_index(ms->env, tokens[i]);
-		if (env_index <= 0)
+		if (env_index >= 0)
 		{
-			remove_env_var(ms->env, env_index);
+			remove_env_var1(ms, env_index);
 			printf("Unset variable: %s\n", tokens[i]);
 		}
 		else
@@ -46,7 +67,7 @@ int	find_env_index(char **env, const char *var_name)
 
 	i = 0;
 	len = ft_strlen(var_name);
-	while (env[i])
+	while (env && env[i])
 	{
 		if (ft_strncmp(env[i], var_name, len) == 0 && env[i][len] == '=')
 			return (i);
@@ -55,9 +76,44 @@ int	find_env_index(char **env, const char *var_name)
 	return (FAIL);
 }
 
-void	remove_env_var(char **env, int index)
+bool	remove_env_var1(t_minishell *ms, int idx)
 {
-	while(env[index])
-		env[index] = env[index + 1];
-	index++;
+	int	i;
+	int	count;
+
+	if (idx > env_var_count(ms->env))
+		return (false);
+	free_ptr(ms->env[idx]);
+	i = idx;
+	count = idx;
+	while (ms->env[i + 1])
+	{
+		ms->env[i] = ft_strdup(ms->env[i + 1]);
+		free_ptr(ms->env[i + 1]);
+		count++;
+		i++;
+	}
+	ms->env = realloc_env_vars(ms, count);
+	if (!ms->env)
+		return (false);
+	return (true);
+}
+
+int	env_var_count(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env && env[i])
+		i++;
+	return (i);
+}
+
+void	free_ptr(void *ptr)
+{
+	if (ptr != NULL)
+	{
+		free(ptr);
+		ptr = NULL;
+	}
 }

@@ -276,7 +276,6 @@ char			*get_env(char **env, char *var_name);
 // export.c
 int				detect_export_call(t_minishell *ms, char **tokens);
 void			export_handling(t_minishell *ms, char **tokens, int i);
-int				count_en_var(char **env, int count);
 void			set_env_var(t_minishell *ms, const char *var_name,
 					const char *value);
 void			print_env(char **env);
@@ -289,9 +288,6 @@ int				find_env_index(char **env, const char *var_name);
 bool			remove_env_var1(t_minishell *ms, int idx);
 void			free_ptr(void *ptr);
 int				env_var_count(char **env);
-
-
-
 
 // commands.c
 int				call_commands(t_minishell *ms);
@@ -373,5 +369,4 @@ int				redirect_pipes(t_minishell *ms, t_pipes *p, int return_value,
 void			fill_pipes_protected_array(t_minishell *ms, int cmd_start);
 char			**extract_args(char **tokens, int start, int end);
 void			handle_last_cmd(t_minishell *ms, int *i);
-
 #endif

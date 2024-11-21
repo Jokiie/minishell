@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:52:07 by ccodere           #+#    #+#             */
-<<<<<<< HEAD:src/commands/pwd.c
-/*   Updated: 2024/11/21 03:46:21 by ccodere          ###   ########.fr       */
-=======
-/*   Updated: 2024/11/20 16:07:15 by matislessar      ###   ########.fr       */
->>>>>>> origin/cmd:commands/pwd.c
+/*   Updated: 2024/11/21 16:01:56 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
