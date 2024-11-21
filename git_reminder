@@ -55,11 +55,11 @@ git remote -v
 - Pour merge les changement de git
     -git checkout -b "branch" // cree la branch
     -git checkout "branch" // va dans la branch
-    -git init // initialise la branch
+    <!-- -git init // initialise la branch -->
     -git add .
     -git commit -m ""
     -git merge "branch"
-    -git push
+    -git push -u origin "branch"
 
 - Pour merge les changements dune branche a dev :
 

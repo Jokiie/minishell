@@ -6,11 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:09:45 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/15 03:59:03 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/21 03:45:57 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "commands.h"
+#include "../../includes/minishell.h"
 
 int detect_exit_call(t_minishell *ms, char **tokens, int is_child)
 {

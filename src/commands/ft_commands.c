@@ -1,5 +1,5 @@
 
-#include "commands.h"
+#include "../../includes/minishell.h"
 
 /*
 	Create a child process with fork to execute a command in the environment
