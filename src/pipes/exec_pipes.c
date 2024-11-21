@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 00:19:36 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 03:12:46 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/21 14:15:45 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	exect_pipes(t_minishell *ms)
 		i++;
 	}
 	close_pipes(ms);
+	ms->ret = wait_children();
 	return (ms->p.ret);
 }
 
@@ -59,8 +60,9 @@ void	handle_child_process(t_minishell *ms)
 	if (has_type(ms->p.p_args, &ms->p.arg_protected, is_redirect)
 		|| has_type(ms->p.p_args, &ms->p.arg_protected, is_heredoc))
 	{
-		if (exec_redirections(ms, ms->p.p_args, &ms->p.arg_protected, TRUE) != SUCCESS)
-			exit_child(ms, 24);
+		ms->ret = exec_redirections(ms, ms->p.p_args, &ms->p.arg_protected, TRUE);
+		if (ms->ret > 0)	
+			exit_child(ms, ms->ret);
 	}
 	close_pipes(ms);
 	return_value = call_commands_pipes(ms);
@@ -83,7 +85,6 @@ int	create_and_manage_process(t_minishell *ms, pid_t *pid)
 			close(ms->p.pipes[ms->p.cmd_num][1]);
 		if (ms->p.cmd_num > 0)
 			close(ms->p.pipes[ms->p.cmd_num - 1][0]);
-		return_value = wait_children();
 	}
 	return (return_value);
 }

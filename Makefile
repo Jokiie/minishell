@@ -10,10 +10,10 @@ CLE 			=	\e[1;1H\e[2J
 
 NAME			=	minishell
 
-RL_DIR			=	 readline/
+RL_DIR			=	 includes/readline/
 RL_H			=	libhistory.a
 RL_L			=	libreadline.a
-RL				=	$(RL_DIR)$(RL_L) $(RL_DIR)$(RL_H)
+RL				=	$(RL_DIR)$(RL_H) $(RL_DIR)$(RL_L)
 
 # ARCH := $(shell uname -m | sed -e s/i386/x86_64/ -e s/arm.*/arm64/)
 
@@ -119,8 +119,9 @@ $(LIBFT):
 $(RL):
 	(cd $(RL_DIR) && ./configure && $(MAKE))
 
+# -L directory / -l library
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(RL_LIB) -L readline -l readline -l ncurses \
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -L includes/readline -l readline -l ncurses \
 	$(RL) $(LDFLAGS) -o $(NAME)
 
 
@@ -149,15 +150,15 @@ cp:
 
 mem: all
 #	valgrind --leak-check=full --trace-children=yes --track-fds=yes --show-leak-kinds=all --suppressions=/home/ccodere/42cursus/minishell/readline.supp ./minishell
-	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/home/ccodere/42cursus/minishell/readline.supp ./minishell
-#	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=/Users/$(USER)/my_cursus/minishell/readline.supp ./minishell
+#	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/home/ccodere/42cursus/minishell/readline.supp ./minishell
+	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=/Users/$(USER)/my_cursus/minishell/readline.supp ./minishell
 
 norm:
 	norminette src/*.c $(LIBFT_DIR)/*.c commands/*.c lexing/*.c
 
 
 exp:
-	echo export CPPFLAGS="-I/opt/homebrew/opt/readline/include"
-	echo export LDFLAGS="-L/opt/homebrew/opt/readline/lib"
+	export CPPFLAGS="-I/opt/homebrew/opt/readline/include"
+	export LDFLAGS="-L/opt/homebrew/opt/readline/lib"
 
 .PHONY: clean fclean run mc re cp mem norm exp all libft readline rm_readline quick
