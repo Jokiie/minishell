@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 14:56:04 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/21 15:03:42 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	handle_sigquit(void)
 void	reset_prompt(int sig)
 {
 	(void)sig;
-	// rl_replace_line("", 0);
+	rl_replace_line("", 0);
 	rl_on_new_line();
 	write(1, "\n", 1);
 	rl_redisplay();
@@ -52,7 +52,7 @@ void	put_newline(int sig)
 {
 	(void)sig;
 	rl_on_new_line();
-	// rl_replace_line("", 0);
+	rl_replace_line("", 0);
 	write(STDOUT_FILENO, "\n", 1);
 	rl_redisplay();
 }

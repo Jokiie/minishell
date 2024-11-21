@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/21 03:02:06 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/21 13:58:55 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	**allocate_pipes(t_minishell *ms)
 {
 	int	i;
 
-	ms->p.pipes = malloc(sizeof(int *) * ms->p.num_pipes);
+	ms->p.pipes = ft_calloc(ms->p.num_pipes, sizeof(int *));
 	i = 0;
 	while (i < ms->p.num_pipes)
 	{
@@ -62,10 +62,10 @@ void	close_pipes(t_minishell *ms)
 	{
 		close(ms->p.pipes[i][0]);
 		close(ms->p.pipes[i][1]);
-		free(ms->p.pipes[i]);
+		free(ms->p.pipes[i]);		
 		i++;
 	}
-	free(ms->p.pipes);
+	free(ms->p.pipes);	
 }
 
 int	pipes_redirection(t_minishell *ms)
