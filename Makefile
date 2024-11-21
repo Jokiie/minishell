@@ -38,9 +38,6 @@ TMP_PATH = tmp/
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-CMDS_DIR = commands
-CMDS = $(CMDS_DIR)/commands.a
-
 SRC_PIPES = pipes/pipes.c \
 			pipes/pipes_utils.c \
 			pipes/exec_pipes.c

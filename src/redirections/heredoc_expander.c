@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 00:29:35 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/18 23:59:44 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/21 02:13:09 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,13 @@
 
 char	*expand_line(t_minishell *ms, char *line)
 {
-	char	*tmp_line;
+	//char	*tmp_line;
 
 	if (!line)
 		return (NULL);
-	if (ms->heredoc.in_quotes == FALSE && ft_strchr(line, '$'))
-	{
-		tmp_line = expander(ms, line);
-		if (tmp_line)
-		{
-			ft_free(line);
-			line = tmp_line;
-		}
-		else
-			ft_free(line);
-	}
-	return (line);
+	if (ms->heredoc.in_quotes == TRUE)
+		return (ft_strdup(line));
+	return (expander(ms, line));
 }
 
 char	*expander(t_minishell *ms, char *line)

@@ -46,20 +46,3 @@ void	free_at_address(char **str)
 		*str = NULL;
 	}
 }
-
-void	free_tokens(char **tokens)
-{
-	int	i;
-
-	i = 0;
-	if (tokens && *tokens)
-	{
-		while (tokens[i])
-		{
-			ft_free(tokens[i]);
-			i++;
-		}
-		free(tokens);
-		tokens = NULL;
-	}
-}

@@ -4,7 +4,7 @@
 /* init heredocs related data */
 void	init_heredoc_data(t_minishell *ms)
 {
-	ft_bzero(ms->heredoc.fd_name, sizeof(ms->heredoc.fd_name));
+    ms->heredoc.fd_name = NULL;
 	ms->heredoc.delim = NULL;
 	ms->heredoc.count = 0;
 	ms->heredoc.index = 0;
@@ -41,6 +41,7 @@ void	init_minishell(t_minishell *ms)
 	ms->fd.fdout = NULL;
 	ms->fd.saved_stdin = 0;
 	ms->fd.saved_stdout = 0;
+	ms->in_pipe = FALSE;
 	init_heredoc_data(ms);
 }
 
@@ -65,7 +66,7 @@ int	execute_input(t_minishell *ms, char *input)
 		return (SYNTAX_ERROR);
 	else if (ms->tokens && *ms->tokens)
 	{
-		if (has_heredoc(ms, ms->tokens) == TRUE)
+		if (has_heredoc(ms, ms->tokens))
 		{
 			ms->ret = execute_heredocs(ms);
 			if (ms->ret == ERROR || ms->ret == TERM_SIGINT)
@@ -79,6 +80,7 @@ int	execute_input(t_minishell *ms, char *input)
 
 void	execms(t_minishell *ms, char **envp)
 {
+	ms->env = ft_envdup(envp);
 	ms->path = getcwd(NULL, 0);
 	if (!ms->path)
 		exit(EXIT_FAILURE);
@@ -107,17 +109,16 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	*ms;
 
+	(void)argv;
+	if (argc > 1)
+		return (0);
 	ms = (t_minishell *)malloc(sizeof(t_minishell));
 	if (!ms)
 		exit(EXIT_FAILURE);
 	ft_memset(ms, 0, sizeof(ms));
-	(void)argv;
-	if (argc == 1)
-	{
-		init_minishell(ms);
-		init_signals_interactive();
-		execms(ms, envp);
-	}
+	init_minishell(ms);
+	init_signals_interactive();
+	execms(ms, envp);
 	exit_minishell(ms, 0);
 	return (0);
 }

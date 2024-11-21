@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 02:08:33 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/19 06:24:37 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/21 02:08:29 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,34 +19,88 @@
 	interpret '<<', '>>', '<', and '>' as if it were a command or an argument
 	to a command.
 */
-int	exec_redirections(t_minishell *ms)
+int	exec_redirections(t_minishell *ms, char **tokens, int **protected,
+		t_bool in_pipe)
 {
-	static int	i = 0;
-	int			k;
-	int			return_value;
-	int			count;
+	int	return_value;
+	int	count;
+	int	k;
 
+	ms->in_pipe = in_pipe;
 	return_value = 0;
+	ft_fprintf(2, "Before redirection\n");
+	print_debug(tokens);
+	print_protected_array(tokens, protected);
+	ft_fprintf(2, "Heredocs name\n");
+	print_debug(ms->heredoc.fd_name);
+	count = get_filtered_tokc(tokens, protected);
+	ft_fprintf(2, "count = %d\n", count);
 	k = 0;
-	//ft_fprintf(2, "Before redirection\n");
-	//print_debug(ms->tokens);
-	while (ms->tokens[k])
+	while (tokens[k])
 	{
-		if ((is_heredoc(ms->tokens[k]) || is_redirect(ms->tokens[k])) && ms->token.protected[k] == 0)
+		if (is_heredoc(tokens[k]) && (*protected)[k] == 0)
 		{
-			return_value = redirect(ms, return_value, k, &i);
+			return_value = redirect_heredocs(ms);
+			if (return_value != 0)
+				return (return_value);
+			k += 2;
+		}
+		else if (is_redirect(tokens[k]) && (*protected)[k] == 0)
+		{
+			return_value = redirect(tokens[k], tokens[k + 1]);
+			if (return_value != 0)
+				return (return_value);
 			k += 2;
 		}
 		else
 			k++;
-		if (return_value == FAIL || return_value == FAIL)
-			return (ERROR);
 	}
-	count = count_tokens_left(ms);
-	//ft_fprintf(2, "count = %d\n", count);
-	recreate_tokens(ms, count);
-	//ft_fprintf(2, "After redirection\n");
-	//print_debug(ms->tokens);
-	i = 0;
+	if (in_pipe)
+	{
+		ms->p.p_args = recreate_tokens(tokens, protected, count, in_pipe);
+		ft_fprintf(2, "After redirection\n");
+		print_debug(ms->p.p_args);
+		print_protected_array(ms->p.p_args, protected);
+	}
+	else if (!in_pipe)
+	{
+		ms->tokens = recreate_tokens(tokens, protected, count, in_pipe);
+		ft_fprintf(2, "After redirection\n");
+		print_debug(ms->tokens);
+		print_protected_array(ms->tokens, protected);
+	}
+	return (return_value);
+}
+
+int	redirect(char *tokens, char *file)
+{
+	int	return_value;
+
+	return_value = 0;
+	if (is_append(tokens))
+	{
+		return_value = append_output(file);
+	}
+	else if (is_redirect_out(tokens))
+	{
+		return_value = redirect_output(file);
+	}
+	else if (is_redirect_in(tokens))
+	{
+		return_value = redirect_input(file);
+	}
+	return (return_value);
+}
+
+int	redirect_heredocs(t_minishell *ms)
+{
+	int	return_value;
+
+	return_value = 0;
+	ms->heredoc.index = 0;
+	if (!ms->heredoc.fd_name)
+		return (ERROR);
+	return_value = redirect_heredoc(ms->heredoc.fd_name[ms->heredoc.index]);
+	ms->heredoc.index++;
 	return (return_value);
 }
