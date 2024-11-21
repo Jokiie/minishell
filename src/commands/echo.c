@@ -6,11 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 23:25:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/18 02:39:48 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/21 03:50:15 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "commands.h"
+#include "../../includes/minishell.h"
 
 /*
 	Detect if the command is echo, currently work if only the first token

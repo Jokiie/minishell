@@ -6,62 +6,85 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/19 01:47:23 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/21 03:02:06 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	init_pipes(t_pipes *p)
+void	init_exec_pipes(t_minishell *ms, int *i)
 {
-	p->p_args = NULL;
-	p->num_pipes = 0;
-	p->cmd_num = 0;
-	p->pipes = NULL;
-    p->ret = 0;
-    p->last_cmd = FALSE;
-    p->cmd_start = 0;
-	p->arg_protected = NULL;
+	init_pipes(ms);
+	*i = 0;
+	ms->p.cmd_start = *i;
+	ms->p.num_pipes = count_type(ms->tokens, &ms->token.protected, is_pipe);
+	if (ms->p.num_pipes > 0)
+    	ms->p.pipes = allocate_pipes(ms);
 }
 
-int	**allocate_pipes(t_pipes *p)
+void	init_pipes(t_minishell *ms)
+{
+	ms->p.p_args = NULL;
+	ms->p.num_pipes = 0;
+	ms->p.cmd_num = 0;
+	ms->p.pipes = NULL;
+	ms->p.ret = 0;
+	ms->p.last_cmd = FALSE;
+	ms->p.cmd_start = 0;
+	ms->p.arg_protected = NULL;
+}
+
+int	**allocate_pipes(t_minishell *ms)
 {
 	int	i;
 
-	p->pipes = malloc(sizeof(int *) * p->num_pipes);
+	ms->p.pipes = malloc(sizeof(int *) * ms->p.num_pipes);
 	i = 0;
-	while (i < p->num_pipes)
+	while (i < ms->p.num_pipes)
 	{
-		p->pipes[i] = ft_calloc(2, sizeof(int));
-		if (pipe(p->pipes[i]) == -1)
+		ms->p.pipes[i] = ft_calloc(2, sizeof(int));
+		if (pipe(ms->p.pipes[i]) == -1)
 		{
 			perror("minishell: pipe");
 			exit(EXIT_FAILURE);
 		}
 		i++;
 	}
-	return (p->pipes);
+	return (ms->p.pipes);
 }
 
-void	close_pipes(t_pipes *p)
+void	close_pipes(t_minishell *ms)
 {
 	int	i;
 
 	i = 0;
-	while (i < p->num_pipes)
+	while (i < ms->p.num_pipes)
 	{
-		close(p->pipes[i][0]);
-		close(p->pipes[i][1]);
-		free(p->pipes[i]);
+		close(ms->p.pipes[i][0]);
+		close(ms->p.pipes[i][1]);
+		free(ms->p.pipes[i]);
 		i++;
 	}
-	free(p->pipes);
+	free(ms->p.pipes);
 }
 
-void	pipes_redirection(t_pipes *p)
+int	pipes_redirection(t_minishell *ms)
 {
-	if (p->cmd_num > 0)
-		dup2(p->pipes[p->cmd_num - 1][0], STDIN_FILENO);
-	if (p->cmd_num < p->num_pipes)
-		dup2(p->pipes[p->cmd_num][1], STDOUT_FILENO);
+	if (ms->p.cmd_num > 0)
+	{
+		if (dup2(ms->p.pipes[ms->p.cmd_num - 1][0], STDIN_FILENO) == -1)
+		{
+			ft_fprintf(2, "ms: dup2 stdin error: %s\n", strerror(errno));
+			return (FAIL);
+		}
+	}
+	if (ms->p.cmd_num < ms->p.num_pipes)
+	{
+		if (dup2(ms->p.pipes[ms->p.cmd_num][1], STDOUT_FILENO) == -1)
+		{
+			ft_fprintf(2, "ms: dup2 stdout error: %s\n", strerror(errno));
+			return (FAIL);
+		}
+	}
+	return (SUCCESS);
 }

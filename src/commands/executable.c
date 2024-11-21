@@ -6,11 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 22:14:31 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/14 23:11:47 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/21 03:45:52 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "commands.h"
+#include "../../includes/minishell.h"
 
 /*
 	Detect if the command is an executable. If execve is successful, we return

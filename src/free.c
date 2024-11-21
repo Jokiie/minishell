@@ -27,6 +27,7 @@ void	free_at_exit(t_minishell *ms)
 	ft_free(ms->path);
 	free_int_array(&ms->token.protected);
 	free_tokens(ms->env);
+	free_tokens(ms->test);
 }
 
 void	free_int_array(int **arr)
@@ -44,22 +45,5 @@ void	free_at_address(char **str)
 	{
 		free(*str);
 		*str = NULL;
-	}
-}
-
-void	free_tokens(char **tokens)
-{
-	int	i;
-
-	i = 0;
-	if (tokens && *tokens)
-	{
-		while (tokens[i])
-		{
-			ft_free(tokens[i]);
-			i++;
-		}
-		free(tokens);
-		tokens = NULL;
 	}
 }

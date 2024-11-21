@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 12:29:15 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/14 12:29:44 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/21 03:46:14 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "commands.h"
+#include "../../includes/minishell.h"
 
 /*
 	Iterate in the paths returned by ft_strtok to find where is the cmd process

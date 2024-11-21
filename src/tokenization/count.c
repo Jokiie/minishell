@@ -1,34 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc_utils.c                                    :+:      :+:    :+:   */
+/*   count.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/06 22:07:44 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 04:24:09 by ccodere          ###   ########.fr       */
+/*   Created: 2024/11/20 05:27:46 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/20 05:40:46 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	check_delim(t_minishell *ms, int pos)
+int	count_type(char **tokens, int **protected, t_bool (*is_type)(char *))
 {
-	if (!ms->tokens[pos])
-		return ;
-	if (ms->token.protected[pos] == TRUE)
-		ms->heredoc.in_quotes = TRUE;
-	else
-		ms->heredoc.in_quotes = FALSE;
+    int i;
+    int count;
+    
+    i = 0;
+    count = 0;
+    while (tokens[i])
+    {
+        if (is_type(tokens[i]) && (*protected)[i] == 0)
+            count++;
+        i++;
+    }
+    return (count);
 }
 
-t_bool	check_line(char *line, char *delim)
+int	count_tokens(char **tokens)
 {
-	if (!line || ft_strncmp(line, delim, ft_strlen(delim) + 1) == 0)
-	{
-		if (!line)
-			ft_fprintf(2, "ms: warning: here-document delimited by end-of-file (wanted '%s')\n", delim);
-		return (FALSE);
-	}
-	return (TRUE);
+	int	count;
+
+	count = 0;
+	if (!tokens || !*tokens)
+		return (0);
+	while (tokens[count])
+		count++;
+	return (count);
 }
