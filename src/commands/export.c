@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/20 16:06:58 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/21 13:35:22 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int detect_export_call( t_minishell *ms, char **tokens)
 	if (ft_strncmp(tokens[0], "export\0", 7) == 0)
 	{
 		export_handling(ms, 1);
-		// print_env(ms->test);
+		// print_env(ms->env);
 		ms->ret = SUCCESS;
 		return (ms->ret);
 	}
@@ -58,7 +58,7 @@ void	set_env_var(t_minishell *ms, const char *var_name, const char *value)
 	int		index;
 	int		env_count;
 
-	index = find_env_index(ms->test, var_name);
+	index = find_env_index(ms->env, var_name);
 	entry = malloc(ft_strlen(var_name) + ft_strlen(value) + 2);
 	if (!entry)
 		exit(FAIL);
@@ -67,15 +67,15 @@ void	set_env_var(t_minishell *ms, const char *var_name, const char *value)
 	ft_strcat(entry, value);
 	if (index >= 0)
 	{
-		free(ms->test[index]);
-		ms->test[index] = entry;
+		free(ms->env[index]);
+		ms->env[index] = entry;
 	}
 	else
 	{
-		env_count = count_env_var(ms->test, 0);
-		ms->test = realloc_env(ms->test, env_count + 2);
-		ms->test[env_count] = entry;
-		ms->test[env_count + 1] = NULL;
+		env_count = count_env_var(ms->env, 0);
+		ms->env = realloc_env(ms->env, env_count + 2);
+		ms->env[env_count] = entry;
+		ms->env[env_count + 1] = NULL;
 	}
 }
 char **realloc_env(char **env, int new_size)

@@ -6,6 +6,7 @@
 # include <fcntl.h>
 # include <locale.h>
 # include <signal.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <string.h>
 # include <sys/ioctl.h>
@@ -266,9 +267,13 @@ char			**realloc_env(char **env, int new_size);
 
 // unset.c
 int				detect_unset_call(t_minishell *ms, char **tokens);
-void			unset_handling(t_minishell *ms, int i);
+void			unset_handling(t_minishell *ms, char **tokens, int i);
 int				find_env_index(char **env, const char *var_name);
-void			remove_env_var(char **env, int index);
+bool			remove_env_var1(t_minishell *ms, int idx);
+void			free_ptr(void *ptr);
+int				env_var_count(char **env);
+
+
 
 // commands.c
 int				call_commands(t_minishell *ms);
