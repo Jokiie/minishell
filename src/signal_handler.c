@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/20 14:19:58 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/21 14:56:04 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,9 @@ void	put_newline(int sig)
 {
 	(void)sig;
 	rl_on_new_line();
+	// rl_replace_line("", 0);
+	write(STDOUT_FILENO, "\n", 1);
+	rl_redisplay();
 }
 
 void	init_signals_noninteractive(void)

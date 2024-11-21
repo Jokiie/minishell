@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 19:08:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/19 03:42:49 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/19 19:17:32 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,20 @@ t_bool	has_redirect(t_minishell *ms, char **tokens)
 	while (tokens[i])
 	{
 		if (ms->token.protected[i] == 0 && is_redirect(tokens[i]))
+			return (TRUE);
+		i++;
+	}
+	return (FALSE);
+}
+
+t_bool	has_type(char **tokens, int **protected, t_bool (*is_type)(char *))
+{
+	int	i;
+
+	i = 0;
+	while (tokens[i])
+	{
+		if ((*protected)[i] == 0 && is_type(tokens[i]))
 			return (TRUE);
 		i++;
 	}

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_commands.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/21 03:56:53 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/21 03:57:02 by ccodere          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
@@ -10,7 +21,6 @@
 	commands, it will show the wrong message.
 
 	to do:
-	- ft_getenv
 	- ft_setenv
 
 */
@@ -18,7 +28,7 @@ int	call_commands(t_minishell *ms)
 {
 	int	pid;
 
-	if (has_pipe(ms, ms->tokens) == TRUE)
+	if (has_type(ms->tokens, &ms->token.protected, is_pipe))
 	{
 		ms->ret = exect_pipes(ms);
 		return (ms->ret);
@@ -31,10 +41,11 @@ int	call_commands(t_minishell *ms)
 			return (ERROR);
 		else if (pid == 0)
 		{
-			if (has_heredoc(ms, ms->tokens) == TRUE || has_redirect(ms, ms->tokens) == TRUE)
+			if (has_type(ms->tokens, &ms->token.protected, is_heredoc) || has_type(ms->tokens, &ms->token.protected, is_redirect))
 			{
-				if (exec_redirections(ms) != SUCCESS || !ms->tokens)
-					exit_child(ms, 0);
+				ms->ret = exec_redirections(ms, ms->tokens, &ms->token.protected, FALSE);
+				if (ms->ret != 0)
+					exit_child(ms, ms->ret);
 			}
 			if (!ms->tokens || !*ms->tokens)
 				exit_child(ms, 0);	

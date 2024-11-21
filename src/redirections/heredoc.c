@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 12:01:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/20 14:20:17 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/21 14:56:22 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,13 @@ int	execute_heredocs(t_minishell *ms)
 	int	executed;
 
 	executed = 0;
-	count = count_heredoc(ms);
+	count = count_type(ms->tokens, &ms->token.protected, is_heredoc);
+	ft_fprintf(2, "%d heredocs to execute\n", count);
 	ms->heredoc.count = count;
+	ms->heredoc.fd_name = ft_calloc(count + 1, sizeof(char *));
+	if (!ms->heredoc.fd_name)
+		return (ERROR);
+	ms->heredoc.fd_name[count] = NULL;
 	while (executed < count)
 	{
 		ms->ret = exec_heredoc(ms);
@@ -104,15 +109,23 @@ void	fill_heredoc(t_minishell *ms, int fd, char *delim)
 	while (g_heredoc_signal == 0)
 	{
 		init_heredoc_signals();
-		line = readline("> ");
-		if (!line || g_heredoc_signal == 1)
+		line = readline("heredoc> ");
+		if (g_heredoc_signal == 1)
+		{
+			free(line);
 			break ;
+		}
 		init_signals_noninteractive();
 		tmp_line = expand_line(ms, line);
 		if (check_line(tmp_line, delim) == FALSE)
+		{
+			free(line);
+			free(tmp_line);
 			break ;
+		}
 		ft_putendl_fd(tmp_line, fd);
-		ft_free(tmp_line);
+		free(line);
+		free(tmp_line);
 	}
 	if (g_heredoc_signal == 1)
 		ms->ret = 130;
