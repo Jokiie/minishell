@@ -1,3 +1,4 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -5,10 +6,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/21 03:56:53 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 15:28:05 by ccodere          ###   ########.fr       */
+/*   Created: 2024/11/21 15:58:41 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/21 15:58:44 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../includes/minishell.h"
 
@@ -81,7 +83,7 @@ int	ft_execvp(char **tokens, char **envp)
 		if (tokens[k][0] == '/')
 			path = ft_strdup(tokens[k]);
 		else
-			path = get_path(tokens[k]);
+			path = get_path(envp, tokens[k]);
 		if (!path || execve(path, tokens, envp) == FAIL)
 		{
 			ft_free(path);

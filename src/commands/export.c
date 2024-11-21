@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/21 04:01:21 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/21 15:58:22 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,12 @@ void	set_env_var(t_minishell *ms, const char *var_name, const char *value)
 	}
 	else
 	{
-		env_count = count_env_var(ms->test, 0);
-		ms->test = realloc_env(ms->test, env_count + 2);
-		ms->test[env_count] = entry;
-		ms->test[env_count + 1] = NULL;
+		env_count = count_env_var(ms->env, 0);
+		ms->env = realloc_env(ms->env, env_count + 2);
+		ms->env[env_count] = entry;
+		ms->env[env_count + 1] = NULL;
 	}
 }
-
 char **realloc_env(char **env, int new_size)
 {
 	char **new_env;

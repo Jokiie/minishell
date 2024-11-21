@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 12:29:15 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 03:46:14 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/21 15:56:34 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@
 	to do:
 		paths = (should search in ms->env), not with getenv ?
 */
-char	*get_path(char *cmds)
+char	*get_path(char **envp, char *cmds)
 {
 	char	*paths;
 	char	*paths_dup;
 	char	*dir;
 	char	*full_path;
 
-	paths = getenv("PATH");
+	paths = get_env(envp, "PATH");
 	paths_dup = ft_strdup(paths);
 	if (!paths_dup)
 		return (NULL);

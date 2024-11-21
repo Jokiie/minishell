@@ -3,10 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+<<<<<<< HEAD
 /*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
 /*   Updated: 2024/11/21 14:17:45 by ccodere          ###   ########.fr       */
+=======
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/20 14:19:58 by matislessar      ###   ########.fr       */
+>>>>>>> origin/cmd
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +49,7 @@ void	handle_sigquit(void)
 void	reset_prompt(int sig)
 {
 	(void)sig;
-	rl_replace_line("", 0);
+	// rl_replace_line("", 0);
 	rl_on_new_line();
 	write(1, "\n", 1);
 	rl_redisplay();
