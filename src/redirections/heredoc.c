@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 12:01:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 02:16:37 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/21 04:31:54 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void	fill_heredoc(t_minishell *ms, int fd, char *delim)
 	{
 		init_heredoc_signals();
 		line = readline("heredoc> ");
-		if (!line || g_heredoc_signal == 1)
+		if (g_heredoc_signal == 1)
 		{
 			free(line);
 			break ;

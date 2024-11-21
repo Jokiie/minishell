@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/21 03:46:00 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/21 04:01:21 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	set_env_var(t_minishell *ms, const char *var_name, const char *value)
 		ms->test[env_count + 1] = NULL;
 	}
 }
+
 char **realloc_env(char **env, int new_size)
 {
 	char **new_env;
