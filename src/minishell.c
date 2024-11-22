@@ -6,6 +6,8 @@ void	init_heredoc_data(t_minishell *ms)
 {
     ms->heredoc.fd_name = NULL;
 	ms->heredoc.delim = NULL;
+	ms->heredoc.input = NULL;
+	ms->heredoc.line = NULL;
 	ms->heredoc.count = 0;
 	ms->heredoc.index = 0;
 	ms->heredoc.in_quotes = FALSE;
@@ -68,11 +70,16 @@ int	execute_input(t_minishell *ms, char *input)
 	{
 		if (has_heredoc(ms, ms->tokens))
 		{
-			ms->ret = execute_heredocs(ms);
+			ms->ret = process_heredocs(ms);
 			if (ms->ret == ERROR || ms->ret == TERM_SIGINT)
+			{
+				free_tokens(ms->tokens);
 				return (ms->ret);
+			}
 		}
 		ms->ret = call_commands(ms);
+		if (has_heredoc(ms, ms->tokens))
+			reset_heredoc(ms);
 		free_tokens(ms->tokens);
 	}
 	return (ms->ret);
@@ -84,10 +91,9 @@ void	execms(t_minishell *ms, char **envp)
 	ms->path = getcwd(NULL, 0);
 	if (!ms->path)
 		exit(EXIT_FAILURE);
-	setenv("INPUTRC", "./.inputrc", 1);
-	ms->env = ft_envdup(envp);
 	ms->test = ft_envdup(envp);
-	// rl_bind_key('\t', rl_complete);
+	setenv("INPUTRC", "./.inputrc", 1);
+	//set_env_var(ms, "INPUTRC", "./.inputrc");
 	while (1)
 	{
 		ms->prompt_name = get_prompt_name(ms);

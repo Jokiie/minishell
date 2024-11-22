@@ -162,15 +162,16 @@ cp:
 
 mem: all
 #	valgrind --leak-check=full --trace-children=yes --track-fds=yes --show-leak-kinds=all --suppressions=/home/ccodere/42cursus/minishell/readline.supp ./minishell
-#	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/home/ccodere/42cursus/minishell/readline.supp ./minishell
-	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=/Users/$(USER)/my_cursus/minishell/readline.supp ./minishell
+	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/home/ccodere/42cursus/minishell/readline.supp ./minishell
+#	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=/Users/$(USER)/my_cursus/minishell/readline.supp ./minishell
 
 norm:
 	norminette src/*.c $(LIBFT_DIR)/*.c commands/*.c lexing/*.c
 
 
 exp:
-	export CPPFLAGS="-I/opt/homebrew/opt/readline/include"
-	export LDFLAGS="-L/opt/homebrew/opt/readline/lib"
+	@export CPPFLAGS="-I/opt/homebrew/opt/readline/include"; \
+	export LDFLAGS="-L/opt/homebrew/opt/readline/lib"; \
+	export INPUTRC="./.inputrc"; \
 
 .PHONY: clean fclean run mc re cp mem norm exp all libft readline rm_readline quick

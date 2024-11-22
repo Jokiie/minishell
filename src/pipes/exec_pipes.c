@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 00:19:36 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 16:01:38 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/22 02:51:36 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	handle_pipe_cmd(t_minishell *ms, int i, pid_t *pid)
     ms->p.p_args = extract_args(ms->tokens, ms->p.cmd_start, i);
 	if (!ms->p.p_args)
 		return ;
-		
     fill_pipes_protected_array(ms, ms->p.cmd_start);
     ms->p.ret = create_and_manage_process(ms, pid);
 	free(ms->p.p_args);

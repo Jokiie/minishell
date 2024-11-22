@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirections.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 02:08:33 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 15:11:55 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/22 03:54:16 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	exec_redirections(t_minishell *ms, char **tokens, int **protected,
 	int	return_value;
 	int	count;
 	int	k;
+	char	**tmp;
 
 	ms->in_pipe = in_pipe;
 	return_value = 0;
@@ -41,14 +42,14 @@ int	exec_redirections(t_minishell *ms, char **tokens, int **protected,
 		if (is_heredoc(tokens[k]) && (*protected)[k] == 0)
 		{
 			return_value = redirect_heredocs(ms);
-			if (return_value != 0)
+			if (return_value != SUCCESS)
 				return (return_value);
 			k += 2;
 		}
 		else if (is_redirect(tokens[k]) && (*protected)[k] == 0)
 		{
 			return_value = redirect(tokens[k], tokens[k + 1]);
-			if (return_value != 0)
+			if (return_value != SUCCESS)
 				return (return_value);
 			k += 2;
 		}
@@ -57,7 +58,9 @@ int	exec_redirections(t_minishell *ms, char **tokens, int **protected,
 	}
 	if (in_pipe)
 	{
+		tmp = ms->p.p_args;
 		ms->p.p_args = recreate_tokens(tokens, protected, count, in_pipe);
+		free(tmp);
 		//ft_fprintf(2, "After redirection\n");
 		//print_debug(ms->p.p_args);
 		//print_protected_array(ms->p.p_args, protected);
