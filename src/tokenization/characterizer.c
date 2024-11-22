@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/19 00:10:54 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/22 13:51:25 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,12 @@ char	**characterizer(t_minishell *ms, char **tokens)
 		if (characterized)
 		{
 			tokens[k] = characterized;
-			ft_free(tmp);
+			ft_free(tmp);			
 		}
 		else
+		{
 			ft_free(tmp);
+		}
 		k++;
 	}
 	return (tokens);

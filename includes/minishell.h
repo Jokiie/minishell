@@ -270,6 +270,7 @@ int				env(t_minishell *ms, char **tokens);
 // exit.c
 int				detect_exit_call(t_minishell *ms, char **tokens, int is_child);
 int				ft_exit(t_minishell *ms, char **tokens, int is_child);
+t_bool  		is_valid_arg(char *token);
 
 // get_path.c
 char			*get_path(char **envp, char *cmds);

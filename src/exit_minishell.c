@@ -9,7 +9,7 @@ void	exit_minishell(t_minishell *ms, int return_code)
 {
 	int	child_ret;
 
-	ft_printf(BOLD GREEN "ms: Goodbye %s!\n" RESET BOLDRESET, ms->user);
+	//ft_printf(BOLD GREEN "ms: Goodbye %s!\n" RESET BOLDRESET, ms->user);
 	free_at_exit(ms);
 	reset_heredoc(ms);
 	clear_history();

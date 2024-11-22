@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/19 00:11:57 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/22 13:42:50 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,9 @@ char	**transformer(t_minishell *ms)
 	tmp_pretokens = ms->pretokens;
 	ms->tokens = ft_envdup(ms->pretokens);
 	tmp_tokens = ms->tokens;
+	print_debug(ms->tokens);
 	ms->pretokens = characterizer(ms, ms->tokens);
+	print_debug(ms->pretokens);
 	if (!*ms->pretokens[0])
 	{
 		free_tokens(tmp_pretokens);

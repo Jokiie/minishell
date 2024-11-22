@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 00:19:36 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/22 02:51:36 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/22 12:57:35 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	exect_pipes(t_minishell *ms)
 	}
 	close_pipes(ms);
 	ms->ret = wait_children();
-	return (ms->p.ret);
+	return (ms->ret);
 }
 
 void	handle_pipe_cmd(t_minishell *ms, int i, pid_t *pid)

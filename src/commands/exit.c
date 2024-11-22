@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 00:09:45 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 15:59:06 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/22 13:33:44 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,22 +35,35 @@ int   ft_exit(t_minishell *ms, char **tokens, int is_child)
         ft_fprintf(2, "ms: exit: too many arguments\n");
         return (ERROR);
     }
-    if (tokens[1] && !contains_only_digits(tokens[1]))
+    if (tokens[1] && !is_valid_arg(tokens[1]))
     {
         ft_fprintf(2, "ms: exit: %s: numeric argument required\n", tokens[1]);
         return (SYNTAX_ERROR);
     }
-    if (is_child == 1)
-    {
-        if (tokens[1])
-            return_code = ft_atoi(tokens[1]);
-        return (return_code);
-    }
     else
     {
         if (tokens[1])
-             return_code = ft_atoi(tokens[1]);
-        exit_minishell(ms, return_code);
+            return_code = ft_atoi(tokens[1]);
+        if (is_child == 1)
+            return (return_code);
+        else
+            exit_minishell(ms, return_code);
     }
     return (SUCCESS);
+}
+
+t_bool  is_valid_arg(char *token)
+{
+    int i;
+
+    i = 0;
+    if (token[i] == '-' || token[i] == '+')
+        i++;
+    while (token[i])
+    {
+        if (!ft_isdigit(token[i]))
+            return (FALSE);
+        i++;
+    }
+    return (TRUE);
 }

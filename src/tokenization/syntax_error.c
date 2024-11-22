@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 03:19:33 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/19 00:11:47 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/22 13:02:50 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ int error_pipes(char **tokens)
                 ft_fprintf(2, "ms: syntax error near unexpected token '||'\n");
                 return (SYNTAX_ERROR);
             }
-            else if (is_redirect(tokens[k + 1])) // || is_heredoc(tokens[k + 1])
-            {
-                ft_fprintf(2, "ms: syntax error near unexpected token '|'\n");
-                return (SYNTAX_ERROR);
-            }
+            // else if (is_redirect(tokens[k + 1]) && !tokens[k + 2]) // || is_heredoc(tokens[k + 1])
+            // {
+            //     ft_fprintf(2, "ms: syntax error near unexpected token '|'\n");
+            //     return (SYNTAX_ERROR);
+            // }
         }
         k++;
     }

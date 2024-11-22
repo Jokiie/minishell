@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 23:25:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 15:55:06 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/22 13:41:50 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,11 @@ void	echo(t_minishell *ms, char **tokens, int opt)
 		k = 1;
 	else
 		k = 2;
-	if (!tokens[k])
-	{
-		write(STDOUT_FILENO, "\n", 1);
-		return ;
-	}
+	//if (!tokens[k])
+	//{
+	// 	write(STDOUT_FILENO, "\n", 1);
+	// 	return ;
+	// }
 	while (tokens[k])
 	{
 		if (!first_word)

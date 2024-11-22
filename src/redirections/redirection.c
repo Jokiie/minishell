@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:25:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/20 23:39:58 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/22 12:37:03 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ int	redirect_input(char *file)
 	if (fdin < 0)
 	{
 		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
-		return (1);
+		return (ERROR);
 	}
 	if (dup2(fdin, STDIN_FILENO) == -1)
 	{
 		ft_fprintf(2, "ms: dup2 error: %s\n", strerror(errno));
 		close(fdin);
-		return (1);
+		return (ERROR);
 	}
 	close(fdin);
 	return (SUCCESS);
@@ -42,13 +42,13 @@ int	redirect_output(char *file)
 	if (fdout < 0)
 	{
 		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
-		return (2);
+		return (ERROR);
 	}
 	if (dup2(fdout, STDOUT_FILENO) == -1)
 	{
 		ft_fprintf(2, "ms: dup2 error: %s\n", strerror(errno));
 		close(fdout);
-		return (2);
+		return (ERROR);
 	}
 	close(fdout);
 	return (SUCCESS);
@@ -63,13 +63,13 @@ int	append_output(char *file)
 	if (fdout < 0)
 	{
 		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
-		return (3);
+		return (ERROR);
 	}
 	if (dup2(fdout, STDOUT_FILENO) == -1)
 	{
 		ft_fprintf(2, "ms: dup2 error: %s\n", strerror(errno));
 		close(fdout);
-		return (3);
+		return (ERROR);
 	}
 	close(fdout);
 	return (SUCCESS);
@@ -84,13 +84,13 @@ int	redirect_heredoc(char *file)
 	if (fdin < 0)
 	{
 		ft_fprintf(2, "ms: heredoc: %s: %s\n", strerror(errno), file);
-		return (4);
+		return (ERROR);
 	}
 	if (dup2(fdin, STDIN_FILENO) == -1)
 	{
 		ft_fprintf(2, "ms: dup2 error: %s\n", strerror(errno));
 		close(fdin);
-		return (4);
+		return (ERROR);
 	}
 	close(fdin);
 	return (SUCCESS);
