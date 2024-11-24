@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 12:08:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 15:59:36 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/24 03:18:29 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,10 @@ int	cd(char **tokens)
 	return_value = 0;
 	if (!tokens[1] || !*tokens[1])
 	{
-		ft_putstr_fd("ms: cd: need a relative or absolute path\n", 2);
-		return_value = ERROR;
+		if (chdir(getenv("HOME")) != -1)
+			return (return_value);
+		else
+			return (ERROR);
 	}
 	else if (tokens[2])
 	{

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:25:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/22 12:37:03 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/24 09:00:20 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ int	redirect_input(char *file)
 	fdin = open(file, O_RDONLY);
 	if (fdin < 0)
 	{
-		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
+		perror("ms");
 		return (ERROR);
 	}
 	if (dup2(fdin, STDIN_FILENO) == -1)
 	{
-		ft_fprintf(2, "ms: dup2 error: %s\n", strerror(errno));
-		close(fdin);
-		return (ERROR);
+		perror("ms");
+		//close(fdin);
+		//return (ERROR);
 	}
 	close(fdin);
 	return (SUCCESS);
@@ -41,14 +41,14 @@ int	redirect_output(char *file)
 	fdout = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fdout < 0)
 	{
-		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
+		perror("ms");
 		return (ERROR);
 	}
 	if (dup2(fdout, STDOUT_FILENO) == -1)
 	{
-		ft_fprintf(2, "ms: dup2 error: %s\n", strerror(errno));
-		close(fdout);
-		return (ERROR);
+		perror("ms");
+		//close(fdout);
+		//return (ERROR);
 	}
 	close(fdout);
 	return (SUCCESS);
@@ -62,14 +62,14 @@ int	append_output(char *file)
 	fdout = open(file, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (fdout < 0)
 	{
-		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
+		perror("ms");
 		return (ERROR);
 	}
 	if (dup2(fdout, STDOUT_FILENO) == -1)
 	{
-		ft_fprintf(2, "ms: dup2 error: %s\n", strerror(errno));
-		close(fdout);
-		return (ERROR);
+		perror("ms");
+		//close(fdout);
+		//return (ERROR);
 	}
 	close(fdout);
 	return (SUCCESS);
@@ -83,14 +83,14 @@ int	redirect_heredoc(char *file)
 	fdin = open(file, O_RDONLY);
 	if (fdin < 0)
 	{
-		ft_fprintf(2, "ms: heredoc: %s: %s\n", strerror(errno), file);
+		perror("ms");
 		return (ERROR);
 	}
 	if (dup2(fdin, STDIN_FILENO) == -1)
 	{
-		ft_fprintf(2, "ms: dup2 error: %s\n", strerror(errno));
-		close(fdin);
-		return (ERROR);
+		perror("ms");
+		//close(fdin);
+		//return (ERROR);
 	}
 	close(fdin);
 	return (SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/22 13:42:50 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/24 03:10:46 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,12 @@ int	tokens_creator(t_minishell *ms, char *line)
 		return (SYNTAX_ERROR);
 	}
 	tokenizer(ms, line);
+	if (!ms->pretokens)
+	{
+		ms->pretokens = NULL;
+		ms->tokens = NULL;
+		return (SUCCESS);
+	}
 	ms->tokens = transformer(ms);
 	if (ms->tokens && check_syntax(ms->tokens) == SYNTAX_ERROR)
 	{
@@ -36,52 +42,61 @@ int	tokens_creator(t_minishell *ms, char *line)
 
 char	**transformer(t_minishell *ms)
 {
-	char	**tmp_pretokens;
-	char	**tmp_tokens;
+	char **tmp;
+	char **final_tokens;
+	
+	ms->characterized = characterizer(ms, ms->pretokens);
 
-	if (!ms->pretokens && !*ms->pretokens)
+	free_tokens(ms->pretokens);
+	
+	if (!ms->characterized)
 		return (NULL);
-	fill_protected_arr(ms);
-	ms->tokc = count_tokens(ms->pretokens);
-	tmp_pretokens = ms->pretokens;
-	ms->tokens = ft_envdup(ms->pretokens);
-	tmp_tokens = ms->tokens;
-	print_debug(ms->tokens);
-	ms->pretokens = characterizer(ms, ms->tokens);
-	print_debug(ms->pretokens);
-	if (!*ms->pretokens[0])
+
+	tmp = cleaner(ms->characterized);
+	free_tokens(ms->characterized);
+	
+	ms->pretokens = tmp;
+	if (!ms->pretokens)
+		return (NULL);
+		
+	fill_protected_arr(ms, ms->pretokens);
+	final_tokens = trimmer(ms, ms->pretokens);
+	free_tokens(ms->pretokens);
+	
+	if (!final_tokens || !*final_tokens)
 	{
-		free_tokens(tmp_pretokens);
-		free_tokens(tmp_tokens);
-		ms->pretokens = NULL;
+		free_tokens(final_tokens);
 		return (NULL);
 	}
-	ms->tokens = trimmer(ms, ms->pretokens);
-	free_tokens(tmp_pretokens);
-	if (!*ms->tokens[0] && !ms->token.protected[0])
-		return (NULL);
-	return (ms->tokens);
+	ms->tokc = count_tokens(final_tokens);
+	return (final_tokens);
 }
 
-void	fill_protected_arr(t_minishell *ms)
+void	fill_protected_arr(t_minishell *ms, char **tokens)
 {
 	int k;
 	int i;
+	int count;
 
 	i = 0;
 	k = 0;
-	while (ms->pretokens[k])
-		k++;
-	ms->token.protected = malloc(sizeof(int) * k);
+	if (!tokens)
+		return ;
+	count = count_tokens(tokens);
+	ms->token.protected = ft_calloc(count + 1, sizeof(int));
 	if (!ms->token.protected)
 		return ;
 	k = 0;
-	while (ms->pretokens[k])
+	while (tokens[k] && k < count)
 	{
-		if (has_quotes(ms->pretokens[k]))
+		if (has_quotes(tokens[k]))
+		{
 			ms->token.protected[i] = 1;
+		}
 		else
+		{
 			ms->token.protected[i] = 0;
+		}
 		k++;
 		i++;
 	}

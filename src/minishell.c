@@ -16,9 +16,6 @@ void	init_heredoc_data(t_minishell *ms)
 /* init the minishell struct variables */
 void	init_minishell(t_minishell *ms)
 {
-	ms->test = NULL;
-	ms->p_input = NULL;
-	ms->cmd_path = NULL;
 	ms->input = NULL;
 	ms->prompt_name = NULL;
 	ms->user = NULL;
@@ -27,10 +24,8 @@ void	init_minishell(t_minishell *ms)
 	ms->env = NULL;
 	ms->tokens = NULL;
 	ms->pretokens = NULL;
+	ms->characterized = NULL;
 	ms->tokc = 0;
-	ms->std_in = 0;
-	ms->std_out = 1;
-	ms->std_err = 2;
 	ms->ret = 0;
 	ms->path = NULL;
 	ms->interactive = TRUE;
@@ -73,14 +68,14 @@ int	execute_input(t_minishell *ms, char *input)
 			ms->ret = process_heredocs(ms);
 			if (ms->ret == ERROR || ms->ret == TERM_SIGINT)
 			{
-				free_tokens(ms->tokens);
+				free_tokens_address(&ms->tokens);
 				return (ms->ret);
 			}
 		}
 		ms->ret = call_commands(ms);
 		if (has_heredoc(ms, ms->tokens))
 			reset_heredoc(ms);
-		free_tokens(ms->tokens);
+		free_tokens_address(&ms->tokens);
 	}
 	return (ms->ret);
 }
@@ -91,7 +86,7 @@ void	execms(t_minishell *ms, char **envp)
 	ms->path = getcwd(NULL, 0);
 	if (!ms->path)
 		exit(EXIT_FAILURE);
-	ms->test = ft_envdup(envp);
+	//ms->test = ft_envdup(envp);
 	setenv("INPUTRC", "./.inputrc", 1);
 	//set_env_var(ms, "INPUTRC", "./.inputrc");
 	while (1)

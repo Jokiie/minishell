@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/22 13:51:25 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/23 05:20:28 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,30 @@
 */
 char	**characterizer(t_minishell *ms, char **tokens)
 {
-	char	*characterized;
+	char	**characterized;
 	char	*tmp;
+	int		count;
 	int		k;
+	int		i;
 
 	k = 0;
-	while (tokens[k] && k < ms->tokc)
+	i = 0;
+	if (!tokens || !*tokens)
+		return (NULL);
+	count = count_tokens(tokens);
+	characterized = ft_calloc(count + 1, sizeof(char *));
+	if (!characterized)
+    {
+        free(tokens);
+        return (NULL);
+    }
+	while (tokens[k] && k < count)
 	{
 		tmp = tokens[k];
-		characterized = characterize_token(ms, tokens[k], 0);
+		characterized[i] = characterize_token(ms, tokens[k], 0);
 		if (characterized)
 		{
-			tokens[k] = characterized;
-			ft_free(tmp);			
+			i++;
 		}
 		else
 		{
@@ -41,7 +52,13 @@ char	**characterizer(t_minishell *ms, char **tokens)
 		}
 		k++;
 	}
-	return (tokens);
+	if (!characterized[0])
+	{
+		free(characterized);
+		return (NULL);
+	}
+	characterized[i] = NULL;
+	return (characterized);
 }
 
 char	*characterize_token(t_minishell *ms, char *token, int i)

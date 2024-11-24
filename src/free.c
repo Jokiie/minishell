@@ -20,12 +20,12 @@ void	ft_free(void *ptr)
 
 void	free_at_exit(t_minishell *ms)
 {
-	ft_free(ms->prompt_name);
-	ft_free(ms->input);
-	ft_free(ms->cwd);
-	ft_free(ms->path);
+	free_at_address(&ms->prompt_name);
+	free_at_address(&ms->input);
+	free_at_address(&ms->cwd);
+	free_at_address(&ms->path);
 	free_int_array(&ms->token.protected);
-	free_tokens(ms->env);
+	free_tokens_address(&ms->env);
 }
 
 void	free_int_array(int **arr)

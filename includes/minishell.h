@@ -36,7 +36,7 @@
 # define BOLD "\033[1m"
 # define BOLDRESET "\033[0m"
 
-# define MB_SIZE 2097152
+# define MAX_ARGS 10000
 # define SIZE_CHAR_PTR sizeof(char *)
 
 # define MAX_PATH 4096
@@ -84,8 +84,6 @@ typedef struct s_pipes
 
 typedef struct s_minishell
 {
-	char		*cmd_path;
-	char		**p_input;
 	char		*input;
 	char		*prompt_name;
 	char		*user;
@@ -93,15 +91,10 @@ typedef struct s_minishell
 	char		*prev_cwd;
 	char		**history;
 	char		**env;
-
-	char		**test;
-
 	char		**tokens;
 	char		**pretokens;
+	char		**characterized;
 	int			tokc;
-	int			std_in;
-	int			std_out;
-	int			std_err;
 	int			ret;
 	char		*path;
 	t_token		token;
@@ -136,7 +129,7 @@ int				wait_children(void);
 
 // exit_minishell.c
 void			exit_minishell(t_minishell *ms, int return_code);
-void			exit_child(t_minishell *ms, int return_code);
+void			exit_child(t_minishell *ms, int return_code, t_bool in_pipe);
 
 // free.c
 void			free_data(t_minishell *ms);
@@ -172,12 +165,13 @@ void			print_protected_array(char **tokens, int **protected);
 // tokens_creator.c
 int				tokens_creator(t_minishell *ms, char *line);
 char			**transformer(t_minishell *ms);
-void			fill_protected_arr(t_minishell *ms);
+void			fill_protected_arr(t_minishell *ms, char **tokens);
 
 // tokenizer.c
 int				separe_line(t_minishell *ms, char *line, int i, int *k);
 char			**tokenizer(t_minishell *ms, char *line);
 char			*meta_chars_extractor(char *line, int *i);
+int				count_words(char const *line);
 
 // quotes_detector.c
 int				ft_quotes_detector(t_minishell *ms, char *line, int i);
@@ -201,6 +195,12 @@ char			*single_var_extractor(char *token, int *i);
 // trimmer.c
 char			**trimmer(t_minishell *ms, char **tokens);
 char			*ft_toktrim(t_minishell *ms, char *token, int len);
+
+// cleaner.c
+
+char			**cleaner(char **tokens);
+t_bool    		has_empty_token(char **tokens);
+int				count_valid_tokens(char **tokens);
 
 // has_meta.c
 t_bool			has_redirect(t_minishell *ms, char **tokens);

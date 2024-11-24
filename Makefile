@@ -73,6 +73,7 @@ SRC_TOK = tokenization/tokens_creator.c \
 		  tokenization/var_expansion.c \
 		  tokenization/nbr_expansion.c \
 		  tokenization/quotes_detector.c \
+		  tokenization/cleaner.c \
 		  tokenization/has_one_meta.c \
 		  tokenization/has_meta.c \
 		  tokenization/is_one_meta.c \
@@ -161,9 +162,12 @@ cp:
 	cp supp.txt /tmp
 
 mem: all
-#	valgrind --leak-check=full --trace-children=yes --track-fds=yes --show-leak-kinds=all --suppressions=/home/ccodere/42cursus/minishell/readline.supp ./minishell
-	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/home/ccodere/42cursus/minishell/readline.supp ./minishell
-#	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=/Users/$(USER)/my_cursus/minishell/readline.supp ./minishell
+#	valgrind --leak-check=full --trace-children=yes --track-fds=yes --show-leak-kinds=all --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
+	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
+#	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=/Users/$(USER)/my_cursus/minishell/1readline.supp ./minishell
+
+fullmem: all
+	valgrind --leak-check=full --trace-children=yes --track-fds=yes --show-leak-kinds=all --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
 
 norm:
 	norminette src/*.c $(LIBFT_DIR)/*.c commands/*.c lexing/*.c

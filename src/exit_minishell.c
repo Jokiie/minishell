@@ -19,11 +19,15 @@ void	exit_minishell(t_minishell *ms, int return_code)
 	exit(return_code);
 }
 
-void	exit_child(t_minishell *ms, int return_code)
+void	exit_child(t_minishell *ms, int return_code, t_bool in_pipe)
 {
-	// if (has_type(ms->tokens, &ms->token.protected, is_pipe))
-	// 	close_pipes(ms);
 	free_at_exit(ms);
+	if (in_pipe)
+	{
+		free_tokens_address(&ms->p.p_args);
+		free_int_array(&ms->p.arg_protected);
+		close_pipes(ms);
+	}
 	exit(return_code);
 }
 
@@ -55,10 +59,10 @@ int	wait_children(void)
 		wait_pid = waitpid(-1, &status, 0);
 		last_status = status;
 	}
-	if (WIFSIGNALED(last_status))
-	{
+	if (WIFSIGNALED(last_status) && WTERMSIG(last_status) == SIGPIPE)
+		return (0);
+	else if (WIFSIGNALED(last_status))
 		status = 128 + WTERMSIG(last_status);
-	}
 	else if (WIFEXITED(last_status) && !WIFSIGNALED(last_status))
 		status = WEXITSTATUS(last_status);
 	else

@@ -6,25 +6,26 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/19 00:11:53 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/23 12:35:12 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/* MB_SIZE / PTR_SIZE = 2097152 / 8 (max args on Linux env) */
 char	**tokenizer(t_minishell *ms, char *line)
 {
 	int	i;
 	int	k;
-
+	int	count;
+	
 	k = 0;
 	if (!line)
 	{
 		ms->pretokens = NULL;
 		return (NULL);
 	}
-	ms->pretokens = (char **)malloc(MB_SIZE / sizeof(char *));
+	count = count_words(line);
+	ms->pretokens = ft_calloc((count * 10), sizeof(char *));
 	if (!ms->pretokens)
 		return (NULL);
 	i = 0;
@@ -88,4 +89,27 @@ char	*meta_chars_extractor(char *line, int *i)
 	if (!substr)
 		return (NULL);
 	return (substr);
+}
+
+int	count_words(char const *line)
+{
+	int		count;
+	int		i;
+
+	i = 0;
+	count = 0;
+	if (!line[i])
+		return (1);
+	while (line[i])
+	{
+		while (ft_isspace(line[i]))
+			i++;
+		if (line[i])
+		{
+			count++;
+			while (line[i] && !ft_isspace(line[i]))
+				i++;
+		}
+	}
+	return (count);
 }

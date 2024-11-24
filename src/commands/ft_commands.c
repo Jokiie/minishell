@@ -47,17 +47,17 @@ int	call_commands(t_minishell *ms)
 			{
 				ms->ret = exec_redirections(ms, ms->tokens, &ms->token.protected, FALSE);
 				if (ms->ret != 0)
-					exit_child(ms, ms->ret);
+					exit_child(ms, ms->ret, FALSE);
 			}
 			if (!ms->tokens || !*ms->tokens)
-				exit_child(ms, 0);	
-			ms->ret = detect_executable(ms, ms->tokens);
-			if (ms->ret == EXE_NOT_FOUND)
-				ms->ret = exec_builtin2(ms, ms->tokens, 1);
+				exit_child(ms, 0, FALSE);	
+			ms->ret = exec_builtin2(ms, ms->tokens, 1);
 			if (ms->ret == CMD_NOT_FOUND)
+				ms->ret = detect_executable(ms, ms->tokens);
+			if (ms->ret == EXE_NOT_FOUND)
 				ms->ret = ft_execvp(ms->tokens, ms->env);
 			
-			exit_child(ms, ms->ret);
+			exit_child(ms, ms->ret, FALSE);
 		}
 		ms->ret = wait_children();
 	}

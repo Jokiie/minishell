@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/21 15:58:22 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/23 12:30:46 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	set_env_var(t_minishell *ms, const char *var_name, const char *value)
 	int		index;
 	int		env_count;
 
-	index = find_env_index(ms->test, var_name);
+	index = find_env_index(ms->env, var_name);
 	entry = malloc(ft_strlen(var_name) + ft_strlen(value) + 2);
 	if (!entry)
 		exit(FAIL);
@@ -64,8 +64,8 @@ void	set_env_var(t_minishell *ms, const char *var_name, const char *value)
 	ft_strcat(entry, value);
 	if (index >= 0)
 	{
-		free(ms->test[index]);
-		ms->test[index] = entry;
+		free(ms->env[index]);
+		ms->env[index] = entry;
 	}
 	else
 	{

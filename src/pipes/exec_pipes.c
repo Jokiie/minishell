@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 00:19:36 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/22 12:57:35 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/24 08:56:50 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ int	exect_pipes(t_minishell *ms)
 {
 	pid_t	pid;
 	int		i;
+	int		ret;
 
+	ret = 0;
 	init_exec_pipes(ms, &i);
 	while (ms->tokens[i])
 	{
@@ -31,8 +33,8 @@ int	exect_pipes(t_minishell *ms)
 		i++;
 	}
 	close_pipes(ms);
-	ms->ret = wait_children();
-	return (ms->ret);
+	ret = wait_children();
+	return (ret);
 }
 
 void	handle_pipe_cmd(t_minishell *ms, int i, pid_t *pid)
@@ -51,21 +53,21 @@ void	handle_pipe_cmd(t_minishell *ms, int i, pid_t *pid)
 
 void	handle_child_process(t_minishell *ms)
 {
-	int	return_value;
+	int	ret;
 
-	return_value = 0;
+	ret = 0;
 	if (pipes_redirection(ms) != SUCCESS)
-		exit_child(ms, 42);
+		exit_child(ms, ret, TRUE);
 	if (has_type(ms->p.p_args, &ms->p.arg_protected, is_redirect)
 		|| has_type(ms->p.p_args, &ms->p.arg_protected, is_heredoc))
 	{
-		ms->ret = exec_redirections(ms, ms->p.p_args, &ms->p.arg_protected, TRUE);
-		if (ms->ret > 0)	
-			exit_child(ms, ms->ret);
+		ret = exec_redirections(ms, ms->p.p_args, &ms->p.arg_protected, TRUE);
+		if (ret > 0)	
+			exit_child(ms, ret, TRUE);
+		close_pipes(ms);
 	}
-	close_pipes(ms);
-	return_value = call_commands_pipes(ms);
-	exit_child(ms, return_value);
+	ret = call_commands_pipes(ms);
+	exit_child(ms, ret, TRUE);
 }
 
 int	create_and_manage_process(t_minishell *ms, pid_t *pid)
@@ -75,7 +77,7 @@ int	create_and_manage_process(t_minishell *ms, pid_t *pid)
 	return_value = 0;
 	*pid = fork();
 	if (*pid == -1)
-		return(FAIL);
+		return (FAIL);
 	else if (*pid == 0)
 		handle_child_process(ms);
 	else
@@ -90,16 +92,15 @@ int	create_and_manage_process(t_minishell *ms, pid_t *pid)
 
 int	call_commands_pipes(t_minishell *ms)
 {
-	int return_value;
+	int ret;
 
-	return_value = 0;
+	ret = 0;
 	if (!ms->p.p_args || !ms->p.p_args[0])
-		exit_child(ms, 0);
-	return_value = detect_executable(ms, ms->p.p_args);
-	if (return_value == EXE_NOT_FOUND)
-		return_value = exec_builtin2(ms, ms->p.p_args, 1);
-	if (return_value == CMD_NOT_FOUND)
-		return_value = ft_execvp(ms->p.p_args, ms->env);
-	exit_child(ms, return_value);
-	return (return_value);
+		exit_child(ms, ret, TRUE);
+	ret = exec_builtin2(ms, ms->p.p_args, 1);
+	if (ret == CMD_NOT_FOUND)
+		ret = detect_executable(ms, ms->p.p_args);
+	if (ret == EXE_NOT_FOUND)
+		ret = ft_execvp(ms->p.p_args, ms->env);
+	return (ret);
 }

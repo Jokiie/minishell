@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executable.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 22:14:31 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 15:59:14 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/24 03:35:24 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	detect_executable(t_minishell *ms, char **tokens)
 		}
 		if (execve(tokens[0], tokens, ms->env) != FAIL)
 			return (SUCCESS);
-		return (check_error_executable(tokens[0]));
+		return(check_error_executable(tokens[0]));
 	}
 	return (EXE_NOT_FOUND);
 }

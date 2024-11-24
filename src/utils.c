@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/20 05:45:52 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/23 13:02:04 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ char	**ft_envdup(char **envp)
 	if (!envp && !*envp)
 		return (NULL);
 	size = count_tokens(envp);
-	env_dup = (char **)malloc(sizeof(char *) * (size + 1));
+	env_dup = ft_calloc(sizeof(char *) , (size + 1));
 	if (!env_dup)
 		return (NULL);
 	i = 0;
 	j = 0;
-	while (envp[i] && j < (size + 1))
+	while (envp[i] && j < size)
 		env_dup[j++] = ft_strdup(envp[i++]);
 	env_dup[j] = NULL;
 	return (env_dup);

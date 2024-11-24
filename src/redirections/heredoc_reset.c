@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 22:04:16 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/22 01:44:10 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/24 05:59:05 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	unlink_heredocs(t_minishell *ms)
 
 void	clear_heredoc_names(t_minishell *ms)
 {
-	if (!ms->heredoc.fd_name || !*ms->heredoc.fd_name)
+	if (!ms->heredoc.fd_name)
 		return ;
 	free_tokens(ms->heredoc.fd_name);
 	ms->heredoc.fd_name = NULL;
@@ -44,6 +44,6 @@ void	clear_heredoc_names(t_minishell *ms)
 
 void	free_tmp_data(t_minishell *ms)
 {
-	ft_free(ms->heredoc.line);
-	ft_free(ms->heredoc.input);
+	free_at_address(&ms->heredoc.line);
+	free_at_address(&ms->heredoc.input);
 }

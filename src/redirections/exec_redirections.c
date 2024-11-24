@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 02:08:33 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/22 12:52:02 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/24 06:36:12 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,7 @@ int	exec_redirections(t_minishell *ms, char **tokens, int **protected,
 
 	ms->in_pipe = in_pipe;
 	return_value = 0;
-	//ft_fprintf(2, "Before redirection\n");
-	//print_debug(tokens);
-	//print_protected_array(tokens, protected);
-	//ft_fprintf(2, "Heredocs name\n");
-	//print_debug(ms->heredoc.fd_name);
 	count = get_filtered_tokc(tokens, protected);
-	//ft_fprintf(2, "count = %d\n", count);
 	k = 0;
 	while (tokens[k])
 	{
@@ -60,17 +54,17 @@ int	exec_redirections(t_minishell *ms, char **tokens, int **protected,
 	{
 		tmp = ms->p.p_args;
 		ms->p.p_args = recreate_tokens(tokens, protected, count, in_pipe);
-		free(tmp);
-		//ft_fprintf(2, "After redirection\n");
-		//print_debug(ms->p.p_args);
-		//print_protected_array(ms->p.p_args, protected);
+		if (!ms->p.p_args)
+			ms->p.p_args = NULL;
+		free_tokens(tmp);
 	}
 	else if (!in_pipe)
 	{
+		tmp = ms->tokens;
 		ms->tokens = recreate_tokens(tokens, protected, count, in_pipe);
-		//ft_fprintf(2, "After redirection\n");
-		//print_debug(ms->tokens);
-		//print_protected_array(ms->tokens, protected);
+		if (!ms->tokens)
+			ms->tokens = NULL;
+		free_tokens(tmp);
 	}
 	return (return_value);
 }
