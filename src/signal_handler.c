@@ -3,10 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+<<<<<<< HEAD
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
 /*   Updated: 2024/11/24 09:35:22 by ccodere          ###   ########.fr       */
+=======
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/21 15:03:42 by matislessar      ###   ########.fr       */
+>>>>>>> origin/cmd
 /*                                                                            */
 /* ************************************************************************** */
 

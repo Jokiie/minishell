@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_redirections.c                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 02:08:33 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/24 10:32:54 by ccodere          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/minishell.h"
 
 /*
@@ -17,7 +5,7 @@
 	created	without the redirections characters, allowing the command to be
 	executed. Before this, the command couldn't execute because it attempted to
 	interpret '<<', '>>', '<', and '>' as if it were a command or an argument
-	to a command.
+	to a command. Return 0 if successful or 1 for failure.
 */
 int	exec_redirections(t_minishell *ms, char **tokens, int **protected,
 		t_bool in_pipe)

@@ -11,7 +11,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../../includes/minishell.h"
 
 /*
@@ -21,10 +20,6 @@
 	because if the token is not executable, it have a special message and
 	if we returned CMD_NOT_FOUND(127), and checkit like for built-in
 	commands, it will show the wrong message.
-
-	to do:
-	- ft_setenv
-
 */
 int	call_commands(t_minishell *ms)
 {
@@ -127,6 +122,12 @@ int	exec_builtin(t_minishell *ms, char **tokens, int is_child)
 	return (return_value);
 }
 
+
+/*
+	Built-in command executed in the child process to avoid using "env", "cd", or "echo" 
+	as part of the path search, and use the environment built-in. This also prevents error
+	messages when a built-in command is not found in the specified paths.
+*/
 int	exec_builtin2(t_minishell *ms, char **tokens, int is_child)
 {
 	int	return_value;

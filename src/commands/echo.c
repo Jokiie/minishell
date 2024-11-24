@@ -1,25 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/05 23:25:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/24 10:11:39 by ccodere          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/minishell.h"
 
 /*
-	Detect if the command is echo, currently work if only the first token
-	is echo. If the echo call is detected, call echo. Return 0 is successful,
+	Detect if the command is echo, If the echo call is detected, call echo. Return 0 is successful,
 	and CMD_NOT_FOUND(127) is the call is not detected.
-	to do :
-	- should work later if a pipe preceed it.
-		as for the example : ls | echo done
-		which should print 'done' and not the result of ls.
 */
 int	detect_echo_call(t_minishell *ms, char **tokens)
 {
