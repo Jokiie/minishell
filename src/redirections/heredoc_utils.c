@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 22:07:44 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/22 02:55:30 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/24 09:35:34 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_bool	line_is_null(char *line, char *delim)
 {
 	if (!line)
 	{
-		ft_fprintf(2, "ms: warning: here-document delimited by end-of-file (wanted '%s')\n", delim);
+		ft_fprintf(2, "\nms: warning: here-document delimited by end-of-file (wanted '%s')\n", delim);
 		return (TRUE);
 	}
 	return (FALSE);

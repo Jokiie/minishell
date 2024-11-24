@@ -34,10 +34,6 @@ void	init_minishell(t_minishell *ms)
 	ms->token.in_dquotes = FALSE;
 	ms->token.in_squotes = FALSE;
 	ms->token.protected = NULL;
-	ms->fd.fdin = NULL;
-	ms->fd.fdout = NULL;
-	ms->fd.saved_stdin = 0;
-	ms->fd.saved_stdout = 0;
 	ms->in_pipe = FALSE;
 	init_heredoc_data(ms);
 }

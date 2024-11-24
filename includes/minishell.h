@@ -62,14 +62,6 @@ typedef struct s_heredoc
 	t_bool		in_quotes;
 }				t_heredoc;
 
-typedef struct s_fd
-{
-	char		*fdin;
-	char		*fdout;
-	int			saved_stdin;
-	int			saved_stdout;
-}				t_fd;
-
 typedef struct s_pipes
 {
 	char		**p_args;
@@ -99,7 +91,6 @@ typedef struct s_minishell
 	char		*path;
 	t_token		token;
 	t_heredoc	heredoc;
-	t_fd		fd;
 	t_bool		interactive;
 	t_bool		in_pipe;
 	t_pipes		p;
@@ -297,8 +288,9 @@ int				env_var_count(char **env);
 
 // commands.c
 int				call_commands(t_minishell *ms);
-int				exec_builtin(t_minishell *ms, char **tokens, int is_child);
+void			handle_one_child_process(t_minishell *ms);
 int				ft_execvp(char **tokens, char **envp);
+int				exec_builtin(t_minishell *ms, char **tokens, int is_child);
 int				exec_builtin2(t_minishell *ms, char **tokens, int is_child);
 
 /* redirections*/

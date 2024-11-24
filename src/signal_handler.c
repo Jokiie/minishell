@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/24 07:52:49 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/24 09:35:22 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,6 @@ void	put_newline(int sig)
 {
 	(void)sig;
 	rl_on_new_line();
-	rl_replace_line("", 0);
-	write(1, "\n", 1);
-	rl_redisplay();
 }
 
 void	init_signals_noninteractive(void)
