@@ -14,12 +14,17 @@
 #include "../../includes/minishell.h"
 
 /*
-	Create a child process with fork to execute a command in the environment
-	path variable. wait_children wait the children processes to finish and
-	save their return value. We check if forked_builtin_cmds return ERROR
-	because if the token is not executable, it have a special message and
-	if we returned CMD_NOT_FOUND(127), and checkit like for built-in
-	commands, it will show the wrong message.
+	First check if the tokens contains a pipe, if so, exec_pipes handle the
+	executions and return immediatly the result of the last child. If there
+	is no pipe, we create a child process with fork and search in the builtin 
+	again, which will have echo this time, so echo we have the updated tokens
+	after the redirections. If the command is not found, we check if it's an
+	executable, if yes we execute it or print the appropriate message. If the
+	function return EXE_NOT_FOUND, we search in the environment paths. If the 
+	command is found, execute it and return SUCCESS, otherwise, return the value
+	returned by check_error. Then, we wait the children processes to finish and
+	save their return value. Finally, we return this value so we can use it for 
+	$? and our arrow in our prompt name.
 */
 int	call_commands(t_minishell *ms)
 {
@@ -63,9 +68,6 @@ int	call_commands(t_minishell *ms)
 	Execute a command in the path returned by get_path.
 	If path is accessible, we execute it and return SUCCESS(0), else, we free
 	the path and return the error code returned by check error.
-	to do:
-	- Verify if all errors return the correct value and add the errors missing
-		if applicable
 */
 int	ft_execvp(char **tokens, char **envp)
 {
