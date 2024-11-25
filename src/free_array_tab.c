@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 13:57:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/20 13:58:19 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 04:38:57 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,9 @@ void	free_tokens_address(char ***tokens)
 {
 	int	i;
 
-	i = 0;
-	if (!tokens || !*tokens)
-		return ;
-	if (tokens)
+	if (tokens && *tokens)
 	{
+		i = 0;
 		while ((*tokens)[i])
 		{
 			ft_free((*tokens)[i]);
@@ -34,11 +32,13 @@ void	free_tokens_address(char ***tokens)
 void	free_tokens(char **tokens)
 {
 	int	i;
+	int	count;
 
 	i = 0;
 	if (tokens && *tokens)
 	{
-		while (tokens[i])
+		count = count_tokens(tokens);
+		while (tokens[i] && i < (count))
 		{
 			ft_free(tokens[i]);
 			i++;

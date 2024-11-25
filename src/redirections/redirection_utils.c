@@ -6,49 +6,67 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 01:52:01 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 03:06:39 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 06:01:09 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	**recreate_tokens(char **tokens, int **protected, int count, t_bool in_pipe)
+void	remake_tokens(t_minishell *ms, char **tokens, int **quoted,
+		t_bool in_pipe)
+{
+	char	**tmp;
+	int		count;
+
+	count = get_filtered_tokc(tokens, quoted);
+	if (in_pipe)
+	{
+		tmp = ms->p.p_args;
+		ms->p.p_args = recreate_tokens(tokens, quoted, count, 0);
+		if (!ms->p.p_args)
+			ms->p.p_args = NULL;
+		free_tokens(tmp);
+	}
+	else if (!in_pipe)
+	{
+		tmp = ms->tokens;
+		ms->tokens = recreate_tokens(tokens, quoted, count, 0);
+		if (!ms->tokens)
+			ms->tokens = NULL;
+		free_tokens(tmp);
+	}
+}
+
+char	**recreate_tokens(char **tok, int **arr, int count, int i)
 {
 	char	**new_tokens;
-	int		*new_protected;
-	int		i;
+	int		*new_quoted;
 	int		j;
-	
-	(void)in_pipe;
-    new_protected = malloc(sizeof(int) * (count + 1));
-    if (!new_protected)
-	    return (NULL);
-	new_tokens = (char **)malloc(sizeof(char *) * (count + 1));
+
+	new_tokens = ft_calloc((count + 1), sizeof(char *));
 	if (!new_tokens)
 		return (NULL);
+	new_quoted = ft_calloc((count + 1), sizeof(int));
+	if (!new_quoted)
+		return (NULL);
 	j = 0;
-	i = 0;
-	while (tokens[i] && j < count)
+	while (tok[i] && j < count)
 	{
-		while ((is_redirect(tokens[i]) || is_heredoc(tokens[i])) && (*protected)[i] == 0)
-		{
+		while ((is_redirect(tok[i]) || is_heredoc(tok[i])) && (*arr)[i] == 0)
 			i += 2;
-		}
-		if (!tokens[i])
+		if (!tok[i])
 			break ;
-		new_tokens[j] = ft_strdup(tokens[i]);
-		new_protected[j] = (*protected)[i];
+		new_tokens[j] = ft_strdup(tok[i]);
+		new_quoted[j] = (*arr)[i];
 		j++;
 		i++;
 	}
-	new_tokens[j] = NULL;
-	new_protected[j] = '\0';
-	free(*protected);
-	*protected = new_protected;
+	free(*arr);
+	*arr = new_quoted;
 	return (new_tokens);
 }
 
-int	get_filtered_tokc(char **tokens, int **protected)
+int	get_filtered_tokc(char **tokens, int **quoted)
 {
 	int	count;
 	int	i;
@@ -57,35 +75,12 @@ int	get_filtered_tokc(char **tokens, int **protected)
 	count = count_tokens(tokens);
 	while (tokens[i])
 	{
-		if ((is_redirect(tokens[i]) || is_heredoc(tokens[i])) && (*protected)[i] == 0)
+		if ((is_redirect(tokens[i]) || is_heredoc(tokens[i]))
+			&& (*quoted)[i] == 0)
 		{
 			count = count - 2;
 		}
 		i++;
 	}
-	if (count == 0)
-		return (0);
 	return (count);
-}
-
-int	cat_heredoc(char *file)
-{
-	int		fd;
-	char	*line;
-	
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-	{
-		ft_fprintf(2, "ms: %s: %s\n", strerror(errno), file);
-		return (FAIL);
-	}
-	line = get_next_line(fd);
-	while (line)
-	{
-		ft_putstr_fd(line, STDOUT_FILENO);
-		free(line);
-		line = get_next_line(fd);
-	}
-	close(fd);
-	return (SUCCESS);	
 }

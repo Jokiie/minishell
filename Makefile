@@ -67,12 +67,14 @@ SRC_CMDS = commands/cd.c \
 		   commands/unset.c \
 
 SRC_TOK = tokenization/tokens_creator.c \
-		  tokenization/characterizer.c \
+		  tokenization/expander.c \
 		  tokenization/tokenizer.c \
 		  tokenization/trimmer.c \
 		  tokenization/var_expansion.c \
 		  tokenization/nbr_expansion.c \
 		  tokenization/quotes_detector.c \
+		  tokenization/cleaner.c \
+		  tokenization/is.c \
 		  tokenization/has_one_meta.c \
 		  tokenization/has_meta.c \
 		  tokenization/is_one_meta.c \
@@ -95,7 +97,6 @@ SRC	=		minishell.c \
 			free.c \
 			free_array_tab.c \
 			utils.c \
-			is.c \
 			signal_handler.c \
 			error.c \
 			prompt_name.c \
@@ -161,16 +162,20 @@ cp:
 	cp supp.txt /tmp
 
 mem: all
-#	valgrind --leak-check=full --trace-children=yes --track-fds=yes --show-leak-kinds=all --suppressions=/home/ccodere/42cursus/minishell/readline.supp ./minishell
-#	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/home/ccodere/42cursus/minishell/readline.supp ./minishell
-	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=/Users/$(USER)/my_cursus/minishell/readline.supp ./minishell
+#	valgrind --leak-check=full --trace-children=yes --track-fds=yes --show-leak-kinds=all --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
+	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
+#	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=/Users/$(USER)/my_cursus/minishell/1readline.supp ./minishell
+
+fullmem: all
+	valgrind --leak-check=full --trace-children=yes --track-fds=yes --show-leak-kinds=all --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
 
 norm:
-	norminette src/*.c $(LIBFT_DIR)/*.c commands/*.c lexing/*.c
+	norminette src/*.c src/tokenization/*.c src/commands/*.c src/redirections/*.c src/pipes/*.c
 
 
 exp:
-	export CPPFLAGS="-I/opt/homebrew/opt/readline/include"
-	export LDFLAGS="-L/opt/homebrew/opt/readline/lib"
+	@export CPPFLAGS="-I/opt/homebrew/opt/readline/include"; \
+	export LDFLAGS="-L/opt/homebrew/opt/readline/lib"; \
+	export INPUTRC="./.inputrc"; \
 
 .PHONY: clean fclean run mc re cp mem norm exp all libft readline rm_readline quick

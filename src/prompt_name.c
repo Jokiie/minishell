@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   prompt_name.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/25 05:35:20 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/25 05:35:22 by ccodere          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
@@ -41,8 +52,9 @@ char	*get_prompt_name(t_minishell *ms)
 
 char	**get_cwdsplit(t_minishell *ms)
 {
-	char	**splitted = NULL;
+	char	**splitted;
 
+	splitted = NULL;
 	ms->cwd = getcwd(NULL, 0);
 	if (!ms->cwd)
 		ms->cwd = ft_strdup("/deleted_dir");
@@ -54,7 +66,7 @@ char	**get_cwdsplit(t_minishell *ms)
 char	*get_arrow_color(t_minishell *ms, char *cwd_dup)
 {
 	char	*arrow_color;
-	
+
 	arrow_color = NULL;
 	if (ms->ret == 0)
 		arrow_color = ft_strjoin(cwd_dup, GREEN " ➜  " RESET BOLDRESET);

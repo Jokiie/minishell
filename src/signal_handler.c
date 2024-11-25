@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 01:21:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 15:03:42 by matislessar      ###   ########.fr       */
+/*   Created: 2024/11/25 05:35:57 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/25 05:36:00 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,12 @@ void	put_newline(int sig)
 {
 	(void)sig;
 	rl_on_new_line();
-	rl_replace_line("", 0);
-	write(STDOUT_FILENO, "\n", 1);
-	rl_redisplay();
 }
 
 void	init_signals_noninteractive(void)
 {
 	struct sigaction	sa;
-	
+
 	ft_memset(&sa, 0, sizeof(sa));
 	sa.sa_handler = &put_newline;
 	sigaction(SIGQUIT, &sa, NULL);

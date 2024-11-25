@@ -3,23 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/05 23:25:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 14:53:11 by matislessar      ###   ########.fr       */
+/*   Created: 2024/11/25 06:41:24 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/25 06:41:31 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-	Detect if the command is echo, currently work if only the first token
-	is echo. If the echo call is detected, call echo. Return 0 is successful,
-	and CMD_NOT_FOUND(127) is the call is not detected.
-	to do :
-	- should work later if a pipe preceed it.
-		as for the example : ls | echo done
-		which should print 'done' and not the result of ls.
+	Detect if the command is echo, If the echo call is detected, call echo.
+	Return 0 is successful, and CMD_NOT_FOUND(127) is the call is not detected.
 */
 int	detect_echo_call(t_minishell *ms, char **tokens)
 {
@@ -48,11 +43,6 @@ void	echo(t_minishell *ms, char **tokens, int opt)
 		k = 1;
 	else
 		k = 2;
-	if (!tokens[k])
-	{
-		write(STDOUT_FILENO, "\n", 1);
-		return ;
-	}
 	while (tokens[k])
 	{
 		if (!first_word)

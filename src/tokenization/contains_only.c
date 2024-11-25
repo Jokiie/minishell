@@ -6,13 +6,13 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 01:59:12 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/20 14:54:02 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 03:04:32 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-t_bool  contains_only_digits(char *line)
+t_bool	contains_only_digits(char *line)
 {
 	int	i;
 
@@ -40,7 +40,8 @@ t_bool	contains_only_spaces(char *line)
 	return (TRUE);
 }
 
-t_bool	contains_only_type(char **tokens, int **protected, t_bool (*is_type)(char *))
+t_bool	contains_only_type(char **tokens, int **protected,
+		t_bool (*is_type)(char *))
 {
 	int	i;
 
@@ -49,8 +50,7 @@ t_bool	contains_only_type(char **tokens, int **protected, t_bool (*is_type)(char
 	{
 		if ((*protected)[i] == 0 && !is_type(tokens[i]))
 			return (FALSE);
-		i+=2;
+		i += 2;
 	}
 	return (TRUE);
 }
-

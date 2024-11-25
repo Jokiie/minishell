@@ -1,29 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_env.c                                          :+:      :+:    :+:   */
+/*   is.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/20 14:22:49 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/25 13:51:40 by matislessar      ###   ########.fr       */
+/*   Created: 2024/11/25 06:47:09 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/25 06:47:12 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*get_env(char **env, char *var_name)
+int	ft_is_dquote(int c)
 {
-	int		i;
-	size_t	len;
+	return (c == '\"');
+}
 
-	i = 0;
-	len = ft_strlen(var_name);
-	while (env[i])
-	{
-		if (ft_strncmp(env[i], var_name, len) == 0 && env[i][len] == '=')
-			return (env[i] + len + 1);
-		i++;
-	}
-	return (NULL);
+int	ft_is_squote(int c)
+{
+	return (c == '\'');
+}
+
+int	ft_isquotes(int c)
+{
+	return (ft_is_dquote(c) || ft_is_squote(c));
+}
+
+int	ft_ismeta_chars(int c)
+{
+	return (c == '<' || c == '>' || c == '|');
 }

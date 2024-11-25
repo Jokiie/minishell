@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executable.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/13 22:14:31 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 14:53:20 by matislessar      ###   ########.fr       */
+/*   Created: 2024/11/25 06:40:13 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/25 06:40:31 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	detect_executable(t_minishell *ms, char **tokens)
 
 int	check_error_executable(char *executable)
 {
-	int return_value;
+	int	return_value;
 
 	return_value = 0;
 	if (errno == EACCES)

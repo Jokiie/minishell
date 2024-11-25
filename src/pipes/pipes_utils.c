@@ -6,28 +6,28 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 00:18:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 02:53:47 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 06:06:09 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	fill_pipes_protected_array(t_minishell *ms, int i)
+void	fill_pipes_quoted_arr(t_minishell *ms, int i)
 {
 	int	j;
 	int	count;
 
 	j = 0;
 	count = count_tokens(ms->p.p_args);
-	ms->p.arg_protected = malloc(sizeof(int) * (count + 1));
-	if (!ms->p.arg_protected)
+	ms->p.arg_quoted = ft_calloc(count + 1, sizeof(int));
+	if (!ms->p.arg_quoted)
 		return ;
 	while (ms->p.p_args[j])
 	{
-		if (ms->token.protected[i] == 1)
-			ms->p.arg_protected[j] = 1;
+		if (ms->token.quoted[i] == 1)
+			ms->p.arg_quoted[j] = 1;
 		else
-			ms->p.arg_protected[j] = 0;
+			ms->p.arg_quoted[j] = 0;
 		j++;
 		i++;
 	}

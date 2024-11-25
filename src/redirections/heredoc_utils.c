@@ -6,29 +6,65 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 22:07:44 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 04:24:09 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 06:17:44 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	check_delim(t_minishell *ms, int pos)
+char	*create_heredoc_name(t_minishell *ms)
 {
-	if (!ms->tokens[pos])
-		return ;
-	if (ms->token.protected[pos] == TRUE)
-		ms->heredoc.in_quotes = TRUE;
-	else
-		ms->heredoc.in_quotes = FALSE;
+	char	*name;
+	char	*num;
+	char	*full_path;
+	int		count;
+
+	count = update_heredoc_number(FALSE);
+	num = ft_itoa(count);
+	full_path = ft_strjoin(ms->path, "/tmp/heredoc");
+	name = ft_strjoin(full_path, num);
+	free(full_path);
+	free(num);
+	return (name);
 }
 
-t_bool	check_line(char *line, char *delim)
+void	check_quotes_delim(t_minishell *ms, int index)
 {
-	if (!line || ft_strncmp(line, delim, ft_strlen(delim) + 1) == 0)
+	if (ms->token.quoted[index] == 1)
 	{
-		if (!line)
-			ft_fprintf(2, "ms: warning: here-document delimited by end-of-file (wanted '%s')\n", delim);
-		return (FALSE);
+		ms->heredoc.in_quotes = TRUE;
 	}
-	return (TRUE);
+	else
+	{
+		ms->heredoc.in_quotes = FALSE;
+	}
+}
+
+t_bool	break_check(char *line, char *delim)
+{
+	if (line_is_null(line, delim) == TRUE || is_delim(line, delim) == TRUE)
+	{
+		return (TRUE);
+	}
+	return (FALSE);
+}
+
+t_bool	line_is_null(char *line, char *delim)
+{
+	if (!line)
+	{
+		ft_putstr_fd("ms: warning: here-document delimited by end-of-file ", 2);
+		ft_fprintf(2, "(wanted '%s')\n", delim);
+		return (TRUE);
+	}
+	return (FALSE);
+}
+
+t_bool	is_delim(char *line, char *delim)
+{
+	if (ft_strncmp(line, delim, ft_strlen(delim)) == 0)
+	{
+		return (TRUE);
+	}
+	return (FALSE);
 }

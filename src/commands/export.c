@@ -6,22 +6,20 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/22 15:34:16 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/25 13:51:25 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int detect_export_call( t_minishell *ms, char **tokens)
+int detect_export_call(t_minishell *ms, char **tokens)
 {
 	if (ft_strncmp(tokens[0], "export\0", 7) == 0)
 	{
 		export_handling(ms, tokens, 1);
-		ms->ret = SUCCESS;
-		return (ms->ret);
+		return (SUCCESS);
 	}
-	ms->ret = CMD_NOT_FOUND;
-	return (ms->ret);
+	return (CMD_NOT_FOUND);
 }
 
 void	export_handling(t_minishell *ms, char **tokens, int i)
@@ -36,10 +34,10 @@ void	export_handling(t_minishell *ms, char **tokens, int i)
 		if (var_name && value)
 		{
 			set_env_var(ms, var_name, value);
-			printf("Set variable: %s=%s\n", var_name, value);
+			//printf("Set variable: %s=%s\n", var_name, value);
 		}
 		else
-			printf("minishell: export: %s: not found\n", tokens[i]);
+			//printf("minishell: export: %s: not found\n", tokens[i]);
 		i++;
 	}
 }
@@ -68,6 +66,7 @@ void	set_env_var(t_minishell *ms, const char *var_name, const char *value)
 		ms->env[env_count + 1] = NULL;
 	}
 }
+
 char **realloc_env(char **env, int new_size)
 {
 	char **new_env;

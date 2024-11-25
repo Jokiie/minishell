@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/19 00:12:00 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 04:18:34 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,28 @@
 
 char	**trimmer(t_minishell *ms, char **tokens)
 {
-	char	*trimmed;
-	char	*tmp;
+	char	**trimmed;
+	int		count;
 	int		k;
+	int		i;
 
 	k = 0;
-	if (!tokens || !*tokens)
+	i = 0;
+	if (!tokens)
 		return (NULL);
-	while (tokens[k] && k < ms->tokc)
+	count = count_tokens(tokens);
+	trimmed = ft_calloc(count + 1, sizeof(char *));
+	if (!trimmed)
+		return (NULL);
+	while (tokens[k] && k < count)
 	{
-		tmp = tokens[k];
-		trimmed = ft_toktrim(ms, tokens[k], ft_strlen(tokens[k]));
-		if (trimmed)
-		{
-			tokens[k] = trimmed;
-			ft_free(tmp);
-		}
-		else
-			ft_free(tmp);
+		trimmed[i] = ft_toktrim(ms, tokens[k], ft_strlen(tokens[k]));
+		if (trimmed[i])
+			i++;
 		k++;
 	}
-	return (tokens);
+	trimmed[i] = NULL;
+	return (trimmed);
 }
 
 char	*ft_toktrim(t_minishell *ms, char *token, int len)
@@ -43,24 +44,21 @@ char	*ft_toktrim(t_minishell *ms, char *token, int len)
 	int		i;
 	int		j;
 
-	if (!token)
-		return (NULL);
-	buffer = malloc(sizeof(char) * (len + 1));
-	if (!buffer)
-		return (NULL);
 	i = 0;
 	j = 0;
-	while (i < len && j < len)
+	if (!token)
+		return (NULL);
+	buffer = ft_calloc((len + 1), sizeof(char));
+	if (!buffer)
+		return (NULL);
+	while (token[i] && i < len)
 	{
-		ft_quotes_detector(ms, token, i);
+		quotes_detector(ms, token, i);
 		if ((i < len) && ((ft_is_squote(token[i]) && !ms->token.in_dquotes)
 				|| (ft_is_dquote(token[i]) && !ms->token.in_squotes)))
 			i++;
 		else
-		{
-			if (i < len)
-				buffer[j++] = token[i++];
-		}
+			buffer[j++] = token[i++];
 	}
 	buffer[j] = '\0';
 	return (buffer);

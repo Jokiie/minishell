@@ -3,104 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirections.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 02:08:33 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 15:08:44 by matislessar      ###   ########.fr       */
+/*   Created: 2024/11/25 01:42:06 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/25 06:15:28 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-	Execute the adequate function for each redirection. A new list of tokens is
-	created	without the redirections characters, allowing the command to be
-	executed. Before this, the command couldn't execute because it attempted to
-	interpret '<<', '>>', '<', and '>' as if it were a command or an argument
-	to a command.
+	Iter in each token and execute the adequate function for each redirection.
+	A new list of tokens is created	without the redirections characters,
+	allowing the command to be executed. Before this, the command couldn't be
+	executed because it attempted to interpret '<<', '>>', '<', and '>' as if
+	it were a command or an argument to a command. Return 0 if successful or 1
+	for failure.
 */
-int	exec_redirections(t_minishell *ms, char **tokens, int **protected,
+int	exec_redirections(t_minishell *ms, char **tokens, int **quoted,
 		t_bool in_pipe)
 {
-	int	return_value;
-	int	count;
 	int	k;
 
-	ms->in_pipe = in_pipe;
-	return_value = 0;
-	//ft_fprintf(2, "Before redirection\n");
-	//print_debug(tokens);
-	//print_protected_array(tokens, protected);
-	//ft_fprintf(2, "Heredocs name\n");
-	//print_debug(ms->heredoc.fd_name);
-	count = get_filtered_tokc(tokens, protected);
-	//ft_fprintf(2, "count = %d\n", count);
 	k = 0;
 	while (tokens[k])
 	{
-		if (is_heredoc(tokens[k]) && (*protected)[k] == 0)
+		if (is_heredoc(tokens[k]) && (*quoted)[k] == 0)
 		{
-			return_value = redirect_heredocs(ms);
-			if (return_value != 0)
-				return (return_value);
+			if (redirect_heredocs(ms) != SUCCESS)
+				return (ERROR);
 			k += 2;
 		}
-		else if (is_redirect(tokens[k]) && (*protected)[k] == 0)
+		else if (is_redirect(tokens[k]) && (*quoted)[k] == 0)
 		{
-			return_value = redirect(tokens[k], tokens[k + 1]);
-			if (return_value != 0)
-				return (return_value);
+			if (redirect(tokens[k], tokens[k + 1]))
+				return (ERROR);
 			k += 2;
 		}
 		else
 			k++;
 	}
-	if (in_pipe)
-	{
-		ms->p.p_args = recreate_tokens(tokens, protected, count, in_pipe);
-		//ft_fprintf(2, "After redirection\n");
-		//print_debug(ms->p.p_args);
-		//print_protected_array(ms->p.p_args, protected);
-	}
-	else if (!in_pipe)
-	{
-		ms->tokens = recreate_tokens(tokens, protected, count, in_pipe);
-		//ft_fprintf(2, "After redirection\n");
-		//print_debug(ms->tokens);
-		//print_protected_array(ms->tokens, protected);
-	}
-	return (return_value);
+	remake_tokens(ms, tokens, quoted, in_pipe);
+	return (SUCCESS);
 }
 
 int	redirect(char *tokens, char *file)
 {
-	int	return_value;
+	int	ret;
 
-	return_value = 0;
+	ret = 0;
 	if (is_append(tokens))
-	{
-		return_value = append_output(file);
-	}
+		ret = append_output(file);
 	else if (is_redirect_out(tokens))
-	{
-		return_value = redirect_output(file);
-	}
+		ret = redirect_output(file);
 	else if (is_redirect_in(tokens))
-	{
-		return_value = redirect_input(file);
-	}
-	return (return_value);
-}
-
-int	redirect_heredocs(t_minishell *ms)
-{
-	int	return_value;
-
-	return_value = 0;
-	ms->heredoc.index = 0;
-	if (!ms->heredoc.fd_name)
-		return (ERROR);
-	return_value = redirect_heredoc(ms->heredoc.fd_name[ms->heredoc.index]);
-	ms->heredoc.index++;
-	return (return_value);
+		ret = redirect_input(file);
+	return (ret);
 }
