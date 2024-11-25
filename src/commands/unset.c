@@ -40,10 +40,10 @@ void	unset_handling(t_minishell *ms, char **tokens, int i)
 		if (env_index >= 0)
 		{
 			remove_env_var1(ms, env_index);
-			printf("Unset variable: %s\n", tokens[i]);
+			//printf("Unset variable: %s\n", tokens[i]);
 		}
 		else
-			printf("minishell: unset: %s: not found\n", tokens[i]);
+			//printf("minishell: unset: %s: not found\n", tokens[i]);
 		i++;
 	}
 }

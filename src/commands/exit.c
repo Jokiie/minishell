@@ -1,57 +1,69 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/25 04:36:52 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/25 04:37:00 by ccodere          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-int detect_exit_call(t_minishell *ms, char **tokens, int is_child)
+int	detect_exit_call(t_minishell *ms, char **tokens, int is_child)
 {
-    int return_value;
+	int	return_value;
 
-    return_value = 0;
-    if (ft_strncmp(tokens[0], "exit\0", 5) == 0)
-    {    
-        return_value = ft_exit(ms, tokens, is_child);
-        return (return_value);
-    }    
-    return (CMD_NOT_FOUND); 
+	return_value = 0;
+	if (ft_strncmp(tokens[0], "exit\0", 5) == 0)
+	{
+		return_value = ft_exit(ms, tokens, is_child);
+		return (return_value);
+	}
+	return (CMD_NOT_FOUND);
 }
 
-int   ft_exit(t_minishell *ms, char **tokens, int is_child)
+int	ft_exit(t_minishell *ms, char **tokens, int is_child)
 {
-    int return_code;
+	int	return_code;
 
-    return_code = 0;
-    if (tokens[1] && tokens[2])
-    {
-        ft_fprintf(2, "ms: exit: too many arguments\n");
-        return (ERROR);
-    }
-    if (tokens[1] && !is_valid_arg(tokens[1]))
-    {
-        ft_fprintf(2, "ms: exit: %s: numeric argument required\n", tokens[1]);
-        return (SYNTAX_ERROR);
-    }
-    else
-    {
-        if (tokens[1])
-            return_code = ft_atoi(tokens[1]);
-        if (is_child == 1)
-            return (return_code);
-        else
-            exit_minishell(ms, return_code);
-    }
-    return (SUCCESS);
+	return_code = 0;
+	if (tokens[1] && tokens[2])
+	{
+		ft_fprintf(2, "ms: exit: too many arguments\n");
+		return (ERROR);
+	}
+	if (tokens[1] && !is_valid_arg(tokens[1]))
+	{
+		ft_fprintf(2, "ms: exit: %s: numeric argument required\n", tokens[1]);
+		return (SYNTAX_ERROR);
+	}
+	else
+	{
+		if (tokens[1])
+			return_code = ft_atoi(tokens[1]);
+		if (is_child == 1)
+			return (return_code);
+		else
+			exit_minishell(ms, return_code);
+	}
+	return (SUCCESS);
 }
 
-t_bool  is_valid_arg(char *token)
+t_bool	is_valid_arg(char *token)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    if (token[i] == '-' || token[i] == '+')
-        i++;
-    while (token[i])
-    {
-        if (!ft_isdigit(token[i]))
-            return (FALSE);
-        i++;
-    }
-    return (TRUE);
+	i = 0;
+	if (token[i] == '-' || token[i] == '+')
+		i++;
+	while (token[i])
+	{
+		if (!ft_isdigit(token[i]))
+			return (FALSE);
+		i++;
+	}
+	return (TRUE);
 }

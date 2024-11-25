@@ -1,40 +1,47 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   ft_commands.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/21 15:58:41 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 15:58:44 by ccodere          ###   ########.fr       */
+/*   Created: 2024/11/25 06:23:54 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/25 07:09:13 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-	First check if the tokens contains a pipe, if so, exec_pipes handle the
-	executions and return immediatly the result of the last child. If there
-	is no pipe, we create a child process with fork and search in the builtin 
-	again, which will have echo this time, so echo we have the updated tokens
-	after the redirections. If the command is not found, we check if it's an
-	executable, if yes we execute it or print the appropriate message. If the
-	function return EXE_NOT_FOUND, we search in the environment paths. If the 
-	command is found, execute it and return SUCCESS, otherwise, return the value
-	returned by check_error. Then, we wait the children processes to finish and
-	save their return value. Finally, we return this value so we can use it for 
-	$? and our arrow in our prompt name.
+	5-	If the tokens contains no pipes, we execute the simple command in a
+		sub-shell. Both pipes and simple command proceed like the following:
+
+		5.1-	We check if the command exist in our built-in(except echo)
+				if the command exist, execute it and return SUCCESS or ERROR
+
+		5.2-	If not found in our built-in, We create a fork in handle_child()
+				and check if the tokens contains redirections or heredocs
+				characters. If yes, we iter in the tokens and redirect the
+				output/input depending of the meta characters. Then we recreate
+				the tokens without these characters and argument(files).
+
+		5.3-	We recheck the built-in to be sure we don't call the command in
+				the system environment and include echo this time, so echo can
+				print the tokens without the redirections or heredocs.
+
+		5.4-	If we didn't find the command in our built-in, we check if it's
+				an executable. If yes, we execute path directly with exerve.
+
+		5.5- 	If not, we finally search the command in the environment path,
+				and	execute it if found, otherwise we return the exit code from
+				check_error.
+
+		5.6 - We finally return the exit code of the child and return in execms.
 */
 int	call_commands(t_minishell *ms)
 {
 	int	pid;
 
-	if (has_type(ms->tokens, &ms->token.protected, is_pipe))
-	{
-		ms->ret = exect_pipes(ms);
-		return (ms->ret);
-	}
 	ms->ret = exec_builtin(ms, ms->tokens, 0);
 	if (ms->ret == CMD_NOT_FOUND)
 	{
@@ -43,25 +50,29 @@ int	call_commands(t_minishell *ms)
 			return (ERROR);
 		else if (pid == 0)
 		{
-			if (has_type(ms->tokens, &ms->token.protected, is_heredoc) || has_type(ms->tokens, &ms->token.protected, is_redirect))
-			{
-				ms->ret = exec_redirections(ms, ms->tokens, &ms->token.protected, FALSE);
-				if (ms->ret != 0)
-					exit_child(ms, ms->ret, FALSE);
-			}
-			if (!ms->tokens || !*ms->tokens)
-				exit_child(ms, 0, FALSE);	
-			ms->ret = exec_builtin2(ms, ms->tokens, 1);
-			if (ms->ret == CMD_NOT_FOUND)
-				ms->ret = detect_executable(ms, ms->tokens);
-			if (ms->ret == EXE_NOT_FOUND)
-				ms->ret = ft_execvp(ms->tokens, ms->env);
-			
-			exit_child(ms, ms->ret, FALSE);
+			handle_child(ms);
 		}
 		ms->ret = wait_children();
 	}
 	return (ms->ret);
+}
+
+void	handle_child(t_minishell *ms)
+{
+	if (has_type(ms->tokens, &ms->token.quoted, is_heredoc)
+		|| has_type(ms->tokens, &ms->token.quoted, is_redirect))
+	{
+		if (exec_redirections(ms, ms->tokens, &ms->token.quoted, FALSE) != 0)
+			exit_child(ms, ERROR, FALSE);
+	}
+	if (!ms->tokens || !*ms->tokens)
+		exit_child(ms, 0, FALSE);
+	ms->ret = exec_builtin2(ms, ms->tokens, 1);
+	if (ms->ret == CMD_NOT_FOUND)
+		ms->ret = detect_executable(ms, ms->tokens);
+	if (ms->ret == EXE_NOT_FOUND)
+		ms->ret = ft_execvp(ms->tokens, ms->env);
+	exit_child(ms, ms->ret, FALSE);
 }
 
 /*
@@ -99,54 +110,54 @@ int	ft_execvp(char **tokens, char **envp)
 	tell the program to search in paths.
 
 	to do:
-	- add unset without option
-	- add export without option
 	- rework pwd to display the same pwd in the environment variables
-		and need to work (not crash minishell) when we deleted the current directory
+	  and need to rework (not crash minishell) when we deleted the current
+	  directory
 	- rework cd (need to update the pwd and old pwd in the environment variables)
 */
 int	exec_builtin(t_minishell *ms, char **tokens, int is_child)
 {
-	int	return_value;
+	int	ret;
 
-	return_value = 0;
-	return_value = detect_exit_call(ms, tokens, is_child);
-	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_cd_call(tokens);
-	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_pwd_call(ms, tokens);
-	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_env_call(ms, tokens);
-	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_export_call(ms, tokens);
-	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_unset_call(ms, tokens);
-	return (return_value);
+	ret = 0;
+	ret = detect_exit_call(ms, tokens, is_child);
+	if (ret == CMD_NOT_FOUND)
+		ret = detect_cd_call(ms, tokens);
+	if (ret == CMD_NOT_FOUND)
+		ret = detect_pwd_call(ms, tokens);
+	if (ret == CMD_NOT_FOUND)
+		ret = detect_env_call(ms, tokens);
+	if (ret == CMD_NOT_FOUND)
+		ret = detect_export_call(ms, tokens);
+	if (ret == CMD_NOT_FOUND)
+		ret = detect_unset_call(ms, tokens);
+	return (ret);
 }
 
-
 /*
-	Built-in command executed in the child process to avoid using "env", "cd", or "echo" 
-	as part of the path search, and use the environment built-in. This also prevents error
+	Built-in commands executed in the child process to avoid using "env", "cd",
+		or "echo"
+	as part of the path search,
+		and use the environment built-in. This also prevents error
 	messages when a built-in command is not found in the specified paths.
 */
 int	exec_builtin2(t_minishell *ms, char **tokens, int is_child)
 {
-	int	return_value;
+	int	ret;
 
-	return_value = 0;
-	return_value = detect_exit_call(ms, tokens, is_child);
-	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_cd_call(tokens);
-	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_pwd_call(ms, tokens);
-	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_env_call(ms, tokens);
-	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_echo_call(ms, tokens);
-	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_export_call(ms, tokens);
-	if (return_value == CMD_NOT_FOUND)
-		return_value = detect_unset_call(ms, tokens);
-	return (return_value);
+	ret = 0;
+	ret = detect_exit_call(ms, tokens, is_child);
+	if (ret == CMD_NOT_FOUND)
+		ret = detect_cd_call(ms, tokens);
+	if (ret == CMD_NOT_FOUND)
+		ret = detect_pwd_call(ms, tokens);
+	if (ret == CMD_NOT_FOUND)
+		ret = detect_env_call(ms, tokens);
+	if (ret == CMD_NOT_FOUND)
+		ret = detect_echo_call(ms, tokens);
+	if (ret == CMD_NOT_FOUND)
+		ret = detect_export_call(ms, tokens);
+	if (ret == CMD_NOT_FOUND)
+		ret = detect_unset_call(ms, tokens);
+	return (ret);
 }

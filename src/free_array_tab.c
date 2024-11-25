@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 13:57:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/24 05:35:14 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 04:38:57 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	free_tokens(char **tokens)
 	i = 0;
 	if (tokens && *tokens)
 	{
-		count = count_tokens(tokens);	
+		count = count_tokens(tokens);
 		while (tokens[i] && i < (count))
 		{
 			ft_free(tokens[i]);

@@ -6,11 +6,22 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:37:24 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/19 00:11:37 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 07:13:46 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+char	*apply_nbr_expansion(t_minishell *ms, char *token_dup, int i)
+{
+	char	*new_token_dup;
+
+	new_token_dup = NULL;
+	if ((token_dup[i] == '$' && token_dup[i + 1] == '?')
+		&& !ms->token.in_squotes)
+		new_token_dup = apply_nbr_value(token_dup, i, ms->ret);
+	return (new_token_dup);
+}
 
 char	*apply_nbr_value(char *token_dup, int i, int nbr)
 {
@@ -26,7 +37,7 @@ char	*apply_nbr_value(char *token_dup, int i, int nbr)
 	new_token_dup = insert_nbr_value(before, after, nbr);
 	ft_free(token_dup);
 	token_dup = new_token_dup;
-	i = ft_strlen(before) + ft_strlen(getenv(var));
+	i = ft_strlen(before) + ft_strlen(var);
 	ft_free(before);
 	ft_free(var);
 	ft_free(after);

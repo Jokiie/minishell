@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/25 06:41:24 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/25 06:41:31 by ccodere          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 /*
-	Detect if the command is echo, If the echo call is detected, call echo. Return 0 is successful,
-	and CMD_NOT_FOUND(127) is the call is not detected.
+	Detect if the command is echo, If the echo call is detected, call echo.
+	Return 0 is successful, and CMD_NOT_FOUND(127) is the call is not detected.
 */
 int	detect_echo_call(t_minishell *ms, char **tokens)
 {

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 00:29:35 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/22 02:04:46 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 06:59:53 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,32 +19,31 @@ char	*expand_line(t_minishell *ms, char *line)
 	if (ms->heredoc.in_quotes == TRUE)
 		return (ft_strdup(line));
 	else
-		return (expander(ms, line));
+		return (heredoc_expander(ms, line));
 }
 
-char	*expander(t_minishell *ms, char *line)
+char	*heredoc_expander(t_minishell *ms, char *line)
 {
-	char	*line_dup;
-	char	*new_line_dup;
+	char	*dup;
+	char	*new_dup;
 	int		i;
 
 	i = 0;
-	line_dup = ft_strdup(line);
-	while (line_dup[i])
+	dup = ft_strdup(line);
+	while (dup[i])
 	{
-		if (line_dup[i] == '$' && (ft_isalnum(line_dup[i + 1])
-			|| line_dup[i + 1] == '_'))
+		if (dup[i] == '$' && (ft_isalnum(dup[i + 1]) || dup[i + 1] == '_'))
 		{
-			new_line_dup = apply_var_expansion(line_dup, i);
-			line_dup = new_line_dup;
+			new_dup = apply_var_expansion(ms, dup, i);
+			dup = new_dup;
 		}
-		else if (line_dup[i] == '$' && line_dup[i + 1] == '?')
+		else if (dup[i] == '$' && dup[i + 1] == '?')
 		{
-			new_line_dup = apply_nbr_expansion(ms, line_dup, i);
-			line_dup = new_line_dup;
+			new_dup = apply_nbr_expansion(ms, dup, i);
+			dup = new_dup;
 		}
 		else
 			i++;
 	}
-	return (line_dup);
+	return (dup);
 }

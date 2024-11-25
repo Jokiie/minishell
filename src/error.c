@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:47:45 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/24 09:46:05 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 05:34:25 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,47 @@
 
 int	check_error(char *cmd)
 {
-	int return_value;
-	
-	return_value = 0;
+	int	ret;
+
+	ret = 0;
 	if (errno == EISDIR)
 	{
 		ft_fprintf(2, "ms: %s: %s\n", cmd, strerror(errno));
-		return_value = CPERM_DENIED;
+		ret = CPERM_DENIED;
 	}
-	else if (errno == ENOENT)
+	else if (check_enoent(cmd) == CMD_NOT_FOUND)
+		ret = CMD_NOT_FOUND;
+	else if (check_eacces(cmd) == CPERM_DENIED)
+		ret = CPERM_DENIED;
+	else if (errno == ENAMETOOLONG)
+	{
+		ft_fprintf(2, "ms: %s: %s\n", cmd, strerror(errno));
+		ret = CMD_NOT_FOUND;
+	}
+	else
+	{
+		ft_fprintf(2, "ms: %s: %s\n", cmd, strerror(errno));
+		ret = SUCCESS;
+	}
+	return (ret);
+}
+
+int	check_enoent(char *cmd)
+{
+	if (errno == ENOENT)
 	{
 		if (cmd[0] == '/')
 			ft_fprintf(2, "ms: %s: %s\n", cmd, strerror(errno));
 		else
 			ft_fprintf(2, "ms: %s: command not found\n", cmd);
-		return_value = CMD_NOT_FOUND;
+		return (CMD_NOT_FOUND);
 	}
-	else if (errno == EACCES)
+	return (0);
+}
+
+int	check_eacces(char *cmd)
+{
+	if (errno == EACCES)
 	{
 		if (cmd[0] == '/')
 		{
@@ -39,17 +63,7 @@ int	check_error(char *cmd)
 		}
 		else
 			ft_fprintf(2, "ms: %s: %s\n", cmd, strerror(errno));
-		return_value = CPERM_DENIED;
+		return (CPERM_DENIED);
 	}
-	else if (errno == ENAMETOOLONG)
-	{
-		ft_fprintf(2, "ms: %s: %s\n", cmd, strerror(errno));
-		return_value = CMD_NOT_FOUND;
-	}
-	else
-	{
-		ft_fprintf(2, "ms: %s: %s\n", cmd, strerror(errno));
-		return_value = ERROR;
-	}
-	return (return_value);
+	return (0);
 }

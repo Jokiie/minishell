@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/24 08:52:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 05:59:00 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	init_exec_pipes(t_minishell *ms, int *i)
 	init_pipes(ms);
 	*i = 0;
 	ms->p.cmd_start = *i;
-	ms->p.num_pipes = count_type(ms->tokens, &ms->token.protected, is_pipe);
+	ms->p.num_pipes = count_type(ms->tokens, &ms->token.quoted, is_pipe);
 	if (ms->p.num_pipes > 0)
 		ms->p.pipes = allocate_pipes(ms);
 }
@@ -31,7 +31,7 @@ void	init_pipes(t_minishell *ms)
 	ms->p.ret = 0;
 	ms->p.last_cmd = FALSE;
 	ms->p.cmd_start = 0;
-	ms->p.arg_protected = NULL;
+	ms->p.arg_quoted = NULL;
 }
 
 int	**allocate_pipes(t_minishell *ms)
@@ -60,16 +60,16 @@ void	close_pipes(t_minishell *ms)
 	i = 0;
 	if (!ms->p.pipes || !*ms->p.pipes)
 		return ;
-    while (i < ms->p.num_pipes)
-    {
-        close(ms->p.pipes[i][0]);
-        close(ms->p.pipes[i][1]);
-        free(ms->p.pipes[i]);
+	while (i < ms->p.num_pipes)
+	{
+		close(ms->p.pipes[i][0]);
+		close(ms->p.pipes[i][1]);
+		free(ms->p.pipes[i]);
 		ms->p.pipes[i] = NULL;
-        i++;
-    }
-    free(ms->p.pipes);
-    ms->p.pipes = NULL;
+		i++;
+	}
+	free(ms->p.pipes);
+	ms->p.pipes = NULL;
 }
 
 int	pipes_redirection(t_minishell *ms)

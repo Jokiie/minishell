@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:25:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/24 10:10:21 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 02:10:52 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ int	redirect_input(char *file)
 	if (dup2(fdin, STDIN_FILENO) == -1)
 	{
 		perror("ms");
-		//close(fdin);
-		//return (ERROR);
+		close(fdin);
+		return (ERROR);
 	}
 	close(fdin);
 	return (SUCCESS);
@@ -47,8 +47,8 @@ int	redirect_output(char *file)
 	if (dup2(fdout, STDOUT_FILENO) == -1)
 	{
 		perror("ms");
-		//close(fdout);
-		//return (ERROR);
+		close(fdout);
+		return (ERROR);
 	}
 	close(fdout);
 	return (SUCCESS);
@@ -68,30 +68,22 @@ int	append_output(char *file)
 	if (dup2(fdout, STDOUT_FILENO) == -1)
 	{
 		perror("ms");
-		//close(fdout);
-		//return (ERROR);
+		close(fdout);
+		return (ERROR);
 	}
 	close(fdout);
 	return (SUCCESS);
 }
 
-/* Redirect STDIN to the temporary heredoc file in the index i */
-int	redirect_heredoc(char *file)
+int	redirect_heredocs(t_minishell *ms)
 {
-	int		fdin;
+	int	return_value;
 
-	fdin = open(file, O_RDONLY);
-	if (fdin < 0)
-	{
-		perror("ms");
+	return_value = 0;
+	ms->heredoc.index = 0;
+	if (!ms->heredoc.fd_name)
 		return (ERROR);
-	}
-	if (dup2(fdin, STDIN_FILENO) == -1)
-	{
-		perror("ms");
-		//close(fdin);
-		//return (ERROR);
-	}
-	close(fdin);
-	return (SUCCESS);
+	return_value = redirect_input(ms->heredoc.fd_name[ms->heredoc.index]);
+	ms->heredoc.index++;
+	return (return_value);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executable.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/25 06:40:13 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/25 06:40:31 by ccodere          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 /*
@@ -21,14 +33,14 @@ int	detect_executable(t_minishell *ms, char **tokens)
 		}
 		if (execve(tokens[0], tokens, ms->env) != FAIL)
 			return (SUCCESS);
-		return(check_error_executable(tokens[0]));
+		return (check_error_executable(tokens[0]));
 	}
 	return (EXE_NOT_FOUND);
 }
 
 int	check_error_executable(char *executable)
 {
-	int return_value;
+	int	return_value;
 
 	return_value = 0;
 	if (errno == EACCES)

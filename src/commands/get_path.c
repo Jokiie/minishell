@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_path.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/25 06:54:08 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/25 07:17:37 by ccodere          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 /*
@@ -6,8 +18,6 @@
 	creating tokens. We recall ft_strtok with NULL, to continue with the next
 	token. If we find a match, and we can access it, we return the path to
 	execute.
-	to do:
-		paths = (should search in ms->env), not with getenv ?
 */
 char	*get_path(char **envp, char *cmds)
 {

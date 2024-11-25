@@ -1,23 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/25 06:41:58 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/25 07:10:43 by ccodere          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 /*
 	Call cd , return 0 for success, 1 for errors, CMD_NOT_FOUND if
 	cd command is not detected.
 */
-int	detect_cd_call(char **tokens)
+int	detect_cd_call(t_minishell *ms, char **tokens)
 {
-	int	return_value;
-
-	return_value = 0;
 	if (ft_strncmp(tokens[0], "cd\0", 3) == 0)
-		return_value = cd(tokens);
-	else
-		return_value = CMD_NOT_FOUND;
-	return (return_value);
+		return (cd(ms, tokens));
+	return (CMD_NOT_FOUND);
 }
 
 /* Change of current working directory */
-int	cd(char **tokens)
+int	cd(t_minishell *ms, char **tokens)
 {
 	t_bool	found_dir;
 	int		return_value;
@@ -25,12 +32,7 @@ int	cd(char **tokens)
 	found_dir = FALSE;
 	return_value = 0;
 	if (!tokens[1] || !*tokens[1])
-	{
-		if (chdir(getenv("HOME")) != -1)
-			return (return_value);
-		else
-			return (ERROR);
-	}
+		return (go_home(ms->env));
 	else if (tokens[2])
 	{
 		ft_putstr_fd("ms: cd: too many arguments\n", 2);
@@ -47,4 +49,11 @@ int	cd(char **tokens)
 		return_value = ERROR;
 	}
 	return (return_value);
+}
+
+int	go_home(char **env)
+{
+	if (chdir(get_env(env, "HOME")) == -1)
+		return (ERROR);
+	return (SUCCESS);
 }

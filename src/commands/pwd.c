@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pwd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/25 06:49:09 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/25 06:49:19 by ccodere          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 /*
@@ -17,10 +29,7 @@ int	detect_pwd_call(t_minishell *ms, char **tokens)
 }
 
 /*
-	Display the current working directory, if the cwd do not exist,
-	display the previous cwd. But maybe need to enhance this because
-	if we delete a parent directory, it do not display properly. At
-	least it do not segfault.
+	Display the current working directory
 */
 int	pwd(t_minishell *ms)
 {
@@ -29,12 +38,11 @@ int	pwd(t_minishell *ms)
 	return_value = 0;
 	if (!ms->cwd)
 	{
-		//should print the deleted directory
 		ft_putstr_fd("You are in a deleted directory, ", 2);
 		ft_putstr_fd("please 'cd ..' until you are in a valid directory\n", 2);
 		return_value = SUCCESS;
 	}
-	else 
+	else
 	{
 		ft_printf("%s\n", ms->cwd);
 		return_value = SUCCESS;

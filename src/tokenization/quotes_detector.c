@@ -6,13 +6,13 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:30:53 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/19 00:11:41 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 03:30:30 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	ft_quotes_detector(t_minishell *ms, char *line, int i)
+int	quotes_detector(t_minishell *ms, char *line, int i)
 {
 	if (ft_is_dquote(line[i]) && !ms->token.in_squotes)
 		ms->token.in_dquotes = !ms->token.in_dquotes;
@@ -21,7 +21,7 @@ int	ft_quotes_detector(t_minishell *ms, char *line, int i)
 	return (i);
 }
 
-int	ft_open_quotes_checker(t_minishell *ms, char *line)
+int	open_quotes_checker(t_minishell *ms, char *line)
 {
 	int	i;
 
@@ -30,7 +30,7 @@ int	ft_open_quotes_checker(t_minishell *ms, char *line)
 	ms->token.in_squotes = FALSE;
 	while (line[i])
 	{
-		ft_quotes_detector(ms, line, i);
+		quotes_detector(ms, line, i);
 		i++;
 	}
 	if (ms->token.in_dquotes == TRUE || ms->token.in_squotes == TRUE)

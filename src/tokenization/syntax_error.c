@@ -6,71 +6,67 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 03:19:33 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/22 13:02:50 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 06:46:31 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int check_syntax(char **tokens)
+int	check_syntax(char **tokens)
 {
-    if (error_pipes(tokens) != SUCCESS || errors_redirect(tokens) != SUCCESS)
-        return (SYNTAX_ERROR);
-    return (SUCCESS);
+	if (error_pipes(tokens) != SUCCESS || errors_redirect(tokens) != SUCCESS)
+		return (SYNTAX_ERROR);
+	return (SUCCESS);
 }
 
-int error_pipes(char **tokens)
+int	error_pipes(char **tokens)
 {
-    int k;
+	int	k;
 
-    k = 0;
-    while (tokens[k])
-    {
-        if (is_pipe(tokens[k]))
-        {
-            if (tokens[k + 1] == NULL)
-            {
-                ft_fprintf(2, "ms: syntax error near unexpected token '|'\n");
-                return (SYNTAX_ERROR);
-            }
-            else if (is_pipe(tokens[k + 1]))
-            {
-                ft_fprintf(2, "ms: syntax error near unexpected token '||'\n");
-                return (SYNTAX_ERROR);
-            }
-            // else if (is_redirect(tokens[k + 1]) && !tokens[k + 2]) // || is_heredoc(tokens[k + 1])
-            // {
-            //     ft_fprintf(2, "ms: syntax error near unexpected token '|'\n");
-            //     return (SYNTAX_ERROR);
-            // }
-        }
-        k++;
-    }
-    return (SUCCESS);
+	k = 0;
+	while (tokens[k])
+	{
+		if (is_pipe(tokens[k]))
+		{
+			if (tokens[k + 1] == NULL)
+			{
+				ft_fprintf(2, "ms: syntax error near unexpected token '|'\n");
+				return (SYNTAX_ERROR);
+			}
+			else if (is_pipe(tokens[k + 1]))
+			{
+				ft_fprintf(2, "ms: syntax error near unexpected token '||'\n");
+				return (SYNTAX_ERROR);
+			}
+		}
+		k++;
+	}
+	return (SUCCESS);
 }
 
-int errors_redirect(char **tokens)
+int	errors_redirect(char **tokens)
 {
-    int k;
+	int	k;
 
-    k = 0;
-    while (tokens[k])
-    {
-        if (is_redirect(tokens[k]) || is_heredoc(tokens[k]))
-        { 
-            if (tokens[k + 1] == NULL)
-            {
-                ft_fprintf(2, "ms: syntax error near unexpected token 'newline'\n");
-                return (SYNTAX_ERROR);
-            }
-            else if (is_pipe(tokens[k + 1]) || is_redirect(tokens[k + 1])
-                || is_heredoc(tokens[k + 1]))
-            {
-                ft_fprintf(2, "ms: syntax error near unexpected token '%s'\n", tokens[k + 1]);
-                return (SYNTAX_ERROR);
-            }
-        }
-        k++;
-    }
-    return (SUCCESS);
+	k = 0;
+	while (tokens[k])
+	{
+		if (is_redirect(tokens[k]) || is_heredoc(tokens[k]))
+		{
+			if (tokens[k + 1] == NULL)
+			{
+				ft_fprintf(2,
+					"ms: syntax error near unexpected token 'newline'\n");
+				return (SYNTAX_ERROR);
+			}
+			else if (is_meta(tokens[k + 1]))
+			{
+				ft_fprintf(2, "ms: syntax error near unexpected token '%s'\n",
+					tokens[k + 1]);
+				return (SYNTAX_ERROR);
+			}
+		}
+		k++;
+	}
+	return (SUCCESS);
 }

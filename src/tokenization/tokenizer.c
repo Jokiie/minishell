@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/23 12:35:12 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 04:07:04 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,12 @@ char	**tokenizer(t_minishell *ms, char *line)
 	int	i;
 	int	k;
 	int	count;
-	
+
 	k = 0;
 	if (!line)
-	{
-		ms->pretokens = NULL;
 		return (NULL);
-	}
-	count = count_words(line);
-	ms->pretokens = ft_calloc((count * 10), sizeof(char *));
+	count = ft_strlen(line);
+	ms->pretokens = ft_calloc((count + 1), sizeof(char *));
 	if (!ms->pretokens)
 		return (NULL);
 	i = 0;
@@ -43,39 +40,37 @@ char	**tokenizer(t_minishell *ms, char *line)
 
 int	separe_line(t_minishell *ms, char *line, int i, int *k)
 {
-	t_token	*t;
-	int		have_meta_chars;
-
-	have_meta_chars = 0;
-	t = &(ms->token);
-	(*t).start = i;
+	ms->token.is_meta = FALSE;
+	ms->token.start = i;
 	while (line[i])
 	{
-		ft_quotes_detector(ms, line, i);
-		if (!(*t).in_dquotes && !(*t).in_squotes)
+		quotes_detector(ms, line, i);
+		if (!ms->token.in_dquotes && !ms->token.in_squotes)
 		{
 			if (ft_isspace(line[i]))
 				break ;
 			else if (ft_ismeta_chars(line[i]))
 			{
-				have_meta_chars = 1;
+				ms->token.is_meta = TRUE;
 				break ;
 			}
 		}
 		i++;
 	}
-	(*t).end = i;
-	if (i > (*t).start)
-		ms->pretokens[(*k)++] = ft_substr(line, (*t).start, ((*t).end - (*t).start));
-	else if (have_meta_chars)
+	ms->token.end = i;
+	ms->token.size = (ms->token.end - ms->token.start);
+	if (i > ms->token.start)
+		ms->pretokens[(*k)++] = ft_substr(line, ms->token.start,
+				ms->token.size);
+	else if (ms->token.is_meta)
 		ms->pretokens[(*k)++] = meta_chars_extractor(line, &i);
 	return (i);
 }
 
 char	*meta_chars_extractor(char *line, int *i)
 {
-	char *substr;
-	int start;
+	char	*substr;
+	int		start;
 
 	start = *i;
 	if ((line[*i] == '>' && line[*i + 1] == '>')
@@ -89,27 +84,4 @@ char	*meta_chars_extractor(char *line, int *i)
 	if (!substr)
 		return (NULL);
 	return (substr);
-}
-
-int	count_words(char const *line)
-{
-	int		count;
-	int		i;
-
-	i = 0;
-	count = 0;
-	if (!line[i])
-		return (1);
-	while (line[i])
-	{
-		while (ft_isspace(line[i]))
-			i++;
-		if (line[i])
-		{
-			count++;
-			while (line[i] && !ft_isspace(line[i]))
-				i++;
-		}
-	}
-	return (count);
 }

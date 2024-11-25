@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 11:22:22 by ccodere           #+#    #+#             */
-/*   Updated: 2024/09/25 22:07:13 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 06:50:35 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	ft_fparse_pointer(int fd, va_list args)
 {
-	int						count;
-	unsigned long			ptr;
-	char					buffer[20];
-	char					*array;
+	int				count;
+	unsigned long	ptr;
+	char			buffer[20];
+	char			*array;
 
 	count = 0;
 	ptr = (unsigned long)va_arg(args, void *);
@@ -49,7 +49,7 @@ int	ft_fparse_chars(int fd, char format, va_list args)
 
 int	ft_fparse_digits(int fd, char format, va_list args)
 {
-	int		count;
+	int	count;
 
 	count = 0;
 	if (format == '\0')
@@ -74,9 +74,9 @@ int	ft_fparse_digits(int fd, char format, va_list args)
 
 int	ft_fprintf(int fd, const char *format, ...)
 {
-	va_list		args;
-	int			count;
-	
+	va_list	args;
+	int		count;
+
 	va_start(args, format);
 	count = 0;
 	if (format == NULL)

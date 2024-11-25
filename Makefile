@@ -67,13 +67,14 @@ SRC_CMDS = commands/cd.c \
 		   commands/unset.c \
 
 SRC_TOK = tokenization/tokens_creator.c \
-		  tokenization/characterizer.c \
+		  tokenization/expander.c \
 		  tokenization/tokenizer.c \
 		  tokenization/trimmer.c \
 		  tokenization/var_expansion.c \
 		  tokenization/nbr_expansion.c \
 		  tokenization/quotes_detector.c \
 		  tokenization/cleaner.c \
+		  tokenization/is.c \
 		  tokenization/has_one_meta.c \
 		  tokenization/has_meta.c \
 		  tokenization/is_one_meta.c \
@@ -96,7 +97,6 @@ SRC	=		minishell.c \
 			free.c \
 			free_array_tab.c \
 			utils.c \
-			is.c \
 			signal_handler.c \
 			error.c \
 			prompt_name.c \
@@ -170,7 +170,7 @@ fullmem: all
 	valgrind --leak-check=full --trace-children=yes --track-fds=yes --show-leak-kinds=all --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
 
 norm:
-	norminette src/*.c $(LIBFT_DIR)/*.c commands/*.c lexing/*.c
+	norminette src/*.c src/tokenization/*.c src/commands/*.c src/redirections/*.c src/pipes/*.c
 
 
 exp:

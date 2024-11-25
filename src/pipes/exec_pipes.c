@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_pipes.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/25 01:36:20 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/25 06:06:09 by ccodere          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	exect_pipes(t_minishell *ms)
@@ -10,7 +22,7 @@ int	exect_pipes(t_minishell *ms)
 	init_exec_pipes(ms, &i);
 	while (ms->tokens[i])
 	{
-		if ((is_pipe(ms->tokens[i]) && ms->token.protected[i] == 0)
+		if ((is_pipe(ms->tokens[i]) && ms->token.quoted[i] == 0)
 			|| ms->tokens[i + 1] == NULL)
 		{
 			handle_last_cmd(ms, &i);
@@ -27,16 +39,16 @@ int	exect_pipes(t_minishell *ms)
 
 void	handle_pipe_cmd(t_minishell *ms, int i, pid_t *pid)
 {
-    ms->p.p_args = extract_args(ms->tokens, ms->p.cmd_start, i);
+	ms->p.p_args = extract_args(ms->tokens, ms->p.cmd_start, i);
 	if (!ms->p.p_args)
 		return ;
-    fill_pipes_protected_array(ms, ms->p.cmd_start);
-    ms->p.ret = create_and_manage_process(ms, pid);
+	fill_pipes_quoted_arr(ms, ms->p.cmd_start);
+	ms->p.ret = create_and_manage_process(ms, pid);
 	free(ms->p.p_args);
 	ms->p.p_args = NULL;
-	free_int_array(&ms->p.arg_protected);
+	free_int_array(&ms->p.arg_quoted);
 	ms->p.cmd_start = i + 1;
-    ms->p.cmd_num++;
+	ms->p.cmd_num++;
 }
 
 void	handle_child_process(t_minishell *ms)
@@ -46,11 +58,11 @@ void	handle_child_process(t_minishell *ms)
 	ret = 0;
 	if (pipes_redirection(ms) != SUCCESS)
 		exit_child(ms, ret, TRUE);
-	if (has_type(ms->p.p_args, &ms->p.arg_protected, is_redirect)
-		|| has_type(ms->p.p_args, &ms->p.arg_protected, is_heredoc))
+	if (has_type(ms->p.p_args, &ms->p.arg_quoted, is_redirect)
+		|| has_type(ms->p.p_args, &ms->p.arg_quoted, is_heredoc))
 	{
-		ret = exec_redirections(ms, ms->p.p_args, &ms->p.arg_protected, TRUE);
-		if (ret > 0)	
+		ret = exec_redirections(ms, ms->p.p_args, &ms->p.arg_quoted, TRUE);
+		if (ret > 0)
 			exit_child(ms, ret, TRUE);
 		close_pipes(ms);
 	}
@@ -80,7 +92,7 @@ int	create_and_manage_process(t_minishell *ms, pid_t *pid)
 
 int	call_commands_pipes(t_minishell *ms)
 {
-	int ret;
+	int	ret;
 
 	ret = 0;
 	if (!ms->p.p_args || !ms->p.p_args[0])

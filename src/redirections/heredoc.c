@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/25 05:40:13 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/25 06:17:36 by ccodere          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 volatile sig_atomic_t	g_heredoc_signal;
@@ -26,20 +38,18 @@ void	init_heredoc_signals(void)
 
 int	process_heredocs(t_minishell *ms)
 {
-	int	count;
 	int	k;
 
 	init_heredoc_data(ms);
-	count = count_type(ms->tokens, &ms->token.protected, is_heredoc);
-	ms->heredoc.count = count;
-	ms->heredoc.fd_name = ft_calloc(count + 1, sizeof(char *));
+	ms->heredoc.count = count_type(ms->tokens, &ms->token.quoted,
+			is_heredoc);
+	ms->heredoc.fd_name = ft_calloc(ms->heredoc.count + 1, sizeof(char *));
 	if (!ms->heredoc.fd_name)
-		return (ERROR);		
-	ms->heredoc.fd_name[count] = NULL;
+		return (ERROR);
 	k = 0;
 	while (ms->tokens[k])
 	{
-		while ((is_heredoc(ms->tokens[k]) && ms->token.protected[k] == 0))
+		while ((is_heredoc(ms->tokens[k]) && ms->token.quoted[k] == 0))
 		{
 			ms->heredoc.delim = ms->tokens[k + 1];
 			check_quotes_delim(ms, k + 1);
@@ -50,8 +60,6 @@ int	process_heredocs(t_minishell *ms)
 		}
 		if (ms->tokens[k] && ms->tokens[k + 1])
 			k++;
-		else
-			break;
 	}
 	return (ms->ret);
 }
@@ -101,20 +109,4 @@ int	fill_heredoc(t_minishell *ms, int fd)
 	free_tmp_data(ms);
 	ft_free(delim);
 	return (SUCCESS);
-}
-
-char	*create_heredoc_name(t_minishell *ms)
-{
-	char	*name;
-	char	*num;
-	char	*full_path;
-	int		count;
-
-	count = update_heredoc_number(FALSE);
-	num = ft_itoa(count);
-	full_path = ft_strjoin(ms->path, "/tmp/heredoc");
-	name = ft_strjoin(full_path, num);
-	free(full_path);
-	free(num);
-	return (name);
 }

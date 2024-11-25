@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/25 06:40:51 by ccodere           #+#    #+#             */
+/*   Updated: 2024/11/25 06:41:04 by ccodere          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 /*
@@ -6,7 +18,7 @@
 */
 int	detect_env_call(t_minishell *ms, char **tokens)
 {
-	int return_value;
+	int	return_value;
 
 	return_value = 0;
 	if (ft_strncmp(tokens[0], "env\0", 4) == 0)
