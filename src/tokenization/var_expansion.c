@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:43:35 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/19 00:12:03 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/22 16:18:16 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

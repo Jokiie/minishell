@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_expander.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 00:29:35 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/21 02:13:09 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/22 15:14:08 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 char	*expand_line(t_minishell *ms, char *line)
 {
-	//char	*tmp_line;
-
 	if (!line)
 		return (NULL);
 	if (ms->heredoc.in_quotes == TRUE)

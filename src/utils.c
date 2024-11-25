@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/20 05:45:52 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/22 15:33:14 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,13 @@ char	**ft_envdup(char **envp)
 		env_dup[j++] = ft_strdup(envp[i++]);
 	env_dup[j] = NULL;
 	return (env_dup);
+}
+
+void	free_ptr(void *ptr)
+{
+	if (ptr != NULL)
+	{
+		free(ptr);
+		ptr = NULL;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/21 15:45:09 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/22 15:34:16 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,15 @@ char **realloc_env(char **env, int new_size)
 	new_env[i] = NULL;
 	free(env);
 	return (new_env);
+}
+
+int	env_var_count(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env && env[i])
+		i++;
+	return (i);
 }
 

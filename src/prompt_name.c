@@ -67,7 +67,7 @@ char	*get_user_color(t_minishell *ms)
 {
 	char	*color;
 
-	ms->user = getenv("USER");
+	ms->user = get_env(ms->env, "USER");
 	color = NULL;
 	if (ft_strncmp(ms->user, "ccodere", 7) == 0)
 	{
