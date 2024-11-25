@@ -6,15 +6,15 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:47:45 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 16:07:58 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 16:20:33 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int check_error(char *cmd)
+int	check_error(char *cmd)
 {
-	int ret;
+	int	ret;
 
 	ret = 0;
 	if (errno == EISDIR)
@@ -39,7 +39,7 @@ int check_error(char *cmd)
 	return (ret);
 }
 
-int check_enoent(char *cmd)
+int	check_enoent(char *cmd)
 {
 	if (errno == ENOENT)
 	{
@@ -52,7 +52,7 @@ int check_enoent(char *cmd)
 	return (0);
 }
 
-int check_eacces(char *cmd)
+int	check_eacces(char *cmd)
 {
 	if (errno == EACCES)
 	{
@@ -70,13 +70,13 @@ int check_eacces(char *cmd)
 
 void	error_msg(char *cmd, char *msg)
 {
-	char *name;
-	char *sep;
-	char *newl;
-	char buffer[512];
+	char	*name;
+	char	*sep;
+	char	*newl;
+	char	buffer[512];
 
 	name = "ms: ";
-	sep = ": ";	
+	sep = ": ";
 	newl = "\n";
 	ft_strcpy(buffer, name);
 	ft_strcat(buffer, cmd);
