@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:40:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 15:09:24 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 16:36:07 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ int	process_heredocs(t_minishell *ms)
 			}
 			if (ms->tokens[k] && ms->tokens[k + 1])
 				k++;
+			else
+				break ;
 		}
 	}
 	return (ms->ret);
@@ -72,7 +74,7 @@ int	heredoc(t_minishell *ms)
 	fd = open(ms->heredoc.fd_name[i], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
 	{
-		ft_fprintf(2, "ms: %s:\n", ms->heredoc.fd_name[i], strerror(errno));
+		error_msg(ms->heredoc.fd_name[i], strerror(errno));
 		return (ERROR);
 	}
 	ms->ret = fill_heredoc(ms, fd);

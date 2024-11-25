@@ -281,7 +281,7 @@ char			**realloc_env(char **env, int new_size);
 int				env_var_count(char **env);
 void			set_env_var(t_minishell *ms, const char *var_name,
 					const char *value);
-int	is_valid_var_name(const char *var_name);
+int				is_valid_var_name(const char *var_name);
 
 
 // unset.c
