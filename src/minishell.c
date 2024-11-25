@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 06:35:36 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 15:04:05 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,6 @@ int	execute_input(t_minishell *ms, char *input)
 				free_tokens_address(&ms->tokens);
 				return (ms->ret);
 			}
-		}
-		if (has_type(ms->tokens, &ms->token.quoted, is_pipe))
-		{
-			ms->ret = exect_pipes(ms);
-			return (ms->ret);
 		}
 		ms->ret = call_commands(ms);
 		if (has_heredoc(ms, ms->tokens))

@@ -134,6 +134,7 @@ void			free_protected_array(int **array);
 int				check_error(char *cmd);
 int				check_eacces(char *cmd);
 int				check_enoent(char *cmd);
+void			error_msg(char *cmd, char *msg);
 
 // prompt_name.c
 char			*get_prompt_name(t_minishell *ms);
@@ -255,7 +256,7 @@ int				detect_echo_call(t_minishell *ms, char **tokens);
 
 // executable.c
 int				detect_executable(t_minishell *ms, char **tokens);
-int				check_error_executable(char *executable);
+int				check_error_executable(char *cmd);
 
 // env.c
 int				detect_env_call(t_minishell *ms, char **tokens);
@@ -339,6 +340,7 @@ void			unlink_heredocs(t_minishell *ms);
 void			reset_heredoc(t_minishell *ms);
 void			clear_heredoc_names(t_minishell *ms);
 void			free_tmp_data(t_minishell *ms);
+int				init_heredoc_names(t_minishell *ms);
 
 // heredoc_statics.c
 void			reset_heredoc_statics(void);
