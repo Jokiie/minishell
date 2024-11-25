@@ -110,6 +110,7 @@ void			init_signals_noninteractive(void);
 void			print_tokens(char **tokens);
 char			**ft_envdup(char **envp);
 int				wait_children(void);
+void			free_ptr(void *ptr);
 
 // exit_minishell.c
 void			exit_minishell(t_minishell *ms, int return_code);
@@ -276,18 +277,19 @@ char			*get_env(char **env, char *var_name);
 // export.c
 int				detect_export_call(t_minishell *ms, char **tokens);
 void			export_handling(t_minishell *ms, char **tokens, int i);
+char			**realloc_env(char **env, int new_size);
+int				env_var_count(char **env);
 void			set_env_var(t_minishell *ms, const char *var_name,
 					const char *value);
-void			print_env(char **env);
-char			**realloc_env(char **env, int new_size);
+int	is_valid_var_name(const char *var_name);
+
 
 // unset.c
 int				detect_unset_call(t_minishell *ms, char **tokens);
 void			unset_handling(t_minishell *ms, char **tokens, int i);
 int				find_env_index(char **env, const char *var_name);
+char			**realloc_env_vars(t_minishell *ms, int size);
 bool			remove_env_var1(t_minishell *ms, int idx);
-void			free_ptr(void *ptr);
-int				env_var_count(char **env);
 
 // commands.c
 int				call_commands(t_minishell *ms);

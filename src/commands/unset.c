@@ -1,23 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/11 13:28:23 by matislessar       #+#    #+#             */
+/*   Updated: 2024/11/25 13:51:50 by matislessar      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
-
-static char	**realloc_env_vars(t_minishell *ms, int size)
-{
-	char	**new_env;
-	int		i;
-
-	new_env = ft_calloc(size + 1, sizeof * new_env);
-	if (!new_env)
-		return (NULL);
-	i = 0;
-	while (ms->env[i] && i < size)
-	{
-		new_env[i] = ft_strdup(ms->env[i]);
-		free_ptr(ms->env[i]);
-		i++;
-	}
-	free(ms->env);
-	return (new_env);
-}
 
 int	detect_unset_call(t_minishell *ms, char **tokens)
 {
@@ -87,21 +80,21 @@ bool	remove_env_var1(t_minishell *ms, int idx)
 	return (true);
 }
 
-int	env_var_count(char **env)
+char	**realloc_env_vars(t_minishell *ms, int size)
 {
-	int	i;
+	char	**new_env;
+	int		i;
 
+	new_env = ft_calloc(size + 1, sizeof * new_env);
+	if (!new_env)
+		return (NULL);
 	i = 0;
-	while (env && env[i])
-		i++;
-	return (i);
-}
-
-void	free_ptr(void *ptr)
-{
-	if (ptr != NULL)
+	while (ms->env[i] && i < size)
 	{
-		free(ptr);
-		ptr = NULL;
+		new_env[i] = ft_strdup(ms->env[i]);
+		free_ptr(ms->env[i]);
+		i++;
 	}
+	free(ms->env);
+	return (new_env);
 }

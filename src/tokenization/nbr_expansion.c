@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nbr_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:37:24 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 07:13:46 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 13:53:30 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
