@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:40:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 06:17:36 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 15:09:24 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,23 @@ int	process_heredocs(t_minishell *ms)
 	int	k;
 
 	init_heredoc_data(ms);
-	ms->heredoc.count = count_type(ms->tokens, &ms->token.quoted,
-			is_heredoc);
-	ms->heredoc.fd_name = ft_calloc(ms->heredoc.count + 1, sizeof(char *));
-	if (!ms->heredoc.fd_name)
-		return (ERROR);
-	k = 0;
-	while (ms->tokens[k])
+	if (init_heredoc_names(ms) == SUCCESS)
 	{
-		while ((is_heredoc(ms->tokens[k]) && ms->token.quoted[k] == 0))
+		k = 0;
+		while (ms->tokens[k])
 		{
-			ms->heredoc.delim = ms->tokens[k + 1];
-			check_quotes_delim(ms, k + 1);
-			ms->ret = heredoc(ms);
-			if (ms->ret != SUCCESS)
-				return (ms->ret);
-			k += 2;
+			while ((is_heredoc(ms->tokens[k]) && ms->token.quoted[k] == 0))
+			{
+				ms->heredoc.delim = ms->tokens[k + 1];
+				check_quotes_delim(ms, k + 1);
+				ms->ret = heredoc(ms);
+				if (ms->ret != SUCCESS)
+					return (ms->ret);
+				k += 2;
+			}
+			if (ms->tokens[k] && ms->tokens[k + 1])
+				k++;
 		}
-		if (ms->tokens[k] && ms->tokens[k + 1])
-			k++;
 	}
 	return (ms->ret);
 }

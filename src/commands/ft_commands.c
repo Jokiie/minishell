@@ -6,15 +6,19 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:23:54 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 07:09:13 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 16:03:15 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
+	4-  if all the previous step were successful, we check if the tokens contain
+		at least one pipe. If yes, execute the pipeline in exec_pipes. But will
+		return the exit code of the last command to the next.
+
 	5-	If the tokens contains no pipes, we execute the simple command in a
-		sub-shell. Both pipes and simple command proceed like the following:
+		sub-shell. Both pipelines and simple command proceed like the following:
 
 		5.1-	We check if the command exist in our built-in(except echo)
 				if the command exist, execute it and return SUCCESS or ERROR
@@ -42,6 +46,11 @@ int	call_commands(t_minishell *ms)
 {
 	int	pid;
 
+	if (has_type(ms->tokens, &ms->token.quoted, is_pipe))
+	{
+		ms->ret = exect_pipes(ms);
+		return (ms->ret);
+	}
 	ms->ret = exec_builtin(ms, ms->tokens, 0);
 	if (ms->ret == CMD_NOT_FOUND)
 	{
@@ -111,8 +120,8 @@ int	ft_execvp(char **tokens, char **envp)
 
 	to do:
 	- rework pwd to display the same pwd in the environment variables
-	  and need to rework (not crash minishell) when we deleted the current
-	  directory
+		and need to rework (not crash minishell) when we deleted the current
+		directory
 	- rework cd (need to update the pwd and old pwd in the environment variables)
 */
 int	exec_builtin(t_minishell *ms, char **tokens, int is_child)

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:40:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 06:40:31 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 15:41:26 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	detect_executable(t_minishell *ms, char **tokens)
 		{
 			if (S_ISDIR(s.st_mode))
 			{
-				ft_fprintf(2, "ms: %s: Is a directory\n", tokens[0]);
+				error_msg(tokens[0], "Is a directory");
 				return (CPERM_DENIED);
 			}
 		}
@@ -38,24 +38,24 @@ int	detect_executable(t_minishell *ms, char **tokens)
 	return (EXE_NOT_FOUND);
 }
 
-int	check_error_executable(char *executable)
+int	check_error_executable(char *cmd)
 {
 	int	return_value;
 
 	return_value = 0;
 	if (errno == EACCES)
 	{
-		ft_fprintf(2, "ms: %s: %s\n", executable, strerror(errno));
+		error_msg(cmd, strerror(errno));
 		return_value = CPERM_DENIED;
 	}
 	else if (errno == ENOENT)
 	{
-		ft_fprintf(2, "ms: %s: %s\n", executable, strerror(errno));
+		error_msg(cmd, strerror(errno));
 		return_value = CMD_NOT_FOUND;
 	}
 	else
 	{
-		ft_fprintf(2, "ms: %s: %s\n", executable, strerror(errno));
+		error_msg(cmd, strerror(errno));
 		return_value = ERROR;
 	}
 	return (return_value);

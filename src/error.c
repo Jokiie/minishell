@@ -6,20 +6,20 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:47:45 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 05:34:25 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/25 16:07:58 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	check_error(char *cmd)
+int check_error(char *cmd)
 {
-	int	ret;
+	int ret;
 
 	ret = 0;
 	if (errno == EISDIR)
 	{
-		ft_fprintf(2, "ms: %s: %s\n", cmd, strerror(errno));
+		error_msg(cmd, strerror(errno));
 		ret = CPERM_DENIED;
 	}
 	else if (check_enoent(cmd) == CMD_NOT_FOUND)
@@ -28,42 +28,60 @@ int	check_error(char *cmd)
 		ret = CPERM_DENIED;
 	else if (errno == ENAMETOOLONG)
 	{
-		ft_fprintf(2, "ms: %s: %s\n", cmd, strerror(errno));
+		error_msg(cmd, strerror(errno));
 		ret = CMD_NOT_FOUND;
 	}
 	else
 	{
-		ft_fprintf(2, "ms: %s: %s\n", cmd, strerror(errno));
-		ret = SUCCESS;
+		error_msg(cmd, strerror(errno));
+		ret = ERROR;
 	}
 	return (ret);
 }
 
-int	check_enoent(char *cmd)
+int check_enoent(char *cmd)
 {
 	if (errno == ENOENT)
 	{
 		if (cmd[0] == '/')
-			ft_fprintf(2, "ms: %s: %s\n", cmd, strerror(errno));
+			error_msg(cmd, strerror(errno));
 		else
-			ft_fprintf(2, "ms: %s: command not found\n", cmd);
+			error_msg(cmd, "command not found");
 		return (CMD_NOT_FOUND);
 	}
 	return (0);
 }
 
-int	check_eacces(char *cmd)
+int check_eacces(char *cmd)
 {
 	if (errno == EACCES)
 	{
 		if (cmd[0] == '/')
 		{
 			errno = EISDIR;
-			ft_fprintf(2, "ms: %s: %s\n", cmd, strerror(errno));
+			error_msg(cmd, strerror(errno));
 		}
 		else
-			ft_fprintf(2, "ms: %s: %s\n", cmd, strerror(errno));
+			error_msg(cmd, strerror(errno));
 		return (CPERM_DENIED);
 	}
 	return (0);
+}
+
+void	error_msg(char *cmd, char *msg)
+{
+	char *name;
+	char *sep;
+	char *newl;
+	char buffer[512];
+
+	name = "ms: ";
+	sep = ": ";	
+	newl = "\n";
+	ft_strcpy(buffer, name);
+	ft_strcat(buffer, cmd);
+	ft_strcat(buffer, sep);
+	ft_strcat(buffer, msg);
+	ft_strcat(buffer, newl);
+	write(2, buffer, ft_strlen(buffer));
 }
