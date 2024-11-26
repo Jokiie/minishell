@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 07:10:43 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/26 17:03:14 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,37 +23,63 @@ int	detect_cd_call(t_minishell *ms, char **tokens)
 	return (CMD_NOT_FOUND);
 }
 
-/* Change of current working directory */
+/* Change the current working directory */
 int	cd(t_minishell *ms, char **tokens)
 {
-	t_bool	found_dir;
-	int		return_value;
-
-	found_dir = FALSE;
-	return_value = 0;
 	if (!tokens[1] || !*tokens[1])
-		return (go_home(ms->env));
+	{
+		ft_putstr_fd("ms: cd: no directory specified\n", 2);
+		return (ERROR);
+	}
 	else if (tokens[2])
 	{
 		ft_putstr_fd("ms: cd: too many arguments\n", 2);
-		return_value = ERROR;
+		return (ERROR);
 	}
-	else if (return_value != ERROR && chdir(tokens[1]) == 0)
-	{
-		found_dir = TRUE;
-		return_value = SUCCESS;
-	}
-	else if (found_dir == FALSE)
-	{
-		ft_fprintf(2, "ms: cd: %s: %s\n", tokens[1], strerror(errno));
-		return_value = ERROR;
-	}
-	return (return_value);
+	return (change_directory(ms, tokens[1]));
 }
 
-int	go_home(char **env)
+/* Navigate to the home directory */
+int	go_home(t_minishell *ms)
 {
-	if (chdir(get_env(env, "HOME")) == -1)
+	char *home = get_env(ms->env, "HOME");
+	if (!home || chdir(home) == -1)
+	{
+		ft_putstr_fd("ms: cd: HOME not set or inaccessible\n", 2);
 		return (ERROR);
+	}
+	update_working_directories(ms);
+	return (SUCCESS);
+}
+
+/* Update cwd and OLDPWD in both struct and environment variables */
+void	update_working_directories(t_minishell *ms)
+{
+	char	*cwd;
+	
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		perror("getcwd");
+		return;
+	}
+	set_env_var(ms, "OLDPWD", get_env(ms->env, "PWD"));
+	set_env_var(ms, "PWD", cwd);
+	if (ms->prev_cwd)
+		free(ms->prev_cwd);
+	ms->prev_cwd = ms->cwd;
+	set_env_var(ms, "PWD", cwd);
+	ms->cwd = cwd;
+}
+
+/* Change directory and update working directories */
+int	change_directory(t_minishell *ms, const char *path)
+{
+	if (chdir(path) == -1)
+	{
+		ft_fprintf(2, "ms: cd: %s: %s\n", path, strerror(errno));
+		return (ERROR);
+	}
+	update_working_directories(ms);
 	return (SUCCESS);
 }

@@ -242,9 +242,12 @@ int				count_tokens(char **tokens);
 /* /commands */
 
 // cd.c
-int				cd(t_minishell *ms, char **tokens);
 int				detect_cd_call(t_minishell *ms, char **tokens);
-int				go_home(char **env);
+int				cd(t_minishell *ms, char **tokens);
+int				go_home(t_minishell *ms);
+void			update_working_directories(t_minishell *ms);
+int				change_directory(t_minishell *ms, const char *path);
+
 
 // pwd.c
 int				pwd(t_minishell *ms);
