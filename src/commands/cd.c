@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/26 17:03:14 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/26 17:12:44 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,9 @@ int	cd(t_minishell *ms, char **tokens)
 /* Navigate to the home directory */
 int	go_home(t_minishell *ms)
 {
-	char *home = get_env(ms->env, "HOME");
+	char *home;
+	
+	home = get_env(ms->env, "HOME");
 	if (!home || chdir(home) == -1)
 	{
 		ft_putstr_fd("ms: cd: HOME not set or inaccessible\n", 2);
