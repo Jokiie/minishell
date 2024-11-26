@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:32:54 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 05:55:23 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/26 02:20:00 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	free_data(t_minishell *ms)
 	free_int_array(&ms->token.quoted);
 }
 
-void	ft_free(void *ptr)
+void	free_ptr(void *ptr)
 {
-	if (ptr)
+	if (ptr != NULL)
 	{
 		free(ptr);
 		ptr = NULL;

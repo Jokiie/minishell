@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:40:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 16:36:07 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/26 02:18:45 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,8 @@ int	fill_heredoc(t_minishell *ms, int fd)
 		ms->heredoc.input = readline("heredoc> ");
 		if (g_heredoc_signal == 1)
 		{
-			ft_free(ms->heredoc.input);
-			ft_free(delim);
+			free_ptr(ms->heredoc.input);
+			free_ptr(delim);
 			reset_heredoc(ms);
 			return (TERM_SIGINT);
 		}
@@ -107,6 +107,6 @@ int	fill_heredoc(t_minishell *ms, int fd)
 		free_tmp_data(ms);
 	}
 	free_tmp_data(ms);
-	ft_free(delim);
+	free_ptr(delim);
 	return (SUCCESS);
 }

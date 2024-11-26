@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 01:36:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 20:27:19 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/26 02:43:02 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int	exect_pipes(t_minishell *ms)
 {
-	pid_t	pid;
 	int		i;
 	int		ret;
 
@@ -26,14 +25,14 @@ int	exect_pipes(t_minishell *ms)
 			|| ms->tokens[i + 1] == NULL)
 		{
 			handle_last_cmd(ms, &i);
-			handle_pipe_cmd(ms, i, &pid);
+			handle_pipe_cmd(ms, i, &ms->pid);
 			if (ms->p.last_cmd)
 				break ;
 		}
 		i++;
 	}
 	close_pipes(ms);
-	ret = wait_children();
+	ret = wait_children(ms);
 	return (ret);
 }
 

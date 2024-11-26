@@ -6,34 +6,39 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 03:19:33 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 06:46:31 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/26 03:47:29 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	check_syntax(char **tokens)
+int	check_syntax(t_minishell *ms)
 {
-	if (error_pipes(tokens) != SUCCESS || errors_redirect(tokens) != SUCCESS)
+	if (error_pipes(ms) != SUCCESS || errors_redirect(ms) != SUCCESS)
 		return (SYNTAX_ERROR);
 	return (SUCCESS);
 }
 
-int	error_pipes(char **tokens)
+int	error_pipes(t_minishell *ms)
 {
 	int	k;
 
 	k = 0;
-	while (tokens[k])
+	while (ms->tokens[k])
 	{
-		if (is_pipe(tokens[k]))
+		if (is_pipe(ms->tokens[k]) && !ms->token.quoted[k])
 		{
-			if (tokens[k + 1] == NULL)
+			if (k == 0)
 			{
 				ft_fprintf(2, "ms: syntax error near unexpected token '|'\n");
 				return (SYNTAX_ERROR);
 			}
-			else if (is_pipe(tokens[k + 1]))
+			if (ms->tokens[k + 1] == NULL)
+			{
+				ft_fprintf(2, "ms: syntax error near unexpected token '|'\n");
+				return (SYNTAX_ERROR);
+			}
+			else if (is_pipe(ms->tokens[k + 1]) && !ms->token.quoted[k + 1])
 			{
 				ft_fprintf(2, "ms: syntax error near unexpected token '||'\n");
 				return (SYNTAX_ERROR);
@@ -44,25 +49,26 @@ int	error_pipes(char **tokens)
 	return (SUCCESS);
 }
 
-int	errors_redirect(char **tokens)
+int	errors_redirect(t_minishell *ms)
 {
 	int	k;
 
 	k = 0;
-	while (tokens[k])
+	while (ms->tokens[k])
 	{
-		if (is_redirect(tokens[k]) || is_heredoc(tokens[k]))
+		if ((is_redirect(ms->tokens[k]) || is_heredoc(ms->tokens[k]))
+			&& !ms->token.quoted[k])
 		{
-			if (tokens[k + 1] == NULL)
+			if (ms->tokens[k + 1] == NULL)
 			{
 				ft_fprintf(2,
 					"ms: syntax error near unexpected token 'newline'\n");
 				return (SYNTAX_ERROR);
 			}
-			else if (is_meta(tokens[k + 1]))
+			else if (is_meta(ms->tokens[k + 1]) && !ms->token.quoted[k + 1])
 			{
 				ft_fprintf(2, "ms: syntax error near unexpected token '%s'\n",
-					tokens[k + 1]);
+					ms->tokens[k + 1]);
 				return (SYNTAX_ERROR);
 			}
 		}

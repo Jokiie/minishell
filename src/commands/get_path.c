@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:54:08 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 07:17:37 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/26 02:18:36 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ char	*get_path(char **envp, char *cmds)
 		full_path = create_full_path(dir, cmds);
 		if (access(full_path, F_OK | X_OK) == 0)
 		{
-			ft_free(paths_dup);
+			free_ptr(paths_dup);
 			return (full_path);
 		}
 		dir = ft_strtok(NULL, ":");
 		if (full_path)
-			ft_free(full_path);
+			free_ptr(full_path);
 	}
-	ft_free(paths_dup);
+	free_ptr(paths_dup);
 	return (NULL);
 }
 

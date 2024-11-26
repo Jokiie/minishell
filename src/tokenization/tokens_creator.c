@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 06:05:20 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/26 03:35:41 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	tokens_creator(t_minishell *ms, char *line)
 	}
 	if (open_quotes_checker(ms, line) != SUCCESS)
 	{
-		ft_fprintf(2, "ms: syntax error near unclosed quotes\n");
+		ft_putendl_fd("ms: syntax error near unclosed quotes", 2);
 		return (SYNTAX_ERROR);
 	}
 	ms->pretokens = tokenizer(ms, line);
@@ -32,7 +32,7 @@ int	tokens_creator(t_minishell *ms, char *line)
 		return (SUCCESS);
 	}
 	ms->tokens = transformer(ms);
-	if (ms->tokens && check_syntax(ms->tokens) == SYNTAX_ERROR)
+	if (ms->tokens && check_syntax(ms) == SYNTAX_ERROR)
 	{
 		free_tokens(ms->tokens);
 		return (SYNTAX_ERROR);

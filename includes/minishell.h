@@ -37,7 +37,7 @@
 # define BOLDRESET "\033[0m"
 
 # define MAX_PATH 4096
-# define MAX_HEREDOC 1024
+# define SIZE_BUF 1024
 
 typedef struct s_token
 {
@@ -93,6 +93,7 @@ typedef struct s_minishell
 	t_bool		interactive;
 	t_bool		in_pipe;
 	t_pipes		p;
+	pid_t		pid;
 }				t_minishell;
 
 // minishell.c
@@ -109,8 +110,7 @@ void			init_signals_noninteractive(void);
 // utils.c
 void			print_tokens(char **tokens);
 char			**ft_envdup(char **envp);
-int				wait_children(void);
-void			free_ptr(void *ptr);
+int				wait_children(t_minishell *ms);
 
 // exit_minishell.c
 void			exit_minishell(t_minishell *ms, int return_code);
@@ -118,7 +118,7 @@ void			exit_child(t_minishell *ms, int return_code, t_bool in_pipe);
 
 // free.c
 void			free_data(t_minishell *ms);
-void			ft_free(void *ptr);
+void			free_ptr(void *ptr);
 void			free_at_address(char **str);
 void			free_at_exit(t_minishell *ms);
 void			free_int_array(int **arr);
@@ -223,9 +223,9 @@ t_bool			is_heredoc(char *token);
 t_bool			is_pipe(char *token);
 
 // syntax_error.c
-int				check_syntax(char **tokens);
-int				errors_redirect(char **tokens);
-int				error_pipes(char **tokens);
+int				check_syntax(t_minishell *ms);
+int				errors_redirect(t_minishell *ms);
+int				error_pipes(t_minishell *ms);
 
 // contains_only.c
 t_bool			contains_only_digits(char *line);
