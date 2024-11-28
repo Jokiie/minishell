@@ -6,35 +6,11 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:40:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/26 02:18:45 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/27 22:44:41 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-volatile sig_atomic_t	g_heredoc_signal;
-
-void	heredoc_signal_handler(int signum)
-{
-	if (signum == SIGINT)
-	{
-		g_heredoc_signal = 1;
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		ioctl(STDIN_FILENO, TIOCSTI, "\n");
-	}
-}
-
-void	init_heredoc_signals(void)
-{
-	struct sigaction	sa;
-
-	sa.sa_handler = heredoc_signal_handler;
-	sa.sa_flags = 0;
-	sigemptyset(&sa.sa_mask);
-	sigaction(SIGINT, &sa, NULL);
-	signal(SIGQUIT, SIG_IGN);
-}
 
 int	process_heredocs(t_minishell *ms)
 {
@@ -87,18 +63,19 @@ int	fill_heredoc(t_minishell *ms, int fd)
 	char	*delim;
 
 	delim = ft_strdup(ms->heredoc.delim);
-	g_heredoc_signal = 0;
 	while (1)
 	{
-		init_heredoc_signals();
-		ms->heredoc.input = readline("heredoc> ");
-		if (g_heredoc_signal == 1)
+		init_signals_interactive(ms);
+		if (ms->received_sig == 2)
 		{
 			free_ptr(ms->heredoc.input);
 			free_ptr(delim);
 			reset_heredoc(ms);
+			ms->received_sig = 0;
+			ms->ret = 130;
 			return (TERM_SIGINT);
 		}
+		ms->heredoc.input = readline("heredoc> ");
 		init_signals_noninteractive();
 		ms->heredoc.line = expand_line(ms, ms->heredoc.input);
 		if (break_check(ms->heredoc.line, delim) == TRUE)

@@ -94,6 +94,7 @@ typedef struct s_minishell
 	t_bool		in_pipe;
 	t_pipes		p;
 	pid_t		pid;
+	sig_atomic_t received_sig;
 }				t_minishell;
 
 // minishell.c
@@ -101,11 +102,12 @@ typedef struct s_minishell
 void			init_heredoc_data(t_minishell *ms);
 
 // ft_signal_handler.c
-void			init_signals_interactive(void);
+void			init_signals_interactive(t_minishell *ms);
 void			reset_prompt(int sig);
 void			handle_sigquit(void);
 void			put_newline(int sig);
 void			init_signals_noninteractive(void);
+void	sync_signals(t_minishell *ms);
 
 // utils.c
 void			print_tokens(char **tokens);
@@ -248,7 +250,6 @@ int				go_home(t_minishell *ms);
 void			update_working_directories(t_minishell *ms);
 int				change_directory(t_minishell *ms, const char *path);
 
-
 // pwd.c
 int				pwd(t_minishell *ms);
 int				detect_pwd_call(t_minishell *ms, char **tokens);
@@ -285,7 +286,6 @@ int				env_var_count(char **env);
 void			set_env_var(t_minishell *ms, const char *var_name,
 					const char *value);
 int				is_valid_var_name(const char *var_name);
-
 
 // unset.c
 int				detect_unset_call(t_minishell *ms, char **tokens);

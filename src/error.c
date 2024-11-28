@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:47:45 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/26 15:57:25 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/27 14:24:28 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ int	check_error(char *cmd)
 	}
 	else
 	{
+		errno = ENOENT;
 		error_msg(cmd, strerror(errno));
-		ret = ERROR;
+		ret = CMD_NOT_FOUND;
 	}
 	return (ret);
 }

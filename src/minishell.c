@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/26 01:52:06 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/27 22:49:57 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	init_minishell(t_minishell *ms)
 	ms->token.quoted = NULL;
 	ms->in_pipe = FALSE;
 	ms->pid = 0;
+	ms->received_sig = 0;
 	init_heredoc_data(ms);
 }
 
@@ -148,6 +149,12 @@ void	execms(t_minishell *ms, char **envp)
 	// set_env_var(ms, "INPUTRC", "./.inputrc");
 	while (1)
 	{
+		sync_signals(ms);
+		if (ms->received_sig == SIGINT)
+		{
+			ms->received_sig = 0;
+			ms->ret = 130;
+		}
 		ms->prompt_name = get_prompt_name(ms);
 		ms->input = readline(ms->prompt_name);
 		if (!ms->input)
@@ -173,7 +180,7 @@ int	main(int argc, char **argv, char **envp)
 		exit(EXIT_FAILURE);
 	ft_memset(ms, 0, sizeof(ms));
 	init_minishell(ms);
-	init_signals_interactive();
+	init_signals_interactive(ms);
 	execms(ms, envp);
 	exit_minishell(ms, 0);
 	return (0);
