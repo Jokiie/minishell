@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/26 17:12:44 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/28 13:31:19 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,7 @@ int	detect_cd_call(t_minishell *ms, char **tokens)
 int	cd(t_minishell *ms, char **tokens)
 {
 	if (!tokens[1] || !*tokens[1])
-	{
-		ft_putstr_fd("ms: cd: no directory specified\n", 2);
-		return (ERROR);
-	}
+		return (go_home(ms));
 	else if (tokens[2])
 	{
 		ft_putstr_fd("ms: cd: too many arguments\n", 2);
@@ -57,16 +54,18 @@ int	go_home(t_minishell *ms)
 /* Update cwd and OLDPWD in both struct and environment variables */
 void	update_working_directories(t_minishell *ms)
 {
-	char	*cwd;
-	
+	char *cwd;
+
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
 		perror("getcwd");
-		return;
+		cwd = ft_strdup("deleted_dir");
 	}
-	set_env_var(ms, "OLDPWD", get_env(ms->env, "PWD"));
-	set_env_var(ms, "PWD", cwd);
+	if (ms->cwd)
+		set_env_var(ms, "OLDPWD", ms->cwd);
+	else
+		set_env_var(ms, "OLDPWD", "deleted_dir");
 	if (ms->prev_cwd)
 		free(ms->prev_cwd);
 	ms->prev_cwd = ms->cwd;
