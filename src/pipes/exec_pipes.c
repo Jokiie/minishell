@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 01:36:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/28 00:25:05 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/28 13:35:34 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	call_commands_pipes(t_minishell *ms)
 	ret = 0;
 	if (!ms->p.p_args || !ms->p.p_args[0])
 		exit_child(ms, ret, TRUE);
-	ret = exec_builtin2(ms, ms->p.p_args, 1);
+	ret = exec_builtin(ms, ms->p.p_args, 1);
 	if (ret == CMD_NOT_FOUND)
 		ret = detect_executable(ms, ms->p.p_args);
 	if (ret == EXE_NOT_FOUND)
