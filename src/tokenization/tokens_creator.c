@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/26 03:35:41 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/27 23:50:10 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,18 @@ char	**transformer(t_minishell *ms)
 	char	**final_tokens;
 
 	ms->expanded = expander(ms, ms->pretokens);
-	free_tokens(ms->pretokens);
+	free_tokens_address(&ms->pretokens);
 	if (!ms->expanded)
 		return (NULL);
 	tmp = cleaner(ms->expanded);
-	free_tokens(ms->expanded);
+	free_tokens_address(&ms->expanded);
 	ms->pretokens = tmp;
 	if (!ms->pretokens)
 		return (NULL);
 	fill_quoted_arr(ms, ms->pretokens);
 	final_tokens = trimmer(ms, ms->pretokens);
-	free_tokens(ms->pretokens);
-	if (!final_tokens || !*final_tokens)
+	free_tokens_address(&ms->pretokens);
+	if (!final_tokens)
 	{
 		free_tokens(final_tokens);
 		return (NULL);

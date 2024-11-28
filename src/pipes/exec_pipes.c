@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 01:36:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/27 15:33:24 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/28 00:25:05 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,11 @@ int	create_and_manage_process(t_minishell *ms, pid_t *pid)
 	}
 	else
 	{
-		// if ((has_type(ms->p.p_args, &ms->p.arg_quoted, is_redirect)
-		// 	|| has_type(ms->p.p_args, &ms->p.arg_quoted, is_heredoc)))
-		// {
-		// 	waitpid(*pid, NULL, 0);
-		// }
+		if ((has_type(ms->p.p_args, &ms->p.arg_quoted, is_redirect)
+			|| has_type(ms->p.p_args, &ms->p.arg_quoted, is_heredoc)))
+		{
+			waitpid(*pid, NULL, 0);
+		}
 		if (ms->p.cmd_num < ms->p.num_pipes)
 			close(ms->p.pipes[ms->p.cmd_num][1]);
 		if (ms->p.cmd_num > 0)
