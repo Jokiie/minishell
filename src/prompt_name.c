@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 05:35:22 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/26 02:03:45 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ char	*get_prompt_name(t_minishell *ms)
 		color = get_user_color(ms);
 		tmp = color;
 		color = ft_strjoin(color, "/");
-		ft_free(tmp);
+		free_ptr(tmp);
 		cwd_dup = ft_strjoin(color, split[count_tokens(split) - 1]);
 		username_dup = get_arrow_color(ms, cwd_dup);
-		ft_free(color);
-		ft_free(cwd_dup);
+		free_ptr(color);
+		free_ptr(cwd_dup);
 	}
 	else
 		username_dup = ft_strdup(CYAN BOLD "minishell ➜  " RESET BOLDRESET);

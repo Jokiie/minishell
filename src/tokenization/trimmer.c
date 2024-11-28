@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 15:05:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/28 00:15:32 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	**trimmer(t_minishell *ms, char **tokens)
 
 	k = 0;
 	i = 0;
-	if (!tokens)
+	if (!tokens || !*tokens)
 		return (NULL);
 	count = count_tokens(tokens);
 	trimmed = ft_calloc(count + 1, sizeof(char *));

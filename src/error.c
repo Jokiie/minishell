@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:47:45 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 16:20:33 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/27 14:24:28 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ int	check_error(char *cmd)
 		error_msg(cmd, strerror(errno));
 		ret = CPERM_DENIED;
 	}
-	else if (check_enoent(cmd) == CMD_NOT_FOUND)
-		ret = CMD_NOT_FOUND;
-	else if (check_eacces(cmd) == CPERM_DENIED)
-		ret = CPERM_DENIED;
+	else if (errno == ENOENT)
+		ret = check_enoent(cmd);
+	else if (errno == EACCES)
+		ret = check_eacces(cmd);
 	else if (errno == ENAMETOOLONG)
 	{
 		error_msg(cmd, strerror(errno));
@@ -33,39 +33,32 @@ int	check_error(char *cmd)
 	}
 	else
 	{
+		errno = ENOENT;
 		error_msg(cmd, strerror(errno));
-		ret = ERROR;
+		ret = CMD_NOT_FOUND;
 	}
 	return (ret);
 }
 
 int	check_enoent(char *cmd)
 {
-	if (errno == ENOENT)
-	{
-		if (cmd[0] == '/')
-			error_msg(cmd, strerror(errno));
-		else
-			error_msg(cmd, "command not found");
-		return (CMD_NOT_FOUND);
-	}
-	return (0);
+	if (cmd[0] == '/')
+		error_msg(cmd, strerror(errno));
+	else
+		error_msg(cmd, "command not found");
+	return (CMD_NOT_FOUND);
 }
 
 int	check_eacces(char *cmd)
 {
-	if (errno == EACCES)
+	if (cmd[0] == '/')
 	{
-		if (cmd[0] == '/')
-		{
-			errno = EISDIR;
-			error_msg(cmd, strerror(errno));
-		}
-		else
-			error_msg(cmd, strerror(errno));
-		return (CPERM_DENIED);
+		errno = EISDIR;
+		error_msg(cmd, strerror(errno));
 	}
-	return (0);
+	else
+		error_msg(cmd, strerror(errno));
+	return (CPERM_DENIED);
 }
 
 void	error_msg(char *cmd, char *msg)
@@ -73,15 +66,18 @@ void	error_msg(char *cmd, char *msg)
 	char	*name;
 	char	*sep;
 	char	*newl;
-	char	buffer[512];
-
+	char	buffer[SIZE_BUF];
+	int		size;
+	
 	name = "ms: ";
 	sep = ": ";
 	newl = "\n";
+	ft_bzero(buffer, SIZE_BUF);
 	ft_strcpy(buffer, name);
-	ft_strcat(buffer, cmd);
+	ft_strlcat(buffer, cmd, (SIZE_BUF - 96));
 	ft_strcat(buffer, sep);
 	ft_strcat(buffer, msg);
 	ft_strcat(buffer, newl);
-	write(2, buffer, ft_strlen(buffer));
+	size = ft_strlen(buffer);
+	write(2, buffer, size);
 }

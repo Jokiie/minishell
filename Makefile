@@ -79,7 +79,8 @@ SRC_REDIR = redirections/exec_redirections.c \
 			redirections/heredoc_utils.c \
 			redirections/heredoc_expander.c \
 			redirections/heredoc_statics.c \
-			redirections/heredoc_reset.c
+			redirections/heredoc_reset.c \
+			redirections/heredoc_signal.c \
 
 SRC	=		minishell.c \
 			exit_minishell.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nbr_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:37:24 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 13:53:30 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/26 02:18:21 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ char	*apply_nbr_value(char *token_dup, int i, int nbr)
 	var = single_var_extractor(token_dup, &i);
 	after = ft_substr(token_dup, i, ft_strlen(token_dup) - i);
 	new_token_dup = insert_nbr_value(before, after, nbr);
-	ft_free(token_dup);
+	free_ptr(token_dup);
 	token_dup = new_token_dup;
 	i = ft_strlen(before) + ft_strlen(var);
-	ft_free(before);
-	ft_free(var);
-	ft_free(after);
+	free_ptr(before);
+	free_ptr(var);
+	free_ptr(after);
 	return (new_token_dup);
 }
 
@@ -66,7 +66,7 @@ char	*insert_nbr_value(char *before, char *after, int nbr)
 		var_value = "";
 	half_token = ft_strjoin(before, var_value);
 	complete_token = ft_strjoin(half_token, after);
-	ft_free(half_token);
-	ft_free(var_value);
+	free_ptr(half_token);
+	free_ptr(var_value);
 	return (complete_token);
 }

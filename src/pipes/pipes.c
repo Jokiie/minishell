@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/25 05:59:00 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/26 02:48:43 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	**allocate_pipes(t_minishell *ms)
 		if (pipe(ms->p.pipes[i]) == -1)
 		{
 			perror("ms: pipe");
-			exit(EXIT_FAILURE);
+			exit_child(ms, ERROR, TRUE);
 		}
 		i++;
 	}

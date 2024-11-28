@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:23:54 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 16:03:15 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/26 02:23:07 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@
 */
 int	call_commands(t_minishell *ms)
 {
-	int	pid;
-
 	if (has_type(ms->tokens, &ms->token.quoted, is_pipe))
 	{
 		ms->ret = exect_pipes(ms);
@@ -54,14 +52,14 @@ int	call_commands(t_minishell *ms)
 	ms->ret = exec_builtin(ms, ms->tokens, 0);
 	if (ms->ret == CMD_NOT_FOUND)
 	{
-		pid = fork();
-		if (pid < 0)
+		ms->pid = fork();
+		if (ms->pid < 0)
 			return (ERROR);
-		else if (pid == 0)
+		else if (ms->pid == 0)
 		{
 			handle_child(ms);
 		}
-		ms->ret = wait_children();
+		ms->ret = wait_children(ms);
 	}
 	return (ms->ret);
 }
@@ -103,12 +101,12 @@ int	ft_execvp(char **tokens, char **envp)
 			path = get_path(envp, tokens[k]);
 		if (!path || execve(path, tokens, envp) == FAIL)
 		{
-			ft_free(path);
+			free_ptr(path);
 			return (check_error(tokens[k]));
 		}
 		k++;
 	}
-	ft_free(path);
+	free_ptr(path);
 	return (SUCCESS);
 }
 
