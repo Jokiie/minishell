@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 01:36:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/28 12:12:00 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/29 13:32:32 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 int	exect_pipes(t_minishell *ms)
 {
-	int		i;
-	int		ret;
+	int	i;
+	int	ret;
 
 	ret = 0;
 	init_exec_pipes(ms, &i);
 	while (ms->tokens[i])
 	{
-		if ((is_pipe(ms->tokens[i]) && ms->token.quoted[i] == 0)
-			|| ms->tokens[i + 1] == NULL)
+		if ((is_pipe(ms->tokens[i]) && ms->token.quoted[i] == 0) || ms->tokens[i
+			+ 1] == NULL)
 		{
 			handle_last_cmd(ms, &i);
 			handle_pipe_cmd(ms, i, &ms->pid);
@@ -80,11 +80,6 @@ int	create_and_manage_process(t_minishell *ms, pid_t *pid)
 	else if (*pid == 0)
 	{
 		handle_child_process(ms);
-		if ((has_type(ms->p.p_args, &ms->p.arg_quoted, is_redirect)
-			|| has_type(ms->p.p_args, &ms->p.arg_quoted, is_heredoc)))
-		{
-			waitpid(*pid, NULL, 0);
-		}
 	}
 	else
 	{

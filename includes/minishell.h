@@ -103,9 +103,13 @@ void				init_heredoc_data(t_minishell *ms);
 
 // ft_signal_handler.c
 void				init_signals_interactive(t_minishell *ms);
+void				init_signals_interactive_heredocs(t_minishell *ms);
 void				reset_prompt(int sig);
-void				handle_sigquit(void);
 void				sync_signals(t_minishell *ms);
+void				reset_prompt2(int sig);
+
+// handle_sigquit.c
+void				handle_sigquit(void);
 
 // utils.c
 void				print_tokens(char **tokens);
@@ -323,8 +327,6 @@ char				**recreate_tokens(char **tok, int **arr, int count, int i);
 int					get_filtered_tokc(char **tokens, int **protected);
 
 // heredoc.c
-void				heredoc_signal_handler(int signum);
-void				init_heredoc_signals(void);
 int					process_heredocs(t_minishell *ms);
 int					heredoc(t_minishell *ms);
 int					fill_heredoc(t_minishell *ms, int fd);
