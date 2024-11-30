@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/27 23:50:10 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/30 01:25:27 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,27 +42,34 @@ int	tokens_creator(t_minishell *ms, char *line)
 
 char	**transformer(t_minishell *ms)
 {
-	char	**tmp;
 	char	**final_tokens;
+	char	**dup;
 
 	ms->expanded = expander(ms, ms->pretokens);
 	free_tokens_address(&ms->pretokens);
-	if (!ms->expanded)
+	fill_quoted_arr(ms, ms->expanded);
+	final_tokens = trimmer(ms, ms->expanded);
+	if (!final_tokens)
+	{
+		free_tokens(final_tokens);
 		return (NULL);
-	tmp = cleaner(ms->expanded);
+	}
+	if (!has_type(final_tokens, &ms->token.quoted, is_pipe))
+	{
+		dup = ft_envdup(final_tokens);
+		free_tokens(final_tokens);
+		final_tokens = cleaner(ms, dup);
+		free_tokens(dup);		
+	}
 	free_tokens_address(&ms->expanded);
-	ms->pretokens = tmp;
-	if (!ms->pretokens)
-		return (NULL);
-	fill_quoted_arr(ms, ms->pretokens);
-	final_tokens = trimmer(ms, ms->pretokens);
-	free_tokens_address(&ms->pretokens);
 	if (!final_tokens)
 	{
 		free_tokens(final_tokens);
 		return (NULL);
 	}
 	ms->tokc = count_tokens(final_tokens);
+	// print_debug(final_tokens);
+	// print_protected_array(final_tokens, &ms->token.quoted);
 	return (final_tokens);
 }
 

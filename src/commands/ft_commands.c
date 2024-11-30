@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:23:54 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/26 02:23:07 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/30 04:32:34 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	handle_child(t_minishell *ms)
 	}
 	if (!ms->tokens || !*ms->tokens)
 		exit_child(ms, 0, FALSE);
-	ms->ret = exec_builtin2(ms, ms->tokens, 1);
+	ms->ret = detect_echo_call(ms, ms->tokens);
 	if (ms->ret == CMD_NOT_FOUND)
 		ms->ret = detect_executable(ms, ms->tokens);
 	if (ms->ret == EXE_NOT_FOUND)
@@ -134,34 +134,6 @@ int	exec_builtin(t_minishell *ms, char **tokens, int is_child)
 		ret = detect_pwd_call(ms, tokens);
 	if (ret == CMD_NOT_FOUND)
 		ret = detect_env_call(ms, tokens);
-	if (ret == CMD_NOT_FOUND)
-		ret = detect_export_call(ms, tokens);
-	if (ret == CMD_NOT_FOUND)
-		ret = detect_unset_call(ms, tokens);
-	return (ret);
-}
-
-/*
-	Built-in commands executed in the child process to avoid using "env", "cd",
-		or "echo"
-	as part of the path search,
-		and use the environment built-in. This also prevents error
-	messages when a built-in command is not found in the specified paths.
-*/
-int	exec_builtin2(t_minishell *ms, char **tokens, int is_child)
-{
-	int	ret;
-
-	ret = 0;
-	ret = detect_exit_call(ms, tokens, is_child);
-	if (ret == CMD_NOT_FOUND)
-		ret = detect_cd_call(ms, tokens);
-	if (ret == CMD_NOT_FOUND)
-		ret = detect_pwd_call(ms, tokens);
-	if (ret == CMD_NOT_FOUND)
-		ret = detect_env_call(ms, tokens);
-	if (ret == CMD_NOT_FOUND)
-		ret = detect_echo_call(ms, tokens);
 	if (ret == CMD_NOT_FOUND)
 		ret = detect_export_call(ms, tokens);
 	if (ret == CMD_NOT_FOUND)

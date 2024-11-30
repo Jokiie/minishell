@@ -47,6 +47,7 @@ SRC_CMDS = commands/cd.c \
 		   commands/env.c \
 		   commands/executable.c\
 		   commands/exit.c \
+		   commands/exit_utils.c \
 		   commands/export.c \
 		   commands/export_utils.c \
 		   commands/ft_commands.c \

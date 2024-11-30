@@ -194,7 +194,7 @@ char				*ft_toktrim(t_minishell *ms, char *token, int len);
 
 // cleaner.c
 
-char				**cleaner(char **tokens);
+char				**cleaner(t_minishell *ms, char **tokens);
 int					count_valid_tokens(char **tokens);
 
 // is.c
@@ -277,6 +277,11 @@ int					detect_exit_call(t_minishell *ms, char **tokens,
 int					ft_exit(t_minishell *ms, char **tokens, int is_child);
 t_bool				is_valid_arg(char *token);
 
+// exit_utils.c
+t_bool				is_valid_size(char *token);
+t_bool				iter_long_min(char *token);
+t_bool				iter_long_max(char *token);
+
 // get_path.c
 char				*get_path(char **envp, char *cmds);
 char				*create_full_path(char *dir, char *cmds);
@@ -305,7 +310,6 @@ int					call_commands(t_minishell *ms);
 void				handle_child(t_minishell *ms);
 int					ft_execvp(char **tokens, char **envp);
 int					exec_builtin(t_minishell *ms, char **tokens, int is_child);
-int					exec_builtin2(t_minishell *ms, char **tokens, int is_child);
 
 /* redirections*/
 

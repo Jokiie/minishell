@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 01:36:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/29 13:32:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/30 04:32:12 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int	exect_pipes(t_minishell *ms)
 	init_exec_pipes(ms, &i);
 	while (ms->tokens[i])
 	{
-		if ((is_pipe(ms->tokens[i]) && ms->token.quoted[i] == 0) || ms->tokens[i
-			+ 1] == NULL)
+		if ((is_pipe(ms->tokens[i]) && ms->token.quoted[i] == 0)
+			|| ms->tokens[i + 1] == NULL)
 		{
 			handle_last_cmd(ms, &i);
 			handle_pipe_cmd(ms, i, &ms->pid);
@@ -98,7 +98,9 @@ int	call_commands_pipes(t_minishell *ms)
 	ret = 0;
 	if (!ms->p.p_args || !ms->p.p_args[0])
 		exit_child(ms, ret, TRUE);
-	ret = exec_builtin2(ms, ms->p.p_args, 1);
+	ret = exec_builtin(ms, ms->p.p_args, 1);
+	if (ret == CMD_NOT_FOUND)
+		ret = detect_echo_call(ms, ms->p.p_args);
 	if (ret == CMD_NOT_FOUND)
 		ret = detect_executable(ms, ms->p.p_args);
 	if (ret == EXE_NOT_FOUND)
