@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:57 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/29 13:33:17 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/30 13:22:42 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,7 @@ void	init_signals_interactive(t_minishell *ms)
 	ms->received_sig = g_sig_received;
 	handle_sigquit();
 	ft_memset(&sa, 0, sizeof(sa));
-	if (!ms->in_pipe)
-	{
-		sa.sa_handler = &reset_prompt;
-	}
+	sa.sa_handler = &reset_prompt;
 	sigaction(SIGINT, &sa, NULL);
 }
 
@@ -57,8 +54,11 @@ void	reset_prompt(int sig)
 	g_sig_received = sig;
 	rl_replace_line("", 0);
 	rl_on_new_line();
-	// ioctl(STDIN_FILENO, TIOCSTI, "\n");
-	write(1, "\n", 1);
+	if (g_sig_received)
+		write(1, "\n", 1);
+	else
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	//write(1, "\n", 1);
 	// rl_redisplay();
 }
 void	reset_prompt2(int sig)

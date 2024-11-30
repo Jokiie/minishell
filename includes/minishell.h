@@ -234,8 +234,6 @@ t_bool				is_pipe(char *token);
 int					check_syntax(t_minishell *ms);
 int					errors_redirect(t_minishell *ms);
 int					error_pipes(t_minishell *ms);
-int					count_heredocs(t_minishell *ms);
-int					count_redirects(t_minishell *ms);
 
 // contains_only.c
 t_bool				contains_only_digits(char *line);
