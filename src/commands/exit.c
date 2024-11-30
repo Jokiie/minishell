@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 04:36:52 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/30 04:09:04 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/30 05:13:29 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	ft_exit(t_minishell *ms, char **tokens, int is_child)
 	int	return_code;
 
 	return_code = 0;
-	if (tokens[1] && tokens[2])
+	if (((tokens[1] && tokens[2])) && (is_valid_arg(tokens[1])))
 	{
 		ft_fprintf(2, "ms: exit: too many arguments\n");
 		return (ERROR);
@@ -38,7 +38,10 @@ int	ft_exit(t_minishell *ms, char **tokens, int is_child)
 	if (tokens[1] && (!is_valid_arg(tokens[1]) || !is_valid_size(tokens[1])))
 	{
 		ft_fprintf(2, "ms: exit: %s: numeric argument required\n", tokens[1]);
-		return (SYNTAX_ERROR);
+		if (is_child == 1)
+			return (SYNTAX_ERROR);
+		else
+			exit_minishell(ms, SYNTAX_ERROR);
 	}
 	else
 	{
