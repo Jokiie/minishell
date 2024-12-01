@@ -89,7 +89,6 @@ SRC	=		minishell.c \
 			free_array_tab.c \
 			utils.c \
 			signal_handler.c \
-			handle_sigquit.c \
 			error.c \
 			prompt_name.c \
 			debug.c \
