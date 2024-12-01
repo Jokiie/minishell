@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 00:18:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/30 00:26:53 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/01 01:49:35 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	fill_pipes_quoted_arr(t_minishell *ms, int i)
 	}
 }
 
-char	**extract_args(char **tokens, int start, int end)
+char	**extract_args(t_minishell *ms, char **tokens, int start, int end)
 {
 	int		i;
 	int		j;
@@ -50,7 +50,8 @@ char	**extract_args(char **tokens, int start, int end)
 	j = 0;
 	while (i < size)
 	{
-		if (tokens[start + i][0] != '\0')
+		if (tokens[start + i][0] != '\0'
+			|| (tokens[start + i][0] == '\0' && ms->token.quoted[start + i] == 1))
 		{
 			args[j] = tokens[start + i];
 			j++;

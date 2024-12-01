@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/30 01:08:44 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/01 02:42:01 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,29 +89,29 @@ int	execute_input(t_minishell *ms, char *input)
 	Execute the prompt in a loop. We read the input with readline and store
 	the input in ms->input. If readline do not encounter EOF(Ctrl+d), otherwise,
 	we parse the input:
-	
+
 	1- Tokenizer: If line is empty, ms->tokens is null. Otherwise, separe the
 		tokens at each unquoted blank character and meta-characters.
-	
+
 	2- Transformer : call the following:
-		
+
 		2.1- Expander: Iter in each tokens and expand the variables.
-		
+
 		2.2- Cleaner: Iter in each tokens and remove the empty tokens resulted
 				from expander.
-		
+
 		2.3- Fill the int array ms->token.quoted which save the states of
 				each token to determine if it was quoted or not.
 				quoted: 1 | else: 0
 		2.4 - Trimmer: Iter in each tokens and remove the quotes when needed.
-	
+
 	3-  we check if we have a heredoc, if so we execute and fill all heredocs at
 		once and save them with an unique name in our folder /tmp.
-	
+
 	4-  if all the previous step were successful, we check if the tokens contain
 		at least one pipe. If yes, execute the pipeline in exec_pipes and return
 		the exitcode of the last command.
-	
+
 	5-	If the tokens contains no pipes, we execute the simple command in a
 		sub-shell. Both pipes and simple command proceed like the following:
 
@@ -136,25 +136,18 @@ int	execute_input(t_minishell *ms, char *input)
 				check_error.
 
 		5.6 - We finally return the exit code of the child and return in execms.
-	
+
 	5 - We free the history and other data to be ready for the next command.
 */
 void	execms(t_minishell *ms, char **envp)
 {
 	ms->env = ft_envdup(envp);
 	ms->path = getcwd(NULL, 0);
-	if (!ms->path)
-		exit(EXIT_FAILURE);
 	// setenv("INPUTRC", "./.inputrc", 1);
 	// set_env_var(ms, "INPUTRC", "./.inputrc");
 	while (1)
 	{
 		sync_signals(ms);
-		if (ms->received_sig == SIGINT)
-		{
-			ms->received_sig = 0;
-			ms->ret = 130;
-		}
 		ms->prompt_name = get_prompt_name(ms);
 		ms->input = readline(ms->prompt_name);
 		if (!ms->input)

@@ -196,7 +196,7 @@ char				*ft_toktrim(t_minishell *ms, char *token, int len);
 // cleaner.c
 
 char				**cleaner(t_minishell *ms, char **tokens);
-int					count_valid_tokens(char **tokens);
+int					count_valid_tokens(t_minishell *ms, char **tokens);
 
 // is.c
 int					ft_is_dquote(int c);
@@ -263,6 +263,7 @@ int					detect_pwd_call(t_minishell *ms, char **tokens);
 // echo.c
 void				echo(t_minishell *ms, char **tokens, int opt);
 int					detect_echo_call(t_minishell *ms, char **tokens);
+t_bool				valid_echo_arg(char *token);
 
 // executable.c
 int					detect_executable(t_minishell *ms, char **tokens);
@@ -389,6 +390,6 @@ int					redirect_pipes(t_minishell *ms, t_pipes *p,
 
 // pipes_utils.c
 void				fill_pipes_quoted_arr(t_minishell *ms, int cmd_start);
-char				**extract_args(char **tokens, int start, int end);
+char				**extract_args(t_minishell *ms, char **tokens, int start, int end);
 void				handle_last_cmd(t_minishell *ms, int *i);
 #endif

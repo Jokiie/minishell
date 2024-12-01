@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 01:36:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/30 04:32:12 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/01 01:47:27 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	exect_pipes(t_minishell *ms)
 
 void	handle_pipe_cmd(t_minishell *ms, int i, pid_t *pid)
 {
-	ms->p.p_args = extract_args(ms->tokens, ms->p.cmd_start, i);
+	ms->p.p_args = extract_args(ms, ms->tokens, ms->p.cmd_start, i);
 	if (!ms->p.p_args)
 		return ;
 	fill_pipes_quoted_arr(ms, ms->p.cmd_start);
@@ -96,7 +96,7 @@ int	call_commands_pipes(t_minishell *ms)
 	int	ret;
 
 	ret = 0;
-	if (!ms->p.p_args || !ms->p.p_args[0])
+	if (!ms->p.p_args || (!ms->p.p_args[0] && ms->p.arg_quoted[0] == 0))
 		exit_child(ms, ret, TRUE);
 	ret = exec_builtin(ms, ms->p.p_args, 1);
 	if (ret == CMD_NOT_FOUND)
