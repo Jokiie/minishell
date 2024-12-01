@@ -1,0 +1,57 @@
+to do:
+
+❌ export A- 
+mini output = (minishell: export: not an identifier: A-)
+bash output = ()
+mini error = ()
+bash error = ( not a valid identifier)
+
+❌ export HELLO-=123 
+mini output = (minishell: export: not an identifier: HELLO-)
+bash output = ()
+mini error = ()
+bash error = ( not a valid identifier)
+
+❌ export = 
+mini output = (minishell: export: not an identifier: =)
+bash output = ()
+mini error = ()
+bash error = ( not a valid identifier)
+
+❌ export 123
+mini output = (minishell: export: not an identifier: 123)
+bash output = ()
+mini error = ()
+bash error = ( not a valid identifier)
+
+❌ export export
+mini : (added "export=" into the env)
+bash : (do nothing and return 0)
+
+❌ export unset
+mini : (added "unset=" into the env)
+bash : (do nothing and return 0)
+
+✅ export var="lol mdr"
+mini : (added "var=lol mdr" into the env)
+bash : (added "var=lol mdr" into the env)
+
+❌ ls $var
+mini : ls: cannot access 'lol mdr': No such file or directory
+bash : ls: cannot access 'lol': No such file or directory
+       ls: cannot access 'mdr': No such file or directory
+❌ export a='1 b=2 "c=3'
+mini : (added: "a=1 b" into the env)
+bash : (added: "a=1 b=2 "c=3" into the env)
+
+❌ export HELLO=123 A- WORLD=456
+mini output = (minishell: export: not an identifier: A-)
+bash output = ()
+mini error = ()
+bash error = ( not a valid identifier)
+
+❌ export | sort | grep -v SHLVL | grep -v "declare -x _" | grep -v "PS.="
+mini output = ()
+bash output = (declare -x COLORTERM="truecolor" declare -x DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus" declare -x DISPLAY=":0" declare -x GIT_ASKPASS="/home/ccodere/.vscode-server/bin/f1a4fb101478ce6ec82fe9627c43efbf9e98c813/extensions/git/dist/askpass.sh" declare -x HOME="/home/ccodere" declare -x HOSTTYPE="x86_64" declare -x LANG="en_CA.UTF-8" declare -x LESS="-R" declare -x LOGNAME="ccodere" declare -x LSCOLORS="Gxfxcxdxbxegedabagacad" declare -x LS_COLORS="rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:" declare -x NAME="Code" declare -x NVM_BIN="/home/ccodere/.nvm/versions/node/v22.2.0/bin" declare -x NVM_CD_FLAGS="-q" declare -x NVM_DIR="/home/ccodere/.nvm" declare -x NVM_INC="/home/ccodere/.nvm/versions/node/v22.2.0/include/node" declare -x OLDPWD="/home/ccodere/42cursus/minishell" declare -x PAGER="less" declare -x PATH="/home/ccodere/.vscode-server/bin/f1a4fb101478ce6ec82fe9627c43efbf9e98c813/bin/remote-cli:/home/ccodere/.nvm/versions/node/v22.2.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files (x86)/Razer/ChromaBroadcast/bin:/mnt/c/Program Files/Razer/ChromaBroadcast/bin:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/mnt/c/ProgramData/Oracle/Java/javapath:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/Microsoft SQL Server/130/Tools/Binn/:/mnt/c/Program Files/Git/cmd:/mnt/c/TDM-GCC-64/bin:/mnt/c/WINDOWS/system32/config/systemprofile/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/celia/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/celia/.dotnet/tools:/mnt/c/Users/celia/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/celia/AppData/Local/GitHubDesktop/bin" declare -x PULSE_SERVER="unix:/mnt/wslg/PulseServer" declare -x PWD="/home/ccodere/42cursus/minishell/minishell_tester" declare -x SHELL="/usr/bin/zsh" declare -x TERM_PROGRAM_VERSION="1.95.3" declare -x TERM_PROGRAM="vscode" declare -x TERM="xterm-256color" declare -x USER="ccodere" declare -x USER_ZDOTDIR="/home/ccodere" declare -x VSCODE_GIT_ASKPASS_EXTRA_ARGS="" declare -x VSCODE_GIT_ASKPASS_MAIN="/home/ccodere/.vscode-server/bin/f1a4fb101478ce6ec82fe9627c43efbf9e98c813/extensions/git/dist/askpass-main.js" declare -x VSCODE_GIT_ASKPASS_NODE="/home/ccodere/.vscode-server/bin/f1a4fb101478ce6ec82fe9627c43efbf9e98c813/node" declare -x VSCODE_GIT_IPC_HANDLE="/run/user/1000/vscode-git-5fdd5d3291.sock" declare -x VSCODE_INJECTION="1" declare -x VSCODE_IPC_HOOK_CLI="/run/user/1000/vscode-ipc-6d3b62cc-eb3a-4d76-973c-04cd544dd375.sock" declare -x WAYLAND_DISPLAY="wayland-0" declare -x WSL2_GUI_APPS_ENABLED="1" declare -x WSL_DISTRO_NAME="Ubuntu-22.04" declare -x WSLENV="ELECTRON_RUN_AS_NODE/w:" declare -x WSL_INTEROP="/run/WSL/1546_interop" declare -x XDG_RUNTIME_DIR="/run/user/1000/" declare -x ZDOTDIR="/home/ccodere" declare -x ZSH="/home/ccodere/.oh-my-zsh")
+mini exit code = 1
+bash exit code = 0
