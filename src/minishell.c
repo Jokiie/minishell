@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 05:15:16 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 06:14:26 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ void	execms(t_minishell *ms, char **envp)
 {
 	ms->env = ft_envdup(envp);
 	ms->path = getcwd(NULL, 0);
-	set_env_var(ms, "INPUTRC", "./.inputrc");
+	//set_env_var(ms, "INPUTRC", "./.inputrc");
 	while (1)
 	{
 		sync_signals(ms);

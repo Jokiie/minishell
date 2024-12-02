@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 06:06:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 06:15:38 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ char	**get_cwdsplit(t_minishell *ms)
 		splitted = ft_split(cwd, '/');
 		free_ptr(cwd);
 	}
+	ms->cwd = getcwd(NULL, 0);
 	return (splitted);
 }
 
