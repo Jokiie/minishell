@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 03:06:43 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 06:06:32 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,19 +54,27 @@ char	**get_cwdsplit(t_minishell *ms)
 {
 	char	**splitted;
 	int		i;
+	char	*cwd;
 
+	(void)ms;
 	i = 0;
 	splitted = NULL;
-	ms->cwd = getcwd(NULL, 0);
-	if ((ms->cwd[0] == '/' && !ms->cwd[1]) || (ms->cwd[1] && ms->cwd[1] == '/'))
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+		cwd = ft_strdup("/deleted_dir");
+	if (cwd)
 	{
-		while (ms->cwd[i] && ms->cwd[i] == '/')
-			i++;
-		if (!ms->cwd[i])
+		if ((cwd[0] == '/' && (!cwd[1] || cwd[1] == '/')))
+		{
+			while (cwd[i] && cwd[i] == '/')
+				i++;
 			splitted = ft_split("'/'/'/'", '\'');
-		return (splitted);
+			free_ptr(cwd);
+			return (splitted);
+		}
+		splitted = ft_split(cwd, '/');
+		free_ptr(cwd);
 	}
-	splitted = ft_split(ms->cwd, '/');
 	return (splitted);
 }
 
