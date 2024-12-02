@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 04:22:34 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 05:12:03 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	tokens_creator(t_minishell *ms, char *line)
 	ms->pretokens = tokenizer(ms, line);
 	if (!ms->pretokens || !*ms->pretokens)
 	{
-		ms->pretokens = NULL;
 		ms->tokens = NULL;
 		return (SUCCESS);
 	}
@@ -46,22 +45,12 @@ char	**transformer(t_minishell *ms)
 {
 	char	**final_tokens;
 	char	**dup;
-	//ft_fprintf(2, "Pretokens:\n");
-	//print_debug(ms->pretokens);
 
 	init_expanded_array(ms, ms->pretokens);
 	fill_quoted_arr(ms, ms->pretokens);
 	ms->expanded = expander(ms, ms->pretokens);
-	
-	//ft_fprintf(2, "Expanded:\n");
-	//print_debug(ms->expanded);
-
 	free_tokens_address(&ms->pretokens);
 	final_tokens = trimmer(ms, ms->expanded);
-
-	//ft_fprintf(2, "Trimmed:\n");
-	//print_debug(final_tokens);
-
 	free_tokens_address(&ms->expanded);
 	if (!final_tokens)
 		return (NULL);
@@ -70,10 +59,6 @@ char	**transformer(t_minishell *ms)
 		dup = ft_envdup(final_tokens);
 		free_tokens(final_tokens);
 		final_tokens = cleaner(ms, dup);
-
-		//ft_fprintf(2, "Cleaned:\n");
-		//print_debug(final_tokens);
-		
 		free_tokens(dup);
 	}
 	if (!final_tokens || (!final_tokens[0] && ms->token.quoted[0] == 0))
@@ -81,8 +66,6 @@ char	**transformer(t_minishell *ms)
 		free_tokens(final_tokens);
 		return (NULL);
 	}
-	//ft_fprintf(2, "ms->tokens:\n");
-	//print_debug(final_tokens);
 	return (final_tokens);
 }
 
@@ -94,8 +77,6 @@ void	fill_quoted_arr(t_minishell *ms, char **tokens)
 
 	i = 0;
 	k = 0;
-	if (!tokens)
-		return ;
 	count = count_tokens(tokens);
 	ms->token.quoted = ft_calloc(count + 1, sizeof(int));
 	if (!ms->token.quoted)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:28:23 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/25 13:51:50 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/02 05:21:16 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	detect_unset_call(t_minishell *ms, char **tokens)
 	ms->ret = CMD_NOT_FOUND;
 	return (ms->ret);
 }
+
 void	unset_handling(t_minishell *ms, char **tokens, int i)
 {
 	int	env_index;
@@ -33,11 +34,9 @@ void	unset_handling(t_minishell *ms, char **tokens, int i)
 		if (env_index >= 0)
 		{
 			remove_env_var1(ms, env_index);
-			//printf("Unset variable: %s\n", tokens[i]);
 		}
 		else
-			//printf("minishell: unset: %s: not found\n", tokens[i]);
-		i++;
+			i++;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 03:42:03 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 05:15:16 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ void	init_minishell(t_minishell *ms)
 		(tokens_creator return 0 if no syntax errors were found)
 	- heredoc -> success: 0 | terminated with SIGINT: 130
 	- call_commands -> Return value depend of child return value.
-
-	to do: rename to parse_input
 */
 int	execute_input(t_minishell *ms, char *input)
 {
@@ -144,8 +142,7 @@ void	execms(t_minishell *ms, char **envp)
 {
 	ms->env = ft_envdup(envp);
 	ms->path = getcwd(NULL, 0);
-	// setenv("INPUTRC", "./.inputrc", 1);
-	// set_env_var(ms, "INPUTRC", "./.inputrc");
+	set_env_var(ms, "INPUTRC", "./.inputrc");
 	while (1)
 	{
 		sync_signals(ms);

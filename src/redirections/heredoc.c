@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:40:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 04:03:42 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 04:35:43 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,17 +63,14 @@ int	fill_heredoc(t_minishell *ms, int fd)
 	char	*delim;
 
 	delim = ft_strdup(ms->heredoc.delim);
-	ft_fprintf(2, "delim: %s\n", delim);
 	while (1)
 	{
 		init_signals_interactive_heredocs(ms);
-		if (ms->received_sig == 2)
+		if (ms->received_sig == SIGINT)
 		{
 			free_ptr(ms->heredoc.input);
 			free_ptr(delim);
 			reset_heredoc(ms);
-			ms->received_sig = 0;
-			ms->ret = 130;
 			return (TERM_SIGINT);
 		}
 		ms->heredoc.input = readline("heredoc> ");

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 05:43:45 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/30 00:22:38 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 04:51:21 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 void	print_debug(char **tokens)
 {
 	int	k;
-	int count;
-	
+	int	count;
+
 	k = 0;
 	if (!tokens || !*tokens)
 	{
@@ -29,12 +29,12 @@ void	print_debug(char **tokens)
 		if (tokens[k])
 			ft_fprintf(2, GREEN "[%d] = :%s:\n" RESET, k, tokens[k]);
 		else
-			ft_fprintf(2, GREEN "[%d] = (null)\n" RESET, k);	
+			ft_fprintf(2, GREEN "[%d] = (null)\n" RESET, k);
 		k++;
 	}
 }
 
-void	print_protected_array(char **tokens, int **protected)
+void	print_int_array(char **tokens, int **quoted)
 {
 	int	i;
 	int	count;
@@ -44,9 +44,9 @@ void	print_protected_array(char **tokens, int **protected)
 	while (i < count)
 	{
 		if (tokens[i])
-			ft_fprintf(2, YELLOW "protected[%d] = %d\n" RESET, i, (*protected)[i]);
+			ft_fprintf(2, YELLOW "quoted[%d] = %d\n" RESET, i, (*quoted)[i]);
 		else
-			ft_fprintf(2, YELLOW "protected[%d] = (null)\n" RESET, i);
+			ft_fprintf(2, YELLOW "quoted[%d] = (null)\n" RESET, i);
 		i++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 00:18:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/01 01:49:35 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 04:32:25 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ char	**extract_args(t_minishell *ms, char **tokens, int start, int end)
 	j = 0;
 	while (i < size)
 	{
-		if (tokens[start + i][0] != '\0'
-			|| (tokens[start + i][0] == '\0' && ms->token.quoted[start + i] == 1))
+		if (tokens[start + i][0] != '\0' || (tokens[start + i][0] == '\0'
+				&& ms->token.quoted[start + i] == 1))
 		{
 			args[j] = tokens[start + i];
 			j++;

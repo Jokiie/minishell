@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:24 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/30 22:43:17 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 05:08:00 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,7 @@ void	echo(t_minishell *ms, char **tokens, int opt)
 	(void)ms;
 	first_word = 1;
 	if (opt == 1)
-	{
-		k = 2;
-		while (tokens[k])
-		{
-			if (valid_echo_arg(tokens[k]) == TRUE)
-				k++;
-			else
-				break ;
-		}
-	}
+		k = update_echo_index(tokens, &k);
 	else
 		k = 1;
 	while (tokens[k])
@@ -62,6 +53,19 @@ void	echo(t_minishell *ms, char **tokens, int opt)
 	}
 	if (!opt)
 		ft_putstr_fd("\n", STDOUT_FILENO);
+}
+
+int	update_echo_index(char **tokens, int *k)
+{
+	*k = 2;
+	while (tokens[*k])
+	{
+		if (valid_echo_arg(tokens[*k]) == TRUE)
+			(*k)++;
+		else
+			break ;
+	}
+	return (*k);
 }
 
 t_bool	valid_echo_arg(char *token)

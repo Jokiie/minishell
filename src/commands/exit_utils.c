@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 04:06:55 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/30 05:04:08 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 05:21:34 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 t_bool	is_valid_size(char *token)
 {
-	char		*long_max;
-	char		*long_min_max;
+	char	*long_max;
+	char	*long_min_max;
 
 	long_max = "9223372036854775807";
 	long_min_max = "-9223372036854775808";
@@ -60,7 +60,7 @@ t_bool	iter_long_max(char *token)
 	char	*long_max;
 	int		i;
 	int		j;
-	
+
 	long_max = "9223372036854775807";
 	j = 0;
 	i = 0;
