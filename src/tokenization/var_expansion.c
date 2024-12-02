@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:43:35 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/01 23:54:55 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 04:47:19 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*var_extractor(char *token, int *i)
 	else
 	{
 		(*i)++;
-		return(ft_strdup(""));
+		return (ft_strdup(""));
 	}
 	return (substr);
 }

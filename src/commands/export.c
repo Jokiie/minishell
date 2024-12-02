@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/25 15:31:17 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/02 05:20:24 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int detect_export_call(t_minishell *ms, char **tokens)
+int	detect_export_call(t_minishell *ms, char **tokens)
 {
 	if (ft_strncmp(tokens[0], "export\0", 7) == 0)
 	{

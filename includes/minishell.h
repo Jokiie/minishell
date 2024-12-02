@@ -125,9 +125,9 @@ void				exit_child(t_minishell *ms, int return_code,
 
 // free.c
 void				free_data(t_minishell *ms);
+void				free_at_exit(t_minishell *ms);
 void				free_ptr(void *ptr);
 void				free_at_address(char **str);
-void				free_at_exit(t_minishell *ms);
 void				free_int_array(int **arr);
 
 // free_array_tab.c
@@ -153,7 +153,7 @@ char				**get_cwdsplit(t_minishell *ms);
 
 // debug.c
 void				print_debug(char **tokens);
-void				print_protected_array(char **tokens, int **protected);
+void				print_int_array(char **tokens, int **quoted);
 
 /* Tokenization */
 
@@ -211,7 +211,7 @@ int					ft_ismeta_chars(int c);
 
 // has_meta.c
 t_bool				has_redirect(t_minishell *ms, char **tokens);
-t_bool				has_type(char **tokens, int **protected,
+t_bool				has_type(char **tokens, int **quoted,
 						t_bool (*is_type)(char *));
 t_bool				has_meta(t_minishell *ms, char **tokens);
 t_bool				has_quotes(char *token);
@@ -248,7 +248,7 @@ t_bool				contains_only_type(char **tokens, int **protected,
 
 // count.c
 
-int					count_type(char **tokens, int **protected,
+int					count_type(char **tokens, int **quoted,
 						t_bool (*is_type)(char *));
 int					count_tokens(char **tokens);
 
@@ -269,6 +269,7 @@ int					detect_pwd_call(t_minishell *ms, char **tokens);
 void				echo(t_minishell *ms, char **tokens, int opt);
 int					detect_echo_call(t_minishell *ms, char **tokens);
 t_bool				valid_echo_arg(char *token);
+int					update_echo_index(char **tokens, int *k);
 
 // executable.c
 int					detect_executable(t_minishell *ms, char **tokens);

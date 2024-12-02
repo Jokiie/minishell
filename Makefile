@@ -160,8 +160,8 @@ mem: all
 fullmem: all
 	valgrind --leak-check=full --trace-children=yes --track-fds=yes --show-leak-kinds=all --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
 
-norm:
-	norminette src/*.c src/tokenization/*.c src/commands/*.c src/redirections/*.c src/pipes/*.c
+norm: all
+	norminette libft src
 
 
 exp:

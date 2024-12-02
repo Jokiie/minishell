@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 04:36:52 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/30 05:13:29 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 05:22:55 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ int	ft_exit(t_minishell *ms, char **tokens, int is_child)
 			return_code = ft_atol(tokens[1]);
 		if (is_child == 1)
 			return (return_code);
-		else
-			exit_minishell(ms, return_code);
+		exit_minishell(ms, return_code);
 	}
 	return (SUCCESS);
 }

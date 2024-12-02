@@ -6,12 +6,15 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 02:38:54 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 04:59:22 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/*
+	Print all the tokens in the STDIN followed by a new line.
+*/
 void	print_tokens(char **tokens)
 {
 	int	k;

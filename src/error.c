@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:47:45 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/01 01:59:57 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 05:16:50 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	error_msg(char *cmd, char *msg)
 	char	*newl;
 	char	buffer[SIZE_BUF];
 	int		size;
-	
+
 	name = "ms: ";
 	sep = ": ";
 	newl = "\n";

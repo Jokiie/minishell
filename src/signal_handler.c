@@ -6,13 +6,12 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:57 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/01 13:49:48 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 05:14:41 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-volatile sig_atomic_t	g_sig_received = 0;
 /*
 	ctrl-D -> quit the shell (if (!ms->input), in execms)
 	ctrl-C -> display a new prompt on a new line
@@ -21,6 +20,8 @@ volatile sig_atomic_t	g_sig_received = 0;
 	ps : Children processes inherit the signal handler so there is no need to
 		call it in the "if (pid == 0)"
 */
+volatile sig_atomic_t	g_sig_received = 0;
+
 void	init_signals_interactive(t_minishell *ms)
 {
 	struct sigaction	sa;
@@ -50,9 +51,7 @@ void	reset_prompt(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		return ;
-		//write(1, "\n", 1);
-		//rl_redisplay();
-	}	
+	}
 }
 
 void	init_signals_interactive_heredocs(t_minishell *ms)
@@ -72,6 +71,4 @@ void	reset_prompt2(int sig)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
-	// write(1, "\n", 1);
-	// rl_redisplay();
 }

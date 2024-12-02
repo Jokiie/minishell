@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 02:51:27 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 05:10:25 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ int	cd(t_minishell *ms, char **tokens)
 /* Navigate to the home directory */
 int	go_home(t_minishell *ms)
 {
-	char *home;
-	
+	char	*home;
+
 	home = get_env(ms->env, "HOME");
 	if (!home || chdir(home) == -1)
 	{
@@ -54,7 +54,7 @@ int	go_home(t_minishell *ms)
 /* Update cwd and OLDPWD in both struct and environment variables */
 void	update_working_directories(t_minishell *ms)
 {
-	char *cwd;
+	char	*cwd;
 
 	cwd = getcwd(NULL, 0);
 	if (!cwd)

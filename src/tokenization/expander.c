@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 01:05:08 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 04:45:53 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ void	init_expanded_array(t_minishell *ms, char **tokens)
 	int	i;
 	int	count;
 
-	if (!tokens || !*tokens)
-		return ;
 	count = count_tokens(tokens);
 	ms->token.expanded = ft_calloc(count + 1, sizeof(int));
 	if (!ms->token.expanded)
@@ -36,8 +34,8 @@ void	init_expanded_array(t_minishell *ms, char **tokens)
 	k = 0;
 	while (tokens[k] && k < count)
 	{
-		if (tokens[k][0] == '$' && tokens[k][1]
-		&& var_is_squoted(ms, tokens[k]) != TRUE)
+		if (tokens[k][0] == '$' && tokens[k][1] && var_is_squoted(ms,
+				tokens[k]) != TRUE)
 		{
 			if (ft_isalpha(tokens[k][1]) || tokens[k][1] == '_')
 				ms->token.expanded[i] = 1;
@@ -51,7 +49,7 @@ void	init_expanded_array(t_minishell *ms, char **tokens)
 
 t_bool	var_is_squoted(t_minishell *ms, char *tokens)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (tokens[i])
@@ -61,7 +59,7 @@ t_bool	var_is_squoted(t_minishell *ms, char *tokens)
 			return (TRUE);
 		i++;
 	}
-	return (FALSE);	
+	return (FALSE);
 }
 
 char	**expander(t_minishell *ms, char **tokens)
@@ -73,18 +71,15 @@ char	**expander(t_minishell *ms, char **tokens)
 
 	k = 0;
 	i = 0;
-	if (!tokens || !*tokens)
-		return (NULL);
 	count = count_tokens(tokens);
 	expanded = ft_calloc(count + 1, sizeof(char *));
 	if (!expanded)
 		return (NULL);
 	while (tokens[k] && k < count)
 	{
-		if (k > 0 && (is_heredoc(tokens[k - 1]) && ms->token.quoted[k - 1] == 0) && tokens[k])
-		{
+		if (k > 0 && (is_heredoc(tokens[k - 1]) && ms->token.quoted[k - 1] == 0)
+			&& tokens[k])
 			expanded[i] = ft_strdup(tokens[k]);
-		}
 		else
 			expanded[i] = expand_token(ms, tokens[k], k, 0);
 		if (expanded)
