@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/28 00:15:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 00:10:09 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ char	**trimmer(t_minishell *ms, char **tokens)
 		return (NULL);
 	while (tokens[k] && k < count)
 	{
-		trimmed[i] = ft_toktrim(ms, tokens[k], ft_strlen(tokens[k]));
+		if (ms->token.expanded[k] == 1)
+			trimmed[i] = ft_strdup(tokens[k]);
+		else
+			trimmed[i] = ft_toktrim(ms, tokens[k], ft_strlen(tokens[k]));
 		if (trimmed[i])
 			i++;
 		k++;
@@ -51,14 +54,17 @@ char	*ft_toktrim(t_minishell *ms, char *token, int len)
 	buffer = ft_calloc((len + 1), sizeof(char));
 	if (!buffer)
 		return (NULL);
-	while (token[i] && i < len)
+	ms->token.in_dquotes = FALSE;
+	ms->token.in_squotes = FALSE;
+	while (i < len && j < len)
 	{
 		quotes_detector(ms, token, i);
 		if ((i < len) && ((ft_is_squote(token[i]) && !ms->token.in_dquotes)
 				|| (ft_is_dquote(token[i]) && !ms->token.in_squotes)))
 			i++;
 		else
-			buffer[j++] = token[i++];
+			if (i < len)
+				buffer[j++] = token[i++];
 	}
 	buffer[j] = '\0';
 	return (buffer);

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/01 00:49:49 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:06:43 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,20 @@ char	*get_prompt_name(t_minishell *ms)
 char	**get_cwdsplit(t_minishell *ms)
 {
 	char	**splitted;
+	int		i;
 
+	i = 0;
 	splitted = NULL;
 	ms->cwd = getcwd(NULL, 0);
-	if (!ms->cwd)
-		ms->cwd = ft_strdup(get_env(ms->env, "PWD"));
-	if (ms->cwd)
-		splitted = ft_split(ms->cwd, '/');
+	if ((ms->cwd[0] == '/' && !ms->cwd[1]) || (ms->cwd[1] && ms->cwd[1] == '/'))
+	{
+		while (ms->cwd[i] && ms->cwd[i] == '/')
+			i++;
+		if (!ms->cwd[i])
+			splitted = ft_split("'/'/'/'", '\'');
+		return (splitted);
+	}
+	splitted = ft_split(ms->cwd, '/');
 	return (splitted);
 }
 

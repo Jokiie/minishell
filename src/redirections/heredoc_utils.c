@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 22:07:44 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 06:17:44 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:22:39 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_bool	line_is_null(char *line, char *delim)
 
 t_bool	is_delim(char *line, char *delim)
 {
-	if (ft_strncmp(line, delim, ft_strlen(delim)) == 0)
+	if (ft_strncmp(delim, line, ft_strlen(line)) == 0 && is_same_size(line, delim) == TRUE)
 	{
 		return (TRUE);
 	}

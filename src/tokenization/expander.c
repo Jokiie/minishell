@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 06:57:11 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 01:05:08 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,50 @@
 	we replace the variable by the value of the environment variable or the
 	return value of the last command if it's a '?'.
 */
+void	init_expanded_array(t_minishell *ms, char **tokens)
+{
+	int	k;
+	int	i;
+	int	count;
+
+	if (!tokens || !*tokens)
+		return ;
+	count = count_tokens(tokens);
+	ms->token.expanded = ft_calloc(count + 1, sizeof(int));
+	if (!ms->token.expanded)
+		return ;
+	i = 0;
+	k = 0;
+	while (tokens[k] && k < count)
+	{
+		if (tokens[k][0] == '$' && tokens[k][1]
+		&& var_is_squoted(ms, tokens[k]) != TRUE)
+		{
+			if (ft_isalpha(tokens[k][1]) || tokens[k][1] == '_')
+				ms->token.expanded[i] = 1;
+		}
+		else
+			ms->token.expanded[i] = 0;
+		k++;
+		i++;
+	}
+}
+
+t_bool	var_is_squoted(t_minishell *ms, char *tokens)
+{
+	int i;
+
+	i = 0;
+	while (tokens[i])
+	{
+		quotes_detector(ms, tokens, i);
+		if (tokens[i] == '$' && ms->token.in_squotes == TRUE)
+			return (TRUE);
+		i++;
+	}
+	return (FALSE);	
+}
+
 char	**expander(t_minishell *ms, char **tokens)
 {
 	char	**expanded;
@@ -37,7 +81,12 @@ char	**expander(t_minishell *ms, char **tokens)
 		return (NULL);
 	while (tokens[k] && k < count)
 	{
-		expanded[i] = expand_token(ms, tokens[k], 0);
+		if (k > 0 && (is_heredoc(tokens[k - 1]) && ms->token.quoted[k - 1] == 0) && tokens[k])
+		{
+			expanded[i] = ft_strdup(tokens[k]);
+		}
+		else
+			expanded[i] = expand_token(ms, tokens[k], k, 0);
 		if (expanded)
 			i++;
 		k++;
@@ -46,7 +95,7 @@ char	**expander(t_minishell *ms, char **tokens)
 	return (expanded);
 }
 
-char	*expand_token(t_minishell *ms, char *token, int i)
+char	*expand_token(t_minishell *ms, char *token, int k, int i)
 {
 	char	*dup;
 	char	*new_dup;
@@ -54,7 +103,7 @@ char	*expand_token(t_minishell *ms, char *token, int i)
 	dup = ft_strdup(token);
 	while (dup[i])
 	{
-		quotes_detector(ms, dup, i);
+		quotes_detector_tokens(ms, dup, k, i);
 		if (dup[i] == '$' && !ms->token.in_squotes && (ft_isalnum(dup[i + 1])
 				|| dup[i + 1] == '_'))
 		{

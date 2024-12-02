@@ -46,6 +46,7 @@ typedef struct s_token
 	int				end;
 	int				size;
 	int				*quoted;
+	int				*expanded;
 	t_bool			is_meta;
 	t_bool			in_dquotes;
 	t_bool			in_squotes;
@@ -170,10 +171,14 @@ int					count_words(char const *line);
 // quotes_detector.c
 int					quotes_detector(t_minishell *ms, char *line, int i);
 int					open_quotes_checker(t_minishell *ms, char *line);
-
+int					quotes_detector_tokens(t_minishell *ms, char *tokens, int k,
+						int i);
 // expander.c
 char				**expander(t_minishell *ms, char **tokens);
-char				*expand_token(t_minishell *ms, char *token, int i);
+char				*expand_token(t_minishell *ms, char *token, int k, int i);
+void				init_expanded_array(t_minishell *ms, char **tokens);
+t_bool				var_is_squoted(t_minishell *ms, char *tokens);
+;
 
 // var_expansion.c
 char				*apply_var_expansion(t_minishell *ms, char *token_dup,
@@ -338,8 +343,9 @@ int					heredoc(t_minishell *ms);
 int					fill_heredoc(t_minishell *ms, int fd);
 
 // heredoc_expander.c
-char				*expand_line(t_minishell *ms, char *line);
-char				*heredoc_expander(t_minishell *ms, char *line);
+char				*expand_line(t_minishell *ms, char *line, char *delim);
+char				*heredoc_expander(t_minishell *ms, char *line, char *delim);
+t_bool				is_same_size(char *str1, char *str2);
 
 // heredoc_utils.c
 char				*create_heredoc_name(t_minishell *ms);
@@ -390,6 +396,7 @@ int					redirect_pipes(t_minishell *ms, t_pipes *p,
 
 // pipes_utils.c
 void				fill_pipes_quoted_arr(t_minishell *ms, int cmd_start);
-char				**extract_args(t_minishell *ms, char **tokens, int start, int end);
+char				**extract_args(t_minishell *ms, char **tokens, int start,
+						int end);
 void				handle_last_cmd(t_minishell *ms, int *i);
 #endif

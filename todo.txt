@@ -1,13 +1,19 @@
 to do:
 
-❌ export A- 
+❌ export A-
 mini output = (minishell: export: not an identifier: A-)
 bash output = ()
 mini error = ()
 bash error = ( not a valid identifier)
 
-❌ export HELLO-=123 
+❌ export HELLO-=123
 mini output = (minishell: export: not an identifier: HELLO-)
+bash output = ()
+mini error = ()
+bash error = ( not a valid identifier)
+
+❌ export HELLO=123 A- WORLD=456
+mini output = (minishell: export: not an identifier: A-)
 bash output = ()
 mini error = ()
 bash error = ( not a valid identifier)
@@ -24,6 +30,11 @@ bash output = ()
 mini error = ()
 bash error = ( not a valid identifier)
 
+i think the errors above happen because the message is not the same
+->solution try to use 
+error_msg(cmd, message);
+check error.c for examples
+------------------------------------------------------------------
 ❌ export export
 mini : (added "export=" into the env)
 bash : (do nothing and return 0)
@@ -40,15 +51,18 @@ bash : (added "var=lol mdr" into the env)
 mini : ls: cannot access 'lol mdr': No such file or directory
 bash : ls: cannot access 'lol': No such file or directory
        ls: cannot access 'mdr': No such file or directory
+
 ❌ export a='1 b=2 "c=3'
 mini : (added: "a=1 b" into the env)
 bash : (added: "a=1 b=2 "c=3" into the env)
+---
+Not a tokenizer error, here is the debug output:
 
-❌ export HELLO=123 A- WORLD=456
-mini output = (minishell: export: not an identifier: A-)
-bash output = ()
-mini error = ()
-bash error = ( not a valid identifier)
+ms->tokens:
+[0] = :export:
+[1] = :a=1 b=2 "c=3:
+
+---
 
 ❌ export | sort | grep -v SHLVL | grep -v "declare -x _" | grep -v "PS.="
 mini output = ()
