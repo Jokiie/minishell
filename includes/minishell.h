@@ -305,6 +305,8 @@ int					env_var_count(char **env);
 void				set_env_var(t_minishell *ms, const char *var_name,
 						const char *value);
 int					is_valid_var_name(const char *var_name);
+char				*extract_var_value(const char *str, int j);
+char				*extract_var_name(const char *str);
 
 // unset.c
 int					detect_unset_call(t_minishell *ms, char **tokens);

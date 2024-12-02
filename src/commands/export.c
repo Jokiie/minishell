@@ -3,14 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/12/02 05:20:24 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 17:26:57 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	env_var_count(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env && env[i])
+		i++;
+	return (i);
+}
 
 int	detect_export_call(t_minishell *ms, char **tokens)
 {
@@ -29,29 +39,25 @@ void	export_handling(t_minishell *ms, char **tokens, int i)
 {
 	char	*var_name;
 	char	*value;
-	int		ret;
 
-	ret = SUCCESS;
 	while (tokens[i])
 	{
-		var_name = ft_strtok(tokens[i], "=");
-		value = ft_strtok(NULL, "=");
+		var_name = extract_var_name(tokens[i]);
+		value = extract_var_value(tokens[i], 0);
+
 		if (!is_valid_var_name(var_name))
 		{
-			ret = ERROR;
-			printf("minishell: export: not an identifier: %s\n", tokens[i]);
+			ft_fprintf(2, "ms: export: %s: not a valid identifier\n", tokens[i]);
+			ms->ret = ERROR;
 		}
 		else if (var_name && value)
-		{
 			set_env_var(ms, var_name, value);
-		}
-		else if (var_name)
-		{
-			set_env_var(ms, var_name, "");
-		}
+		else
+			ms->ret = SUCCESS;
+		free_ptr(var_name);
+		free_ptr(value);
 		i++;
 	}
-	ms->ret = ret;
 }
 
 void	set_env_var(t_minishell *ms, const char *var_name, const char *value)
