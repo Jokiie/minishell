@@ -110,13 +110,6 @@ void				handle_sigint(int sig);
 void				sync_signals(t_minishell *ms);
 void				handle_sigint_hd(int sig);
 
-// signal_handler_child.c
-
-void    init_child_signal(struct termios *mirror_termios);
-void    sigint_child(void);
-void	sigquit_child(void);
-
-
 // utils.c
 void				print_tokens(char **tokens);
 char				**ft_envdup(char **envp);
@@ -282,11 +275,9 @@ int					detect_env_call(t_minishell *ms, char **tokens);
 int					env(t_minishell *ms, char **tokens);
 
 // exit.c
-int					detect_exit_call(t_minishell *ms, char **tokens,
-						int is_child);
 int					ft_exit(t_minishell *ms, char **tokens, int is_child);
 t_bool				is_valid_arg(char *token);
-
+int					handle_valid_exit(t_minishell *ms, char **tokens, int is_child);
 // exit_utils.c
 t_bool				is_valid_size(char *token);
 t_bool				iter_long_min(char *token);
@@ -319,7 +310,7 @@ bool				remove_env_var1(t_minishell *ms, int idx);
 int					call_commands(t_minishell *ms);
 void				handle_child(t_minishell *ms);
 int					ft_execvp(char **tokens, char **envp);
-int					exec_builtin(t_minishell *ms, char **tokens, int is_child);
+int					exec_builtin(t_minishell *ms, char **tokens);
 
 /* redirections*/
 

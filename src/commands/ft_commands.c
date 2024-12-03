@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:23:54 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/01 13:20:36 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 15:59:48 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,12 @@ int	call_commands(t_minishell *ms)
 		ms->ret = exect_pipes(ms);
 		return (ms->ret);
 	}
-	ms->ret = exec_builtin(ms, ms->tokens, 0);
+	if (ft_strncmp(ms->tokens[0], "exit\0", 5) == 0)
+	{
+		ft_exit(ms, ms->tokens, 0);
+		return (ms->ret);
+	}
+	ms->ret = exec_builtin(ms, ms->tokens);
 	if (ms->ret == CMD_NOT_FOUND)
 	{
 		ms->pid = fork();
@@ -122,14 +127,12 @@ int	ft_execvp(char **tokens, char **envp)
 		directory
 	- rework cd (need to update the pwd and old pwd in the environment variables)
 */
-int	exec_builtin(t_minishell *ms, char **tokens, int is_child)
+int	exec_builtin(t_minishell *ms, char **tokens)
 {
 	int	ret;
 
 	ret = 0;
-	ret = detect_exit_call(ms, tokens, is_child);
-	if (ret == CMD_NOT_FOUND)
-		ret = detect_cd_call(ms, tokens);
+	ret = detect_cd_call(ms, tokens);
 	if (ret == CMD_NOT_FOUND)
 		ret = detect_pwd_call(ms, tokens);
 	if (ret == CMD_NOT_FOUND)

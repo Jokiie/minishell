@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 01:36:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/03 03:01:12 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 15:55:56 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ void	handle_child_process(t_minishell *ms)
 {
 	int	ret;
 
-	ret = 0;
-	//init_child_signal(&ms->stermios);
+	ret = ms->ret;
 	if (pipes_redirection(ms) != SUCCESS)
 		exit_child(ms, ret, TRUE);
 	if (has_type(ms->p.p_args, &ms->p.arg_quoted, is_redirect)
@@ -99,12 +98,17 @@ int	call_commands_pipes(t_minishell *ms)
 	ret = 0;
 	if (!ms->p.p_args || (!ms->p.p_args[0] && ms->p.arg_quoted[0] == 0))
 		exit_child(ms, ret, TRUE);
-	ret = exec_builtin(ms, ms->p.p_args, 1);
-	if (ret == CMD_NOT_FOUND)
-		ret = detect_echo_call(ms, ms->p.p_args);
+	if (ft_strncmp(ms->p.p_args[0], "exit\0", 5) == 0)
+	{
+		ret = ft_exit(ms, ms->p.p_args, 1);
+		return (ret);
+	}
+	ret = detect_echo_call(ms, ms->p.p_args);
 	if (ret == CMD_NOT_FOUND)
 		ret = detect_executable(ms, ms->p.p_args);
 	if (ret == EXE_NOT_FOUND)
+		ret = exec_builtin(ms, ms->p.p_args);
+	if (ret == CMD_NOT_FOUND)
 		ret = ft_execvp(ms->p.p_args, ms->env);
 	return (ret);
 }
