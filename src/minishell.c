@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/03 01:48:30 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 01:53:20 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,8 +159,8 @@ void	execms(t_minishell *ms, char **envp)
 			ms->ret = execute_input(ms, ms->input);
 			add_history(ms->input);
 		}
+		free_data(ms);
 	}
-	free_data(ms);
 }
 
 int	main(int argc, char **argv, char **envp)

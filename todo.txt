@@ -74,6 +74,15 @@ bash exit code = 0
 
 Others:
 
+$UID -> 1000
+$hola* -> ""
+"$HOMEdskjhfkdshfsd" -> command no found
+cat (faire Ctlr-C apres avoir fait plusieurs fois [ENTREE])
+cat | rev (faire ctrl-C comme ^)
+sleep 3 | sleep 3 | sleep 3 (faire Ctlr-C une seconde apres)
+
+
+
 - fix prompt when we ctrl+c
 
 - Norminette everything

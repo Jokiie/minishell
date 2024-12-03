@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 01:36:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 05:04:50 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 03:01:12 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	handle_child_process(t_minishell *ms)
 	int	ret;
 
 	ret = 0;
+	//init_child_signal(&ms->stermios);
 	if (pipes_redirection(ms) != SUCCESS)
 		exit_child(ms, ret, TRUE);
 	if (has_type(ms->p.p_args, &ms->p.arg_quoted, is_redirect)

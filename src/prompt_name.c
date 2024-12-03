@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/03 01:47:44 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 02:40:22 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,9 @@ char	*get_user_color(t_minishell *ms)
 		ms->user = "Matis";
 		color = ft_strjoin(GREEN BOLD "", ms->user);
 	}
-	else if (!ms->user)
+	else if (!ms->user || !ms->user[0])
 	{
-		ms->user = "Human";
+		ms->user = "Evaluator";
 		color = ft_strjoin(YELLOW BOLD "", ms->user);
 	}
 	else
