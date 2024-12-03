@@ -70,6 +70,40 @@ bash output = (declare -x COLORTERM="truecolor" declare -x DBUS_SESSION_BUS_ADDR
 mini exit code = 1
 bash exit code = 0
 
+❌ export ""
+mini output = ()
+bash output = (bash: export: `': not a valid identifier)
+
+❌ export =
+mini output = ()
+bash output = (bash: export: ʻ=': not a valid identifier)
+
+❌ export _HO_LA_=bonjour
+mini output = (ms: export: _HO_LA_=bonjour: not a valid identifier)
+bash output = (added _HO_LA_=bonjour into the env)
+
+❌ export HOLA =bonjour
+mini output = (added "=bonjour" into the env)
+bash output = (bash: export: `=bonjour': not a valid identifier)
+
+❌ export HOLA = bonjour
+mini output = (added "=" into the env)
+bash output = (bash: export: `=': not a valid identifier)
+
+❌ export HOLA="bonjour          "
+mini output = (added "bonjour          " into the env)
+bash output = (added "bonjour" into the env)
+(not a tokenizer error, because this need to work like this.
+ we need to trim the spaces after an identifier during the
+ export parsing)
+
+❌ export HOLA="    -n bonjour   "
+    echo $HOLA | cat -e
+mini output:(    -n bonjour   $)
+bash output:(bonjour$>) (echo a reconnu le -n et affiche bonjour avec 
+                         l'option -n)
+
+
 ----
 
 Others:

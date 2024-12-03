@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 05:12:03 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 17:32:25 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,22 @@ char	**transformer(t_minishell *ms)
 	char	**final_tokens;
 	char	**dup;
 
+	//ft_fprintf(2, "pretokens:\n");
+	//print_debug(ms->pretokens);
+	
 	init_expanded_array(ms, ms->pretokens);
 	fill_quoted_arr(ms, ms->pretokens);
 	ms->expanded = expander(ms, ms->pretokens);
+	
+	//ft_fprintf(2, "expander:\n");
+	//print_debug(ms->expanded);
+	
 	free_tokens_address(&ms->pretokens);
 	final_tokens = trimmer(ms, ms->expanded);
+	
+	//ft_fprintf(2, "trimmer:\n");
+	//print_debug(final_tokens);
+
 	free_tokens_address(&ms->expanded);
 	if (!final_tokens)
 		return (NULL);
@@ -60,6 +71,9 @@ char	**transformer(t_minishell *ms)
 		free_tokens(final_tokens);
 		final_tokens = cleaner(ms, dup);
 		free_tokens(dup);
+		
+		//ft_fprintf(2, "cleaner:\n");
+		//print_debug(final_tokens);
 	}
 	if (!final_tokens || (!final_tokens[0] && ms->token.quoted[0] == 0))
 	{
