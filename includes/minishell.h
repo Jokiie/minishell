@@ -110,9 +110,6 @@ void				reset_prompt(int sig);
 void				sync_signals(t_minishell *ms);
 void				reset_prompt2(int sig);
 
-// handle_sigquit.c
-void				handle_sigquit(void);
-
 // utils.c
 void				print_tokens(char **tokens);
 char				**ft_envdup(char **envp);
@@ -145,11 +142,9 @@ void				error_msg(char *cmd, char *msg);
 
 // prompt_name.c
 char				*get_prompt_name(t_minishell *ms);
-char				*get_user_color(t_minishell *ms);
-char				*get_arrow_color(t_minishell *ms, char *cwd_dup);
 char				**get_cwdsplit(t_minishell *ms);
-
-/* debug */
+char				*get_arrow_color(t_minishell *ms, char *cwd_dup);
+char				*get_user_color(t_minishell *ms);
 
 // debug.c
 void				print_debug(char **tokens);

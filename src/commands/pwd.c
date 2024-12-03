@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:49:09 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 06:49:19 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/02 18:30:34 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ int	pwd(t_minishell *ms)
 	return_value = 0;
 	if (!ms->cwd)
 	{
-		ft_putstr_fd("You are in a deleted directory, ", 2);
-		ft_putstr_fd("please 'cd ..' until you are in a valid directory\n", 2);
 		return_value = SUCCESS;
 	}
 	else
