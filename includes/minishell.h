@@ -97,7 +97,6 @@ typedef struct s_minishell
 	t_pipes			p;
 	pid_t			pid;
 	sig_atomic_t	received_sig;
-	//struct termios	stermios;
 
 }					t_minishell;
 
