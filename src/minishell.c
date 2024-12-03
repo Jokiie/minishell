@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 06:14:26 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 01:53:20 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,9 +140,13 @@ int	execute_input(t_minishell *ms, char *input)
 */
 void	execms(t_minishell *ms, char **envp)
 {
+	char	*rl_path;
+
 	ms->env = ft_envdup(envp);
 	ms->path = getcwd(NULL, 0);
-	//set_env_var(ms, "INPUTRC", "./.inputrc");
+	rl_path = ft_strjoin(ms->path, "/includes/readline/.inputrc");
+	set_env_var(ms, "INPUTRC", rl_path);
+	free(rl_path);
 	while (1)
 	{
 		sync_signals(ms);
@@ -163,9 +167,16 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	*ms;
 
-	(void)argv;
 	if (argc > 1)
-		return (0);
+	{
+		error_msg(argv[1], "too many arguments");
+		return (1);
+	}
+	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+	{
+		error_msg("./minishell", "must be run in interactive mode");
+		return (1);
+	}
 	ms = (t_minishell *)malloc(sizeof(t_minishell));
 	if (!ms)
 		exit(EXIT_FAILURE);

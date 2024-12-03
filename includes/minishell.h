@@ -103,15 +103,19 @@ typedef struct s_minishell
 
 void				init_heredoc_data(t_minishell *ms);
 
-// ft_signal_handler.c
+// signal_handler.c
 void				init_signals_interactive(t_minishell *ms);
 void				init_signals_interactive_heredocs(t_minishell *ms);
-void				reset_prompt(int sig);
+void				handle_sigint(int sig);
 void				sync_signals(t_minishell *ms);
-void				reset_prompt2(int sig);
+void				handle_sigint_hd(int sig);
 
-// handle_sigquit.c
-void				handle_sigquit(void);
+// signal_handler_child.c
+
+void    init_child_signal(struct termios *mirror_termios);
+void    sigint_child(void);
+void	sigquit_child(void);
+
 
 // utils.c
 void				print_tokens(char **tokens);
@@ -145,11 +149,9 @@ void				error_msg(char *cmd, char *msg);
 
 // prompt_name.c
 char				*get_prompt_name(t_minishell *ms);
-char				*get_user_color(t_minishell *ms);
-char				*get_arrow_color(t_minishell *ms, char *cwd_dup);
 char				**get_cwdsplit(t_minishell *ms);
-
-/* debug */
+char				*get_arrow_color(t_minishell *ms, char *cwd_dup);
+char				*get_user_color(t_minishell *ms);
 
 // debug.c
 void				print_debug(char **tokens);

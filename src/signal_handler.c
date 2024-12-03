@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:57 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 05:14:41 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 02:24:31 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	init_signals_interactive(t_minishell *ms)
 
 	ms->received_sig = g_sig_received;
 	ft_memset(&sa, 0, sizeof(sa));
-	sa.sa_handler = &reset_prompt;
+	sa.sa_handler = &handle_sigint;
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);
 	signal(SIGQUIT, SIG_IGN);
@@ -42,7 +42,7 @@ void	sync_signals(t_minishell *ms)
 	g_sig_received = 0;
 }
 
-void	reset_prompt(int sig)
+void	handle_sigint(int sig)
 {
 	g_sig_received = sig;
 	if (g_sig_received == SIGINT)
@@ -60,12 +60,12 @@ void	init_signals_interactive_heredocs(t_minishell *ms)
 
 	ms->received_sig = g_sig_received;
 	ft_memset(&sa, 0, sizeof(sa));
-	sa.sa_handler = &reset_prompt2;
+	sa.sa_handler = &handle_sigint_hd;
 	sigaction(SIGINT, &sa, NULL);
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	reset_prompt2(int sig)
+void	handle_sigint_hd(int sig)
 {
 	g_sig_received = sig;
 	rl_replace_line("", 0);

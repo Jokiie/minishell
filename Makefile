@@ -128,7 +128,6 @@ $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -L includes/readline -l readline -l ncurses \
 	$(RL) $(LDFLAGS) -o $(NAME)
 
-
 # Removes objects
 clean:
 	# rm -f $(OBJS)

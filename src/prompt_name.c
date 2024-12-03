@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 06:15:38 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 02:40:22 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*get_prompt_name(t_minishell *ms)
 		free_ptr(cwd_dup);
 	}
 	else
-		username_dup = ft_strdup(CYAN BOLD "minishell ➜  " RESET BOLDRESET);
+		username_dup = ft_strdup("minishell ➜  ");
 	free_tokens(split);
 	return (username_dup);
 }
@@ -107,9 +107,9 @@ char	*get_user_color(t_minishell *ms)
 		ms->user = "Matis";
 		color = ft_strjoin(GREEN BOLD "", ms->user);
 	}
-	else if (!ms->user)
+	else if (!ms->user || !ms->user[0])
 	{
-		ms->user = "Human";
+		ms->user = "Evaluator";
 		color = ft_strjoin(YELLOW BOLD "", ms->user);
 	}
 	else
