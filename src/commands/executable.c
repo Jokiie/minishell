@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executable.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:40:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 15:41:26 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 13:10:40 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	detect_executable(t_minishell *ms, char **tokens)
 	}
 	return (EXE_NOT_FOUND);
 }
-
+/*Check if the the errors in the executable*/
 int	check_error_executable(char *cmd)
 {
 	int	return_value;
