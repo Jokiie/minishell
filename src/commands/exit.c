@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 04:36:52 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 05:22:55 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 14:13:57 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
+/*Call exit , return 0 for success, 1 for errors, CMD_NOT_FOUND if
+	cd command is not detected.*/
 int	detect_exit_call(t_minishell *ms, char **tokens, int is_child)
 {
 	int	return_value;

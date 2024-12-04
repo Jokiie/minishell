@@ -6,12 +6,12 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 14:22:49 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/25 13:51:40 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/03 14:31:47 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
+/*Get the environment*/
 char	*get_env(char **env, char *var_name)
 {
 	int		i;

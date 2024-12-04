@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/03 01:53:20 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 14:42:29 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,11 +172,11 @@ int	main(int argc, char **argv, char **envp)
 		error_msg(argv[1], "too many arguments");
 		return (1);
 	}
-	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
-	{
-		error_msg("./minishell", "must be run in interactive mode");
-		return (1);
-	}
+	// if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+	// {
+	// 	error_msg("./minishell", "must be run in interactive mode");
+	// 	return (1);
+	// }
 	ms = (t_minishell *)malloc(sizeof(t_minishell));
 	if (!ms)
 		exit(EXIT_FAILURE);

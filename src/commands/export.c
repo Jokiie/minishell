@@ -6,22 +6,13 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/12/03 13:14:07 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/03 15:06:56 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	env_var_count(char **env)
-{
-	int	i;
-
-	i = 0;
-	while (env && env[i])
-		i++;
-	return (i);
-}
-
+/*Call export , return 0 for success, 1 for errors, CMD_NOT_FOUND if
+	cd command is not detected.*/
 int	detect_export_call(t_minishell *ms, char **tokens)
 {
 	if (ft_strncmp(tokens[0], "export\0", 7) == 0)
@@ -32,7 +23,20 @@ int	detect_export_call(t_minishell *ms, char **tokens)
 		else
 			return (SUCCESS);
 	}
+	else if (ft_strncmp(tokens[0], "export=\0", 8) == 0)
+		return (SUCCESS);    /*tester dit code 1 mais bash dit 0*/
 	return (CMD_NOT_FOUND);
+}
+
+/*Count the nomber of var in the env*/
+int	env_var_count(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env && env[i])
+		i++;
+	return (i);
 }
 
 void	export_handling(t_minishell *ms, char **tokens, int i)
@@ -47,7 +51,7 @@ void	export_handling(t_minishell *ms, char **tokens, int i)
 
 		if (!is_valid_var_name(var_name))
 		{
-			ft_fprintf(2, "ms: export: %s: not a valid identifier\n", tokens[i]);
+			ft_fprintf(2, "ms: export: not valid in this context: %s\n", tokens[i]);
 			ms->ret = ERROR;
 		}
 		else if (var_name && value)
