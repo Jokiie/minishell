@@ -6,12 +6,12 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 15:30:54 by matislessar       #+#    #+#             */
-/*   Updated: 2024/12/02 16:46:09 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/03 14:35:45 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
+/*Realloc the momory of the env var*/
 char	**realloc_env(char **env, int new_size)
 {
 	char	**new_env;
@@ -28,7 +28,7 @@ char	**realloc_env(char **env, int new_size)
 	free(env);
 	return (new_env);
 }
-
+/*Check if the name of the var is OK*/
 int	is_valid_var_name(const char *var_name)
 {
 	int	i;
@@ -48,7 +48,7 @@ int	is_valid_var_name(const char *var_name)
 	}
 	return (ERROR);
 }
-
+/*Finds the var name*/
 char	*extract_var_name(const char *str)
 {
 	int		i;
@@ -60,7 +60,7 @@ char	*extract_var_name(const char *str)
 	var_name = ft_substr(str, 0, i);
 	return (var_name);
 }
-
+/*Finds the value of the var*/
 char	*extract_var_value(const char *str, int j)
 {
 	int		i;

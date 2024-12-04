@@ -6,16 +6,14 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 17:50:40 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/03 14:14:19 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/*
-	Call cd , return 0 for success, 1 for errors, CMD_NOT_FOUND if
-	cd command is not detected.
-*/
+/*Call cd , return 0 for success, 1 for errors, CMD_NOT_FOUND if
+	cd command is not detected.*/
 int	detect_cd_call(t_minishell *ms, char **tokens)
 {
 	if (ft_strncmp(tokens[0], "cd\0", 3) == 0)

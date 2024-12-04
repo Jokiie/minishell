@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   exit_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 04:06:55 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 05:21:34 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 14:13:28 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
+/*Checks the size of the long max & min of the tokens*/
 t_bool	is_valid_size(char *token)
 {
 	char	*long_max;
@@ -36,7 +36,7 @@ t_bool	is_valid_size(char *token)
 	}
 	return (TRUE);
 }
-
+/*Check through long min*/
 t_bool	iter_long_min(char *token)
 {
 	char	*long_min_max;
@@ -54,7 +54,7 @@ t_bool	iter_long_min(char *token)
 	}
 	return (TRUE);
 }
-
+/*Check through long max*/
 t_bool	iter_long_max(char *token)
 {
 	char	*long_max;

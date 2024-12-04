@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:28:23 by matislessar       #+#    #+#             */
-/*   Updated: 2024/12/02 05:21:16 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 14:35:16 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
+/*Call unset , return 0 for success, 1 for errors, CMD_NOT_FOUND if
+	cd command is not detected.*/
 int	detect_unset_call(t_minishell *ms, char **tokens)
 {
 	if (ft_strncmp(tokens[0], "unset\0", 6) == 0)
@@ -78,7 +79,7 @@ bool	remove_env_var1(t_minishell *ms, int idx)
 		return (false);
 	return (true);
 }
-
+/*Realloc memory to the env var*/
 char	**realloc_env_vars(t_minishell *ms, int size)
 {
 	char	**new_env;
