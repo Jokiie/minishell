@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/12/03 15:06:56 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/04 15:03:25 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,9 @@ void	export_handling(t_minishell *ms, char **tokens, int i)
 	{
 		var_name = extract_var_name(tokens[i]);
 		value = extract_var_value(tokens[i], 0);
-
-		if (!is_valid_var_name(var_name))
+		if (!is_valid_var_name(var_name) || (tokens[i][0] == '\0' && ms->token.quoted[i] == 1))
 		{
-			ft_fprintf(2, "ms: export: not valid in this context: %s\n", tokens[i]);
+			ft_fprintf(2, "ms: export: not valid in this context: `%s'\n", tokens[i]);
 			ms->ret = ERROR;
 		}
 		else if (var_name && value)
