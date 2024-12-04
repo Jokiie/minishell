@@ -6,27 +6,27 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:43:35 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 04:47:19 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 18:43:47 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*apply_var_expansion(t_minishell *ms, char *token_dup, int i)
+char	*apply_var_expansion(t_minishell *ms, char *token_dup, int *i)
 {
 	char	*var;
 	char	*before;
 	char	*after;
 	char	*new_token_dup;
 
-	before = ft_substr(token_dup, 0, i);
-	i++;
-	var = var_extractor(token_dup, &i);
-	after = ft_substr(token_dup, i, ft_strlen(token_dup) - i);
+	before = ft_substr(token_dup, 0, *i);
+	(*i)++;
+	var = var_extractor(token_dup, i);
+	after = ft_substr(token_dup, *i, ft_strlen(token_dup) - *i);
 	new_token_dup = insert_variable_value(ms, before, var, after);
 	free_ptr(token_dup);
 	token_dup = new_token_dup;
-	i = ft_strlen(before) + ft_strlen(get_env(ms->env, var));
+	*i = ft_strlen(before) + ft_strlen(get_env(ms->env, var));
 	free_ptr(before);
 	free_ptr(var);
 	free_ptr(after);

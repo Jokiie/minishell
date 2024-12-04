@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 04:45:53 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/04 13:01:32 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ void	init_expanded_array(t_minishell *ms, char **tokens)
 	k = 0;
 	while (tokens[k] && k < count)
 	{
-		if (tokens[k][0] == '$' && tokens[k][1] && var_is_squoted(ms,
-				tokens[k]) != TRUE)
+		if (tokens[k][0] == '$' && tokens[k][1] && var_is_squoted(ms, tokens[k]) != TRUE)
 		{
 			if (ft_isalpha(tokens[k][1]) || tokens[k][1] == '_')
 				ms->token.expanded[i] = 1;
@@ -55,10 +54,16 @@ t_bool	var_is_squoted(t_minishell *ms, char *tokens)
 	while (tokens[i])
 	{
 		quotes_detector(ms, tokens, i);
-		if (tokens[i] == '$' && ms->token.in_squotes == TRUE)
+		if (tokens[i] == '$' && ms->token.in_squotes == TRUE
+			&& ms->token.in_dquotes == FALSE)
+		{
+			ms->token.in_squotes = FALSE;
 			return (TRUE);
+		}
 		i++;
 	}
+	ms->token.in_squotes = FALSE;
+	ms->token.in_dquotes = FALSE;
 	return (FALSE);
 }
 
@@ -77,8 +82,7 @@ char	**expander(t_minishell *ms, char **tokens)
 		return (NULL);
 	while (tokens[k] && k < count)
 	{
-		if (k > 0 && (is_heredoc(tokens[k - 1]) && ms->token.quoted[k - 1] == 0)
-			&& tokens[k])
+		if (k > 0 && (is_heredoc(tokens[k - 1]) && ms->token.quoted[k - 1] == 0) && tokens[k])
 			expanded[i] = ft_strdup(tokens[k]);
 		else
 			expanded[i] = expand_token(ms, tokens[k], k, 0);
@@ -95,19 +99,21 @@ char	*expand_token(t_minishell *ms, char *token, int k, int i)
 	char	*dup;
 	char	*new_dup;
 
+	ms->token.in_dquotes = FALSE;
+	ms->token.in_squotes = FALSE;
 	dup = ft_strdup(token);
 	while (dup[i])
 	{
 		quotes_detector_tokens(ms, dup, k, i);
-		if (dup[i] == '$' && !ms->token.in_squotes && (ft_isalnum(dup[i + 1])
-				|| dup[i + 1] == '_'))
+		if (dup[i] == '$' && !ms->token.in_squotes
+			&& (ft_isalnum(dup[i + 1]) || dup[i + 1] == '_'))
 		{
-			new_dup = apply_var_expansion(ms, dup, i);
+			new_dup = apply_var_expansion(ms, dup, &i);
 			dup = new_dup;
 		}
 		else if (dup[i] == '$' && !ms->token.in_squotes && dup[i + 1] == '?')
 		{
-			new_dup = apply_nbr_expansion(ms, dup, i);
+			new_dup = apply_nbr_expansion(ms, dup, &i);
 			dup = new_dup;
 		}
 		else

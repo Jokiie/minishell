@@ -156,6 +156,7 @@ void				print_int_array(char **tokens, int **quoted);
 int					tokens_creator(t_minishell *ms, char *line);
 char				**transformer(t_minishell *ms);
 void				fill_quoted_arr(t_minishell *ms, char **tokens);
+void				init_int_arrays(t_minishell *ms);
 
 // tokenizer.c
 int					separe_line(t_minishell *ms, char *line, int i, int *k);
@@ -173,26 +174,31 @@ char				**expander(t_minishell *ms, char **tokens);
 char				*expand_token(t_minishell *ms, char *token, int k, int i);
 void				init_expanded_array(t_minishell *ms, char **tokens);
 t_bool				var_is_squoted(t_minishell *ms, char *tokens);
-;
 
 // var_expansion.c
 char				*apply_var_expansion(t_minishell *ms, char *token_dup,
-						int i);
+						int *i);
 char				*insert_variable_value(t_minishell *ms, char *before,
 						char *var, char *after);
 char				*var_extractor(char *token, int *i);
 
 // nbr_expansion.c
 char				*apply_nbr_expansion(t_minishell *ms, char *token_dup,
-						int i);
-char				*apply_nbr_value(char *token_dup, int i, int nbr);
+						int *i);
+char				*apply_nbr_value(char *token_dup, int *i, int nbr);
 char				*insert_nbr_value(char *before, char *after, int nbr);
 char				*single_var_extractor(char *token, int *i);
+
+// separator.c
+char				**separator(t_minishell *ms, char **tokens);
+
+char	**retokenize(t_minishell *ms, char **tokens);
+int	separe_token(t_minishell *ms, char *line, int i, int *k);
 
 // trimmer.c
 char				**trimmer(t_minishell *ms, char **tokens);
 char				*ft_toktrim(t_minishell *ms, char *token, int len);
-
+char				*separe_var(t_minishell *ms, char *line, int *i);
 // cleaner.c
 
 char				**cleaner(t_minishell *ms, char **tokens);
@@ -246,6 +252,7 @@ t_bool				contains_only_type(char **tokens, int **protected,
 int					count_type(char **tokens, int **quoted,
 						t_bool (*is_type)(char *));
 int					count_tokens(char **tokens);
+int					count_size(char **tokens);
 
 /* /commands */
 
@@ -277,7 +284,8 @@ int					env(t_minishell *ms, char **tokens);
 // exit.c
 int					ft_exit(t_minishell *ms, char **tokens, int is_child);
 t_bool				is_valid_arg(char *token);
-int					handle_valid_exit(t_minishell *ms, char **tokens, int is_child);
+int					handle_valid_exit(t_minishell *ms, char **tokens,
+						int is_child);
 // exit_utils.c
 t_bool				is_valid_size(char *token);
 t_bool				iter_long_min(char *token);

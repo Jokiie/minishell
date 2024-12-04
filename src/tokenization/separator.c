@@ -1,44 +1,63 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   separator.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/04 13:19:22 by ccodere          ###   ########.fr       */
+/*   Created: 2024/12/03 19:30:30 by ccodere           #+#    #+#             */
+/*   Updated: 2024/12/04 13:42:07 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	**tokenizer(t_minishell *ms, char *line)
+char	**separator(t_minishell *ms, char **tokens)
+{
+	ms->pretokens = retokenize(ms, tokens);	
+	return (ms->pretokens);
+}
+
+char	**retokenize(t_minishell *ms, char **tokens)
 {
 	int	i;
 	int	k;
-	int	count;
+	int j;
+	int	size;
 	
-	k = 0;
-	if (!line)
-		return (NULL);
-	count = ft_strlen(line);
-	ms->pretokens = ft_calloc((count + 1), sizeof(char *));
+	size = count_tokens(tokens) * count_size(tokens);
+	ms->pretokens = ft_calloc((size + 1), sizeof(char *));
 	if (!ms->pretokens)
 		return (NULL);
+	j = 0;
+	k = 0;
 	i = 0;
-	while (line[i])
+	while (tokens[j] && k < size)
 	{
-		while (ft_isspace(line[i]))
-			i++;
-		i = separe_line(ms, line, i, &k);
-		while (ft_isspace(line[i]))
-			i++;
+		if ((!tokens[j][0] && ms->token.expanded[j] == 1))
+		{
+			ms->pretokens[k++] = ft_strdup("");
+			j++;
+		}
+		else
+		{
+			while (tokens[j][i])
+			{
+				while (ft_isspace(tokens[j][i]))
+					i++;
+				i = separe_token(ms, tokens[j], i, &k);
+				while (ft_isspace(tokens[j][i]))
+				 	i++;
+			}
+			j++;
+			i = 0;
+		}
 	}
 	ms->pretokens[k] = NULL;
 	return (ms->pretokens);
 }
 
-int	separe_line(t_minishell *ms, char *line, int i, int *k)
+int	separe_token(t_minishell *ms, char *line, int i, int *k)
 {
 	ms->token.is_meta = FALSE;
 	ms->token.start = i;
@@ -60,28 +79,8 @@ int	separe_line(t_minishell *ms, char *line, int i, int *k)
 	ms->token.end = i;
 	ms->token.size = (ms->token.end - ms->token.start);
 	if (i > ms->token.start)
-		ms->pretokens[(*k)++] = ft_substr(line, ms->token.start,
-				ms->token.size);
+		ms->pretokens[(*k)++] = ft_substr(line, ms->token.start, ms->token.size);
 	else if (ms->token.is_meta)
 		ms->pretokens[(*k)++] = meta_chars_extractor(line, &i);
 	return (i);
-}
-
-char	*meta_chars_extractor(char *line, int *i)
-{
-	char	*substr;
-	int		start;
-
-	start = *i;
-	if ((line[*i] == '>' && line[*i + 1] == '>')
-		|| (line[*i] == '<' && line[*i + 1] == '<'))
-		(*i) += 2;
-	else if (ft_ismeta_chars(line[*i]) && !ft_ismeta_chars(line[*i + 1]))
-		(*i)++;
-	else if (ft_ismeta_chars(line[*i]) && ft_ismeta_chars(line[*i + 1]))
-		(*i)++;
-	substr = ft_substr(line, start, *i - start);
-	if (!substr)
-		return (NULL);
-	return (substr);
 }

@@ -47,21 +47,16 @@ bash : (do nothing and return 0)
 mini : (added "var=lol mdr" into the env)
 bash : (added "var=lol mdr" into the env)
 
-❌ ls $var
+✅ FIXED
+ls $var
 mini : ls: cannot access 'lol mdr': No such file or directory
 bash : ls: cannot access 'lol': No such file or directory
        ls: cannot access 'mdr': No such file or directory
 
-❌ export a='1 b=2 "c=3'
+✅ FIXED
+export a='1 b=2 "c=3'
 mini : (added: "a=1 b" into the env)
 bash : (added: "a=1 b=2 "c=3" into the env)
----
-Not a tokenizer error, here is the debug output:
-
-ms->tokens:
-[0] = :export:
-[1] = :a=1 b=2 "c=3:
-
 ---
 
 ❌ export | sort | grep -v SHLVL | grep -v "declare -x _" | grep -v "PS.="
@@ -90,25 +85,123 @@ bash output = (bash: export: `=bonjour': not a valid identifier)
 mini output = (added "=" into the env)
 bash output = (bash: export: `=': not a valid identifier)
 
-❌ export HOLA="bonjour          "
+✅ FIXED
+export HOLA="bonjour          "
 mini output = (added "bonjour          " into the env)
 bash output = (added "bonjour" into the env)
 (not a tokenizer error, because this need to work like this.
  we need to trim the spaces after an identifier during the
  export parsing)
 
-❌ export HOLA="    -n bonjour   "
-    echo $HOLA | cat -e
+✅ FIXED 
+export HOLA="    -n bonjour   "
+echo $HOLA | cat -e
 mini output:(    -n bonjour   $)
 bash output:(bonjour$>) (echo a reconnu le -n et affiche bonjour avec 
                          l'option -n)
+
+❌ export quote="'"
+mini ouput: (added (quote=) into the env)
+bash output: (added (quote=') into the env)
+
+ps: javais fixer cela mais un recent changement fait en sorte que ce nest pas ajouter
+la tokenization ce fait correctement voici le output durant la transformation des tokens:
+
+Celia/minishell ➜  export quote="'"
+pretokens:
+[0] = :export:
+[1] = :quote="'":
+expander:
+[0] = :export:
+[1] = :quote="'":
+trimmer:
+[0] = :export:
+[1] = :quote=':
+cleaner:
+[0] = :export:
+[1] = :quote=':    <- on voit ici que le guillement seul a été conservé
+
+ensuite :
+Celia/minishell ➜ env
+...
+quote=
+(quote est vide donc il affiche rien, mais il devait garder le guillement seul)
+Celia/minishell ➜  $quote
+pretokens:
+[0] = :$quote:
+expander:
+[0] = ::
+trimmer:
+[0] = ::
+cleaner:
+[0] = (null)
+Celia/minishell ➜  
+
+
+❌ export "" HOLA=bonjour
+mini output: (added "HOLA=bonjour" into the env)
+bash output: (bash: export: `': not a valid identifier)
+
+ps : voici le output de transformation pour cette commande:
+
+Celia/minishell ➜  export "" HOLA=bonjour
+pretokens:
+[0] = :export:
+[1] = :"":
+[2] = :HOLA=bonjour:
+expander:
+[0] = :export:
+[1] = :"":
+[2] = :HOLA=bonjour:
+separator:
+[0] = :export:
+[1] = :"":
+[2] = :HOLA=bonjour:
+trimmer:
+[0] = :export:
+[1] = ::
+[2] = :HOLA=bonjour:
+cleaner:
+[0] = :export:
+[1] = ::                   <-- jai conserver le token vide
+[2] = :HOLA=bonjour:
+
+il faut donc verifier que si le token suivant contient qu'un caractere nul(!tokens[k][0]) et quil y a un token apres
+celui-ci, retourner une erreur comme bash.
+
+✅ FIXED
+export HOLA="ls                -l           - a"
+mini output: (added "ls                -l           - a" into the env)
+bash output: (added "ls -l -a" into the env)
+
+✅ FIXED
+export HOLA="s -la"
+mini output: (added "s -la" into the env)
+bash output: (added "s -la" into the env)
+   l$HOLA
+mini output: (ls -la: command not found)
+bash output: (output of the command ls -la)
+-> Je vais peut etre faire en sorte de separer les tokens apres lexpansion de variable
+
+
+❌ export heredoc=<<EOF
+mini output: (ms: export: <<: not a valid identifier)
+bash output: (added heredoc= into the env)
+
+❌
+
+
+❌
+
+
+❌
 
 
 ----
 
 Others:
 
-$UID -> 1000
+$UID -> 1000 (seulement us iOS ?)
 $hola* -> ""
 "$HOMEdskjhfkdshfsd" -> command no found
 cat (faire Ctlr-C apres avoir fait plusieurs fois [ENTREE])

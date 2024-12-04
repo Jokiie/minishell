@@ -60,6 +60,7 @@ SRC_TOK = tokenization/tokens_creator.c \
 		  tokenization/expander.c \
 		  tokenization/tokenizer.c \
 		  tokenization/trimmer.c \
+		  tokenization/separator.c \
 		  tokenization/var_expansion.c \
 		  tokenization/nbr_expansion.c \
 		  tokenization/quotes_detector.c \

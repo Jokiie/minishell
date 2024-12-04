@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 05:27:46 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 04:52:31 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/04 13:36:12 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,20 @@ int	count_tokens(char **tokens)
 		return (0);
 	while (tokens[count])
 		count++;
+	return (count);
+}
+
+int	count_size(char **tokens)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (tokens[i])
+	{
+		count += ft_strlen(tokens[i]);
+		i++;
+	}
 	return (count);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:24 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/03 13:09:51 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/03 17:42:39 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	echo(t_minishell *ms, char **tokens, int opt)
 	if (!opt)
 		ft_putstr_fd("\n", STDOUT_FILENO);
 }
+
 /*Use the validated arg to update echo*/
 int	update_echo_index(char **tokens, int *k)
 {
@@ -67,6 +68,7 @@ int	update_echo_index(char **tokens, int *k)
 	}
 	return (*k);
 }
+
 /*Validate the echo args*/
 t_bool	valid_echo_arg(char *token)
 {
