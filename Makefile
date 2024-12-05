@@ -154,7 +154,7 @@ cp:
 
 mem: all
 #	valgrind --leak-check=full --trace-children=yes --track-fds=yes --show-leak-kinds=all --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
-	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
+	valgrind -s --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
 #	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=/Users/$(USER)/my_cursus/minishell/1readline.supp ./minishell
 
 fullmem: all

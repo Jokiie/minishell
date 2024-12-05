@@ -73,6 +73,7 @@ typedef struct s_pipes
 	t_bool			last_cmd;
 	int				ret;
 	int				*arg_quoted;
+	int				*arg_expanded;
 }					t_pipes;
 
 typedef struct s_minishell
@@ -149,6 +150,7 @@ char				*get_user_color(t_minishell *ms);
 // debug.c
 void				print_debug(char **tokens);
 void				print_int_array(char **tokens, int **quoted);
+void				print_expanded_array(char **tokens, int **expanded);
 
 /* Tokenization */
 
@@ -174,7 +176,7 @@ char				**expander(t_minishell *ms, char **tokens);
 char				*expand_token(t_minishell *ms, char *token, int k, int i);
 void				init_expanded_array(t_minishell *ms, char **tokens);
 t_bool				var_is_squoted(t_minishell *ms, char *tokens);
-
+t_bool				is_expandable(t_minishell *ms, char *token);
 // var_expansion.c
 char				*apply_var_expansion(t_minishell *ms, char *token_dup,
 						int *i);
@@ -212,7 +214,7 @@ int					ft_ismeta_chars(int c);
 
 // has_meta.c
 t_bool				has_redirect(t_minishell *ms, char **tokens);
-t_bool				has_type(char **tokens, int **quoted,
+t_bool				has_type(char **tokens, int **quoted, int **expanded,
 						t_bool (*is_type)(char *));
 t_bool				has_meta(t_minishell *ms, char **tokens);
 t_bool				has_quotes(char *token);
@@ -246,10 +248,11 @@ t_bool				contains_only_digits(char *line);
 t_bool				contains_only_spaces(char *line);
 t_bool				contains_only_type(char **tokens, int **protected,
 						t_bool (*is_type)(char *));
+t_bool				contains_only_quotes(char *token);
 
 // count.c
 
-int					count_type(char **tokens, int **quoted,
+int					count_type(char **tokens, int **quoted, int **expanded,
 						t_bool (*is_type)(char *));
 int					count_tokens(char **tokens);
 int					count_size(char **tokens);
@@ -326,7 +329,7 @@ int					exec_builtin(t_minishell *ms, char **tokens);
 
 // exec_redirections.c
 int					exec_redirections(t_minishell *ms, char **tokens,
-						int **protected, t_bool in_pipe);
+						int **quoted, int **expanded, t_bool in_pipe);
 int					redirect(char *tokens, char *file);
 
 // redirection.c
@@ -337,9 +340,9 @@ int					redirect_heredocs(t_minishell *ms);
 
 // redirection_utils.c
 void				remake_tokens(t_minishell *ms, char **tokens,
-						int **protected, t_bool in_pipe);
-char				**recreate_tokens(char **tok, int **arr, int count, int i);
-int					get_filtered_tokc(char **tokens, int **protected);
+						int **protected, int **expanded, t_bool in_pipe);
+char				**recreate_tokens(char **tok, int **arr, int **arr2, int count, int i);
+int					get_filtered_tokc(char **tokens, int **protected, int **expanded);
 
 // heredoc.c
 int					process_heredocs(t_minishell *ms);
@@ -400,6 +403,7 @@ int					redirect_pipes(t_minishell *ms, t_pipes *p,
 
 // pipes_utils.c
 void				fill_pipes_quoted_arr(t_minishell *ms, int cmd_start);
+void				fill_pipes_expanded_arr(t_minishell *ms, int i);
 char				**extract_args(t_minishell *ms, char **tokens, int start,
 						int end);
 void				handle_last_cmd(t_minishell *ms, int *i);

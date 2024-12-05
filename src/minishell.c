@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/04 14:05:30 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/05 01:29:08 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	execute_input(t_minishell *ms, char *input)
 		return (SYNTAX_ERROR);
 	else if (ms->tokens && *ms->tokens)
 	{
-		if (has_heredoc(ms, ms->tokens))
+		if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded, is_heredoc))
 		{
 			ms->ret = process_heredocs(ms);
 			if (ms->ret == ERROR || ms->ret == TERM_SIGINT)

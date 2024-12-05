@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 01:59:12 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 03:04:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/04 23:16:50 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,21 @@ t_bool	contains_only_type(char **tokens, int **protected,
 		if ((*protected)[i] == 0 && !is_type(tokens[i]))
 			return (FALSE);
 		i += 2;
+	}
+	return (TRUE);
+}
+
+t_bool	contains_only_quotes(char *token)
+{
+	int	i;
+
+	i = 0;
+	while (token[i])
+	{
+		if (ft_is_squote(token[i]) || ft_is_dquote(token[i]))
+			i++;
+		else
+			return (FALSE);
 	}
 	return (TRUE);
 }

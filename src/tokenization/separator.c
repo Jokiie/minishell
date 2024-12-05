@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 19:30:30 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/04 13:42:07 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/05 01:05:54 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	**separator(t_minishell *ms, char **tokens)
 {
-	ms->pretokens = retokenize(ms, tokens);	
+	ms->pretokens = retokenize(ms, tokens);
 	return (ms->pretokens);
 }
 
@@ -22,11 +22,13 @@ char	**retokenize(t_minishell *ms, char **tokens)
 {
 	int	i;
 	int	k;
-	int j;
+	int	j;
 	int	size;
+	int	*new;
 	
 	size = count_tokens(tokens) * count_size(tokens);
 	ms->pretokens = ft_calloc((size + 1), sizeof(char *));
+	new = ft_calloc((size + 1), sizeof(int));
 	if (!ms->pretokens)
 		return (NULL);
 	j = 0;
@@ -34,9 +36,14 @@ char	**retokenize(t_minishell *ms, char **tokens)
 	i = 0;
 	while (tokens[j] && k < size)
 	{
-		if ((!tokens[j][0] && ms->token.expanded[j] == 1))
+		if (!tokens[j][0])
 		{
-			ms->pretokens[k++] = ft_strdup("");
+			if (ms->token.expanded[j] == 1)
+			{
+				ms->pretokens[k] = ft_strdup("");
+				new[k] = 1;
+				k++;
+			}
 			j++;
 		}
 		else
@@ -46,14 +53,18 @@ char	**retokenize(t_minishell *ms, char **tokens)
 				while (ft_isspace(tokens[j][i]))
 					i++;
 				i = separe_token(ms, tokens[j], i, &k);
+				new[k - 1] = ms->token.expanded[j];
 				while (ft_isspace(tokens[j][i]))
-				 	i++;
+					i++;
 			}
 			j++;
 			i = 0;
 		}
 	}
 	ms->pretokens[k] = NULL;
+	for (i = 0; i < k; i++)
+		ms->token.expanded[i] = new[i];
+	free(new);
 	return (ms->pretokens);
 }
 
@@ -66,9 +77,11 @@ int	separe_token(t_minishell *ms, char *line, int i, int *k)
 		quotes_detector(ms, line, i);
 		if (!ms->token.in_dquotes && !ms->token.in_squotes)
 		{
-			if (ft_isspace(line[i]) && !ms->token.in_dquotes && !ms->token.in_squotes)
+			if (ft_isspace(line[i]) && !ms->token.in_dquotes
+				&& !ms->token.in_squotes)
 				break ;
-			else if (ft_ismeta_chars(line[i]) && !ms->token.in_dquotes && !ms->token.in_squotes)
+			else if (ft_ismeta_chars(line[i]) && !ms->token.in_dquotes
+				&& !ms->token.in_squotes)
 			{
 				ms->token.is_meta = TRUE;
 				break ;
@@ -79,7 +92,8 @@ int	separe_token(t_minishell *ms, char *line, int i, int *k)
 	ms->token.end = i;
 	ms->token.size = (ms->token.end - ms->token.start);
 	if (i > ms->token.start)
-		ms->pretokens[(*k)++] = ft_substr(line, ms->token.start, ms->token.size);
+		ms->pretokens[(*k)++] = ft_substr(line, ms->token.start,
+				ms->token.size);
 	else if (ms->token.is_meta)
 		ms->pretokens[(*k)++] = meta_chars_extractor(line, &i);
 	return (i);

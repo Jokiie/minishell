@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 05:43:45 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 04:51:21 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/04 15:22:12 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,23 @@ void	print_int_array(char **tokens, int **quoted)
 			ft_fprintf(2, YELLOW "quoted[%d] = %d\n" RESET, i, (*quoted)[i]);
 		else
 			ft_fprintf(2, YELLOW "quoted[%d] = (null)\n" RESET, i);
+		i++;
+	}
+}
+
+void	print_expanded_array(char **tokens, int **expanded)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = count_tokens(tokens);
+	while (i < count)
+	{
+		if (tokens[i])
+			ft_fprintf(2, YELLOW "expanded[%d] = %d\n" RESET, i, (*expanded)[i]);
+		else
+			ft_fprintf(2, YELLOW "expanded[%d] = (null)\n" RESET, i);
 		i++;
 	}
 }

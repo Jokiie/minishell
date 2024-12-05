@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:23:54 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/03 15:59:48 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/05 01:28:26 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 */
 int	call_commands(t_minishell *ms)
 {
-	if (has_type(ms->tokens, &ms->token.quoted, is_pipe))
+	if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded, is_pipe))
 	{
 		ms->ret = exect_pipes(ms);
 		return (ms->ret);
@@ -71,10 +71,10 @@ int	call_commands(t_minishell *ms)
 
 void	handle_child(t_minishell *ms)
 {
-	if (has_type(ms->tokens, &ms->token.quoted, is_heredoc)
-		|| has_type(ms->tokens, &ms->token.quoted, is_redirect))
+	if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded, is_heredoc)
+		|| has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded, is_redirect))
 	{
-		if (exec_redirections(ms, ms->tokens, &ms->token.quoted, FALSE) != 0)
+		if (exec_redirections(ms, ms->tokens, &ms->token.quoted, &ms->token.expanded, FALSE) != 0)
 			exit_child(ms, ERROR, FALSE);
 	}
 	if (!ms->tokens || !*ms->tokens)

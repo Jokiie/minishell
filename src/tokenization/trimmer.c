@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/03 19:29:22 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/04 23:19:20 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	**trimmer(t_minishell *ms, char **tokens)
 	{
 		if (ms->token.expanded[k] == 1)
 			trimmed[i] = ft_strdup(tokens[k]);
-		else
+		else if (ms->token.expanded[k] == 0)
 			trimmed[i] = ft_toktrim(ms, tokens[k], ft_strlen(tokens[k]));
 		if (trimmed[i])
 			i++;

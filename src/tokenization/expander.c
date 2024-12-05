@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/04 13:01:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/05 00:38:01 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,26 +24,47 @@ void	init_expanded_array(t_minishell *ms, char **tokens)
 {
 	int	k;
 	int	i;
-	int	count;
+	int	size;
 
-	count = count_tokens(tokens);
-	ms->token.expanded = ft_calloc(count + 1, sizeof(int));
+	size = count_tokens(tokens) * count_size(tokens);
+	ms->token.expanded = ft_calloc((size * size) , sizeof(int));
 	if (!ms->token.expanded)
 		return ;
 	i = 0;
 	k = 0;
-	while (tokens[k] && k < count)
+	while (tokens[k] && k < size)
 	{
-		if (tokens[k][0] == '$' && tokens[k][1] && var_is_squoted(ms, tokens[k]) != TRUE)
-		{
-			if (ft_isalpha(tokens[k][1]) || tokens[k][1] == '_')
-				ms->token.expanded[i] = 1;
-		}
+		if (is_expandable(ms, tokens[k]) == TRUE)
+			ms->token.expanded[i] = 1;
 		else
 			ms->token.expanded[i] = 0;
 		k++;
 		i++;
 	}
+}
+
+t_bool	is_expandable(t_minishell *ms, char *token)
+{
+	int	i;
+	t_bool expandable;
+
+	expandable = FALSE;
+	ms->token.in_squotes = FALSE;
+	ms->token.in_dquotes = FALSE;
+	i = 0;
+	while (token[i])
+	{
+		quotes_detector(ms, token, i);
+		if (token[i] == '$')
+		{
+			if (ft_isalpha(token[i + 1]) || token[i + 1] == '_')
+				expandable = TRUE;
+		}
+		i++;
+	}
+	if (expandable == TRUE && ms->token.in_squotes == FALSE)
+		return (TRUE);
+	return (FALSE);
 }
 
 t_bool	var_is_squoted(t_minishell *ms, char *tokens)
@@ -105,7 +126,7 @@ char	*expand_token(t_minishell *ms, char *token, int k, int i)
 	while (dup[i])
 	{
 		quotes_detector_tokens(ms, dup, k, i);
-		if (dup[i] == '$' && !ms->token.in_squotes
+		if (dup[i] == '$' && !ms->token.in_squotes 
 			&& (ft_isalnum(dup[i + 1]) || dup[i + 1] == '_'))
 		{
 			new_dup = apply_var_expansion(ms, dup, &i);
