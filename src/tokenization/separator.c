@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 19:30:30 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/05 01:05:54 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/05 11:32:58 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ char	**retokenize(t_minishell *ms, char **tokens)
 				while (ft_isspace(tokens[j][i]))
 					i++;
 				i = separe_token(ms, tokens[j], i, &k);
-				new[k - 1] = ms->token.expanded[j];
 				while (ft_isspace(tokens[j][i]))
 					i++;
+				new[k - 1] = ms->token.expanded[j];
 			}
 			j++;
 			i = 0;
