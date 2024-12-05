@@ -301,13 +301,17 @@ char				*get_env(char **env, char *var_name);
 // export.c
 int					detect_export_call(t_minishell *ms, char **tokens);
 void				export_handling(t_minishell *ms, char **tokens, int i);
-char				**realloc_env(char **env, int new_size);
 int					env_var_count(char **env);
 void				set_env_var(t_minishell *ms, const char *var_name,
 						const char *value);
+void				export_declare_x(char **env);
+
+//export_utils.c
+char				**realloc_env(char **env, int new_size);
 int					is_valid_var_name(const char *var_name);
-char				*extract_var_value(const char *str, int j);
 char				*extract_var_name(const char *str);
+char				*extract_var_value(const char *str, int j);
+void				export_handling_x(t_minishell *ms, char **tokens, int i);
 
 // unset.c
 int					detect_unset_call(t_minishell *ms, char **tokens);

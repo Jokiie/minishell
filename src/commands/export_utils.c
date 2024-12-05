@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 15:30:54 by matislessar       #+#    #+#             */
-/*   Updated: 2024/12/03 14:35:45 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/04 16:32:55 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ char	*extract_var_name(const char *str)
 char	*extract_var_value(const char *str, int j)
 {
 	int		i;
-	char	quote;
 	char	*value;
 
 	i = 0;
@@ -73,18 +72,21 @@ char	*extract_var_value(const char *str, int j)
 	if (!str[i])
 		return (NULL);
 	i++;
-	quote = 0;
 	value = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	while (str[i])
 	{
-		if ((str[i] == '\'' || str[i] == '"') && !quote)
-			quote = str[i];
-		else if (str[i] == quote)
-			quote = 0;
-		else
-			value[j++] = str[i];
+		value[j++] = str[i];
 		i++;
 	}
 	value[j] = '\0';
 	return (value);
+}
+
+void	export_handling_x(t_minishell *ms, char **tokens, int i)
+{
+	if (!tokens[i])
+	{
+		export_declare_x(ms->env);
+		return;
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 04:36:52 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/04 14:06:14 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/04 14:19:05 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	ft_exit(t_minishell *ms, char **tokens, int is_child)
 {
 	int	ret;
 
+	ret = 0;
 	if (((tokens[1] && tokens[2])) && (is_valid_arg(tokens[1])))
 	{
 		ft_fprintf(2, "ms: exit: too many arguments\n");

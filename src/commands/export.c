@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/12/03 15:06:56 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/05 13:34:33 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,37 @@ int	detect_export_call(t_minishell *ms, char **tokens)
 			return (SUCCESS);
 	}
 	else if (ft_strncmp(tokens[0], "export=\0", 8) == 0)
-		return (SUCCESS);    /*tester dit code 1 mais bash dit 0*/
+		return (SUCCESS);
 	return (CMD_NOT_FOUND);
 }
+
+void	export_declare_x(char **env)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (env[i])
+	{
+		j = 0;
+		ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		while (env[i][j])
+		{
+			ft_putchar_fd(env[i][j], STDOUT_FILENO);
+			if (env[i][j] == '=')
+			{
+				ft_putchar_fd('"', STDOUT_FILENO);
+				ft_putstr_fd(env[i] + j + 1, STDOUT_FILENO);
+				ft_putchar_fd('"', STDOUT_FILENO);
+				break;
+			}
+			j++;
+		}
+		ft_putchar_fd('\n', STDOUT_FILENO);
+		i++;
+	}
+}
+		// for (int j = 0; env[i][j]; j++)
 
 /*Count the nomber of var in the env*/
 int	env_var_count(char **env)
@@ -43,12 +71,14 @@ void	export_handling(t_minishell *ms, char **tokens, int i)
 {
 	char	*var_name;
 	char	*value;
-
+	
+	export_handling_x(ms, tokens, i);
 	while (tokens[i])
 	{
 		var_name = extract_var_name(tokens[i]);
 		value = extract_var_value(tokens[i], 0);
-
+		if (tokens[i][0] == '\0' && ms->token.quoted[i] == 1)
+			ft_fprintf(2, "ms: export: not valid in this context: %s\n", tokens[i]);
 		if (!is_valid_var_name(var_name))
 		{
 			ft_fprintf(2, "ms: export: not valid in this context: %s\n", tokens[i]);
