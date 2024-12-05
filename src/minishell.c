@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/27 22:49:57 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/05 13:54:42 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	init_minishell(t_minishell *ms)
 	ms->token.in_dquotes = FALSE;
 	ms->token.in_squotes = FALSE;
 	ms->token.quoted = NULL;
+	ms->token.expanded = NULL;
 	ms->in_pipe = FALSE;
 	ms->pid = 0;
 	ms->received_sig = 0;
@@ -59,8 +60,6 @@ void	init_minishell(t_minishell *ms)
 		(tokens_creator return 0 if no syntax errors were found)
 	- heredoc -> success: 0 | terminated with SIGINT: 130
 	- call_commands -> Return value depend of child return value.
-
-	to do: rename to parse_input
 */
 int	execute_input(t_minishell *ms, char *input)
 {
@@ -68,7 +67,7 @@ int	execute_input(t_minishell *ms, char *input)
 		return (SYNTAX_ERROR);
 	else if (ms->tokens && *ms->tokens)
 	{
-		if (has_heredoc(ms, ms->tokens))
+		if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded, is_heredoc))
 		{
 			ms->ret = process_heredocs(ms);
 			if (ms->ret == ERROR || ms->ret == TERM_SIGINT)
@@ -89,29 +88,29 @@ int	execute_input(t_minishell *ms, char *input)
 	Execute the prompt in a loop. We read the input with readline and store
 	the input in ms->input. If readline do not encounter EOF(Ctrl+d), otherwise,
 	we parse the input:
-	
+
 	1- Tokenizer: If line is empty, ms->tokens is null. Otherwise, separe the
 		tokens at each unquoted blank character and meta-characters.
-	
+
 	2- Transformer : call the following:
-		
+
 		2.1- Expander: Iter in each tokens and expand the variables.
-		
+
 		2.2- Cleaner: Iter in each tokens and remove the empty tokens resulted
 				from expander.
-		
+
 		2.3- Fill the int array ms->token.quoted which save the states of
 				each token to determine if it was quoted or not.
 				quoted: 1 | else: 0
 		2.4 - Trimmer: Iter in each tokens and remove the quotes when needed.
-	
+
 	3-  we check if we have a heredoc, if so we execute and fill all heredocs at
 		once and save them with an unique name in our folder /tmp.
-	
+
 	4-  if all the previous step were successful, we check if the tokens contain
 		at least one pipe. If yes, execute the pipeline in exec_pipes and return
 		the exitcode of the last command.
-	
+
 	5-	If the tokens contains no pipes, we execute the simple command in a
 		sub-shell. Both pipes and simple command proceed like the following:
 
@@ -136,25 +135,21 @@ int	execute_input(t_minishell *ms, char *input)
 				check_error.
 
 		5.6 - We finally return the exit code of the child and return in execms.
-	
+
 	5 - We free the history and other data to be ready for the next command.
 */
 void	execms(t_minishell *ms, char **envp)
 {
+	char	*rl_path;
+
 	ms->env = ft_envdup(envp);
 	ms->path = getcwd(NULL, 0);
-	if (!ms->path)
-		exit(EXIT_FAILURE);
-	// setenv("INPUTRC", "./.inputrc", 1);
-	// set_env_var(ms, "INPUTRC", "./.inputrc");
+	rl_path = ft_strjoin(ms->path, "/includes/readline/.inputrc");
+	set_env_var(ms, "INPUTRC", rl_path);
+	free(rl_path);
 	while (1)
 	{
 		sync_signals(ms);
-		if (ms->received_sig == SIGINT)
-		{
-			ms->received_sig = 0;
-			ms->ret = 130;
-		}
 		ms->prompt_name = get_prompt_name(ms);
 		ms->input = readline(ms->prompt_name);
 		if (!ms->input)
@@ -172,9 +167,16 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	*ms;
 
-	(void)argv;
 	if (argc > 1)
-		return (0);
+	{
+		error_msg(argv[1], "too many arguments");
+		return (1);
+	}
+	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+	{
+		error_msg("./minishell", "must be run in interactive mode");
+		return (1);
+	}
 	ms = (t_minishell *)malloc(sizeof(t_minishell));
 	if (!ms)
 		exit(EXIT_FAILURE);

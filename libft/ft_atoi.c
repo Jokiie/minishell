@@ -6,11 +6,12 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 09:58:04 by ccodere           #+#    #+#             */
-/*   Updated: 2024/09/18 02:24:00 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/11/30 02:46:47 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
 // Example
 // char str[] = "123";
 // int res = ft_atoi(str);

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 04:07:04 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/04 13:19:22 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	**tokenizer(t_minishell *ms, char *line)
 	int	i;
 	int	k;
 	int	count;
-
+	
 	k = 0;
 	if (!line)
 		return (NULL);
@@ -47,9 +47,9 @@ int	separe_line(t_minishell *ms, char *line, int i, int *k)
 		quotes_detector(ms, line, i);
 		if (!ms->token.in_dquotes && !ms->token.in_squotes)
 		{
-			if (ft_isspace(line[i]))
+			if (ft_isspace(line[i]) && !ms->token.in_dquotes && !ms->token.in_squotes)
 				break ;
-			else if (ft_ismeta_chars(line[i]))
+			else if (ft_ismeta_chars(line[i]) && !ms->token.in_dquotes && !ms->token.in_squotes)
 			{
 				ms->token.is_meta = TRUE;
 				break ;

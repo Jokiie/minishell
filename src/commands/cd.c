@@ -3,19 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/27 23:01:15 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 14:14:19 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/*
-	Call cd , return 0 for success, 1 for errors, CMD_NOT_FOUND if
-	cd command is not detected.
-*/
+/*Call cd , return 0 for success, 1 for errors, CMD_NOT_FOUND if
+	cd command is not detected.*/
 int	detect_cd_call(t_minishell *ms, char **tokens)
 {
 	if (ft_strncmp(tokens[0], "cd\0", 3) == 0)
@@ -27,10 +25,7 @@ int	detect_cd_call(t_minishell *ms, char **tokens)
 int	cd(t_minishell *ms, char **tokens)
 {
 	if (!tokens[1] || !*tokens[1])
-	{
-		ft_putstr_fd("ms: cd: no directory specified\n", 2);
-		return (ERROR);
-	}
+		return (go_home(ms));
 	else if (tokens[2])
 	{
 		ft_putstr_fd("ms: cd: too many arguments\n", 2);
@@ -42,8 +37,8 @@ int	cd(t_minishell *ms, char **tokens)
 /* Navigate to the home directory */
 int	go_home(t_minishell *ms)
 {
-	char *home;
-	
+	char	*home;
+
 	home = get_env(ms->env, "HOME");
 	if (!home || chdir(home) == -1)
 	{
@@ -58,15 +53,19 @@ int	go_home(t_minishell *ms)
 void	update_working_directories(t_minishell *ms)
 {
 	char	*cwd;
-	
+
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
-		perror("getcwd");
-		return;
+		ft_putstr_fd("cd: error retrieving current directory: ", 2);
+		ft_putstr_fd("getcwd: cannot access parent directories: ", 2);
+		ft_putendl_fd("No such file or directory", 2);
+		cwd = ft_strdup("deleted_dir");
 	}
-	set_env_var(ms, "OLDPWD", get_env(ms->env, "PWD"));
-	set_env_var(ms, "PWD", cwd);
+	if (ms->cwd)
+		set_env_var(ms, "OLDPWD", ms->cwd);
+	else
+		set_env_var(ms, "OLDPWD", "deleted_dir");
 	if (ms->prev_cwd)
 		free(ms->prev_cwd);
 	ms->prev_cwd = ms->cwd;

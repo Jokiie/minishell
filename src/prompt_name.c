@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/26 02:03:45 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/04 14:14:21 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*get_prompt_name(t_minishell *ms)
 		free_ptr(cwd_dup);
 	}
 	else
-		username_dup = ft_strdup(CYAN BOLD "minishell ➜  " RESET BOLDRESET);
+		username_dup = ft_strdup("minishell ➜  ");
 	free_tokens(split);
 	return (username_dup);
 }
@@ -53,13 +53,29 @@ char	*get_prompt_name(t_minishell *ms)
 char	**get_cwdsplit(t_minishell *ms)
 {
 	char	**splitted;
+	int		i;
+	char	*cwd;
 
+	(void)ms;
+	i = 0;
 	splitted = NULL;
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+		cwd = ft_strdup("/deleted_dir");
+	if (cwd)
+	{
+		if ((cwd[0] == '/' && (!cwd[1] || cwd[1] == '/')))
+		{
+			while (cwd[i] && cwd[i] == '/')
+				i++;
+			splitted = ft_split("'/'/'/'", '\'');
+			free_ptr(cwd);
+			return (splitted);
+		}
+		splitted = ft_split(cwd, '/');
+		free_ptr(cwd);
+	}
 	ms->cwd = getcwd(NULL, 0);
-	if (!ms->cwd)
-		ms->cwd = ft_strdup("/deleted_dir");
-	if (ms->cwd)
-		splitted = ft_split(ms->cwd, '/');
 	return (splitted);
 }
 
@@ -91,9 +107,9 @@ char	*get_user_color(t_minishell *ms)
 		ms->user = "Matis";
 		color = ft_strjoin(GREEN BOLD "", ms->user);
 	}
-	else if (!ms->user)
+	else if (!ms->user || !ms->user[0])
 	{
-		ms->user = "Human";
+		ms->user = "Evaluator";
 		color = ft_strjoin(YELLOW BOLD "", ms->user);
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:32:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/28 13:44:51 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/05 13:30:40 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 /*
 	Free our variables, clear the history from readline, wait the child to
 	finish and quit minishell with the return status of the last command.
+	to reput in the beginning of exit_minishell :
+	//ft_printf(BOLD GREEN "ms: Goodbye %s!\n" RESET BOLDRESET, ms->user);
 */
 void	exit_minishell(t_minishell *ms, int return_code)
 {
 	int	child_ret;
 
-	ft_printf(BOLD GREEN "ms: Goodbye %s!\n" RESET BOLDRESET, ms->user);
 	free_at_exit(ms);
 	reset_heredoc(ms);
 	clear_history();

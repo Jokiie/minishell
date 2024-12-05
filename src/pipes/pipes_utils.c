@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 00:18:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 06:06:09 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/05 01:23:43 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,30 @@ void	fill_pipes_quoted_arr(t_minishell *ms, int i)
 		i++;
 	}
 }
+void	fill_pipes_expanded_arr(t_minishell *ms, int i)
+{
+	int	j;
+	int	count;
 
-char	**extract_args(char **tokens, int start, int end)
+	j = 0;
+	count = count_tokens(ms->p.p_args);
+	ms->p.arg_expanded = ft_calloc(count + 1, sizeof(int));
+	if (!ms->p.arg_expanded)
+		return ;
+	while (ms->p.p_args[j])
+	{
+		if (ms->token.expanded[i] == 1)
+			ms->p.arg_expanded[j] = 1;
+		else
+			ms->p.arg_expanded[j] = 0;
+		j++;
+		i++;
+	}
+}
+char	**extract_args(t_minishell *ms, char **tokens, int start, int end)
 {
 	int		i;
+	int		j;
 	int		size;
 	char	**args;
 
@@ -46,12 +66,18 @@ char	**extract_args(char **tokens, int start, int end)
 	if (!args)
 		return (NULL);
 	i = 0;
+	j = 0;
 	while (i < size)
 	{
-		args[i] = tokens[start + i];
+		if (tokens[start + i][0] != '\0' || (tokens[start + i][0] == '\0'
+				&& ms->token.quoted[start + i] == 1))
+		{
+			args[j] = tokens[start + i];
+			j++;
+		}
 		i++;
 	}
-	args[size] = NULL;
+	args[j] = NULL;
 	return (args);
 }
 

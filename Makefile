@@ -47,6 +47,7 @@ SRC_CMDS = commands/cd.c \
 		   commands/env.c \
 		   commands/executable.c\
 		   commands/exit.c \
+		   commands/exit_utils.c \
 		   commands/export.c \
 		   commands/export_utils.c \
 		   commands/ft_commands.c \
@@ -59,6 +60,7 @@ SRC_TOK = tokenization/tokens_creator.c \
 		  tokenization/expander.c \
 		  tokenization/tokenizer.c \
 		  tokenization/trimmer.c \
+		  tokenization/separator.c \
 		  tokenization/var_expansion.c \
 		  tokenization/nbr_expansion.c \
 		  tokenization/quotes_detector.c \
@@ -127,7 +129,6 @@ $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -L includes/readline -l readline -l ncurses \
 	$(RL) $(LDFLAGS) -o $(NAME)
 
-
 # Removes objects
 clean:
 	# rm -f $(OBJS)
@@ -153,14 +154,14 @@ cp:
 
 mem: all
 #	valgrind --leak-check=full --trace-children=yes --track-fds=yes --show-leak-kinds=all --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
-#	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
-	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=/Users/$(USER)/my_cursus/minishell/1readline.supp ./minishell
+#	valgrind -s --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
+	valgrind -s --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=/Users/$(USER)/my_cursus/minishell/1readline.supp ./minishell
 
 fullmem: all
 	valgrind --leak-check=full --trace-children=yes --track-fds=yes --show-leak-kinds=all --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
 
-norm:
-	norminette src/*.c src/tokenization/*.c src/commands/*.c src/redirections/*.c src/pipes/*.c
+norm: all
+	norminette libft src
 
 
 exp:

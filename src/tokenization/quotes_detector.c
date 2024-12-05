@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:30:53 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 03:30:30 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/04 23:15:08 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,28 @@
 int	quotes_detector(t_minishell *ms, char *line, int i)
 {
 	if (ft_is_dquote(line[i]) && !ms->token.in_squotes)
+	{
 		ms->token.in_dquotes = !ms->token.in_dquotes;
+	}
 	else if (ft_is_squote(line[i]) && !ms->token.in_dquotes)
+	{
 		ms->token.in_squotes = !ms->token.in_squotes;
+	}
+	return (i);
+}
+
+int	quotes_detector_tokens(t_minishell *ms, char *tokens, int k, int i)
+{
+	if (ft_is_dquote(tokens[i]) && !ms->token.in_squotes
+		&& ms->token.expanded[k] == 0)
+	{
+		ms->token.in_dquotes = !ms->token.in_dquotes;
+	}
+	else if (ft_is_squote(tokens[i]) && !ms->token.in_dquotes
+		&& ms->token.expanded[k] == 0)
+	{
+		ms->token.in_squotes = !ms->token.in_squotes;
+	}
 	return (i);
 }
 
@@ -34,6 +53,10 @@ int	open_quotes_checker(t_minishell *ms, char *line)
 		i++;
 	}
 	if (ms->token.in_dquotes == TRUE || ms->token.in_squotes == TRUE)
+	{
+		ms->token.in_dquotes = FALSE;
+		ms->token.in_squotes = FALSE;
 		return (ERROR);
+	}
 	return (SUCCESS);
 }

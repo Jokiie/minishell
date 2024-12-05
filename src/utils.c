@@ -6,12 +6,15 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/27 23:05:22 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 15:41:47 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/*
+	Print all the tokens in the STDIN followed by a new line.
+*/
 void	print_tokens(char **tokens)
 {
 	int	k;
@@ -84,10 +87,8 @@ int	wait_children(t_minishell *ms)
 	if (WIFSIGNALED(last_status) && WTERMSIG(last_status) == SIGPIPE)
 		return (0);
 	else if (WIFSIGNALED(last_status))
-		status = 128 + WTERMSIG(last_status);
+		return (128 + WTERMSIG(last_status));
 	else if (WIFEXITED(last_status) && !WIFSIGNALED(last_status))
-		status = WEXITSTATUS(last_status);
-	else
-		status = last_status;
-	return (status);
+		return (WEXITSTATUS(last_status));
+	return (last_status);
 }

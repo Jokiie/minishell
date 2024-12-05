@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:24 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 06:41:31 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/03 17:42:39 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	detect_echo_call(t_minishell *ms, char **tokens)
 	opt = 0;
 	if (ft_strncmp(tokens[0], "echo\0", 5) == 0)
 	{
-		if (ft_strncmp(tokens[1], "-n\0", 3) == 0)
+		if (tokens[1] && valid_echo_arg(tokens[1]) == TRUE)
 			opt = 1;
 		echo(ms, tokens, opt);
 		return (SUCCESS);
@@ -39,10 +39,10 @@ void	echo(t_minishell *ms, char **tokens, int opt)
 
 	(void)ms;
 	first_word = 1;
-	if (opt == 0)
-		k = 1;
+	if (opt == 1)
+		k = update_echo_index(tokens, &k);
 	else
-		k = 2;
+		k = 1;
 	while (tokens[k])
 	{
 		if (!first_word)
@@ -53,4 +53,38 @@ void	echo(t_minishell *ms, char **tokens, int opt)
 	}
 	if (!opt)
 		ft_putstr_fd("\n", STDOUT_FILENO);
+}
+
+/*Use the validated arg to update echo*/
+int	update_echo_index(char **tokens, int *k)
+{
+	*k = 2;
+	while (tokens[*k])
+	{
+		if (valid_echo_arg(tokens[*k]) == TRUE)
+			(*k)++;
+		else
+			break ;
+	}
+	return (*k);
+}
+
+/*Validate the echo args*/
+t_bool	valid_echo_arg(char *token)
+{
+	int	i;
+
+	i = 0;
+	while (token[i])
+	{
+		if (token[0] == '-')
+			i++;
+		if (token[1] != 'n')
+			return (FALSE);
+		while (token[i] == 'n')
+			i++;
+		if (token[i] != '\0')
+			return (FALSE);
+	}
+	return (TRUE);
 }

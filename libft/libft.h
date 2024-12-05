@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 12:20:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/14 15:42:45 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/11/30 02:52:17 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 # define BUFFER_SIZE 1024
 # define INT_MAX 2147483647
 # define INT_MIN -2147483648
+# define LONG_MAX 9223372036854775807
+# define LONG_MIN -9223372036854775808
 
 typedef enum e_bool
 {

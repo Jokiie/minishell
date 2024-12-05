@@ -6,13 +6,13 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 19:08:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 06:48:06 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/05 01:38:48 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-t_bool	has_type(char **tokens, int **quoted, t_bool (*is_type)(char *))
+t_bool	has_type(char **tokens, int **quoted, int **expanded, t_bool (*is_type)(char *))
 {
 	int	i;
 
@@ -21,7 +21,7 @@ t_bool	has_type(char **tokens, int **quoted, t_bool (*is_type)(char *))
 		return (FALSE);
 	while (tokens[i])
 	{
-		if ((*quoted)[i] == 0 && is_type(tokens[i]))
+		if ((*quoted)[i] == 0 && (*expanded)[i] == 0 && is_type(tokens[i]))
 			return (TRUE);
 		i++;
 	}

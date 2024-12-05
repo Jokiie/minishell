@@ -6,12 +6,13 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:28:23 by matislessar       #+#    #+#             */
-/*   Updated: 2024/11/25 13:51:50 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/03 14:35:16 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
+/*Call unset , return 0 for success, 1 for errors, CMD_NOT_FOUND if
+	cd command is not detected.*/
 int	detect_unset_call(t_minishell *ms, char **tokens)
 {
 	if (ft_strncmp(tokens[0], "unset\0", 6) == 0)
@@ -23,6 +24,7 @@ int	detect_unset_call(t_minishell *ms, char **tokens)
 	ms->ret = CMD_NOT_FOUND;
 	return (ms->ret);
 }
+
 void	unset_handling(t_minishell *ms, char **tokens, int i)
 {
 	int	env_index;
@@ -33,11 +35,9 @@ void	unset_handling(t_minishell *ms, char **tokens, int i)
 		if (env_index >= 0)
 		{
 			remove_env_var1(ms, env_index);
-			//printf("Unset variable: %s\n", tokens[i]);
 		}
 		else
-			//printf("minishell: unset: %s: not found\n", tokens[i]);
-		i++;
+			i++;
 	}
 }
 
@@ -79,7 +79,7 @@ bool	remove_env_var1(t_minishell *ms, int idx)
 		return (false);
 	return (true);
 }
-
+/*Realloc memory to the env var*/
 char	**realloc_env_vars(t_minishell *ms, int size)
 {
 	char	**new_env;
