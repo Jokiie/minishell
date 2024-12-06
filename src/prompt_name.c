@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 05:25:38 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 13:59:45 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ char	*get_prompt_name(t_minishell *ms)
 	char	*tmp;
 
 	split = get_cwdsplit();
+	ms->cwd = getcwd(NULL, 0);
 	if (split && *split)
 	{
 		color = get_user_color(ms);
