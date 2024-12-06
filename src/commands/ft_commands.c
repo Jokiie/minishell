@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_commands.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:23:54 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/05 13:30:53 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/05 23:29:33 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,35 +51,40 @@ int	call_commands(t_minishell *ms)
 	}
 	if (ft_strncmp(ms->tokens[0], "exit\0", 5) == 0)
 	{
-		ft_exit(ms, ms->tokens, 0);
-		return (ms->ret);
-	}
-	ms->ret = exec_builtin(ms, ms->tokens);
-	if (ms->ret == CMD_NOT_FOUND)
-	{
-		ms->pid = fork();
-		if (ms->pid < 0)
+		if (ft_exit(ms, ms->tokens, 0) != ERROR)
+			return (ms->ret);
+		else
 			return (ERROR);
-		else if (ms->pid == 0)
-		{
-			handle_child(ms);
-		}
-		ms->ret = wait_children(ms);
 	}
+	if (!has_redirects(ms->tokens, &ms->token.quoted, &ms->token.expanded))	
+	{
+		ms->ret = exec_builtin(ms, ms->tokens);
+		if (ms->ret != CMD_NOT_FOUND)
+			return (ms->ret);
+	}
+	ms->pid = fork();
+	if (ms->pid < 0)
+		return (ERROR);
+	else if (ms->pid == 0)
+	{
+		handle_child(ms);
+	}
+	ms->ret = wait_children(ms);
 	return (ms->ret);
 }
 
 void	handle_child(t_minishell *ms)
 {
-	if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded, is_heredoc)
-		|| has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded, is_redirect))
+	if (has_redirects(ms->tokens, &ms->token.quoted, &ms->token.expanded))
 	{
 		if (exec_redirections(ms, ms->tokens, &ms->token.quoted, &ms->token.expanded, FALSE) != 0)
 			exit_child(ms, ERROR, FALSE);
 	}
 	if (!ms->tokens || !*ms->tokens)
 		exit_child(ms, 0, FALSE);
-	ms->ret = detect_echo_call(ms, ms->tokens);
+	ms->ret = exec_builtin(ms, ms->tokens);
+	if (ms->ret == CMD_NOT_FOUND)
+		ms->ret = detect_echo_call(ms, ms->tokens);
 	if (ms->ret == CMD_NOT_FOUND)
 		ms->ret = detect_executable(ms, ms->tokens);
 	if (ms->ret == EXE_NOT_FOUND)

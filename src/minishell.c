@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/05 13:54:42 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/05 23:27:21 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	execute_input(t_minishell *ms, char *input)
 			}
 		}
 		ms->ret = call_commands(ms);
-		if (has_heredoc(ms, ms->tokens))
+		if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded, is_heredoc))
 			reset_heredoc(ms);
 		free_tokens_address(&ms->tokens);
 	}
@@ -172,11 +172,11 @@ int	main(int argc, char **argv, char **envp)
 		error_msg(argv[1], "too many arguments");
 		return (1);
 	}
-	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
-	{
-		error_msg("./minishell", "must be run in interactive mode");
-		return (1);
-	}
+	// if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+	// {
+	// 	error_msg("./minishell", "must be run in interactive mode");
+	// 	return (1);
+	// }
 	ms = (t_minishell *)malloc(sizeof(t_minishell));
 	if (!ms)
 		exit(EXIT_FAILURE);

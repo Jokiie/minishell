@@ -171,12 +171,13 @@ int					quotes_detector(t_minishell *ms, char *line, int i);
 int					open_quotes_checker(t_minishell *ms, char *line);
 int					quotes_detector_tokens(t_minishell *ms, char *tokens, int k,
 						int i);
+int	quotes_detector_tokens2(t_minishell *ms, char *tokens, int i);
 // expander.c
 char				**expander(t_minishell *ms, char **tokens);
-char				*expand_token(t_minishell *ms, char *token, int k, int i);
+char				*expand_token(t_minishell *ms, char *token, int i);
 void				init_expanded_array(t_minishell *ms, char **tokens);
-t_bool				var_is_squoted(t_minishell *ms, char *tokens);
-t_bool				is_expandable(t_minishell *ms, char *token);
+t_bool				is_expandable(t_minishell *ms, char *token, int k);
+
 // var_expansion.c
 char				*apply_var_expansion(t_minishell *ms, char *token_dup,
 						int *i);
@@ -206,6 +207,10 @@ char				*separe_var(t_minishell *ms, char *line, int *i);
 char				**cleaner(t_minishell *ms, char **tokens);
 int					count_valid_tokens(t_minishell *ms, char **tokens);
 
+// transformer_utils.c
+
+t_bool				is_heredoc_delim(t_minishell *ms, char **tokens, int k);
+
 // is.c
 int					ft_is_dquote(int c);
 int					ft_is_squote(int c);
@@ -213,18 +218,10 @@ int					ft_isquotes(int c);
 int					ft_ismeta_chars(int c);
 
 // has_meta.c
-t_bool				has_redirect(t_minishell *ms, char **tokens);
 t_bool				has_type(char **tokens, int **quoted, int **expanded,
 						t_bool (*is_type)(char *));
-t_bool				has_meta(t_minishell *ms, char **tokens);
+t_bool				has_redirects(char **tokens, int **quoted, int **expanded);
 t_bool				has_quotes(char *token);
-
-// has_one_meta.c
-t_bool				has_redirect_in(t_minishell *ms, char **tokens);
-t_bool				has_redirect_out(t_minishell *ms, char **tokens);
-t_bool				has_append(t_minishell *ms, char **tokens);
-t_bool				has_heredoc(t_minishell *ms, char **tokens);
-t_bool				has_pipe(t_minishell *ms, char **tokens);
 
 // is_meta.c
 t_bool				is_redirect(char *token);
