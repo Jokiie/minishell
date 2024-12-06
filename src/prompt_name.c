@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt_name.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/04 14:14:21 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/05 16:00:23 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

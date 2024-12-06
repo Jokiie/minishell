@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/03 14:14:19 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/06 15:42:05 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,29 +24,18 @@ int	detect_cd_call(t_minishell *ms, char **tokens)
 /* Change the current working directory */
 int	cd(t_minishell *ms, char **tokens)
 {
-	if (!tokens[1] || !*tokens[1])
+	if (!tokens[1] || !*tokens[1] || ft_strcmp(tokens[1], "~") == 0)
+		return (go_home(ms));
+	else if (ft_strcmp(tokens[1], "-") == 0)
+		return (go_old_pwd(ms));
+	else if (ft_strcmp(tokens[1], "--") == 0)
 		return (go_home(ms));
 	else if (tokens[2])
 	{
-		ft_putstr_fd("ms: cd: too many arguments\n", 2);
-		return (ERROR);
+		// ft_putstr_fd("ms: cd: too many arguments\n", 2);
+		return (SUCCESS);
 	}
-	return (change_directory(ms, tokens[1]));
-}
-
-/* Navigate to the home directory */
-int	go_home(t_minishell *ms)
-{
-	char	*home;
-
-	home = get_env(ms->env, "HOME");
-	if (!home || chdir(home) == -1)
-	{
-		ft_putstr_fd("ms: cd: HOME not set or inaccessible\n", 2);
-		return (ERROR);
-	}
-	update_working_directories(ms);
-	return (SUCCESS);
+return (change_directory(ms, tokens[1]));
 }
 
 /* Update cwd and OLDPWD in both struct and environment variables */
@@ -78,7 +67,7 @@ int	change_directory(t_minishell *ms, const char *path)
 {
 	if (chdir(path) == -1)
 	{
-		ft_fprintf(2, "ms: cd: %s: %s\n", path, strerror(errno));
+		ft_putstr_fd(" No such file or directory", 2);
 		return (ERROR);
 	}
 	update_working_directories(ms);

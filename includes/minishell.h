@@ -262,6 +262,7 @@ int					cd(t_minishell *ms, char **tokens);
 int					go_home(t_minishell *ms);
 void				update_working_directories(t_minishell *ms);
 int					change_directory(t_minishell *ms, const char *path);
+int					go_old_pwd(t_minishell *ms);
 
 // pwd.c
 int					pwd(t_minishell *ms);

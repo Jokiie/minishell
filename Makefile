@@ -43,6 +43,7 @@ SRC_PIPES = pipes/pipes.c \
 			pipes/exec_pipes.c
 
 SRC_CMDS = commands/cd.c \
+		   commands/cd_utils.c \
 		   commands/echo.c \
 		   commands/env.c \
 		   commands/executable.c\

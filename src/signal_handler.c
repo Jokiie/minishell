@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:57 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/03 02:24:31 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 14:19:33 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
