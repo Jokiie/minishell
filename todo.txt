@@ -100,43 +100,10 @@ mini output:(    -n bonjour   $)
 bash output:(bonjour$>) (echo a reconnu le -n et affiche bonjour avec 
                          l'option -n)
 
-❌ export quote="'"
+✅ FIXED
+export quote="'"
 mini ouput: (added (quote=) into the env)
 bash output: (added (quote=') into the env)
-
-ps: javais fixer cela mais un recent changement fait en sorte que ce nest pas ajouter
-la tokenization ce fait correctement voici le output durant la transformation des tokens:
-
-Celia/minishell ➜  export quote="'"
-pretokens:
-[0] = :export:
-[1] = :quote="'":
-expander:
-[0] = :export:
-[1] = :quote="'":
-trimmer:
-[0] = :export:
-[1] = :quote=':
-cleaner:
-[0] = :export:
-[1] = :quote=':    <- on voit ici que le guillement seul a été conservé
-
-ensuite :
-Celia/minishell ➜ env
-...
-quote=
-(quote est vide donc il affiche rien, mais il devait garder le guillement seul)
-Celia/minishell ➜  $quote
-pretokens:
-[0] = :$quote:
-expander:
-[0] = ::
-trimmer:
-[0] = ::
-cleaner:
-[0] = (null)
-Celia/minishell ➜  
-
 
 ❌ export "" HOLA=bonjour
 mini output: (added "HOLA=bonjour" into the env)
