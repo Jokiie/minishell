@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/12/06 14:45:25 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/06 15:52:26 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,11 @@ void	export_handling(t_minishell *ms, char **tokens, int i)
 		var_name = extract_var_name(tokens[i]);
 		value = extract_var_value(tokens[i], 0);
 		if (tokens[i][0] == '\0' && ms->token.quoted[i] == 1)
-			ft_fprintf(2, "ms: export: not valid in this context: %s\n", tokens[i]);
+			ft_fprintf(2, "ms: export: %s: not a valid identifier\n", tokens[i]);
 		if (!is_valid_var_name(var_name) || 
 			(tokens[i][0] == '=' || ft_strchr(tokens[i], '=') == tokens[i]))
 		{
-			ft_fprintf(2, "ms: export: not valid in this context: %s\n", tokens[i]);
+			ft_fprintf(2, "ms: export: %s: not a valid identifier\n", tokens[i]);
 			ms->ret = ERROR;
 		}
 		else if (var_name && value)

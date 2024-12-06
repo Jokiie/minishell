@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 04:36:52 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/04 14:19:05 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/06 16:20:07 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ int	ft_exit(t_minishell *ms, char **tokens, int is_child)
 	{
 		ft_fprintf(2, "ms: exit: %s: numeric argument required\n", tokens[1]);
 		if (is_child == 1)
-			return (SYNTAX_ERROR);
+			return (CATCH_ALL);
 		else
-			exit_minishell(ms, SYNTAX_ERROR);
+			exit_minishell(ms, CATCH_ALL);
 	}
 	else
 	{
@@ -47,7 +47,7 @@ int	handle_valid_exit(t_minishell *ms, char **tokens, int is_child)
 
 	ret = 0;
 	if (tokens[1])
-		ret = ft_atol(tokens[1]);
+		ret = ft_atol(tokens[1]) % 256;
 	if (!is_child)
 		exit_minishell(ms, ret);
 	return (ret);

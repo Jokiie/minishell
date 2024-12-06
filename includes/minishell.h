@@ -29,6 +29,7 @@
 # define TERM_SIGINT 130
 # define TERM_SIGKILL 137
 # define SEGFAULT 139
+# define CATCH_ALL 255
 
 # define SURL "\e[7m"
 # define SURLRESET "\e[0m"
