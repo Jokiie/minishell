@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 19:08:21 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 06:47:28 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/05 21:46:01 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_bool	has_redirect_in(t_minishell *ms, char **tokens)
 	i = 0;
 	while (tokens[i])
 	{
-		if (ms->token.quoted[i] == 0 && is_redirect_in(tokens[i]))
+		if (ms->token.expanded[i] == 0 && ms->token.quoted[i] == 0 && is_redirect_in(tokens[i]))
 			return (TRUE);
 		i++;
 	}
@@ -33,7 +33,7 @@ t_bool	has_redirect_out(t_minishell *ms, char **tokens)
 	i = 0;
 	while (tokens[i])
 	{
-		if (ms->token.quoted[i] == 0 && is_redirect_out(tokens[i]))
+		if (ms->token.expanded[i] == 0 && ms->token.quoted[i] == 0  && is_redirect_out(tokens[i]))
 			return (TRUE);
 		i++;
 	}
@@ -47,7 +47,7 @@ t_bool	has_append(t_minishell *ms, char **tokens)
 	i = 0;
 	while (tokens[i])
 	{
-		if (ms->token.quoted[i] == 0 && is_append(tokens[i]))
+		if (ms->token.expanded[i] == 0 && ms->token.quoted[i] == 0  && is_append(tokens[i]))
 			return (TRUE);
 		i++;
 	}
@@ -61,7 +61,7 @@ t_bool	has_heredoc(t_minishell *ms, char **tokens)
 	i = 0;
 	while (tokens[i])
 	{
-		if (ms->token.quoted[i] == 0 && is_heredoc(tokens[i]))
+		if (ms->token.expanded[i] == 0 && ms->token.quoted[i] == 0  && is_heredoc(tokens[i]))
 			return (TRUE);
 		i++;
 	}
@@ -75,7 +75,7 @@ t_bool	has_pipe(t_minishell *ms, char **tokens)
 	i = 0;
 	while (tokens[i])
 	{
-		if (ms->token.quoted[i] == 0 && is_pipe(tokens[i]))
+		if (ms->token.expanded[i] == 0 && ms->token.quoted[i] == 0  && is_pipe(tokens[i]))
 			return (TRUE);
 		i++;
 	}
