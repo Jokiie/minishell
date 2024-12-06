@@ -43,6 +43,10 @@ bash : (do nothing and return 0)
 mini : (added "unset=" into the env)
 bash : (do nothing and return 0)
 
+❌ export VAR+=Hello
+mini : (ms: export: not valid in this context: `VAR+=Hello')
+bash : (added VAR=Hello into the env)
+
 ✅ export var="lol mdr"
 mini : (added "var=lol mdr" into the env)
 bash : (added "var=lol mdr" into the env)
@@ -152,8 +156,11 @@ bash output: (output of the command ls -la)
 
 
 ❌ export heredoc=<<EOF
-mini output: (ms: export: <<: not a valid identifier)
+mini output: (there is a heredoc so this do nothing because called in child process
+            for the redirection)
 bash output: (added heredoc= into the env)
+
+Maybe we could let it like this ^
 
 ❌
 
