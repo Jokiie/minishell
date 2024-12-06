@@ -157,9 +157,6 @@ void				print_expanded_array(char **tokens, int **expanded);
 // tokens_creator.c
 int					tokens_creator(t_minishell *ms, char *line);
 char				**transformer(t_minishell *ms);
-void				init_quoted_array(t_minishell *ms, char **tokens);
-void				init_int_arrays(t_minishell *ms);
-void				init_expanded_array(t_minishell *ms, char **tokens);
 
 // tokenizer.c
 int					separe_line(t_minishell *ms, char *line, int i, int *k);
@@ -171,8 +168,7 @@ int					count_words(char const *line);
 // quotes_detector.c
 int					quotes_detector(t_minishell *ms, char *line, int i);
 int					open_quotes_checker(t_minishell *ms, char *line);
-int					quotes_detector2(t_minishell *ms, char *tokens, int k,
-						int i);
+int					quotes_detector2(t_minishell *ms, char *tok, int k, int i);
 
 // expander.c
 char				**expander(t_minishell *ms, char **tokens);
@@ -199,7 +195,6 @@ char				**retokenizer(t_minishell *ms);
 int					separe_token(t_minishell *ms, char *token, int *i, int *k);
 int					handle_empty(t_minishell *ms, int *k, int j);
 void				handle_non_empty(t_minishell *ms, int *i, int *k, int j);
-void	            update_arrays(t_minishell *ms, int k);
 
 // trimmer.c
 char				**trimmer(t_minishell *ms, char **tokens);
@@ -210,6 +205,13 @@ char				*separe_var(t_minishell *ms, char *line, int *i);
 
 char				**cleaner(t_minishell *ms, char **tokens);
 int					count_valid_tokens(t_minishell *ms, char **tokens);
+
+// int_arrays.c
+void				init_int_arrays(t_minishell *ms);
+void				init_quoted_array(t_minishell *ms, char **tokens);
+void				init_expanded_array(t_minishell *ms, char **tokens);
+void	            update_arrays(t_minishell *ms, int k);
+
 
 // is.c
 int					ft_is_dquote(int c);

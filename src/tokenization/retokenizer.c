@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 02:38:01 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 04:49:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 13:28:51 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,26 @@
 	in tokenizer, but save the empty tokens. Then we update the quoted and
 	expanded arrays, so we have the state of each new tokens.
 */
+static void	init_retokenizer(int *i, int *j, int *k)
+{
+	*i = 0;
+	*j = 0;
+	*k = 0;
+}
+
 char	**retokenizer(t_minishell *ms)
 {
 	int	i;
-	int	k;
 	int	j;
+	int	k;
 	int	size;
 
+	if (!ms->expanded || !*ms->expanded)
+		return (NULL);
 	size = count_tokens(ms->expanded) * count_size(ms->expanded);
+	init_retokenizer(&i, &j, &k);
 	ms->pretokens = ft_calloc((size + 1), sizeof(char *));
-	j = 0;
-	k = 0;
-	i = 0;
-	while (ms->expanded[j] && k < size)
+	while (ms->pretokens && (ms->expanded[j] && k < size))
 	{
 		if (!ms->expanded[j][0])
 			j = handle_empty(ms, &k, j);
@@ -68,7 +75,7 @@ int	separe_token(t_minishell *ms, char *token, int *i, int *k)
 
 int	handle_empty(t_minishell *ms, int *k, int j)
 {
-	if (!ms->token.expanded[j])
+	if (ms->token.expanded[j] == 1)
 	{
 		ms->pretokens[*k] = ft_strdup("");
 		ms->token.tmp_array[*k] = 1;
@@ -88,19 +95,4 @@ void	handle_non_empty(t_minishell *ms, int *i, int *k, int j)
 			(*i)++;
 		ms->token.tmp_array[*k - 1] = ms->token.expanded[j];
 	}
-}
-
-void	update_arrays(t_minishell *ms, int k)
-{
-	int	i;
-
-	i = 0;
-	while (i < k)
-	{
-		ms->token.expanded[i] = ms->token.tmp_array[i];
-		i++;
-	}
-	free(ms->token.tmp_array);
-	free_int_array(&ms->token.quoted);
-	init_quoted_array(ms, ms->pretokens);
 }

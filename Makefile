@@ -72,6 +72,7 @@ SRC_TOK = tokenization/tokens_creator.c \
 		  tokenization/syntax_error.c \
 		  tokenization/contains_only.c \
 		  tokenization/count.c \
+		  tokenization/int_arrays.c \
 
 SRC_REDIR = redirections/exec_redirections.c \
 			redirections/redirection.c \
