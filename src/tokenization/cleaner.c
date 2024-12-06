@@ -6,12 +6,18 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 22:48:09 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/01 02:07:47 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 04:47:23 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/*
+	Cleaner:
+	Called only if no unquoted and no expanded pipes is found.
+	It will iter in each tokens and remove the unquoted empty tokens
+	resulted from the previous step (usually from empty variables).
+*/
 static void	init_cleaner(int *k, int *i)
 {
 	*k = 0;

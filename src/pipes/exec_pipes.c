@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 01:36:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/05 13:30:15 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 03:57:59 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int	exect_pipes(t_minishell *ms)
 	init_exec_pipes(ms, &i);
 	while (ms->tokens[i])
 	{
-		if ((is_pipe(ms->tokens[i]) && ms->token.quoted[i] == 0 && ms->token.expanded[i] == 0)
-			|| ms->tokens[i + 1] == NULL)
+		if ((is_pipe(ms->tokens[i]) && ms->token.quoted[i] == 0
+				&& ms->token.expanded[i] == 0) || ms->tokens[i + 1] == NULL)
 		{
 			handle_last_cmd(ms, &i);
 			handle_pipe_cmd(ms, i, &ms->pid);
@@ -57,12 +57,15 @@ void	handle_child_process(t_minishell *ms)
 	int	ret;
 
 	ret = ms->ret;
+	ms->in_pipe = TRUE;
 	if (pipes_redirection(ms) != SUCCESS)
 		exit_child(ms, ret, TRUE);
-	if (has_type(ms->p.p_args, &ms->p.arg_quoted, &ms->p.arg_expanded, is_redirect)
-		|| has_type(ms->p.p_args, &ms->p.arg_quoted, &ms->p.arg_expanded, is_heredoc))
+	if (has_type(ms->p.p_args, &ms->p.arg_quoted, &ms->p.arg_expanded,
+			is_redirect) || has_type(ms->p.p_args, &ms->p.arg_quoted,
+			&ms->p.arg_expanded, is_heredoc))
 	{
-		ret = exec_redirections(ms, ms->p.p_args, &ms->p.arg_quoted, &ms->p.arg_expanded, TRUE);
+		ret = exec_redirections(ms, ms->p.p_args, &ms->p.arg_quoted,
+				&ms->p.arg_expanded);
 		if (ret > 0)
 			exit_child(ms, ret, TRUE);
 	}

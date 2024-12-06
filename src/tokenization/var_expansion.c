@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:43:35 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/05 22:35:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 03:59:09 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ char	*var_extractor(char *token, int *i)
 	start = *i;
 	if (ft_isalpha(token[*i]) || token[*i] == '_')
 	{
-		while (token[*i] && token[*i] != '$' && (ft_isalnum(token[*i]) || token[*i] == '_'))
+		while (token[*i] && token[*i] != '$' && (ft_isalnum(token[*i])
+				|| token[*i] == '_'))
 			(*i)++;
 		substr = ft_substr(token, start, *i - start);
 	}

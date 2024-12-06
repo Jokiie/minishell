@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/05 23:27:21 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 04:36:41 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	init_minishell(t_minishell *ms)
 	ms->tokc = 0;
 	ms->ret = 0;
 	ms->path = NULL;
-	ms->interactive = TRUE;
 	ms->token.end = 0;
 	ms->token.start = 0;
 	ms->token.size = 1;
@@ -48,6 +47,7 @@ void	init_minishell(t_minishell *ms)
 	ms->token.in_squotes = FALSE;
 	ms->token.quoted = NULL;
 	ms->token.expanded = NULL;
+	ms->token.tmp_array = NULL;
 	ms->in_pipe = FALSE;
 	ms->pid = 0;
 	ms->received_sig = 0;
@@ -56,10 +56,10 @@ void	init_minishell(t_minishell *ms)
 
 /*
 	- tokens_creator -> success: 0 | syntax_error: 2
-		if ms->tokens is null, we do nothing and return 0
+		if ms->tokens is null, we do nothing and return the last return value
 		(tokens_creator return 0 if no syntax errors were found)
 	- heredoc -> success: 0 | terminated with SIGINT: 130
-	- call_commands -> Return value depend of child return value.
+	- call_commands -> Return value depend of the last command return value.
 */
 int	execute_input(t_minishell *ms, char *input)
 {
@@ -67,7 +67,8 @@ int	execute_input(t_minishell *ms, char *input)
 		return (SYNTAX_ERROR);
 	else if (ms->tokens && *ms->tokens)
 	{
-		if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded, is_heredoc))
+		if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded,
+				is_heredoc))
 		{
 			ms->ret = process_heredocs(ms);
 			if (ms->ret == ERROR || ms->ret == TERM_SIGINT)
@@ -77,7 +78,8 @@ int	execute_input(t_minishell *ms, char *input)
 			}
 		}
 		ms->ret = call_commands(ms);
-		if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded, is_heredoc))
+		if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded,
+				is_heredoc))
 			reset_heredoc(ms);
 		free_tokens_address(&ms->tokens);
 	}
@@ -86,30 +88,46 @@ int	execute_input(t_minishell *ms, char *input)
 
 /*
 	Execute the prompt in a loop. We read the input with readline and store
-	the input in ms->input. If readline do not encounter EOF(Ctrl+d), otherwise,
+	the input in ms->input. If readline do not encounter EOF(Ctrl+D),
 	we parse the input:
 
-	1- Tokenizer: If line is empty, ms->tokens is null. Otherwise, separe the
-		tokens at each unquoted blank character and meta-characters.
+	0- Tokens_creator: If line is empty or contain only spaces, ms->tokens is
+	   set to null, and we return 0. Otherwise, We check if we have an open
+	   quote, if so, we return SYNTAX_ERROR and do not proceed further.
+	   Otherwise, We call tokenizer and transformer, then verify if we have a
+	   syntax error. If so, we return SYNTAX_ERROR. If no syntax error is found,
+	   we return SUCCESS.
+	
+	1- Tokenizer: Separe the line in tokens when we find an unquoted space or
+	    a meta character. If the result is not NULL, we proceed further.
 
-	2- Transformer : call the following:
+	2- Transformer : Init quoted and expanded int arrays, which save the state
+				     of each token (quoted or not) and (expanded or not). then
+					 call the following:
 
-		2.1- Expander: Iter in each tokens and expand the variables.
+		2.1- Expander: Iter in each tokens and expand the variables if not
+			 single quoted or a heredoc delimiter.
 
-		2.2- Cleaner: Iter in each tokens and remove the empty tokens resulted
-				from expander.
+		2.2- Retokenizer : Iter in each tokens and resepare the tokens like
+			 in tokenizer, but save the empty tokens. Then update the quoted and
+			 expanded arrays, so we have the state of each new tokens.
+		
+		2.2- Cleaner: Called only if no unquoted and no expanded pipes is found.
+			 It will iter in each tokens and remove the unquoted empty tokens
+			 resulted from the previous step (usually from empty variables).
 
-		2.3- Fill the int array ms->token.quoted which save the states of
-				each token to determine if it was quoted or not.
-				quoted: 1 | else: 0
-		2.4 - Trimmer: Iter in each tokens and remove the quotes when needed.
+		2.4- Trimmer: Iter in each tokens and remove the quotes of tokens that
+			 do not result from expansion. This is the final step and the result
+			 is assigned to ms->tokens.
 
-	3-  we check if we have a heredoc, if so we execute and fill all heredocs at
-		once and save them with an unique name in our folder /tmp.
+	3-  We check if we have a unquoted and unexpanded heredoc, if so we execute
+	    and fill all heredocs at once and save them with an unique name in our
+		folder /tmp. These are deleted after the command execution, or if we
+		received a SIGINT, at exit or with the command make fclean.
 
 	4-  if all the previous step were successful, we check if the tokens contain
-		at least one pipe. If yes, execute the pipeline in exec_pipes and return
-		the exitcode of the last command.
+		at least one unquoted and unexpanded pipe. If yes, execute the pipeline
+		in exec_pipes and return the exit code of the last child process.
 
 	5-	If the tokens contains no pipes, we execute the simple command in a
 		sub-shell. Both pipes and simple command proceed like the following:
@@ -118,10 +136,11 @@ int	execute_input(t_minishell *ms, char *input)
 				if the command exist, execute it and return SUCCESS or ERROR
 
 		5.2-	If not found in our built-in, We create a fork in handle_child()
-				and check if the tokens contains redirections or heredocs
-				characters. If yes, we iter in the tokens and redirect the
-				output/input depending of the meta characters. Then we recreate
-				the tokens without these characters and argument(files).
+				and check if the tokens contains unquoted and unexpanded
+				redirections or heredocs characters. If yes, we iter in the
+				tokens and redirect the output/input depending of the meta
+				characters. Then we recreate the tokens without these characters
+				and argument(files).
 
 		5.3-	We recheck the built-in to be sure we don't call the command in
 				the system environment and include echo this time, so echo can
