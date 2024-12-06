@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/05 23:27:21 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 01:04:09 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	init_minishell(t_minishell *ms)
 	ms->token.in_squotes = FALSE;
 	ms->token.quoted = NULL;
 	ms->token.expanded = NULL;
+	ms->token.arrays = NULL;
 	ms->in_pipe = FALSE;
 	ms->pid = 0;
 	ms->received_sig = 0;

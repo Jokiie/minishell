@@ -47,6 +47,7 @@ typedef struct s_token
 	int				size;
 	int				*quoted;
 	int				*expanded;
+	int				**arrays;
 	t_bool			is_meta;
 	t_bool			in_dquotes;
 	t_bool			in_squotes;
@@ -75,6 +76,7 @@ typedef struct s_pipes
 	int				*arg_quoted;
 	int				*arg_expanded;
 }					t_pipes;
+
 
 typedef struct s_minishell
 {
@@ -195,11 +197,12 @@ char				*single_var_extractor(char *token, int *i);
 // separator.c
 char				**separator(t_minishell *ms, char **tokens);
 
-char	**retokenize(t_minishell *ms, char **tokens);
-int	separe_token(t_minishell *ms, char *line, int i, int *k);
+char				**retokenize(t_minishell *ms, char **tokens);
+int					separe_token(t_minishell *ms, char *line, int i, int *k);
 
 // trimmer.c
 char				**trimmer(t_minishell *ms, char **tokens);
+char				*trim_or_dup(t_minishell *ms, char **tokens, int k);
 char				*ft_toktrim(t_minishell *ms, char *token, int len);
 char				*separe_var(t_minishell *ms, char *line, int *i);
 // cleaner.c

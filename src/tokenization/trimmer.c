@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/05 23:23:10 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 00:09:46 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,22 @@ char	**trimmer(t_minishell *ms, char **tokens)
 		return (NULL);
 	while (tokens[k] && k < count)
 	{
-		if (!is_expandable(ms, tokens[k], k) && ms->token.expanded[k] == 1
-			&& !ft_strnstr(tokens[0], "export\0", 7)
-			&& !is_heredoc_delim(ms, tokens, k) && !ft_strchr(tokens[k], '\"'))
-			trimmed[i] = ft_strdup(tokens[k]);
-		else
-			trimmed[i] = ft_toktrim(ms, tokens[k], ft_strlen(tokens[k]));
+		trimmed[i] = trim_or_dup(ms, tokens, k);
 		if (trimmed[i])
 			i++;
 		k++;
 	}
 	trimmed[i] = NULL;
 	return (trimmed);
+}
+
+char	*trim_or_dup(t_minishell *ms, char **tokens, int k)
+{
+	if (!is_expandable(ms, tokens[k], k) && ms->token.expanded[k] == 1
+		&& !ft_strnstr(tokens[0], "export\0", 7) && !is_heredoc_delim(ms,
+			tokens, k) && !ft_strchr(tokens[k], '\"'))
+		return (ft_strdup(tokens[k]));
+	return (ft_toktrim(ms, tokens[k], ft_strlen(tokens[k])));
 }
 
 char	*ft_toktrim(t_minishell *ms, char *token, int len)

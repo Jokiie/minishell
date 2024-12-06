@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 01:36:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/05 13:30:15 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 00:10:50 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int	exect_pipes(t_minishell *ms)
 	init_exec_pipes(ms, &i);
 	while (ms->tokens[i])
 	{
-		if ((is_pipe(ms->tokens[i]) && ms->token.quoted[i] == 0 && ms->token.expanded[i] == 0)
-			|| ms->tokens[i + 1] == NULL)
+		if ((is_pipe(ms->tokens[i]) && ms->token.quoted[i] == 0
+			&& ms->token.expanded[i] == 0) || ms->tokens[i + 1] == NULL)
 		{
 			handle_last_cmd(ms, &i);
 			handle_pipe_cmd(ms, i, &ms->pid);
@@ -42,7 +42,11 @@ void	handle_pipe_cmd(t_minishell *ms, int i, pid_t *pid)
 	if (!ms->p.p_args)
 		return ;
 	fill_pipes_quoted_arr(ms, ms->p.cmd_start);
+	//print_int_array(ms->p.p_args, &ms->p.arg_quoted);
 	fill_pipes_expanded_arr(ms, ms->p.cmd_start);
+	//print_expanded_array(ms->p.p_args, &ms->p.arg_expanded);
+	//write(2, "Pipes args:\n", 13);
+	//print_debug(ms->p.p_args);
 	ms->p.ret = create_and_manage_process(ms, pid);
 	free(ms->p.p_args);
 	ms->p.p_args = NULL;
