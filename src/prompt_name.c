@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/04 14:14:21 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 05:25:38 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*get_prompt_name(t_minishell *ms)
 	char	**split;
 	char	*tmp;
 
-	split = get_cwdsplit(ms);
+	split = get_cwdsplit();
 	if (split && *split)
 	{
 		color = get_user_color(ms);
@@ -46,17 +46,16 @@ char	*get_prompt_name(t_minishell *ms)
 	}
 	else
 		username_dup = ft_strdup("minishell ➜  ");
-	free_tokens(split);
+	free_tokens_address(&split);
 	return (username_dup);
 }
 
-char	**get_cwdsplit(t_minishell *ms)
+char	**get_cwdsplit(void)
 {
 	char	**splitted;
 	int		i;
 	char	*cwd;
 
-	(void)ms;
 	i = 0;
 	splitted = NULL;
 	cwd = getcwd(NULL, 0);
@@ -73,9 +72,8 @@ char	**get_cwdsplit(t_minishell *ms)
 			return (splitted);
 		}
 		splitted = ft_split(cwd, '/');
-		free_ptr(cwd);
 	}
-	ms->cwd = getcwd(NULL, 0);
+	free_ptr(cwd);
 	return (splitted);
 }
 

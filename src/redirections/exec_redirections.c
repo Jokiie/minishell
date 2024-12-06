@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 01:42:06 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/05 01:35:34 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 02:09:44 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,30 +20,30 @@
 	it were a command or an argument to a command. Return 0 if successful or 1
 	for failure.
 */
-int	exec_redirections(t_minishell *ms, char **tokens, int **quoted, int **expanded,
-		t_bool in_pipe)
+int	exec_redirections(t_minishell *ms, char **tok, int **quoted, int **expanded)
 {
 	int	k;
 
 	k = 0;
-	while (tokens[k])
+	while (tok[k])
 	{
-		if (is_heredoc(tokens[k]) && (*quoted)[k] == 0 && (*expanded)[k] == 0)
+		if (is_heredoc(tok[k]) && (*quoted)[k] == 0 && (*expanded)[k] == 0)
 		{
 			if (redirect_heredocs(ms) != SUCCESS)
 				return (ERROR);
 			k += 2;
 		}
-		else if (is_redirect(tokens[k]) && (*quoted)[k] == 0 && (*expanded)[k] == 0)
+		else if (is_redirect(tok[k]) && (*quoted)[k] == 0
+			&& (*expanded)[k] == 0)
 		{
-			if (redirect(tokens[k], tokens[k + 1]))
+			if (redirect(tok[k], tok[k + 1]))
 				return (ERROR);
 			k += 2;
 		}
 		else
 			k++;
 	}
-	remake_tokens(ms, tokens, quoted, expanded, in_pipe);
+	remake_tokens(ms, tok, quoted, expanded);
 	return (SUCCESS);
 }
 

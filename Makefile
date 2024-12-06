@@ -60,7 +60,7 @@ SRC_TOK = tokenization/tokens_creator.c \
 		  tokenization/expander.c \
 		  tokenization/tokenizer.c \
 		  tokenization/trimmer.c \
-		  tokenization/separator.c \
+		  tokenization/retokenizer.c \
 		  tokenization/var_expansion.c \
 		  tokenization/nbr_expansion.c \
 		  tokenization/quotes_detector.c \
@@ -72,7 +72,6 @@ SRC_TOK = tokenization/tokens_creator.c \
 		  tokenization/syntax_error.c \
 		  tokenization/contains_only.c \
 		  tokenization/count.c \
-		  tokenization/transformer_utils.c \
 
 SRC_REDIR = redirections/exec_redirections.c \
 			redirections/redirection.c \

@@ -6,13 +6,14 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 05:27:46 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/05 01:13:26 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 02:16:40 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	count_type(char **tokens, int **quoted, int **expanded, t_bool (*is_type)(char *))
+int	count_type(char **tokens, int **quoted, int **expanded,
+		t_bool (*is_type)(char *))
 {
 	int	i;
 	int	count;

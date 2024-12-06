@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 00:29:35 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/03 18:47:15 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 02:10:18 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ char	*heredoc_expander(t_minishell *ms, char *line, char *delim)
 	int		i;
 
 	i = 0;
-	if (ft_strncmp(delim, line, ft_strlen(line)) == 0
-		&& is_same_size(line, delim) == TRUE)
+	if (ft_strncmp(delim, line, ft_strlen(line)) == 0 && is_same_size(line,
+			delim) == TRUE)
 		return (ft_strdup(line));
 	dup = ft_strdup(line);
 	while (dup[i])

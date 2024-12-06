@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 22:07:44 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 04:34:31 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 02:13:41 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ t_bool	line_is_null(char *line, char *delim)
 {
 	if (!line)
 	{
-		ft_putstr_fd("ms: warning: here-document delimited by end-of-file ", 2);
-		ft_fprintf(2, "(wanted '%s')\n", delim);
+		error_msg(delim, "warning: here-document delimited by end-of-file");
 		return (TRUE);
 	}
 	return (FALSE);
@@ -62,8 +61,8 @@ t_bool	line_is_null(char *line, char *delim)
 
 t_bool	is_delim(char *line, char *delim)
 {
-	if (ft_strncmp(delim, line, ft_strlen(line)) == 0 && is_same_size(line,
-			delim) == TRUE)
+	if (ft_strncmp(delim, line, ft_strlen(line)) == 0
+		&& is_same_size(line, delim) == TRUE)
 	{
 		return (TRUE);
 	}

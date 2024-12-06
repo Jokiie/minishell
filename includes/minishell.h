@@ -47,7 +47,7 @@ typedef struct s_token
 	int				size;
 	int				*quoted;
 	int				*expanded;
-	int				**arrays;
+	int				*tmp_array;
 	t_bool			is_meta;
 	t_bool			in_dquotes;
 	t_bool			in_squotes;
@@ -77,7 +77,6 @@ typedef struct s_pipes
 	int				*arg_expanded;
 }					t_pipes;
 
-
 typedef struct s_minishell
 {
 	char			*input;
@@ -95,7 +94,6 @@ typedef struct s_minishell
 	char			*path;
 	t_token			token;
 	t_heredoc		heredoc;
-	t_bool			interactive;
 	t_bool			in_pipe;
 	t_pipes			p;
 	pid_t			pid;
@@ -145,7 +143,7 @@ void				error_msg(char *cmd, char *msg);
 
 // prompt_name.c
 char				*get_prompt_name(t_minishell *ms);
-char				**get_cwdsplit(t_minishell *ms);
+char				**get_cwdsplit(void);
 char				*get_arrow_color(t_minishell *ms, char *cwd_dup);
 char				*get_user_color(t_minishell *ms);
 
@@ -159,11 +157,13 @@ void				print_expanded_array(char **tokens, int **expanded);
 // tokens_creator.c
 int					tokens_creator(t_minishell *ms, char *line);
 char				**transformer(t_minishell *ms);
-void				fill_quoted_arr(t_minishell *ms, char **tokens);
+void				init_quoted_array(t_minishell *ms, char **tokens);
 void				init_int_arrays(t_minishell *ms);
+void				init_expanded_array(t_minishell *ms, char **tokens);
 
 // tokenizer.c
 int					separe_line(t_minishell *ms, char *line, int i, int *k);
+t_bool				is_space_or_meta(t_minishell *ms, char *token, int *i);
 char				**tokenizer(t_minishell *ms, char *line);
 char				*meta_chars_extractor(char *line, int *i);
 int					count_words(char const *line);
@@ -171,14 +171,14 @@ int					count_words(char const *line);
 // quotes_detector.c
 int					quotes_detector(t_minishell *ms, char *line, int i);
 int					open_quotes_checker(t_minishell *ms, char *line);
-int					quotes_detector_tokens(t_minishell *ms, char *tokens, int k,
+int					quotes_detector2(t_minishell *ms, char *tokens, int k,
 						int i);
-int	quotes_detector_tokens2(t_minishell *ms, char *tokens, int i);
+
 // expander.c
 char				**expander(t_minishell *ms, char **tokens);
 char				*expand_token(t_minishell *ms, char *token, int i);
-void				init_expanded_array(t_minishell *ms, char **tokens);
 t_bool				is_expandable(t_minishell *ms, char *token, int k);
+t_bool				is_heredoc_delim(t_minishell *ms, char **tokens, int k);
 
 // var_expansion.c
 char				*apply_var_expansion(t_minishell *ms, char *token_dup,
@@ -194,11 +194,12 @@ char				*apply_nbr_value(char *token_dup, int *i, int nbr);
 char				*insert_nbr_value(char *before, char *after, int nbr);
 char				*single_var_extractor(char *token, int *i);
 
-// separator.c
-char				**separator(t_minishell *ms, char **tokens);
-
-char				**retokenize(t_minishell *ms, char **tokens);
-int					separe_token(t_minishell *ms, char *line, int i, int *k);
+// retokenizer.c
+char				**retokenizer(t_minishell *ms);
+int					separe_token(t_minishell *ms, char *token, int *i, int *k);
+int					handle_empty(t_minishell *ms, int *k, int j);
+void				handle_non_empty(t_minishell *ms, int *i, int *k, int j);
+void	            update_arrays(t_minishell *ms, int k);
 
 // trimmer.c
 char				**trimmer(t_minishell *ms, char **tokens);
@@ -209,10 +210,6 @@ char				*separe_var(t_minishell *ms, char *line, int *i);
 
 char				**cleaner(t_minishell *ms, char **tokens);
 int					count_valid_tokens(t_minishell *ms, char **tokens);
-
-// transformer_utils.c
-
-t_bool				is_heredoc_delim(t_minishell *ms, char **tokens, int k);
 
 // is.c
 int					ft_is_dquote(int c);
@@ -328,8 +325,8 @@ int					exec_builtin(t_minishell *ms, char **tokens);
 /* redirections*/
 
 // exec_redirections.c
-int					exec_redirections(t_minishell *ms, char **tokens,
-						int **quoted, int **expanded, t_bool in_pipe);
+int					exec_redirections(t_minishell *ms, char **tok, int **quoted,
+						int **expanded);
 int					redirect(char *tokens, char *file);
 
 // redirection.c
@@ -339,10 +336,12 @@ int					append_output(char *file);
 int					redirect_heredocs(t_minishell *ms);
 
 // redirection_utils.c
-void				remake_tokens(t_minishell *ms, char **tokens,
-						int **protected, int **expanded, t_bool in_pipe);
-char				**recreate_tokens(char **tok, int **arr, int **arr2, int count, int i);
-int					get_filtered_tokc(char **tokens, int **protected, int **expanded);
+void				remake_tokens(t_minishell *ms, char **tok, int **quoted,
+						int **expanded);
+char				**recreate_tokens(char **tok, int **quoted, int **expanded,
+						int count);
+int					get_filtered_tokc(char **tokens, int **quoted,
+						int **expanded);
 
 // heredoc.c
 int					process_heredocs(t_minishell *ms);

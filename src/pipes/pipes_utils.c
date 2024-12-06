@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 00:18:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/05 01:23:43 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 03:58:41 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	fill_pipes_quoted_arr(t_minishell *ms, int i)
 		i++;
 	}
 }
+
 void	fill_pipes_expanded_arr(t_minishell *ms, int i)
 {
 	int	j;
@@ -52,6 +53,7 @@ void	fill_pipes_expanded_arr(t_minishell *ms, int i)
 		i++;
 	}
 }
+
 char	**extract_args(t_minishell *ms, char **tokens, int start, int end)
 {
 	int		i;

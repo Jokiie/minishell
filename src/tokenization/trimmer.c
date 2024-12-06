@@ -6,12 +6,17 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 00:09:46 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 04:48:15 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/*
+	Trimmer:
+	Iter in each tokens and remove the quotes of tokens that do not result from
+	expansion. This is the final step and the result is assigned to ms->tokens.
+*/
 char	**trimmer(t_minishell *ms, char **tokens)
 {
 	char	**trimmed;

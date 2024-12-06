@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:30:53 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/05 22:40:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 02:28:20 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	quotes_detector(t_minishell *ms, char *line, int i)
 	return (i);
 }
 
-int	quotes_detector_tokens(t_minishell *ms, char *tokens, int k, int i)
+int	quotes_detector2(t_minishell *ms, char *tokens, int k, int i)
 {
 	if (ft_is_dquote(tokens[i]) && !ms->token.in_squotes
 		&& ms->token.expanded[k] == 0)
@@ -34,19 +34,6 @@ int	quotes_detector_tokens(t_minishell *ms, char *tokens, int k, int i)
 	}
 	else if (ft_is_squote(tokens[i]) && !ms->token.in_dquotes
 		&& ms->token.expanded[k] == 0)
-	{
-		ms->token.in_squotes = !ms->token.in_squotes;
-	}
-	return (i);
-}
-
-int	quotes_detector_tokens2(t_minishell *ms, char *tokens, int i)
-{
-	if (ft_is_dquote(tokens[i]) && !ms->token.in_squotes)
-	{
-		ms->token.in_dquotes = !ms->token.in_dquotes;
-	}
-	else if (ft_is_squote(tokens[i]) && !ms->token.in_dquotes)
 	{
 		ms->token.in_squotes = !ms->token.in_squotes;
 	}
