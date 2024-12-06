@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trimmer.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/05 15:44:45 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/05 23:23:10 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ char	**trimmer(t_minishell *ms, char **tokens)
 		return (NULL);
 	while (tokens[k] && k < count)
 	{
-		if (ms->token.expanded[k] == 1 && !ft_strnstr(tokens[0], "export\0", 7)
-			&& !(k > 0 && (is_heredoc(tokens[k - 1]) && ms->token.quoted[k - 1] == 0) && tokens[k]))
+		if (!is_expandable(ms, tokens[k], k) && ms->token.expanded[k] == 1
+			&& !ft_strnstr(tokens[0], "export\0", 7)
+			&& !is_heredoc_delim(ms, tokens, k) && !ft_strchr(tokens[k], '\"'))
 			trimmed[i] = ft_strdup(tokens[k]);
 		else
 			trimmed[i] = ft_toktrim(ms, tokens[k], ft_strlen(tokens[k]));
