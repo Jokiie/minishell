@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 04:36:41 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 23:17:40 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ void	execms(t_minishell *ms, char **envp)
 	ms->env = ft_envdup(envp);
 	ms->path = getcwd(NULL, 0);
 	rl_path = ft_strjoin(ms->path, "/includes/readline/.inputrc");
-	set_env_var(ms, "INPUTRC", rl_path);
+	// set_env_var(ms, "INPUTRC", rl_path);
 	free(rl_path);
 	while (1)
 	{
