@@ -29,6 +29,7 @@
 # define TERM_SIGINT 130
 # define TERM_SIGKILL 137
 # define SEGFAULT 139
+# define CATCH_ALL 255
 
 # define SURL "\e[7m"
 # define SURLRESET "\e[0m"
@@ -48,9 +49,13 @@ typedef struct s_token
 	int				*quoted;
 	int				*expanded;
 	int				*tmp_array;
+	char			**db_buffer;
+	size_t			db_size;
+	size_t			db_capacity;
 	t_bool			is_meta;
 	t_bool			in_dquotes;
 	t_bool			in_squotes;
+
 }					t_token;
 
 typedef struct s_heredoc
@@ -143,7 +148,7 @@ void				error_msg(char *cmd, char *msg);
 
 // prompt_name.c
 char				*get_prompt_name(t_minishell *ms);
-char				**get_cwdsplit(void);
+char				**get_cwdsplit(t_minishell *ms);
 char				*get_arrow_color(t_minishell *ms, char *cwd_dup);
 char				*get_user_color(t_minishell *ms);
 
@@ -157,9 +162,6 @@ void				print_expanded_array(char **tokens, int **expanded);
 // tokens_creator.c
 int					tokens_creator(t_minishell *ms, char *line);
 char				**transformer(t_minishell *ms);
-void				init_quoted_array(t_minishell *ms, char **tokens);
-void				init_int_arrays(t_minishell *ms);
-void				init_expanded_array(t_minishell *ms, char **tokens);
 
 // tokenizer.c
 int					separe_line(t_minishell *ms, char *line, int i, int *k);
@@ -171,8 +173,7 @@ int					count_words(char const *line);
 // quotes_detector.c
 int					quotes_detector(t_minishell *ms, char *line, int i);
 int					open_quotes_checker(t_minishell *ms, char *line);
-int					quotes_detector2(t_minishell *ms, char *tokens, int k,
-						int i);
+int					quotes_detector2(t_minishell *ms, char *tok, int k, int i);
 
 // expander.c
 char				**expander(t_minishell *ms, char **tokens);
@@ -199,7 +200,6 @@ char				**retokenizer(t_minishell *ms);
 int					separe_token(t_minishell *ms, char *token, int *i, int *k);
 int					handle_empty(t_minishell *ms, int *k, int j);
 void				handle_non_empty(t_minishell *ms, int *i, int *k, int j);
-void	            update_arrays(t_minishell *ms, int k);
 
 // trimmer.c
 char				**trimmer(t_minishell *ms, char **tokens);
@@ -210,6 +210,18 @@ char				*separe_var(t_minishell *ms, char *line, int *i);
 
 char				**cleaner(t_minishell *ms, char **tokens);
 int					count_valid_tokens(t_minishell *ms, char **tokens);
+
+// int_arrays.c
+void				init_int_arrays(t_minishell *ms);
+void				init_quoted_array(t_minishell *ms, char **tokens);
+void				init_expanded_array(t_minishell *ms, char **tokens);
+void	            update_arrays(t_minishell *ms, int k);
+
+// dynamic_buffer
+
+char **init_dbuffer(t_minishell *ms, size_t initial_capacity);
+int append_to_dbuffer_char(t_minishell *ms, char *data);
+int append_to_dbuffer_int(t_minishell *ms, int *data, size_t data_count);
 
 // is.c
 int					ft_is_dquote(int c);
@@ -262,6 +274,7 @@ int					cd(t_minishell *ms, char **tokens);
 int					go_home(t_minishell *ms);
 void				update_working_directories(t_minishell *ms);
 int					change_directory(t_minishell *ms, const char *path);
+int					go_old_pwd(t_minishell *ms);
 
 // pwd.c
 int					pwd(t_minishell *ms);
@@ -301,13 +314,17 @@ char				*get_env(char **env, char *var_name);
 // export.c
 int					detect_export_call(t_minishell *ms, char **tokens);
 void				export_handling(t_minishell *ms, char **tokens, int i);
-char				**realloc_env(char **env, int new_size);
 int					env_var_count(char **env);
 void				set_env_var(t_minishell *ms, const char *var_name,
 						const char *value);
+void				export_declare_x(char **env);
+
+//export_utils.c
+char				**realloc_env(char **env, int new_size);
 int					is_valid_var_name(const char *var_name);
-char				*extract_var_value(const char *str, int j);
 char				*extract_var_name(const char *str);
+char				*extract_var_value(const char *str, int j);
+void				export_handling_x(t_minishell *ms, char **tokens, int i);
 
 // unset.c
 int					detect_unset_call(t_minishell *ms, char **tokens);

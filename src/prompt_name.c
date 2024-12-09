@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 05:25:38 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/07 00:01:56 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*get_prompt_name(t_minishell *ms)
 	char	**split;
 	char	*tmp;
 
-	split = get_cwdsplit();
+	split = get_cwdsplit(ms);
 	if (split && *split)
 	{
 		color = get_user_color(ms);
@@ -47,33 +47,34 @@ char	*get_prompt_name(t_minishell *ms)
 	else
 		username_dup = ft_strdup("minishell ➜  ");
 	free_tokens_address(&split);
+	free_at_address(split);
 	return (username_dup);
 }
 
-char	**get_cwdsplit(void)
+char	**get_cwdsplit(t_minishell *ms)
 {
 	char	**splitted;
 	int		i;
-	char	*cwd;
+	//char	*cwd;
 
 	i = 0;
 	splitted = NULL;
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		cwd = ft_strdup("/deleted_dir");
-	if (cwd)
+	ms->cwd = getcwd(NULL, 0);
+	if (!ms->cwd)
+		ms->cwd = ft_strdup("/deleted_dir");
+	if (ms->cwd)
 	{
-		if ((cwd[0] == '/' && (!cwd[1] || cwd[1] == '/')))
+		if ((ms->cwd[0] == '/' && (!ms->cwd[1] || ms->cwd[1] == '/')))
 		{
-			while (cwd[i] && cwd[i] == '/')
+			while (ms->cwd[i] && ms->cwd[i] == '/')
 				i++;
 			splitted = ft_split("'/'/'/'", '\'');
-			free_ptr(cwd);
+			//free_ptr(cwd);
 			return (splitted);
 		}
-		splitted = ft_split(cwd, '/');
+		splitted = ft_split(ms->cwd, '/');
 	}
-	free_ptr(cwd);
+	//free_ptr(cwd);
 	return (splitted);
 }
 

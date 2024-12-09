@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/08 22:37:04 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/08 23:31:17 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,9 @@ t_bool	is_expandable(t_minishell *ms, char *token, int k)
 	{
 		quotes_detector2(ms, token, k, i);
 		if (token[i] == '$' && ms->token.in_squotes == FALSE
-			&& (ft_isalpha(token[i + 1]) || token[i + 1] == '_' || token[i + 1] == '?'))
+			&& (ft_isalpha(token[i + 1])
+			|| token[i + 1] == '_'
+			|| token[i + 1] == '?'))
 		{
 			expandable = TRUE;
 		}

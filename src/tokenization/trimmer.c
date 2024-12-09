@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 04:48:15 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/09 01:48:34 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,7 @@ char	**trimmer(t_minishell *ms, char **tokens)
 
 char	*trim_or_dup(t_minishell *ms, char **tokens, int k)
 {
-	if (!is_expandable(ms, tokens[k], k) && ms->token.expanded[k] == 1
-		&& !ft_strnstr(tokens[0], "export\0", 7) && !is_heredoc_delim(ms,
-			tokens, k) && !ft_strchr(tokens[k], '\"'))
+	if (ms->token.expanded[k] == 1)
 		return (ft_strdup(tokens[k]));
 	return (ft_toktrim(ms, tokens[k], ft_strlen(tokens[k])));
 }

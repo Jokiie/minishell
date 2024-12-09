@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/08 22:31:05 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/09 01:35:06 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int	tokens_creator(t_minishell *ms, char *line)
 		free_tokens_address(&ms->tokens);
 		return (SYNTAX_ERROR);
 	}
-	ms->tokc = count_tokens(ms->tokens);
+	if (ms->tokens && *ms->tokens)
+		ms->tokc = count_tokens(ms->tokens);
 	return (SUCCESS);
 }
 
@@ -64,29 +65,35 @@ char	**transformer(t_minishell *ms)
 
 	ft_fprintf(2, "pretokens:\n");
 	print_debug(ms->pretokens);
+	
 	init_int_arrays(ms);
 	ft_fprintf(2, "token.quoted:\n");
 	print_int_array(ms->pretokens, &ms->token.quoted);
 	ft_fprintf(2, "token.expanded:\n");
 	print_expanded_array(ms->pretokens, &ms->token.expanded);
+	
 	ms->expanded = expander(ms, ms->pretokens);
 	free_tokens_address(&ms->pretokens);
+
 	ft_fprintf(2, "expander:\n");
 	print_debug(ms->expanded);
+
 	ms->pretokens = retokenizer(ms);
+	free_tokens_address(&ms->expanded);
+	
 	ft_fprintf(2, "retokenizer:\n");
 	print_debug(ms->pretokens);
-	free_tokens_address(&ms->expanded);
 	ft_fprintf(2, "token.quoted:\n");
 	print_int_array(ms->pretokens, &ms->token.quoted);
 	ft_fprintf(2, "token.expanded:\n");
 	print_expanded_array(ms->pretokens, &ms->token.expanded);
+	
 	final_tokens = trimmer(ms, ms->pretokens);
-	if (!final_tokens)
+	free_tokens_address(&ms->pretokens);
+	if (!final_tokens || (!final_tokens[0] && ms->token.quoted[0] == 0))
 		return (NULL);
 	ft_fprintf(2, "trimmer:\n");
 	print_debug(final_tokens);
-	free_tokens_address(&ms->pretokens);
 	if (!has_type(final_tokens, &ms->token.quoted, &ms->token.expanded,
 			is_pipe))
 	{
@@ -105,61 +112,4 @@ char	**transformer(t_minishell *ms)
 		return (NULL);
 	}
 	return (final_tokens);
-}
-
-void	init_int_arrays(t_minishell *ms)
-{
-	init_quoted_array(ms, ms->pretokens);
-	init_expanded_array(ms, ms->pretokens);
-}
-
-void	init_quoted_array(t_minishell *ms, char **tokens)
-{
-	int	k;
-	int	i;
-	int	count;
-
-	i = 0;
-	k = 0;
-	count = count_tokens(tokens);
-	ms->token.quoted = ft_calloc(count + 1, sizeof(int));
-	if (!ms->token.quoted)
-		return ;
-	k = 0;
-	while (tokens[k] && k < count)
-	{
-		if (has_quotes(tokens[k])
-			&& open_quotes_checker(ms, tokens[k]) == SUCCESS)
-			ms->token.quoted[i] = 1;
-		else
-			ms->token.quoted[i] = 0;
-		k++;
-		i++;
-	}
-}
-
-void	init_expanded_array(t_minishell *ms, char **tokens)
-{
-	int	k;
-	int	i;
-	int	size;
-
-	size = count_tokens(tokens) * count_size(tokens);
-	ms->token.expanded = ft_calloc((size * size), sizeof(int));
-	ms->token.tmp_array = ft_calloc((size * size), sizeof(int));
-	if (!ms->token.expanded || !ms->token.tmp_array)
-		return ;
-	i = 0;
-	k = 0;
-	while (tokens[k] && k < size)
-	{
-		if (is_expandable(ms, tokens[k], k) == TRUE && !is_heredoc_delim(ms,
-				tokens, k))
-			ms->token.expanded[i] = 1;
-		else
-			ms->token.expanded[i] = 0;
-		k++;
-		i++;
-	}
-	ms->token.expanded[i] = 0;
 }

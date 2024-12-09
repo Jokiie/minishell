@@ -6,11 +6,12 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 15:30:54 by matislessar       #+#    #+#             */
-/*   Updated: 2024/12/04 14:34:56 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 23:21:33 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
 /*Realloc the momory of the env var*/
 char	**realloc_env(char **env, int new_size)
 {
@@ -28,10 +29,11 @@ char	**realloc_env(char **env, int new_size)
 	free(env);
 	return (new_env);
 }
+
 /*Check if the name of the var is OK*/
 int	is_valid_var_name(const char *var_name)
 {
-	int	i;
+	int		i;
 	size_t	len;
 
 	i = 1;
@@ -48,6 +50,7 @@ int	is_valid_var_name(const char *var_name)
 	}
 	return (ERROR);
 }
+
 /*Finds the var name*/
 char	*extract_var_name(const char *str)
 {
@@ -60,6 +63,7 @@ char	*extract_var_name(const char *str)
 	var_name = ft_substr(str, 0, i);
 	return (var_name);
 }
+
 /*Finds the value of the var*/
 char	*extract_var_value(const char *str, int j)
 {
@@ -80,4 +84,13 @@ char	*extract_var_value(const char *str, int j)
 	}
 	value[j] = '\0';
 	return (value);
+}
+
+void	export_handling_x(t_minishell *ms, char **tokens, int i)
+{
+	if (!tokens[i])
+	{
+		export_declare_x(ms->env);
+		return ;
+	}
 }

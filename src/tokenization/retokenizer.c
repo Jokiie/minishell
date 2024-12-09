@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 02:38:01 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/08 22:34:25 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/09 01:35:52 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,29 @@
 	in tokenizer, but save the empty tokens. Then we update the quoted and
 	expanded arrays, so we have the state of each new tokens.
 */
+static void	init_retokenizer(int *i, int *j, int *k)
+{
+	*i = 0;
+	*j = 0;
+	*k = 0;
+}
+
 char	**retokenizer(t_minishell *ms)
 {
 	int	i;
-	int	k;
 	int	j;
+	int	k;
 	int	size;
 
-	size = count_tokens(ms->expanded) * count_size(ms->expanded);
-	ms->pretokens = ft_calloc((size + 1), sizeof(char *));
-	j = 0;
+	if (!ms->expanded || !*ms->expanded)
+		return (NULL);
+	size = count_tokens(ms->expanded);
+	ft_fprintf(2, GREEN"initializing retokenizer\n"RESET);
+	init_retokenizer(&i, &j, &k);
+	if (!init_dbuffer(ms, size))
+		return (NULL);
 	k = 0;
-	i = 0;
-	while (ms->expanded[j] && k < size)
+	while (ms->expanded[j])
 	{
 		if (!ms->expanded[j][0])
 			j = handle_empty(ms, &k, j);
@@ -40,13 +50,15 @@ char	**retokenizer(t_minishell *ms)
 			i = 0;
 		}
 	}
-	ms->pretokens[k] = NULL;
+	ms->token.db_buffer[ms->token.db_size] = NULL;
+	ms->pretokens = ms->token.db_buffer;
 	update_arrays(ms, k);
 	return (ms->pretokens);
 }
 
 int	separe_token(t_minishell *ms, char *token, int *i, int *k)
 {
+	char	*tmp;
 	ms->token.is_meta = FALSE;
 	ms->token.start = *i;
 	while (token[*i])
@@ -59,27 +71,28 @@ int	separe_token(t_minishell *ms, char *token, int *i, int *k)
 	ms->token.end = *i;
 	ms->token.size = (ms->token.end - ms->token.start);
 	if (*i > ms->token.start)
-		ms->pretokens[(*k)++] = ft_substr(token, ms->token.start,
-				ms->token.size);
+	{
+		tmp = ft_substr(token, ms->token.start, ms->token.size);
+		append_to_dbuffer_char(ms, tmp);
+		(*k)++;
+	}
 	else if (ms->token.is_meta)
-		ms->pretokens[(*k)++] = meta_chars_extractor(token, i);
+	{
+		tmp = meta_chars_extractor(token, i);
+		append_to_dbuffer_char(ms, tmp);
+		(*k)++;
+	}
 	return (*i);
 }
 
 int	handle_empty(t_minishell *ms, int *k, int j)
 {
 	if (ms->token.expanded[j] == 1)
-	{
-		ms->pretokens[*k] = ft_strdup("");
 		ms->token.tmp_array[*k] = 1;
-		(*k)++;
-	}
 	else
-	{
-		ms->pretokens[*k] = ft_strdup("");
 		ms->token.tmp_array[*k] = 0;
-		(*k)++;
-	}
+	append_to_dbuffer_char(ms, "");
+	(*k)++;
 	return (j + 1);
 }
 
@@ -94,19 +107,4 @@ void	handle_non_empty(t_minishell *ms, int *i, int *k, int j)
 			(*i)++;
 		ms->token.tmp_array[*k - 1] = ms->token.expanded[j];
 	}
-}
-
-void	update_arrays(t_minishell *ms, int k)
-{
-	int	i;
-
-	i = 0;
-	while (i < k)
-	{
-		ms->token.expanded[i] = ms->token.tmp_array[i];
-		i++;
-	}
-	free(ms->token.tmp_array);
-	free_int_array(&ms->token.quoted);
-	init_quoted_array(ms, ms->pretokens);
 }

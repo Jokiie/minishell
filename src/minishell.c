@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 04:36:41 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/09 01:14:20 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,22 @@ void	init_heredoc_data(t_minishell *ms)
 	ms->heredoc.index = 0;
 	ms->heredoc.in_quotes = FALSE;
 }
-
+void	init_token_data(t_minishell *ms)
+{
+	ms->token.end = 0;
+	ms->token.start = 0;
+	ms->token.size = 1;
+	ms->token.is_meta = FALSE;
+	ms->token.in_dquotes = FALSE;
+	ms->token.in_squotes = FALSE;
+	ms->token.quoted = NULL;
+	ms->token.expanded = NULL;
+	ms->token.tmp_array = NULL;
+	ms->token.db_buffer = NULL;
+	ms->token.db_capacity = 0;
+	ms->token.db_size = 0;
+	
+}
 /* init the minishell struct variables */
 void	init_minishell(t_minishell *ms)
 {
@@ -39,19 +54,12 @@ void	init_minishell(t_minishell *ms)
 	ms->tokc = 0;
 	ms->ret = 0;
 	ms->path = NULL;
-	ms->token.end = 0;
-	ms->token.start = 0;
-	ms->token.size = 1;
-	ms->token.is_meta = FALSE;
-	ms->token.in_dquotes = FALSE;
-	ms->token.in_squotes = FALSE;
-	ms->token.quoted = NULL;
-	ms->token.expanded = NULL;
-	ms->token.tmp_array = NULL;
 	ms->in_pipe = FALSE;
 	ms->pid = 0;
 	ms->received_sig = 0;
+	init_token_data(ms);
 	init_heredoc_data(ms);
+	
 }
 
 /*
@@ -164,7 +172,7 @@ void	execms(t_minishell *ms, char **envp)
 	ms->env = ft_envdup(envp);
 	ms->path = getcwd(NULL, 0);
 	rl_path = ft_strjoin(ms->path, "/includes/readline/.inputrc");
-	set_env_var(ms, "INPUTRC", rl_path);
+	// set_env_var(ms, "INPUTRC", rl_path);
 	free(rl_path);
 	while (1)
 	{

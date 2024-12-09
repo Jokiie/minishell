@@ -43,6 +43,7 @@ SRC_PIPES = pipes/pipes.c \
 			pipes/exec_pipes.c
 
 SRC_CMDS = commands/cd.c \
+		   commands/cd_utils.c \
 		   commands/echo.c \
 		   commands/env.c \
 		   commands/executable.c\
@@ -72,6 +73,8 @@ SRC_TOK = tokenization/tokens_creator.c \
 		  tokenization/syntax_error.c \
 		  tokenization/contains_only.c \
 		  tokenization/count.c \
+		  tokenization/int_arrays.c \
+		  tokenization/dynamic_arrays.c \
 
 SRC_REDIR = redirections/exec_redirections.c \
 			redirections/redirection.c \

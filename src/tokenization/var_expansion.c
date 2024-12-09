@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:43:35 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 03:59:09 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/09 01:30:53 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ char	*apply_var_expansion(t_minishell *ms, char *token_dup, int *i)
 	char	*before;
 	char	*after;
 	char	*new_token_dup;
-
+	char	*var_value;
+	
 	before = ft_substr(token_dup, 0, *i);
 	(*i)++;
 	var = var_extractor(token_dup, i);
@@ -26,7 +27,11 @@ char	*apply_var_expansion(t_minishell *ms, char *token_dup, int *i)
 	new_token_dup = insert_variable_value(ms, before, var, after);
 	free_ptr(token_dup);
 	token_dup = new_token_dup;
-	*i = ft_strlen(before) + ft_strlen(get_env(ms->env, var));
+	var_value = get_env(ms->env, var);
+	if (!var_value)
+		*i = ft_strlen(before) + 1;
+	else
+		*i = ft_strlen(before) + ft_strlen(get_env(ms->env, var));
 	free_ptr(before);
 	free_ptr(var);
 	free_ptr(after);
