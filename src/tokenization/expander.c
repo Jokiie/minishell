@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 04:45:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/08 22:37:04 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	**expander(t_minishell *ms, char **tokens)
 		return (NULL);
 	while (tokens[k] && k < count)
 	{
-		if (is_heredoc_delim(ms, tokens, k) == TRUE)
+		if (!is_expandable(ms, tokens[k], k) || is_heredoc_delim(ms, tokens, k) == TRUE)
 			expanded[i] = ft_strdup(tokens[k]);
 		else
 			expanded[i] = expand_token(ms, tokens[k], 0);
@@ -91,7 +91,7 @@ t_bool	is_expandable(t_minishell *ms, char *token, int k)
 	{
 		quotes_detector2(ms, token, k, i);
 		if (token[i] == '$' && ms->token.in_squotes == FALSE
-			&& (ft_isalpha(token[i + 1]) || token[i + 1] == '_'))
+			&& (ft_isalpha(token[i + 1]) || token[i + 1] == '_' || token[i + 1] == '?'))
 		{
 			expandable = TRUE;
 		}

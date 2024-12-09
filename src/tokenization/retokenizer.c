@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 02:38:01 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 04:49:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/08 22:34:25 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,16 @@ int	separe_token(t_minishell *ms, char *token, int *i, int *k)
 
 int	handle_empty(t_minishell *ms, int *k, int j)
 {
-	if (!ms->token.expanded[j])
+	if (ms->token.expanded[j] == 1)
 	{
 		ms->pretokens[*k] = ft_strdup("");
 		ms->token.tmp_array[*k] = 1;
+		(*k)++;
+	}
+	else
+	{
+		ms->pretokens[*k] = ft_strdup("");
+		ms->token.tmp_array[*k] = 0;
 		(*k)++;
 	}
 	return (j + 1);

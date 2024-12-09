@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 04:40:16 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/08 22:31:05 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,30 +62,30 @@ char	**transformer(t_minishell *ms)
 	char	**final_tokens;
 	char	**dup;
 
-	//ft_fprintf(2, "pretokens:\n");
-	//print_debug(ms->pretokens);
+	ft_fprintf(2, "pretokens:\n");
+	print_debug(ms->pretokens);
 	init_int_arrays(ms);
-	//ft_fprintf(2, "token.quoted:\n");
-	//print_int_array(ms->pretokens, &ms->token.quoted);
-	//ft_fprintf(2, "token.expanded:\n");
-	//print_expanded_array(ms->pretokens, &ms->token.expanded);
+	ft_fprintf(2, "token.quoted:\n");
+	print_int_array(ms->pretokens, &ms->token.quoted);
+	ft_fprintf(2, "token.expanded:\n");
+	print_expanded_array(ms->pretokens, &ms->token.expanded);
 	ms->expanded = expander(ms, ms->pretokens);
 	free_tokens_address(&ms->pretokens);
-	//ft_fprintf(2, "expander:\n");
-	//print_debug(ms->expanded);
+	ft_fprintf(2, "expander:\n");
+	print_debug(ms->expanded);
 	ms->pretokens = retokenizer(ms);
-	//ft_fprintf(2, "retokenizer:\n");
-	//print_debug(ms->pretokens);
+	ft_fprintf(2, "retokenizer:\n");
+	print_debug(ms->pretokens);
 	free_tokens_address(&ms->expanded);
-	//ft_fprintf(2, "token.quoted:\n");
-	//print_int_array(ms->pretokens, &ms->token.quoted);
-	//ft_fprintf(2, "token.expanded:\n");
-	//print_expanded_array(ms->pretokens, &ms->token.expanded);
+	ft_fprintf(2, "token.quoted:\n");
+	print_int_array(ms->pretokens, &ms->token.quoted);
+	ft_fprintf(2, "token.expanded:\n");
+	print_expanded_array(ms->pretokens, &ms->token.expanded);
 	final_tokens = trimmer(ms, ms->pretokens);
 	if (!final_tokens)
 		return (NULL);
-	//ft_fprintf(2, "trimmer:\n");
-	//print_debug(final_tokens);
+	ft_fprintf(2, "trimmer:\n");
+	print_debug(final_tokens);
 	free_tokens_address(&ms->pretokens);
 	if (!has_type(final_tokens, &ms->token.quoted, &ms->token.expanded,
 			is_pipe))
@@ -94,8 +94,8 @@ char	**transformer(t_minishell *ms)
 		free_tokens(final_tokens);
 		final_tokens = cleaner(ms, dup);
 		free_tokens(dup);
-		//ft_fprintf(2, "cleaner:\n");
-		//print_debug(final_tokens);
+		ft_fprintf(2, "cleaner:\n");
+		print_debug(final_tokens);
 	}
 	if (!final_tokens || (!final_tokens[0] && ms->token.quoted[0] == 0))
 	{
