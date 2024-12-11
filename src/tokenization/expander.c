@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/08 23:31:17 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/10 04:31:23 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,44 +36,59 @@ char	**expander(t_minishell *ms, char **tokens)
 	expanded = ft_calloc(count + 1, sizeof(char *));
 	if (!expanded)
 		return (NULL);
+	ms->token.cexpanded = ft_calloc(count + 1, sizeof(int *));
 	while (tokens[k] && k < count)
 	{
-		if (!is_expandable(ms, tokens[k], k) || is_heredoc_delim(ms, tokens, k) == TRUE)
+		init_cexpanded_int(ms, ft_strlen(tokens[k]), i);
+		if (!is_expandable(ms, tokens[k], k) || is_heredoc_delim(ms, tokens, k))
+		{
 			expanded[i] = ft_strdup(tokens[k]);
+			fill_0_cexpanded(ms, 0, ft_strlen(expanded[i]), i);
+		}
 		else
-			expanded[i] = expand_token(ms, tokens[k], 0);
+			expanded[i] = expand_token(ms, tokens[k], i);
 		if (expanded)
 			i++;
 		k++;
 	}
+	ms->token.cexpanded[i] = NULL;
 	expanded[i] = NULL;
 	return (expanded);
 }
 
-char	*expand_token(t_minishell *ms, char *token, int i)
+char	*expand_token(t_minishell *ms, char *token, int cexpindex)
 {
 	char	*dup;
 	char	*new_dup;
-
+	int		i;
+	
 	ms->token.in_dquotes = FALSE;
 	ms->token.in_squotes = FALSE;
+	if (!token)
+		return (NULL);
 	dup = ft_strdup(token);
+	i = 0;
 	while (dup[i])
 	{
 		quotes_detector(ms, dup, i);
-		if (dup[i] == '$' && !ms->token.in_squotes && (ft_isalnum(dup[i + 1])
-				|| dup[i + 1] == '_'))
+		if (ms->token.in_squotes == FALSE && (dup[i] == '$' && (ft_isalnum(dup[i + 1]) || dup[i + 1] == '_' || dup[i + 1] == '?')))
 		{
-			new_dup = apply_var_expansion(ms, dup, &i);
-			dup = new_dup;
-		}
-		else if (dup[i] == '$' && !ms->token.in_squotes && dup[i + 1] == '?')
-		{
-			new_dup = apply_nbr_expansion(ms, dup, &i);
-			dup = new_dup;
+			if (dup[i] == '$' && (ft_isalnum(dup[i + 1]) || dup[i + 1] == '_'))
+			{
+				new_dup = apply_var_expansion(ms, dup, &i, cexpindex);
+				dup = new_dup;
+			}
+			else if (dup[i] == '$' && dup[i + 1] == '?')
+			{
+				new_dup = apply_nbr_expansion(ms, dup, &i, cexpindex);
+				dup = new_dup;
+			}
 		}
 		else
+		{
+			append_to_cexpanded(ms, 0, cexpindex);
 			i++;
+		}
 	}
 	return (dup);
 }
@@ -91,15 +106,24 @@ t_bool	is_expandable(t_minishell *ms, char *token, int k)
 	{
 		quotes_detector2(ms, token, k, i);
 		if (token[i] == '$' && ms->token.in_squotes == FALSE
-			&& (ft_isalpha(token[i + 1])
-			|| token[i + 1] == '_'
-			|| token[i + 1] == '?'))
+			&& (ft_isalpha(token[i + 1]) || token[i + 1] == '_' || token[i
+				+ 1] == '?'))
 		{
 			expandable = TRUE;
 		}
 		i++;
 	}
+	ms->token.in_squotes = FALSE;
+	ms->token.in_dquotes = FALSE;
 	if (expandable == TRUE)
+		return (TRUE);
+	return (FALSE);
+}
+
+t_bool	is_exp_start(char *dup, int i)
+{
+	if (dup[i] == '$' && (ft_isalnum(dup[i + 1]) || dup[i + 1] == '_' || dup[i
+			+ 1] == '?'))
 		return (TRUE);
 	return (FALSE);
 }

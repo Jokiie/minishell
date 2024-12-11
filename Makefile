@@ -75,6 +75,7 @@ SRC_TOK = tokenization/tokens_creator.c \
 		  tokenization/count.c \
 		  tokenization/int_arrays.c \
 		  tokenization/dynamic_arrays.c \
+		  tokenization/dynamic_array_int.c \
 
 SRC_REDIR = redirections/exec_redirections.c \
 			redirections/redirection.c \
@@ -82,6 +83,8 @@ SRC_REDIR = redirections/exec_redirections.c \
 			redirections/heredoc.c \
 			redirections/heredoc_utils.c \
 			redirections/heredoc_expander.c \
+			redirections/heredoc_var_expansion.c\
+			redirections/heredoc_nbr_expansion.c \
 			redirections/heredoc_statics.c \
 			redirections/heredoc_reset.c \
 			redirections/heredoc_signal.c \

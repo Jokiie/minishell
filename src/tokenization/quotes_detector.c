@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:30:53 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 13:02:03 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/10 19:06:14 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,17 @@ int	open_quotes_checker(t_minishell *ms, char *line)
 		return (ERROR);
 	}
 	return (SUCCESS);
+}
+
+size_t	quotes_detector_size_t(t_minishell *ms, char *line, size_t i)
+{
+	if (ft_is_dquote(line[i]) && !ms->token.in_squotes)
+	{
+		ms->token.in_dquotes = !ms->token.in_dquotes;
+	}
+	else if (ft_is_squote(line[i]) && !ms->token.in_dquotes)
+	{
+		ms->token.in_squotes = !ms->token.in_squotes;
+	}
+	return (i);
 }

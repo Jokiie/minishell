@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 13:57:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/27 23:47:18 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/11 03:57:26 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,22 @@ void	free_tokens(char **tokens)
 		}
 		free(tokens);
 		tokens = NULL;
+	}
+}
+
+void	free_cexpanded(t_minishell *ms)
+{
+	int	i;
+
+	if (ms->token.cexpanded)
+	{
+		i = 0;
+		while (ms->token.cexpanded[i])
+		{
+			free_int_array(&ms->token.cexpanded[i]);
+			i++;
+		}
+		free(ms->token.cexpanded);
+		ms->token.cexpanded = NULL;
 	}
 }

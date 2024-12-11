@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 02:38:01 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/09 01:35:52 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/11 02:04:49 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,48 +17,42 @@
 	in tokenizer, but save the empty tokens. Then we update the quoted and
 	expanded arrays, so we have the state of each new tokens.
 */
-static void	init_retokenizer(int *i, int *j, int *k)
-{
-	*i = 0;
-	*j = 0;
-	*k = 0;
-}
 
 char	**retokenizer(t_minishell *ms)
 {
-	int	i;
 	int	j;
-	int	k;
-	int	size;
-
+	size_t	size;
+	int		*saved_expanded;
+	
 	if (!ms->expanded || !*ms->expanded)
 		return (NULL);
 	size = count_tokens(ms->expanded);
-	ft_fprintf(2, GREEN"initializing retokenizer\n"RESET);
-	init_retokenizer(&i, &j, &k);
 	if (!init_dbuffer(ms, size))
+	{
+		free_tokens(ms->token.db_buffer);
 		return (NULL);
-	k = 0;
+	}
+	j = 0;
+	saved_expanded = ms->token.expanded;
 	while (ms->expanded[j])
 	{
 		if (!ms->expanded[j][0])
-			j = handle_empty(ms, &k, j);
+			handle_empty(ms, saved_expanded[j]);
+		else if (ms->expanded[j][0] && ms->token.expanded[j] == 1)
+			handle_non_empty(ms, j);
 		else
-		{
-			handle_non_empty(ms, &i, &k, j);
-			j++;
-			i = 0;
-		}
+			append_to_dbuffer_char(ms, ft_strdup(ms->expanded[j]), 0);
+		j++;
 	}
 	ms->token.db_buffer[ms->token.db_size] = NULL;
-	ms->pretokens = ms->token.db_buffer;
-	update_arrays(ms, k);
-	return (ms->pretokens);
+	update_arrays(ms, ms->token.db_size);
+	return (ms->token.db_buffer);
 }
 
-int	separe_token(t_minishell *ms, char *token, int *i, int *k)
+int	separe_token(t_minishell *ms, char *token, int *i)
 {
 	char	*tmp;
+
 	ms->token.is_meta = FALSE;
 	ms->token.start = *i;
 	while (token[*i])
@@ -73,38 +67,35 @@ int	separe_token(t_minishell *ms, char *token, int *i, int *k)
 	if (*i > ms->token.start)
 	{
 		tmp = ft_substr(token, ms->token.start, ms->token.size);
-		append_to_dbuffer_char(ms, tmp);
-		(*k)++;
+		append_to_dbuffer_char(ms, tmp, 1);
 	}
 	else if (ms->token.is_meta)
 	{
 		tmp = meta_chars_extractor(token, i);
-		append_to_dbuffer_char(ms, tmp);
-		(*k)++;
+		append_to_dbuffer_char(ms, tmp, 1);
 	}
 	return (*i);
 }
 
-int	handle_empty(t_minishell *ms, int *k, int j)
+void	handle_empty(t_minishell *ms, int expanded)
 {
-	if (ms->token.expanded[j] == 1)
-		ms->token.tmp_array[*k] = 1;
-	else
-		ms->token.tmp_array[*k] = 0;
-	append_to_dbuffer_char(ms, "");
-	(*k)++;
-	return (j + 1);
+	if (expanded == 1)
+		append_to_dbuffer_char(ms, ft_strdup(""), 1);
+	else if (expanded == 0)
+		append_to_dbuffer_char(ms, ft_strdup(""), 0);
 }
 
-void	handle_non_empty(t_minishell *ms, int *i, int *k, int j)
+void	handle_non_empty(t_minishell *ms, int j)
 {
-	while (ms->expanded[j][*i])
+	int	i;
+
+	i = 0;
+	while (ms->expanded[j][i])
 	{
-		while (ft_isspace(ms->expanded[j][*i]))
-			(*i)++;
-		*i = separe_token(ms, ms->expanded[j], i, k);
-		while (ft_isspace(ms->expanded[j][*i]))
-			(*i)++;
-		ms->token.tmp_array[*k - 1] = ms->token.expanded[j];
+		while (ft_isspace(ms->expanded[j][i]))
+			i++;
+		i = separe_token(ms, ms->expanded[j], &i);
+		while (ft_isspace(ms->expanded[j][i]))
+			i++;
 	}
 }

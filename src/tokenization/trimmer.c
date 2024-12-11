@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/09 01:48:34 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/11 01:28:11 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,15 @@ char	**trimmer(t_minishell *ms, char **tokens)
 
 	k = 0;
 	i = 0;
-	if (!tokens || !*tokens)
+	if (!tokens)
 		return (NULL);
 	count = count_tokens(tokens);
 	trimmed = ft_calloc(count + 1, sizeof(char *));
 	if (!trimmed)
 		return (NULL);
-	while (tokens[k] && k < count)
+	while (tokens[k])
 	{
-		trimmed[i] = trim_or_dup(ms, tokens, k);
+		trimmed[i] = ft_toktrim(ms, tokens[k], ft_strlen(tokens[k]), k);
 		if (trimmed[i])
 			i++;
 		k++;
@@ -43,14 +43,7 @@ char	**trimmer(t_minishell *ms, char **tokens)
 	return (trimmed);
 }
 
-char	*trim_or_dup(t_minishell *ms, char **tokens, int k)
-{
-	if (ms->token.expanded[k] == 1)
-		return (ft_strdup(tokens[k]));
-	return (ft_toktrim(ms, tokens[k], ft_strlen(tokens[k])));
-}
-
-char	*ft_toktrim(t_minishell *ms, char *token, int len)
+char	*ft_toktrim(t_minishell *ms, char *token, int len, int cexpindex)
 {
 	char	*buffer;
 	int		i;
@@ -65,11 +58,12 @@ char	*ft_toktrim(t_minishell *ms, char *token, int len)
 		return (NULL);
 	ms->token.in_dquotes = FALSE;
 	ms->token.in_squotes = FALSE;
-	while (i < len && j < len)
+	while (i < len)
 	{
 		quotes_detector(ms, token, i);
 		if ((i < len) && ((ft_is_squote(token[i]) && !ms->token.in_dquotes)
-				|| (ft_is_dquote(token[i]) && !ms->token.in_squotes)))
+				|| (ft_is_dquote(token[i]) && !ms->token.in_squotes))
+				&& ms->token.cexpanded[cexpindex][i] != 1)
 			i++;
 		else if (i < len)
 			buffer[j++] = token[i++];

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 05:43:45 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 04:02:59 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/10 02:56:21 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,29 @@ void	print_expanded_array(char **tokens, int **expanded)
 				(*expanded)[i]);
 		else
 			ft_fprintf(2, YELLOW "expanded[%d] = (null)\n" RESET, i);
+		i++;
+	}
+}
+
+void	print_cexpanded_array(char **tokens, int **cexpanded)
+{
+	int	i;
+	int	j;
+	int	count;
+	int size;
+
+	count = count_tokens(tokens);
+	i = 0;
+	while (i < count)
+	{
+		j = 0;
+		size = ft_strlen(tokens[i]);
+		while (j < size)
+		{
+			ft_fprintf(2, "[%d]", cexpanded[i][j]);
+			j++;
+		}
+		ft_fprintf(2, "\n");
 		i++;
 	}
 }

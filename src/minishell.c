@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/09 01:14:20 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/11 04:25:06 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,16 @@ void	init_token_data(t_minishell *ms)
 	ms->token.in_squotes = FALSE;
 	ms->token.quoted = NULL;
 	ms->token.expanded = NULL;
-	ms->token.tmp_array = NULL;
+	ms->token.cexpanded = NULL;
+	ms->token.cexp_size = 0;
+	ms->token.cexp_capacity = 0;
 	ms->token.db_buffer = NULL;
+	ms->token.db_buffer_int = NULL;
+	ms->token.db_buffer_intp = NULL;
 	ms->token.db_capacity = 0;
 	ms->token.db_size = 0;
-	
 }
+
 /* init the minishell struct variables */
 void	init_minishell(t_minishell *ms)
 {

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 00:29:35 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 02:10:18 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/10 01:05:14 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ char	*heredoc_expander(t_minishell *ms, char *line, char *delim)
 	{
 		if (dup[i] == '$' && (ft_isalnum(dup[i + 1]) || dup[i + 1] == '_'))
 		{
-			new_dup = apply_var_expansion(ms, dup, &i);
+			new_dup = apply_var_expansion_hd(ms, dup, &i);
 			dup = new_dup;
 		}
 		else if (dup[i] == '$' && dup[i + 1] == '?')
 		{
-			new_dup = apply_nbr_expansion(ms, dup, &i);
+			new_dup = apply_nbr_expansion_hd(ms, dup, &i);
 			dup = new_dup;
 		}
 		else

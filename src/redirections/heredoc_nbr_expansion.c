@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   nbr_expansion.c                                    :+:      :+:    :+:   */
+/*   heredoc_nbr_expansion.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/20 22:37:24 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/10 04:05:54 by ccodere          ###   ########.fr       */
+/*   Created: 2024/12/10 01:03:09 by ccodere           #+#    #+#             */
+/*   Updated: 2024/12/10 01:05:45 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*apply_nbr_expansion(t_minishell *ms, char *token_dup, int *i,
-		int cexpindex)
+char	*apply_nbr_expansion_hd(t_minishell *ms, char *token_dup, int *i)
 {
 	char	*new_token_dup;
 
 	new_token_dup = NULL;
 	if ((token_dup[*i] == '$' && token_dup[*i + 1] == '?')
 		&& !ms->token.in_squotes)
-		new_token_dup = apply_nbr_value(ms, token_dup, i, cexpindex);
+		new_token_dup = apply_nbr_value_hd(token_dup, i, ms->ret);
 	return (new_token_dup);
 }
 
-char	*apply_nbr_value(t_minishell *ms, char *token_dup, int *i,
-		int cexpindex)
+char	*apply_nbr_value_hd(char *token_dup, int *i, int nbr)
 {
 	char	*var;
 	char	*before;
@@ -34,21 +32,19 @@ char	*apply_nbr_value(t_minishell *ms, char *token_dup, int *i,
 
 	before = ft_substr(token_dup, 0, *i);
 	(*i)++;
-	ms->token.cexp_start = *i;
-	var = single_var_extractor(token_dup, i);
+	var = single_var_extractor_hd(token_dup, i);
 	after = ft_substr(token_dup, *i, ft_strlen(token_dup) - *i);
-	new_token_dup = insert_nbr_value(before, after, ms->ret);
+	new_token_dup = insert_nbr_value_hd(before, after, nbr);
 	free_ptr(token_dup);
 	token_dup = new_token_dup;
 	*i = ft_strlen(before) + ft_strlen(var);
-	fill_1_cexpanded(ms, ms->token.cexp_start, ft_strlen(var), cexpindex);
 	free_ptr(before);
 	free_ptr(var);
 	free_ptr(after);
 	return (new_token_dup);
 }
 
-char	*single_var_extractor(char *token, int *i)
+char	*single_var_extractor_hd(char *token, int *i)
 {
 	char	*substr;
 	int		start;
@@ -59,7 +55,7 @@ char	*single_var_extractor(char *token, int *i)
 	return (substr);
 }
 
-char	*insert_nbr_value(char *before, char *after, int nbr)
+char	*insert_nbr_value_hd(char *before, char *after, int nbr)
 {
 	char	*var_value;
 	char	*half_token;

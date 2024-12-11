@@ -41,6 +41,14 @@
 # define SIZE_BUF 1024
 # define MAX_META 256
 
+typedef struct s_counter
+{
+	int				i;
+	size_t			j;
+	size_t			g;
+	int				k;
+}					t_counter;
+
 typedef struct s_token
 {
 	int				start;
@@ -48,14 +56,21 @@ typedef struct s_token
 	int				size;
 	int				*quoted;
 	int				*expanded;
-	int				*tmp_array;
+	int				**cexpanded;
+	size_t			cexp_capacity;
+	size_t			cexp_size;
+	int				cexp_start;
+	int				cexp_end;
 	char			**db_buffer;
+	int				*db_buffer_int;
+	int				**db_buffer_intp;
 	size_t			db_size;
+	size_t			db_size_int;
+	size_t			db_capacity_int;
 	size_t			db_capacity;
 	t_bool			is_meta;
 	t_bool			in_dquotes;
 	t_bool			in_squotes;
-
 }					t_token;
 
 typedef struct s_heredoc
@@ -156,6 +171,7 @@ char				*get_user_color(t_minishell *ms);
 void				print_debug(char **tokens);
 void				print_int_array(char **tokens, int **quoted);
 void				print_expanded_array(char **tokens, int **expanded);
+void				print_cexpanded_array(char **tokens, int **cexpanded);
 
 /* Tokenization */
 
@@ -174,37 +190,43 @@ int					count_words(char const *line);
 int					quotes_detector(t_minishell *ms, char *line, int i);
 int					open_quotes_checker(t_minishell *ms, char *line);
 int					quotes_detector2(t_minishell *ms, char *tok, int k, int i);
+size_t				quotes_detector_size_t(t_minishell *ms, char *line,
+						size_t i);
 
 // expander.c
 char				**expander(t_minishell *ms, char **tokens);
-char				*expand_token(t_minishell *ms, char *token, int i);
+char				*expand_token(t_minishell *ms, char *token, int cexpindex);
 t_bool				is_expandable(t_minishell *ms, char *token, int k);
 t_bool				is_heredoc_delim(t_minishell *ms, char **tokens, int k);
+t_bool				is_exp_start(char *dup, int i);
 
 // var_expansion.c
 char				*apply_var_expansion(t_minishell *ms, char *token_dup,
-						int *i);
+						int *i, int cexpindex);
 char				*insert_variable_value(t_minishell *ms, char *before,
 						char *var, char *after);
 char				*var_extractor(char *token, int *i);
+int					get_size_without_space(t_minishell *ms, char *str);
 
 // nbr_expansion.c
 char				*apply_nbr_expansion(t_minishell *ms, char *token_dup,
-						int *i);
-char				*apply_nbr_value(char *token_dup, int *i, int nbr);
+						int *i, int cexpindex);
+char				*apply_nbr_value(t_minishell *ms, char *token_dup, int *i,
+						int cexpindex);
 char				*insert_nbr_value(char *before, char *after, int nbr);
 char				*single_var_extractor(char *token, int *i);
 
 // retokenizer.c
 char				**retokenizer(t_minishell *ms);
-int					separe_token(t_minishell *ms, char *token, int *i, int *k);
-int					handle_empty(t_minishell *ms, int *k, int j);
-void				handle_non_empty(t_minishell *ms, int *i, int *k, int j);
+int					separe_token(t_minishell *ms, char *token, int *i);
+void				handle_empty(t_minishell *ms, int expanded);
+void				handle_non_empty(t_minishell *ms, int j);
 
 // trimmer.c
 char				**trimmer(t_minishell *ms, char **tokens);
 char				*trim_or_dup(t_minishell *ms, char **tokens, int k);
-char				*ft_toktrim(t_minishell *ms, char *token, int len);
+char				*ft_toktrim(t_minishell *ms, char *token, int len,
+						int cexpindex);
 char				*separe_var(t_minishell *ms, char *line, int *i);
 // cleaner.c
 
@@ -215,13 +237,31 @@ int					count_valid_tokens(t_minishell *ms, char **tokens);
 void				init_int_arrays(t_minishell *ms);
 void				init_quoted_array(t_minishell *ms, char **tokens);
 void				init_expanded_array(t_minishell *ms, char **tokens);
-void	            update_arrays(t_minishell *ms, int k);
+void				update_arrays(t_minishell *ms, int buffer_size);
+void				free_cexpanded(t_minishell *ms);
 
-// dynamic_buffer
+// dynamic_buffer.c
 
-char **init_dbuffer(t_minishell *ms, size_t initial_capacity);
-int append_to_dbuffer_char(t_minishell *ms, char *data);
-int append_to_dbuffer_int(t_minishell *ms, int *data, size_t data_count);
+char				**init_dbuffer(t_minishell *ms, size_t initial_capacity);
+int					append_to_dbuffer_char(t_minishell *ms, char *data,
+						int expanded_state);
+int					*init_dbuffer_int(t_minishell *ms, size_t initial_capacity);
+int					append_to_dbuffer_int(t_minishell *ms, int data);
+int					append_to_dbuffer_intp(t_minishell *ms, int *data);
+int					**init_dbuffer_intp(t_minishell *ms,
+						size_t initial_capacity);
+void				free_dbuffer(t_minishell *ms);
+
+// dynamic_buffer_int.c
+
+int					*init_cexpanded_int(t_minishell *ms,
+						size_t initial_capacity, int cexpindex);
+int					append_to_cexpanded(t_minishell *ms, int data,
+						int cexpindex);
+void				fill_0_cexpanded(t_minishell *ms, int start, int len,
+						int cexpindex);
+void				fill_1_cexpanded(t_minishell *ms, int start, int len,
+						int cexpindex);
 
 // is.c
 int					ft_is_dquote(int c);
@@ -319,7 +359,7 @@ void				set_env_var(t_minishell *ms, const char *var_name,
 						const char *value);
 void				export_declare_x(char **env);
 
-//export_utils.c
+// export_utils.c
 char				**realloc_env(char **env, int new_size);
 int					is_valid_var_name(const char *var_name);
 char				*extract_var_name(const char *str);
@@ -369,6 +409,19 @@ int					fill_heredoc(t_minishell *ms, int fd);
 char				*expand_line(t_minishell *ms, char *line, char *delim);
 char				*heredoc_expander(t_minishell *ms, char *line, char *delim);
 t_bool				is_same_size(char *str1, char *str2);
+
+// heredoc_var_expansion.c
+char				*apply_var_expansion_hd(t_minishell *ms, char *token_dup,
+						int *i);
+char				*var_extractor_hd(char *token, int *i);
+char				*insert_variable_value_hd(t_minishell *ms, char *before,
+						char *var, char *after);
+// heredoc_nbr_expansion.c
+char				*apply_nbr_expansion_hd(t_minishell *ms, char *token_dup,
+						int *i);
+char				*apply_nbr_value_hd(char *token_dup, int *i, int nbr);
+char				*single_var_extractor_hd(char *token, int *i);
+char				*insert_nbr_value_hd(char *before, char *after, int nbr);
 
 // heredoc_utils.c
 char				*create_heredoc_name(t_minishell *ms);
