@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/11 04:25:06 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/16 02:25:39 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ void	init_heredoc_data(t_minishell *ms)
 	ms->heredoc.index = 0;
 	ms->heredoc.in_quotes = FALSE;
 }
+
+/* init the minishell struct variables */
+
 void	init_token_data(t_minishell *ms)
 {
 	ms->token.end = 0;
@@ -33,14 +36,21 @@ void	init_token_data(t_minishell *ms)
 	ms->token.in_squotes = FALSE;
 	ms->token.quoted = NULL;
 	ms->token.expanded = NULL;
-	ms->token.cexpanded = NULL;
-	ms->token.cexp_size = 0;
-	ms->token.cexp_capacity = 0;
+	ms->token.state_array = NULL;
+	ms->token.state_array_size = 0;
+	ms->token.state_array_capacity = 0;
+	ms->token.state_index = 0;
+	ms->token.new_state_array = NULL;
+	ms->token.new_state_array_size = 0;
+	ms->token.new_state_array_capacity = 0;
 	ms->token.db_buffer = NULL;
-	ms->token.db_buffer_int = NULL;
-	ms->token.db_buffer_intp = NULL;
 	ms->token.db_capacity = 0;
 	ms->token.db_size = 0;
+	ms->token.expansion_start = 0;
+	ms->token.expansion_end = 0;
+	ms->token.expansion_len = 0;
+	ms->token.expansion_state = 0;
+	ms->token.quoted_state = 0;
 }
 
 /* init the minishell struct variables */
@@ -62,8 +72,7 @@ void	init_minishell(t_minishell *ms)
 	ms->pid = 0;
 	ms->received_sig = 0;
 	init_token_data(ms);
-	init_heredoc_data(ms);
-	
+	init_heredoc_data(ms);	
 }
 
 /*
@@ -79,8 +88,7 @@ int	execute_input(t_minishell *ms, char *input)
 		return (SYNTAX_ERROR);
 	else if (ms->tokens && *ms->tokens)
 	{
-		if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded,
-				is_heredoc))
+		if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded, is_heredoc))
 		{
 			ms->ret = process_heredocs(ms);
 			if (ms->ret == ERROR || ms->ret == TERM_SIGINT)
@@ -90,8 +98,7 @@ int	execute_input(t_minishell *ms, char *input)
 			}
 		}
 		ms->ret = call_commands(ms);
-		if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded,
-				is_heredoc))
+		if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded, is_heredoc))
 			reset_heredoc(ms);
 		free_tokens_address(&ms->tokens);
 	}

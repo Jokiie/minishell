@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/10 04:31:23 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/16 15:47:29 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,104 +34,84 @@ char	**expander(t_minishell *ms, char **tokens)
 	i = 0;
 	count = count_tokens(tokens);
 	expanded = ft_calloc(count + 1, sizeof(char *));
+	ms->token.new_state_array = ft_calloc(count + 1, sizeof(int *));
 	if (!expanded)
 		return (NULL);
-	ms->token.cexpanded = ft_calloc(count + 1, sizeof(int *));
 	while (tokens[k] && k < count)
 	{
-		init_cexpanded_int(ms, ft_strlen(tokens[k]), i);
-		if (!is_expandable(ms, tokens[k], k) || is_heredoc_delim(ms, tokens, k))
+		if (tokens[k])
+			init_new_state_array(ms, ft_strlen(tokens[k]), k);
+		if (is_heredoc_delim(ms, tokens, k) || !is_expandable(ms, tokens[k], k))
 		{
+			ms->token.expansion_start = 0;
 			expanded[i] = ft_strdup(tokens[k]);
-			fill_0_cexpanded(ms, 0, ft_strlen(expanded[i]), i);
+			fill_new_state_array(ms, ft_strlen(tokens[k]), k);
 		}
 		else
-			expanded[i] = expand_token(ms, tokens[k], i);
+			expanded[i] = expand_token(ms, tokens[k], k);
 		if (expanded)
 			i++;
 		k++;
 	}
-	ms->token.cexpanded[i] = NULL;
+    ms->token.new_state_array[i] = NULL;
+	free_state_array(ms, count);
+	ms->token.state_array = ms->token.new_state_array;
 	expanded[i] = NULL;
 	return (expanded);
 }
 
-char	*expand_token(t_minishell *ms, char *token, int cexpindex)
+char	*expand_token(t_minishell *ms, char *token, int k)
 {
 	char	*dup;
 	char	*new_dup;
 	int		i;
-	
-	ms->token.in_dquotes = FALSE;
-	ms->token.in_squotes = FALSE;
+	size_t	saved_len;
+
 	if (!token)
 		return (NULL);
 	dup = ft_strdup(token);
+	saved_len = ft_strlen(token);
 	i = 0;
-	while (dup[i])
+	ms->token.state_index = 0;
+	while (dup[i] && ms->token.state_index < saved_len)
 	{
-		quotes_detector(ms, dup, i);
-		if (ms->token.in_squotes == FALSE && (dup[i] == '$' && (ft_isalnum(dup[i + 1]) || dup[i + 1] == '_' || dup[i + 1] == '?')))
-		{
-			if (dup[i] == '$' && (ft_isalnum(dup[i + 1]) || dup[i + 1] == '_'))
+        if (ms->token.state_index >= saved_len)
+            break;
+        ms->token.expansion_len = 0;
+		if (in_expandable_zone(ms, dup, i, k) == TRUE)
+        {
+			if (is_variable_expansion(dup, i) == TRUE)
 			{
-				new_dup = apply_var_expansion(ms, dup, &i, cexpindex);
+				new_dup = apply_var_expansion(ms, dup, &i, k);
 				dup = new_dup;
-			}
-			else if (dup[i] == '$' && dup[i + 1] == '?')
-			{
-				new_dup = apply_nbr_expansion(ms, dup, &i, cexpindex);
-				dup = new_dup;
-			}
-		}
+                ms->token.state_index += (ms->token.expansion_len + 1);
+            }
+		    else if (is_return_code_expansion(dup, i) == TRUE)
+		    {
+			    new_dup = can_apply_nbr_expansion(ms, dup, &i, k);
+			    dup = new_dup;
+            }
+        }
 		else
 		{
-			append_to_cexpanded(ms, 0, cexpindex);
+			add_to_new_state_array(ms, ms->token.state_array[k][ms->token.state_index], k);
+			ms->token.state_index++;
 			i++;
 		}
 	}
 	return (dup);
 }
 
-t_bool	is_expandable(t_minishell *ms, char *token, int k)
+t_bool	in_expandable_zone(t_minishell *ms, char *token, int i, int k)
 {
-	int		i;
-	t_bool	expandable;
-
-	expandable = FALSE;
-	ms->token.in_squotes = FALSE;
-	ms->token.in_dquotes = FALSE;
-	i = 0;
-	while (token[i])
+	if (token[i] && token[i + 1] && ms->token.state_array[k][ms->token.state_index] != 1
+        && ms->token.state_array[k][ms->token.state_index + 1] != 1)
 	{
-		quotes_detector2(ms, token, k, i);
-		if (token[i] == '$' && ms->token.in_squotes == FALSE
-			&& (ft_isalpha(token[i + 1]) || token[i + 1] == '_' || token[i
-				+ 1] == '?'))
+		if (token[i] == '$' && (ft_isalnum(token[i + 1]) || token[i + 1] == '_' || token[i + 1] == '?'))
 		{
-			expandable = TRUE;
+			return (TRUE);
 		}
-		i++;
 	}
-	ms->token.in_squotes = FALSE;
-	ms->token.in_dquotes = FALSE;
-	if (expandable == TRUE)
-		return (TRUE);
 	return (FALSE);
 }
 
-t_bool	is_exp_start(char *dup, int i)
-{
-	if (dup[i] == '$' && (ft_isalnum(dup[i + 1]) || dup[i + 1] == '_' || dup[i
-			+ 1] == '?'))
-		return (TRUE);
-	return (FALSE);
-}
-
-t_bool	is_heredoc_delim(t_minishell *ms, char **tokens, int k)
-{
-	if (k > 0 && (is_heredoc(tokens[k - 1]) && ms->token.quoted[k - 1] == 0)
-		&& tokens[k])
-		return (TRUE);
-	return (FALSE);
-}

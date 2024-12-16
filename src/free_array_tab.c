@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 13:57:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/11 03:57:26 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/16 05:56:48 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,37 @@ void	free_tokens(char **tokens)
 	}
 }
 
-void	free_cexpanded(t_minishell *ms)
+void	free_state_array(t_minishell *ms, int count)
 {
 	int	i;
 
-	if (ms->token.cexpanded)
+	if (ms->token.state_array)
 	{
 		i = 0;
-		while (ms->token.cexpanded[i])
+		while (ms->token.state_array[i] && i < count)
 		{
-			free_int_array(&ms->token.cexpanded[i]);
+			free_int_array(&ms->token.state_array[i]);
 			i++;
 		}
-		free(ms->token.cexpanded);
-		ms->token.cexpanded = NULL;
+		free(ms->token.state_array);
+		ms->token.state_array = NULL;
 	}
+}
+
+
+void	free_dbuffer(t_minishell *ms)
+{
+	size_t	i;
+
+	if (!ms->token.db_buffer)
+		return ;
+	for (i = 0; i < ms->token.db_size; i++)
+	{
+		if (ms->token.db_buffer[i])
+			free(ms->token.db_buffer[i]);
+	}
+	free(ms->token.db_buffer);
+	ms->token.db_buffer = NULL;
+	ms->token.db_size = 0;
+	ms->token.db_capacity = 0;
 }

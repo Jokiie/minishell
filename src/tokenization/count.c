@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 05:27:46 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/10 13:40:01 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/16 03:05:46 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	count_type(char **tokens, int **quoted, int **expanded,
 	int	i;
 	int	count;
 
+	if (!tokens || !*tokens)
+		return (0);
 	i = 0;
 	count = 0;
 	while (tokens[i])
@@ -34,7 +36,7 @@ int	count_tokens(char **tokens)
 	int	count;
 
 	count = 0;
-	if (!tokens)
+	if (!tokens || !*tokens)
 		return (0);
 	while (tokens[count])
 		count++;
@@ -46,6 +48,8 @@ int	count_size(char **tokens)
 	int	i;
 	int	count;
 
+	if (!tokens || !*tokens)
+		return (0);
 	i = 0;
 	count = 0;
 	while (tokens[i])

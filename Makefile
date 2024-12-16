@@ -58,7 +58,9 @@ SRC_CMDS = commands/cd.c \
 		   commands/unset.c \
 
 SRC_TOK = tokenization/tokens_creator.c \
+		  tokenization/tokens_creator_utils.c \
 		  tokenization/expander.c \
+		  tokenization/expander_utils.c \
 		  tokenization/tokenizer.c \
 		  tokenization/trimmer.c \
 		  tokenization/retokenizer.c \
@@ -76,6 +78,7 @@ SRC_TOK = tokenization/tokens_creator.c \
 		  tokenization/int_arrays.c \
 		  tokenization/dynamic_arrays.c \
 		  tokenization/dynamic_array_int.c \
+		  tokenization/parser.c \
 
 SRC_REDIR = redirections/exec_redirections.c \
 			redirections/redirection.c \

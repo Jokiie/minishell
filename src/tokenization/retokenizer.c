@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 02:38:01 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/11 02:04:49 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/16 14:43:01 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,84 +18,96 @@
 	expanded arrays, so we have the state of each new tokens.
 */
 
-char	**retokenizer(t_minishell *ms)
+char	**retokenizer(t_minishell *ms, char **tokens)
 {
-	int	j;
-	size_t	size;
-	int		*saved_expanded;
+	size_t		j;
+	size_t		size;
+	int			*saved_expanded;
 	
-	if (!ms->expanded || !*ms->expanded)
+	if (!tokens || !*tokens)
 		return (NULL);
-	size = count_tokens(ms->expanded);
-	if (!init_dbuffer(ms, size))
+	size = count_tokens(tokens);
+	if (!init_dbuffer(ms, size * 2))
 	{
-		free_tokens(ms->token.db_buffer);
+		if (ms->token.db_buffer)
+			free_tokens(ms->token.db_buffer);
 		return (NULL);
 	}
 	j = 0;
 	saved_expanded = ms->token.expanded;
-	while (ms->expanded[j])
+	ms->token.state_index = 0;
+	while (tokens[j] && j < size)
 	{
-		if (!ms->expanded[j][0])
-			handle_empty(ms, saved_expanded[j]);
-		else if (ms->expanded[j][0] && ms->token.expanded[j] == 1)
-			handle_non_empty(ms, j);
+		ms->token.expansion_state = get_expanded_state(ms, tokens, j);
+		ms->token.quoted_state = get_quoted_state(ms, tokens, j);
+		if (!tokens[j][0] && ms->token.state_array[j][0] != 0)
+			append_to_dbuffer_char(ms, ft_strdup(""));
+		else if (tokens[j][0] && saved_expanded[j] == 1)
+			handle_non_empty(ms, tokens, j);
 		else
-			append_to_dbuffer_char(ms, ft_strdup(ms->expanded[j]), 0);
+			append_to_dbuffer_char(ms, ft_strdup(tokens[j]));
 		j++;
 	}
 	ms->token.db_buffer[ms->token.db_size] = NULL;
-	update_arrays(ms, ms->token.db_size);
 	return (ms->token.db_buffer);
 }
 
-int	separe_token(t_minishell *ms, char *token, int *i)
+t_bool	is_space_or_meta2(t_minishell *ms, char *token, int *i, int k)
 {
-	char	*tmp;
-
-	ms->token.is_meta = FALSE;
-	ms->token.start = *i;
-	while (token[*i])
+	if (ft_isspace(token[*i]) && !is_quoted_char(ms, i, k))
 	{
-		quotes_detector(ms, token, *i);
-		if (is_space_or_meta(ms, token, i) == TRUE)
-			break ;
-		(*i)++;
+		return (TRUE);
 	}
-	ms->token.end = *i;
-	ms->token.size = (ms->token.end - ms->token.start);
-	if (*i > ms->token.start)
+	else if (ft_ismeta_chars(token[*i]) && ms->token.state_array[k][*i] == 0)
 	{
-		tmp = ft_substr(token, ms->token.start, ms->token.size);
-		append_to_dbuffer_char(ms, tmp, 1);
+		ms->token.is_meta = TRUE;
+		return (TRUE);
 	}
-	else if (ms->token.is_meta)
-	{
-		tmp = meta_chars_extractor(token, i);
-		append_to_dbuffer_char(ms, tmp, 1);
-	}
-	return (*i);
+	return (FALSE);
 }
 
-void	handle_empty(t_minishell *ms, int expanded)
+int separe_token(t_minishell *ms, char *token, int *i, int k)
 {
-	if (expanded == 1)
-		append_to_dbuffer_char(ms, ft_strdup(""), 1);
-	else if (expanded == 0)
-		append_to_dbuffer_char(ms, ft_strdup(""), 0);
+    char    *tmp;
+
+    ms->token.is_meta = FALSE;
+    ms->token.start = *i;
+    while (token[*i])
+    {
+        quotes_detector3(ms, token, *i, k);
+        if (is_space_or_meta2(ms, token, i, k) == TRUE)
+            break;
+        (*i)++;
+    }
+    ms->token.end = *i;
+    ms->token.size = (ms->token.end - ms->token.start);
+    if (*i > ms->token.start)
+    {
+        tmp = ft_calloc(ms->token.size + 1, sizeof(char));
+        ft_memcpy(tmp, token + ms->token.start, ms->token.size);
+        append_to_dbuffer_char(ms, tmp);
+    }
+    else if (ms->token.is_meta)
+    {
+        tmp = meta_chars_extractor(token, i);
+        append_to_dbuffer_char(ms, tmp);
+    }
+    return (*i);
 }
 
-void	handle_non_empty(t_minishell *ms, int j)
+void	handle_non_empty(t_minishell *ms, char **tokens, int j)
 {
 	int	i;
 
+	if (!tokens[j])
+		return ;
 	i = 0;
-	while (ms->expanded[j][i])
+	while (tokens[j][i])
 	{
-		while (ft_isspace(ms->expanded[j][i]))
+		while (ft_isspace(tokens[j][i]) && !is_quoted_char(ms, &i, j))
 			i++;
-		i = separe_token(ms, ms->expanded[j], &i);
-		while (ft_isspace(ms->expanded[j][i]))
+		i = separe_token(ms, tokens[j], &i, j);
+		while (ft_isspace(tokens[j][i]) && !is_quoted_char(ms, &i, j))
 			i++;
 	}
 }

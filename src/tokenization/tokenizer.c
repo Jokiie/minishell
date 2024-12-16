@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 04:51:02 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/16 07:26:22 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,7 @@ int	separe_line(t_minishell *ms, char *line, int i, int *k)
 	ms->token.end = i;
 	ms->token.size = (ms->token.end - ms->token.start);
 	if (i > ms->token.start)
-		ms->pretokens[(*k)++] = ft_substr(line, ms->token.start,
-				ms->token.size);
+		ms->pretokens[(*k)++] = ft_substr(line, ms->token.start, ms->token.size);
 	else if (ms->token.is_meta)
 		ms->pretokens[(*k)++] = meta_chars_extractor(line, &i);
 	return (i);

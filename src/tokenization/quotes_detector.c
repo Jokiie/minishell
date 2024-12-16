@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:30:53 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/10 19:06:14 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/13 13:44:42 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,16 @@ int	open_quotes_checker(t_minishell *ms, char *line)
 	return (SUCCESS);
 }
 
-size_t	quotes_detector_size_t(t_minishell *ms, char *line, size_t i)
+
+int	quotes_detector3(t_minishell *ms, char *token, int i, int k)
 {
-	if (ft_is_dquote(line[i]) && !ms->token.in_squotes)
+	if ((ft_is_dquote(token[i]) || ms->token.state_array[k][i] == 2) && !ms->token.in_squotes
+		&& ms->token.expanded[k] == 0)
 	{
 		ms->token.in_dquotes = !ms->token.in_dquotes;
 	}
-	else if (ft_is_squote(line[i]) && !ms->token.in_dquotes)
+	else if ((ft_is_squote(token[i]) || ms->token.state_array[k][i] == 3) && !ms->token.in_dquotes
+		&& ms->token.expanded[k] == 0)
 	{
 		ms->token.in_squotes = !ms->token.in_squotes;
 	}

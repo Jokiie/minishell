@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 19:08:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 02:19:36 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/16 03:14:50 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ t_bool	has_type(char **tokens, int **quoted, int **expanded,
 	int	i;
 
 	i = 0;
-	if (!tokens || !*tokens)
-		return (FALSE);
 	while (tokens[i])
 	{
 		if ((*quoted)[i] == 0 && (*expanded)[i] == 0 && is_type(tokens[i]))
@@ -34,8 +32,6 @@ t_bool	has_redirects(char **tokens, int **quoted, int **expanded)
 	int	i;
 
 	i = 0;
-	if (!tokens || !*tokens)
-		return (FALSE);
 	while (tokens[i])
 	{
 		if ((*quoted)[i] == 0 && (*expanded)[i] == 0 && (is_redirect(tokens[i])
@@ -48,8 +44,6 @@ t_bool	has_redirects(char **tokens, int **quoted, int **expanded)
 
 t_bool	has_quotes(char *token)
 {
-	if (!token)
-		return (FALSE);
 	if (ft_strchr(token, '\'') != NULL || ft_strchr(token, '\"') != NULL)
 		return (TRUE);
 	return (FALSE);
