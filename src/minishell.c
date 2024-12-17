@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/16 02:25:39 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 05:35:15 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	init_minishell(t_minishell *ms)
 	ms->pid = 0;
 	ms->received_sig = 0;
 	init_token_data(ms);
-	init_heredoc_data(ms);	
+	init_heredoc_data(ms);
 }
 
 /*
@@ -88,7 +88,8 @@ int	execute_input(t_minishell *ms, char *input)
 		return (SYNTAX_ERROR);
 	else if (ms->tokens && *ms->tokens)
 	{
-		if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded, is_heredoc))
+		if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded,
+				is_heredoc))
 		{
 			ms->ret = process_heredocs(ms);
 			if (ms->ret == ERROR || ms->ret == TERM_SIGINT)
@@ -98,7 +99,8 @@ int	execute_input(t_minishell *ms, char *input)
 			}
 		}
 		ms->ret = call_commands(ms);
-		if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded, is_heredoc))
+		if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded,
+				is_heredoc))
 			reset_heredoc(ms);
 		free_tokens_address(&ms->tokens);
 	}
@@ -111,36 +113,38 @@ int	execute_input(t_minishell *ms, char *input)
 	we parse the input:
 
 	0- Tokens_creator: If line is empty or contain only spaces, ms->tokens is
-	   set to null, and we return 0. Otherwise, We check if we have an open
-	   quote, if so, we return SYNTAX_ERROR and do not proceed further.
-	   Otherwise, We call tokenizer and transformer, then verify if we have a
-	   syntax error. If so, we return SYNTAX_ERROR. If no syntax error is found,
-	   we return SUCCESS.
-	
+		set to null, and we return 0. Otherwise, We check if we have an open
+		quote, if so, we return SYNTAX_ERROR and do not proceed further.
+		Otherwise, We call tokenizer and transformer, then verify if we have a
+		syntax error. If so,
+			we return SYNTAX_ERROR. If no syntax error is found,
+		we return SUCCESS.
+
 	1- Tokenizer: Separe the line in tokens when we find an unquoted space or
-	    a meta character. If the result is not NULL, we proceed further.
+		a meta character. If the result is not NULL, we proceed further.
 
 	2- Transformer : Init quoted and expanded int arrays, which save the state
-				     of each token (quoted or not) and (expanded or not). then
-					 call the following:
+						of each token (quoted or not) and (expanded or not). then
+						call the following:
 
 		2.1- Expander: Iter in each tokens and expand the variables if not
-			 single quoted or a heredoc delimiter.
+				single quoted or a heredoc delimiter.
 
 		2.2- Retokenizer : Iter in each tokens and resepare the tokens like
-			 in tokenizer, but save the empty tokens. Then update the quoted and
-			 expanded arrays, so we have the state of each new tokens.
-		
+				in tokenizer,
+					but save the empty tokens. Then update the quoted and
+				expanded arrays, so we have the state of each new tokens.
+
 		2.2- Cleaner: Called only if no unquoted and no expanded pipes is found.
-			 It will iter in each tokens and remove the unquoted empty tokens
-			 resulted from the previous step (usually from empty variables).
+				It will iter in each tokens and remove the unquoted empty tokens
+				resulted from the previous step (usually from empty variables).
 
 		2.4- Trimmer: Iter in each tokens and remove the quotes of tokens that
-			 do not result from expansion. This is the final step and the result
-			 is assigned to ms->tokens.
+				do not result from expansion. This is the final step and the result
+				is assigned to ms->tokens.
 
 	3-  We check if we have a unquoted and unexpanded heredoc, if so we execute
-	    and fill all heredocs at once and save them with an unique name in our
+		and fill all heredocs at once and save them with an unique name in our
 		folder /tmp. These are deleted after the command execution, or if we
 		received a SIGINT, at exit or with the command make fclean.
 

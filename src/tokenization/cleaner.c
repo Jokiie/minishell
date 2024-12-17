@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 22:48:09 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/09 16:08:47 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 05:03:10 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,16 @@
 
 /*
 	Cleaner:
-	Called only if no unquoted and no expanded pipes is found.
-	It will iter in each tokens and remove the unquoted empty tokens
-	resulted from the previous step (usually from empty variables).
+	Called only if no unquoted and no expanded pipes is found. It will iter in
+	each tokens and remove the unquoted empty tokens resulted from the previous
+	steps, usually from empty variables because we must keep the empty quoted
+	strings.
 */
-static void	init_cleaner(int *k, int *i)
+static void	init_cleaner(char ***cleaned, int count, int *k, int *i)
 {
 	*k = 0;
 	*i = 0;
+	*cleaned = ft_calloc(count + 1, sizeof(char *));
 }
 
 char	**cleaner(t_minishell *ms, char **tokens)
@@ -31,9 +33,8 @@ char	**cleaner(t_minishell *ms, char **tokens)
 	int		k;
 	int		i;
 
-	init_cleaner(&k, &i);
 	count = count_valid_tokens(ms, tokens);
-	cleaned = ft_calloc(count + 1, sizeof(char *));
+	init_cleaner(&cleaned, count, &k, &i);
 	if (!cleaned)
 		return (NULL);
 	while (tokens[k])
@@ -44,6 +45,7 @@ char	**cleaner(t_minishell *ms, char **tokens)
 			if (cleaned[i])
 			{
 				ms->token.quoted[i] = ms->token.quoted[k];
+				ms->token.expanded[i] = ms->token.expanded[k];
 				i++;
 			}
 		}

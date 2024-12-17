@@ -19,7 +19,7 @@ char	*apply_var_expansion_hd(t_minishell *ms, char *token_dup, int *i)
 	char	*after;
 	char	*new_token_dup;
 	char	*var_value;
-	
+
 	before = ft_substr(token_dup, 0, *i);
 	(*i)++;
 	var = var_extractor_hd(token_dup, i);

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 13:57:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/16 05:56:48 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 05:34:39 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,17 @@ void	free_state_array(t_minishell *ms, int count)
 	}
 }
 
-
 void	free_dbuffer(t_minishell *ms)
 {
 	size_t	i;
 
 	if (!ms->token.db_buffer)
 		return ;
-	for (i = 0; i < ms->token.db_size; i++)
+	while (i < ms->token.db_size)
 	{
 		if (ms->token.db_buffer[i])
 			free(ms->token.db_buffer[i]);
+		i++;
 	}
 	free(ms->token.db_buffer);
 	ms->token.db_buffer = NULL;

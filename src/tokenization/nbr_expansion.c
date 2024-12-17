@@ -6,18 +6,22 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:37:24 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/16 15:05:22 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 04:01:42 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*can_apply_nbr_expansion(t_minishell *ms, char *token_dup, int *i, int k)
+char	*can_apply_nbr_expansion(t_minishell *ms, char *token_dup, int *i,
+		int k)
 {
 	char	*new_token_dup;
 
 	new_token_dup = NULL;
-	if (is_return_code_expansion(token_dup, *i) == TRUE && (ms->token.state_array[k][ms->token.state_index] != 1 && ms->token.state_array[k][ms->token.state_index + 1] != 1 && token_dup[*i] && token_dup[*i + 1]))
+	if (is_return_code_expansion(token_dup, *i) == TRUE
+		&& (ms->token.state_array[k][ms->token.state_index] != 1
+		&& ms->token.state_array[k][ms->token.state_index + 1] != 1
+		&& token_dup[*i] && token_dup[*i + 1]))
 		new_token_dup = apply_nbr_expansion(ms, token_dup, i, k);
 	return (new_token_dup);
 }

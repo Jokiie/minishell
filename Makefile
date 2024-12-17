@@ -79,6 +79,8 @@ SRC_TOK = tokenization/tokens_creator.c \
 		  tokenization/dynamic_arrays.c \
 		  tokenization/dynamic_array_int.c \
 		  tokenization/parser.c \
+		  tokenization/state_array_utils.c \
+		  tokenization/is_state.c \
 
 SRC_REDIR = redirections/exec_redirections.c \
 			redirections/redirection.c \

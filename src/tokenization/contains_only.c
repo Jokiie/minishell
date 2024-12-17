@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 01:59:12 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/13 13:44:42 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 03:34:02 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ t_bool	contains_only_quotes2(t_minishell *ms, char **tokens, int k)
 	i = 0;
 	while (tokens[k][i])
 	{
-		if (ms->token.state_array[k][i] == 2 || ms->token.state_array[k][i] == 3)
+		if (ms->token.state_array[k][i] == 2
+			|| ms->token.state_array[k][i] == 3)
 			i++;
 		else
 			return (FALSE);

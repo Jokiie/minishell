@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:43:35 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/16 17:33:53 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 04:04:07 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ char	*apply_var_expansion(t_minishell *ms, char *token_dup, int *i, int k)
 	char	*after;
 	char	*new_token_dup;
 	char	*var_value;
-	
+
 	before = ft_substr(token_dup, 0, *i);
 	ms->token.expansion_start = *i;
 	(*i)++;
-	var = var_extractor(ms, token_dup, i, k);
+	var = var_extractor(ms, token_dup, i);
 	after = ft_substr(token_dup, *i, ft_strlen(token_dup) - *i);
 	var_value = get_env(ms->env, var);
 	new_token_dup = insert_variable_value(before, var_value, after);
@@ -40,7 +40,7 @@ char	*apply_var_expansion(t_minishell *ms, char *token_dup, int *i, int k)
 	return (new_token_dup);
 }
 
-char	*var_extractor(t_minishell *ms, char *token, int *i, int k)
+char	*var_extractor(t_minishell *ms, char *token, int *i)
 {
 	char	*substr;
 	int		start;
@@ -48,10 +48,10 @@ char	*var_extractor(t_minishell *ms, char *token, int *i, int k)
 
 	index = ms->token.state_index;
 	start = *i;
-	(void)k;
 	if ((ft_isalpha(token[*i]) || token[*i] == '_'))
 	{
-		while (token[*i] && token[*i] != '$' && (ft_isalnum(token[*i]) || token[*i] == '_'))
+		while (token[*i] && token[*i] != '$'
+			&& (ft_isalnum(token[*i]) || token[*i] == '_'))
 		{
 			index++;
 			(*i)++;

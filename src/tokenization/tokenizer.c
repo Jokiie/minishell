@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/16 19:35:05 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 04:27:55 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ int	separe_line(t_minishell *ms, char *line, int i, int *k)
 	ms->token.end = i;
 	ms->token.size = (ms->token.end - ms->token.start);
 	if (i > ms->token.start)
-		ms->pretokens[(*k)++] = ft_substr(line, ms->token.start, ms->token.size);
+		ms->pretokens[(*k)++] = ft_substr(line, ms->token.start,
+				ms->token.size);
 	else if (ms->token.is_meta)
 		ms->pretokens[(*k)++] = meta_chars_extractor(line, &i);
 	return (i);
@@ -86,16 +87,14 @@ char	*meta_chars_extractor(char *line, int *i)
 	int		start;
 
 	start = *i;
-	if ((line[*i] == '>' && line[*i + 1] == '>')
-		|| (line[*i] == '<' && line[*i + 1] == '<'))
+	if ((line[*i] == '>' && line[*i + 1] == '>') || (line[*i] == '<' && line[*i
+			+ 1] == '<'))
 		(*i) += 2;
 	else if (ft_ismeta_chars(line[*i]) && !ft_ismeta_chars(line[*i + 1]))
 		(*i)++;
 	else if (ft_ismeta_chars(line[*i]) && ft_ismeta_chars(line[*i + 1]))
 		(*i)++;
 	substr = ft_substr(line, start, *i - start);
-	//substr = ft_calloc(ms->token.size + 1, sizeof(char));
-	//ft_memcpy(substr, line + start, ms->token.size);
 	if (!substr)
 		return (NULL);
 	return (substr);
