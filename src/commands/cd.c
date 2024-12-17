@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 15:42:05 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/09 16:55:09 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	change_directory(t_minishell *ms, const char *path)
 {
 	if (chdir(path) == -1)
 	{
-		ft_putstr_fd(" No such file or directory", 2);
+		ft_putstr_fd("No such file or directory\n", 2);
 		return (ERROR);
 	}
 	update_working_directories(ms);
