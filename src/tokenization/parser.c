@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 01:55:05 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/16 17:31:59 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 00:17:53 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,19 +102,16 @@ int	get_expanded_state(t_minishell *ms, char **tokens, int k)
 	return (0);
 }
 
-int get_quoted_state(t_minishell *ms, char **tokens, int k)
+int get_quoted_state(t_minishell *ms, int start, int len, int k)
 {
 	int i;
-	int	len;
 
-	i = 0;
-	len = ft_strlen(tokens[k]);
-	while (tokens[k][i] && i < len)
+	i = start;
+	while (i < len)
 	{
-		if (ms->token.state_array[k][i] == 2
-			|| ms->token.state_array[k][i] == 4
-			|| ms->token.state_array[k][i] == 1
-			|| has_quotes(tokens[k]) == TRUE)
+		if (ms->token.state_array[k][i] == 1
+			|| ms->token.state_array[k][i] == 2
+			|| ms->token.state_array[k][i] == 4)
 		{
 			return (1);
 		}

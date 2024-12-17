@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 13:27:04 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/16 06:51:38 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 00:21:54 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,17 @@ void	init_expanded_array(t_minishell *ms, char **tokens)
 	k = 0;
 	while (tokens[k] && k < size)
 	{
-		if (is_expandable(ms, tokens[k], k) == TRUE
-			&& !is_heredoc_delim(ms, tokens, k))
-			ms->token.expanded[i] = 1;
+		if (tokens[k])
+		{
+			if (is_expandable(ms, tokens[k], k) == TRUE
+				&& !is_heredoc_delim(ms, tokens, k))
+				ms->token.expanded[i] = 1;
+			else
+				ms->token.expanded[i] = 0;
+			k++;
+			i++;
+		}
 		else
-			ms->token.expanded[i] = 0;
-		k++;
-		i++;
+			break ;
 	}
 }

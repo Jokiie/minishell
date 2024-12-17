@@ -210,7 +210,7 @@ char **parser(t_minishell *ms, char **tokens);
 void    fill_state_array(t_minishell *ms, char *token, int k);
 int	parse_squotes(t_minishell *ms, char *token, int i, int k);
 int	parse_dquotes(t_minishell *ms, char *token, int i, int k);
-int get_quoted_state(t_minishell *ms, char **tokens, int k);
+int get_quoted_state(t_minishell *ms, int start, int len, int k);
 int	get_expanded_state(t_minishell *ms, char **tokens, int k);
 void print_state_array(t_minishell *ms, char **tokens, int token_count);
 int	update_state_array(t_minishell *ms, char **tokens);
@@ -248,7 +248,7 @@ void				handle_non_empty(t_minishell *ms, char **tokens, int j);
 
 // trimmer.c
 char				**trimmer(t_minishell *ms, char **tokens);
-char				*ft_toktrim(t_minishell *ms, char **tokens, int **tmp, int k);
+char	*ft_toktrim(t_minishell *ms, char **tokens, int **tmp, int k);
 
 // cleaner.c
 char				**cleaner(t_minishell *ms, char **tokens);

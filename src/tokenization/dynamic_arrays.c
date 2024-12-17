@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 03:59:55 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/16 08:18:20 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 01:27:56 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,11 @@ int	update_expanded(t_minishell *ms, int new_capacity)
 {
 	int	*new_expanded;
 
-	new_expanded = ft_calloc(new_capacity * 5, sizeof(int));
+	new_expanded = ft_calloc(new_capacity, sizeof(int));
 	if (!new_expanded)
 		return (-1);
 	ft_memcpy(new_expanded, ms->token.expanded, ms->token.db_capacity * sizeof(int));
 	free_int_array(&ms->token.expanded);
-	free(ms->token.expanded);
 	ms->token.expanded = new_expanded;
 	return (0);
 }
@@ -43,12 +42,11 @@ int	update_quoted(t_minishell *ms, int new_capacity)
 {
 	int	*new_quoted;
 
-	new_quoted = ft_calloc(new_capacity * 5, sizeof(int));
+	new_quoted = ft_calloc(new_capacity, sizeof(int));
 	if (!new_quoted)
 		return (-1);
 	ft_memcpy(new_quoted, ms->token.quoted, ms->token.db_capacity * sizeof(int));
 	free_int_array(&ms->token.quoted);
-	free(ms->token.quoted);
 	ms->token.quoted = new_quoted;
 	return (0);
 }
@@ -77,6 +75,6 @@ int	append_to_dbuffer_char(t_minishell *ms, char *data)
     ms->token.db_buffer[ms->token.db_size] = data;
     ms->token.expanded[ms->token.db_size] = ms->token.expansion_state;
     ms->token.quoted[ms->token.db_size] = ms->token.quoted_state;
-    ms->token.db_size++;
+	ms->token.db_size++;
 	return (0);
 }

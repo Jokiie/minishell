@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/12/06 03:57:36 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 02:35:29 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ int	pipes_redirection(t_minishell *ms)
 	{
 		if (dup2(ms->p.pipes[ms->p.cmd_num - 1][0], STDIN_FILENO) == -1)
 		{
+			if (errno == EPIPE)
+				return (SUCCESS);
 			perror("ms: dup2 stdin");
 			return (FAIL);
 		}
@@ -90,6 +92,8 @@ int	pipes_redirection(t_minishell *ms)
 	{
 		if (dup2(ms->p.pipes[ms->p.cmd_num][1], STDOUT_FILENO) == -1)
 		{
+			if (errno == EPIPE)
+				return (SUCCESS);
 			perror("ms: dup2 stdout");
 			return (FAIL);
 		}

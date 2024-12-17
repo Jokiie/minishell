@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 02:38:01 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/16 14:43:01 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 01:51:20 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,32 +23,34 @@ char	**retokenizer(t_minishell *ms, char **tokens)
 	size_t		j;
 	size_t		size;
 	int			*saved_expanded;
+	int			*saved_quoted;
 	
 	if (!tokens || !*tokens)
 		return (NULL);
 	size = count_tokens(tokens);
 	if (!init_dbuffer(ms, size * 2))
-	{
-		if (ms->token.db_buffer)
-			free_tokens(ms->token.db_buffer);
 		return (NULL);
-	}
+	saved_expanded = ft_calloc(size, sizeof(int));
+	ft_memcpy(saved_expanded, ms->token.expanded, sizeof(int) * size);
+	saved_quoted = ft_calloc(size, sizeof(int));
+	ft_memcpy(saved_quoted, ms->token.quoted, sizeof(int) * size);
 	j = 0;
-	saved_expanded = ms->token.expanded;
 	ms->token.state_index = 0;
 	while (tokens[j] && j < size)
 	{
-		ms->token.expansion_state = get_expanded_state(ms, tokens, j);
-		ms->token.quoted_state = get_quoted_state(ms, tokens, j);
-		if (!tokens[j][0] && ms->token.state_array[j][0] != 0)
+		ms->token.expansion_state = saved_expanded[j];
+		ms->token.quoted_state = saved_quoted[j];
+		if (!tokens[j][0] && j != (size - 1))
 			append_to_dbuffer_char(ms, ft_strdup(""));
-		else if (tokens[j][0] && saved_expanded[j] == 1)
+		if (saved_expanded[j] == 1)
 			handle_non_empty(ms, tokens, j);
 		else
 			append_to_dbuffer_char(ms, ft_strdup(tokens[j]));
 		j++;
 	}
 	ms->token.db_buffer[ms->token.db_size] = NULL;
+	free_int_array(&saved_expanded);
+	free_int_array(&saved_quoted);
 	return (ms->token.db_buffer);
 }
 
@@ -85,12 +87,17 @@ int separe_token(t_minishell *ms, char *token, int *i, int k)
     {
         tmp = ft_calloc(ms->token.size + 1, sizeof(char));
         ft_memcpy(tmp, token + ms->token.start, ms->token.size);
+		if (get_quoted_state(ms, ms->token.start, ms->token.size, k) == TRUE)
+			ms->token.quoted_state = 1;
+		else
+			ms->token.quoted_state = 0;
         append_to_dbuffer_char(ms, tmp);
     }
-    else if (ms->token.is_meta)
+    else if (*i > ms->token.start && ms->token.is_meta)
     {
-        tmp = meta_chars_extractor(token, i);
-        append_to_dbuffer_char(ms, tmp);
+        tmp = ft_calloc(ms->token.size + 1, sizeof(char));
+		ft_memcpy(tmp, token + ms->token.start, ms->token.size);
+		ms->token.is_meta = FALSE;
     }
     return (*i);
 }

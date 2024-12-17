@@ -57,6 +57,7 @@ void	handle_child_process(t_minishell *ms)
 	int	ret;
 
 	ret = ms->ret;
+	signal(SIGPIPE, SIG_IGN);
 	ms->in_pipe = TRUE;
 	if (pipes_redirection(ms) != SUCCESS)
 		exit_child(ms, ret, TRUE);

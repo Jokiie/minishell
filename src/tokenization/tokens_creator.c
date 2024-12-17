@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/16 17:48:51 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 02:21:21 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,69 +63,52 @@ char	**transformer(t_minishell *ms)
 	char	**final_tokens;
 	char	**tmp;
 	int		initial_count;
-	
-	//ft_fprintf(2, "pretokens:\n");
-	//print_debug(ms->pretokens);
-	
+
+	// ft_fprintf(2, "pretokens:\n");
+	// print_debug(ms->pretokens);
 	parser(ms, ms->pretokens);
 	initial_count = count_tokens(ms->pretokens);
 	init_int_arrays(ms, ms->pretokens);
-
-	ft_fprintf(2, "parser:\n");
-	print_debug(ms->pretokens);
-	print_state_array(ms, ms->pretokens, count_tokens(ms->pretokens));
-
-	ft_fprintf(2, "token.quoted:\n");
-	print_int_array(ms->pretokens, &ms->token.quoted);
-	ft_fprintf(2, "token.expanded:\n");
-	print_expanded_array(ms->pretokens, &ms->token.expanded);
-
-	final_tokens = trimmer(ms, ms->pretokens);
+	//ft_fprintf(2, "token.quoted:\n");
+	//print_int_array(ms->pretokens, &ms->token.quoted);
+	//ft_fprintf(2, "token.expanded:\n");
+	//print_expanded_array(ms->pretokens, &ms->token.expanded);
+	ms->expanded = expander(ms, ms->pretokens);
 	free_tokens_address(&ms->pretokens);
-	ft_fprintf(2, "trimmer:\n");
-	print_debug(final_tokens);
-	print_state_array(ms, final_tokens, count_tokens(final_tokens));
-	if (final_tokens && need_to_be_expand(ms, final_tokens))
-	{
-		ms->expanded = expander(ms, final_tokens);
-		free_tokens_address(&final_tokens);
-		if (!ms->expanded)
-			return (NULL);
-		ft_fprintf(2, "expander:\n");
-		print_debug(ms->expanded);
-
-		ft_fprintf(2, "After expander:\n");
-		print_state_array(ms, ms->expanded, count_tokens(ms->expanded));
-	
-		update_state_array(ms, ms->expanded);
-	
-		ft_fprintf(2, "After update state array:\n");
-		print_state_array(ms, ms->expanded, count_tokens(ms->expanded));
-	
-		final_tokens = retokenizer(ms, ms->expanded);
-		free_tokens_address(&ms->expanded);
-
-		ft_fprintf(2, "retokenizer:\n");
-		print_debug(final_tokens);
-	
-		ft_fprintf(2, "token.quoted:\n");
-		print_int_array(final_tokens, &ms->token.quoted);
-		ft_fprintf(2, "token.expanded:\n");
-		print_expanded_array(final_tokens, &ms->token.expanded);
-	}
-	
-	if (final_tokens && !has_type(final_tokens, &ms->token.quoted, &ms->token.expanded, is_pipe))
+	if (!ms->expanded)
+		return (NULL);
+	//ft_fprintf(2, "expander:\n");
+	//print_debug(ms->expanded);
+	//ft_fprintf(2, "After expander:\n");
+	//print_state_array(ms, ms->expanded, count_tokens(ms->expanded));
+	tmp = trimmer(ms, ms->expanded);
+	free_tokens_address(&ms->expanded);
+	//ft_fprintf(2, "trimmer:\n");
+	//print_debug(tmp);
+	//print_state_array(ms, tmp, count_tokens(tmp));
+	//ft_fprintf(2, "token.quoted:\n");
+	//print_int_array(tmp, &ms->token.quoted);
+	//ft_fprintf(2, "token.expanded:\n");
+	//print_expanded_array(tmp, &ms->token.expanded);
+	// update_state_array(ms, tmp);
+	//ft_fprintf(2, "After update state array:\n");
+	//print_state_array(ms, tmp, count_tokens(tmp));
+	final_tokens = retokenizer(ms, tmp);
+	free_tokens_address(&tmp);
+	//ft_fprintf(2, "retokenizer:\n");
+	//print_debug(final_tokens);
+	//ft_fprintf(2, "token.quoted:\n");
+	//print_int_array(final_tokens, &ms->token.quoted);
+	//ft_fprintf(2, "token.expanded:\n");
+	//print_expanded_array(final_tokens, &ms->token.expanded);
+	if (final_tokens && !has_type(final_tokens, &ms->token.quoted,
+			&ms->token.expanded, is_pipe))
 	{
 		tmp = cleaner(ms, final_tokens);
 		free_tokens_address(&final_tokens);
 		final_tokens = tmp;
-		
-		ft_fprintf(2, "cleaner:\n");
-		print_debug(final_tokens);
-	}
-	if (!final_tokens)
-	{
-		return (NULL);
+		//ft_fprintf(2, "cleaner:\n");
+		//print_debug(final_tokens);
 	}
 	free_state_array(ms, initial_count);
 	return (final_tokens);
