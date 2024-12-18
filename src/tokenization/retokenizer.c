@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 02:38:01 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/17 05:30:05 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/18 15:54:57 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,10 @@ char	**retokenizer(t_minishell *ms, char **tokens)
 	{
 		ms->token.expansion_state = saved_expanded[c.k];
 		ms->token.quoted_state = saved_quoted[c.k];
-		if (!tokens[c.k][0] && c.k != (size - 1))
+		if (!tokens[c.k][0])
 			append_to_dbuffer_char(ms, ft_strdup(""));
-		fill_dbuffer(ms, &c, tokens, saved_expanded[c.k]);
+		else
+			fill_dbuffer(ms, &c, tokens, saved_expanded[c.k]);
 		c.k++;
 	}
 	ms->token.db_buffer[ms->token.db_size] = NULL;
