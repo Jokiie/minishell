@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/18 15:59:43 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/18 16:03:33 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	welcome(t_minishell *ms)
 
 	read = NULL;
 	user = get_user_color(ms);
-	ft_printf(GREEN"\nWELCOME : %s\n", user);
+	ft_printf(GREEN"\nWELCOME : %s\n"RESET, user);
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 	read = readline(read);
 	free(read);
