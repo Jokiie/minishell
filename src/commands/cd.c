@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/07 00:03:45 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/18 15:05:37 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ void	update_working_directories(t_minishell *ms)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
-		ft_putstr_fd("cd: error retrieving current directory: ", 2);
-		ft_putstr_fd("getcwd: cannot access parent directories: ", 2);
-		ft_putendl_fd("No such file or directory", 2);
-		cwd = ft_strdup("/deleted_dir");
+		ft_putstr_fd("cd: error retrieving current directory: \n", 2);
+		ft_putstr_fd("getcwd: cannot access parent directories: \n", 2);
+		ft_putendl_fd("No such file or directory\n", 2);
+		cwd = ft_strdup("deleted_dir");
 	}
 	if (ms->cwd)
 		set_env_var(ms, "OLDPWD", ms->cwd);
@@ -68,7 +68,7 @@ int	change_directory(t_minishell *ms, const char *path)
 {
 	if (chdir(path) == -1)
 	{
-		ft_putstr_fd(" No such file or directory", 2);
+		ft_putstr_fd("No such file or directory\n", 2);
 		return (ERROR);
 	}
 	update_working_directories(ms);

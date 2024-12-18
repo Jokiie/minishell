@@ -31,11 +31,11 @@
 # define SEGFAULT 139
 # define CATCH_ALL 255
 
-# define SURL "\e[7m"
-# define SURLRESET "\e[0m"
+# define SURL "\001\e[7m\002"
+# define SURLRESET "\001\e[0m\002"
 
-# define BOLD "\033[1m"
-# define BOLDRESET "\033[0m"
+# define BOLD "\001\033[1m\002"
+# define BOLDRESET "\001\033[0m\002"
 
 # define MAX_PATH 4096
 # define SIZE_BUF 1024

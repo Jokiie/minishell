@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/17 05:36:20 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 22:22:51 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ char	**transformer(t_minishell *ms)
 		tmp = cleaner(ms, final_tokens);
 		free_tokens_address(&final_tokens);
 		final_tokens = tmp;
+		
 		// ft_fprintf(2, "cleaner:\n");
 		// print_debug(final_tokens);
 		// ft_fprintf(2, "token.quoted:\n");
