@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/17 15:20:05 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/18 14:54:50 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,12 +141,17 @@ int	execute_input(t_minishell *ms, char *input)
 void	execms(t_minishell *ms, char **envp)
 {
 	char	*rl_path;
+	char	*read;
 
+	read = NULL;
 	ms->env = ft_envdup(envp);
 	ms->path = getcwd(NULL, 0);
 	rl_path = ft_strjoin(ms->path, "/includes/readline/.inputrc");
 	// set_env_var(ms, "INPUTRC", rl_path);
 	free(rl_path);
+	write(2, "WELCOME", 7);
+	ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	read = readline(read);
 	while (1)
 	{
 		sync_signals(ms);

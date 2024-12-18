@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/17 15:54:27 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/17 17:40:21 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 */
 char	*get_prompt_name(t_minishell *ms)
 {
-	char	*username_dup = NULL;
+	char	*username_dup;
 	char	*color;
 	char	*cwd_dup;
 	char	**split;
