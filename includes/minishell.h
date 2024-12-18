@@ -115,6 +115,7 @@ void				handle_sigint_hd(int sig);
 void				print_tokens(char **tokens);
 char				**ft_envdup(char **envp);
 int					wait_children(t_minishell *ms);
+void				welcome(t_minishell *ms);
 
 // exit_minishell.c
 void				exit_minishell(t_minishell *ms, int return_code);

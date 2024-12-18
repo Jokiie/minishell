@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/03 15:41:47 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/18 15:34:46 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,15 @@ int	wait_children(t_minishell *ms)
 	else if (WIFEXITED(last_status) && !WIFSIGNALED(last_status))
 		return (WEXITSTATUS(last_status));
 	return (last_status);
+}
+void	welcome(t_minishell *ms)
+{
+	char	*read;
+
+	read = NULL;
+	get_user_color(ms);
+	ft_printf(GREEN"\nWELCOME : %s\n", ms->user);
+	ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	read = readline(read);
+	free(read);
 }
