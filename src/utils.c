@@ -6,7 +6,7 @@
 /*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/18 15:34:46 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/18 15:59:43 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,13 @@ int	wait_children(t_minishell *ms)
 void	welcome(t_minishell *ms)
 {
 	char	*read;
+	char	*user;
 
 	read = NULL;
-	get_user_color(ms);
-	ft_printf(GREEN"\nWELCOME : %s\n", ms->user);
+	user = get_user_color(ms);
+	ft_printf(GREEN"\nWELCOME : %s\n", user);
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 	read = readline(read);
 	free(read);
+	free(user);
 }
