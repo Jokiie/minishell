@@ -6,22 +6,25 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 05:27:46 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/04 13:36:12 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/16 03:05:46 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	count_type(char **tokens, int **quoted, t_bool (*is_type)(char *))
+int	count_type(char **tokens, int **quoted, int **expanded,
+		t_bool (*is_type)(char *))
 {
 	int	i;
 	int	count;
 
+	if (!tokens || !*tokens)
+		return (0);
 	i = 0;
 	count = 0;
 	while (tokens[i])
 	{
-		if (is_type(tokens[i]) && (*quoted)[i] == 0)
+		if (is_type(tokens[i]) && (*quoted)[i] == 0 && (*expanded)[i] == 0)
 			count++;
 		i++;
 	}
@@ -45,6 +48,8 @@ int	count_size(char **tokens)
 	int	i;
 	int	count;
 
+	if (!tokens || !*tokens)
+		return (0);
 	i = 0;
 	count = 0;
 	while (tokens[i])

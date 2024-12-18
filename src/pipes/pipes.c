@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 13:13:36 by matislessar       #+#    #+#             */
-/*   Updated: 2024/12/02 02:40:05 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 02:35:29 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ void	init_exec_pipes(t_minishell *ms, int *i)
 	init_pipes(ms);
 	*i = 0;
 	ms->p.cmd_start = *i;
-	ms->p.num_pipes = count_type(ms->tokens, &ms->token.quoted, is_pipe);
+	ms->p.num_pipes = count_type(ms->tokens, &ms->token.quoted,
+			&ms->token.expanded, is_pipe);
 	if (ms->p.num_pipes > 0)
 		ms->p.pipes = allocate_pipes(ms);
 }
@@ -32,6 +33,7 @@ void	init_pipes(t_minishell *ms)
 	ms->p.last_cmd = FALSE;
 	ms->p.cmd_start = 0;
 	ms->p.arg_quoted = NULL;
+	ms->p.arg_expanded = NULL;
 }
 
 int	**allocate_pipes(t_minishell *ms)
@@ -80,6 +82,8 @@ int	pipes_redirection(t_minishell *ms)
 	{
 		if (dup2(ms->p.pipes[ms->p.cmd_num - 1][0], STDIN_FILENO) == -1)
 		{
+			if (errno == EPIPE)
+				return (SUCCESS);
 			perror("ms: dup2 stdin");
 			return (FAIL);
 		}
@@ -88,6 +92,8 @@ int	pipes_redirection(t_minishell *ms)
 	{
 		if (dup2(ms->p.pipes[ms->p.cmd_num][1], STDOUT_FILENO) == -1)
 		{
+			if (errno == EPIPE)
+				return (SUCCESS);
 			perror("ms: dup2 stdout");
 			return (FAIL);
 		}

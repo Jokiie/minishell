@@ -1,64 +1,72 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   nbr_expansion.c                                    :+:      :+:    :+:   */
+/*   heredoc_nbr_expansion.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/20 22:37:24 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/17 04:01:42 by ccodere          ###   ########.fr       */
+/*   Created: 2024/12/10 01:03:09 by ccodere           #+#    #+#             */
+/*   Updated: 2024/12/10 01:05:45 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*can_apply_nbr_expansion(t_minishell *ms, char *token_dup, int *i,
-		int k)
+char	*apply_nbr_expansion_hd(t_minishell *ms, char *token_dup, int *i)
 {
 	char	*new_token_dup;
 
 	new_token_dup = NULL;
-	if (is_return_code_expansion(token_dup, *i) == TRUE
-		&& (ms->token.state_array[k][ms->token.state_index] != 1
-		&& ms->token.state_array[k][ms->token.state_index + 1] != 1
-		&& token_dup[*i] && token_dup[*i + 1]))
-		new_token_dup = apply_nbr_expansion(ms, token_dup, i, k);
+	if ((token_dup[*i] == '$' && token_dup[*i + 1] == '?')
+		&& !ms->token.in_squotes)
+		new_token_dup = apply_nbr_value_hd(token_dup, i, ms->ret);
 	return (new_token_dup);
 }
 
-char	*apply_nbr_expansion(t_minishell *ms, char *token_dup, int *i, int k)
+char	*apply_nbr_value_hd(char *token_dup, int *i, int nbr)
 {
+	char	*var;
 	char	*before;
 	char	*after;
 	char	*new_token_dup;
-	char	*nbr;
 
 	before = ft_substr(token_dup, 0, *i);
-	ms->token.expansion_start = *i;
-	(*i) += 2;
+	(*i)++;
+	var = single_var_extractor_hd(token_dup, i);
 	after = ft_substr(token_dup, *i, ft_strlen(token_dup) - *i);
-	nbr = ft_itoa(ms->ret);
-	new_token_dup = insert_nbr_value(before, nbr, after);
+	new_token_dup = insert_nbr_value_hd(before, after, nbr);
 	free_ptr(token_dup);
 	token_dup = new_token_dup;
-	*i = ft_strlen(before) + ft_strlen(nbr);
-	fill_3_new_state_array(ms, ms->token.expansion_start, ft_strlen(nbr), k);
+	*i = ft_strlen(before) + ft_strlen(var);
 	free_ptr(before);
-	free_ptr(nbr);
+	free_ptr(var);
 	free_ptr(after);
-	ms->token.state_index += 2;
 	return (new_token_dup);
 }
 
-char	*insert_nbr_value(char *before, char *nbr, char *after)
+char	*single_var_extractor_hd(char *token, int *i)
 {
+	char	*substr;
+	int		start;
+
+	start = *i;
+	(*i)++;
+	substr = ft_substr(token, start, *i - start);
+	return (substr);
+}
+
+char	*insert_nbr_value_hd(char *before, char *after, int nbr)
+{
+	char	*var_value;
 	char	*half_token;
 	char	*complete_token;
 
-	if (!nbr)
-		nbr = "";
-	half_token = ft_strjoin(before, nbr);
+	var_value = ft_itoa(nbr);
+	if (!var_value)
+		var_value = "";
+	half_token = ft_strjoin(before, var_value);
 	complete_token = ft_strjoin(half_token, after);
 	free_ptr(half_token);
+	free_ptr(var_value);
 	return (complete_token);
 }

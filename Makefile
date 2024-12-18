@@ -58,22 +58,29 @@ SRC_CMDS = commands/cd.c \
 		   commands/unset.c \
 
 SRC_TOK = tokenization/tokens_creator.c \
+		  tokenization/tokens_creator_utils.c \
 		  tokenization/expander.c \
+		  tokenization/expander_utils.c \
 		  tokenization/tokenizer.c \
 		  tokenization/trimmer.c \
-		  tokenization/separator.c \
+		  tokenization/retokenizer.c \
 		  tokenization/var_expansion.c \
 		  tokenization/nbr_expansion.c \
 		  tokenization/quotes_detector.c \
 		  tokenization/cleaner.c \
 		  tokenization/is.c \
-		  tokenization/has_one_meta.c \
 		  tokenization/has_meta.c \
 		  tokenization/is_one_meta.c \
 		  tokenization/is_meta.c \
 		  tokenization/syntax_error.c \
 		  tokenization/contains_only.c \
 		  tokenization/count.c \
+		  tokenization/int_arrays.c \
+		  tokenization/dynamic_arrays.c \
+		  tokenization/dynamic_array_int.c \
+		  tokenization/parser.c \
+		  tokenization/state_array_utils.c \
+		  tokenization/is_state.c \
 
 SRC_REDIR = redirections/exec_redirections.c \
 			redirections/redirection.c \
@@ -81,6 +88,8 @@ SRC_REDIR = redirections/exec_redirections.c \
 			redirections/heredoc.c \
 			redirections/heredoc_utils.c \
 			redirections/heredoc_expander.c \
+			redirections/heredoc_var_expansion.c\
+			redirections/heredoc_nbr_expansion.c \
 			redirections/heredoc_statics.c \
 			redirections/heredoc_reset.c \
 			redirections/heredoc_signal.c \
@@ -155,15 +164,14 @@ cp:
 
 mem: all
 #	valgrind --leak-check=full --trace-children=yes --track-fds=yes --show-leak-kinds=all --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
-	valgrind --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
-#	valgrind --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=/Users/$(USER)/my_cursus/minishell/1readline.supp ./minishell
+	valgrind -s --leak-check=full --trace-children=yes --track-fds=yes --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
+#	valgrind -s --leak-check=full --trace-children=yes --track-fds=yes  --suppressions=/Users/$(USER)/my_cursus/minishell/1readline.supp ./minishell
 
 fullmem: all
 	valgrind --leak-check=full --trace-children=yes --track-fds=yes --show-leak-kinds=all --suppressions=/home/ccodere/42cursus/minishell/1readline.supp ./minishell
 
 norm: all
 	norminette libft src
-
 
 exp:
 	@export CPPFLAGS="-I/opt/homebrew/opt/readline/include"; \

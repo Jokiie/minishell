@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 03:19:33 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 05:13:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 04:28:04 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int	error_pipes(t_minishell *ms)
 	{
 		if (is_pipe(ms->tokens[k]) && !ms->token.quoted[k])
 		{
-			if (k == 0 || ms->tokens[k + 1] == NULL
-				|| (is_pipe(ms->tokens[k + 1]) && !ms->token.quoted[k + 1]))
+			if (k == 0 || ms->tokens[k + 1] == NULL || (is_pipe(ms->tokens[k
+						+ 1]) && !ms->token.quoted[k + 1]))
 			{
 				ft_fprintf(2, "ms: syntax error near unexpected token `|'\n");
 				return (SYNTAX_ERROR);

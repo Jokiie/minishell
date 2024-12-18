@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 01:36:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/03 15:55:56 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 03:57:59 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int	exect_pipes(t_minishell *ms)
 	init_exec_pipes(ms, &i);
 	while (ms->tokens[i])
 	{
-		if ((is_pipe(ms->tokens[i]) && ms->token.quoted[i] == 0)
-			|| ms->tokens[i + 1] == NULL)
+		if ((is_pipe(ms->tokens[i]) && ms->token.quoted[i] == 0
+				&& ms->token.expanded[i] == 0) || ms->tokens[i + 1] == NULL)
 		{
 			handle_last_cmd(ms, &i);
 			handle_pipe_cmd(ms, i, &ms->pid);
@@ -42,10 +42,12 @@ void	handle_pipe_cmd(t_minishell *ms, int i, pid_t *pid)
 	if (!ms->p.p_args)
 		return ;
 	fill_pipes_quoted_arr(ms, ms->p.cmd_start);
+	fill_pipes_expanded_arr(ms, ms->p.cmd_start);
 	ms->p.ret = create_and_manage_process(ms, pid);
 	free(ms->p.p_args);
 	ms->p.p_args = NULL;
 	free_int_array(&ms->p.arg_quoted);
+	free_int_array(&ms->p.arg_expanded);
 	ms->p.cmd_start = i + 1;
 	ms->p.cmd_num++;
 }
@@ -55,12 +57,16 @@ void	handle_child_process(t_minishell *ms)
 	int	ret;
 
 	ret = ms->ret;
+	signal(SIGPIPE, SIG_IGN);
+	ms->in_pipe = TRUE;
 	if (pipes_redirection(ms) != SUCCESS)
 		exit_child(ms, ret, TRUE);
-	if (has_type(ms->p.p_args, &ms->p.arg_quoted, is_redirect)
-		|| has_type(ms->p.p_args, &ms->p.arg_quoted, is_heredoc))
+	if (has_type(ms->p.p_args, &ms->p.arg_quoted, &ms->p.arg_expanded,
+			is_redirect) || has_type(ms->p.p_args, &ms->p.arg_quoted,
+			&ms->p.arg_expanded, is_heredoc))
 	{
-		ret = exec_redirections(ms, ms->p.p_args, &ms->p.arg_quoted, TRUE);
+		ret = exec_redirections(ms, ms->p.p_args, &ms->p.arg_quoted,
+				&ms->p.arg_expanded);
 		if (ret > 0)
 			exit_child(ms, ret, TRUE);
 	}

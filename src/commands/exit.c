@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 04:36:52 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 16:20:07 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/06 23:13:32 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ int	ft_exit(t_minishell *ms, char **tokens, int is_child)
 		if (is_child && !tokens[1])
 			ret = ms->ret;
 	}
-	if (!is_child)
-		ms->ret = ret;
 	return (ret);
 }
 

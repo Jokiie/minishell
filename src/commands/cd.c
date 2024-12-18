@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/17 16:33:06 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/18 15:05:37 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	cd(t_minishell *ms, char **tokens)
 		// ft_putstr_fd("ms: cd: too many arguments\n", 2);
 		return (SUCCESS);
 	}
-return (change_directory(ms, tokens[1]));
+	return (change_directory(ms, tokens[1]));
 }
 
 /* Update cwd and OLDPWD in both struct and environment variables */
@@ -43,6 +43,7 @@ void	update_working_directories(t_minishell *ms)
 {
 	char	*cwd;
 
+	free_at_address(&ms->cwd);
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
@@ -54,7 +55,7 @@ void	update_working_directories(t_minishell *ms)
 	if (ms->cwd)
 		set_env_var(ms, "OLDPWD", ms->cwd);
 	else
-		set_env_var(ms, "OLDPWD", "deleted_dir");
+		set_env_var(ms, "OLDPWD", "/deleted_dir");
 	if (ms->prev_cwd)
 		free(ms->prev_cwd);
 	ms->prev_cwd = ms->cwd;

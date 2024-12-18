@@ -6,18 +6,23 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/04 13:19:22 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 04:27:55 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/*
+	Tokenizer:
+	Separe the line in tokens when we find an unquoted space or
+	a meta character. Return NULL if the line is empty.
+*/
 char	**tokenizer(t_minishell *ms, char *line)
 {
 	int	i;
 	int	k;
 	int	count;
-	
+
 	k = 0;
 	if (!line)
 		return (NULL);
@@ -45,16 +50,8 @@ int	separe_line(t_minishell *ms, char *line, int i, int *k)
 	while (line[i])
 	{
 		quotes_detector(ms, line, i);
-		if (!ms->token.in_dquotes && !ms->token.in_squotes)
-		{
-			if (ft_isspace(line[i]) && !ms->token.in_dquotes && !ms->token.in_squotes)
-				break ;
-			else if (ft_ismeta_chars(line[i]) && !ms->token.in_dquotes && !ms->token.in_squotes)
-			{
-				ms->token.is_meta = TRUE;
-				break ;
-			}
-		}
+		if (is_space_or_meta(ms, line, &i))
+			break ;
 		i++;
 	}
 	ms->token.end = i;
@@ -67,14 +64,31 @@ int	separe_line(t_minishell *ms, char *line, int i, int *k)
 	return (i);
 }
 
+t_bool	is_space_or_meta(t_minishell *ms, char *token, int *i)
+{
+	if (!ms->token.in_dquotes && !ms->token.in_squotes)
+	{
+		if (ft_isspace(token[*i]) && !ms->token.in_dquotes
+			&& !ms->token.in_squotes)
+			return (TRUE);
+		else if (ft_ismeta_chars(token[*i]) && !ms->token.in_dquotes
+			&& !ms->token.in_squotes)
+		{
+			ms->token.is_meta = TRUE;
+			return (TRUE);
+		}
+	}
+	return (FALSE);
+}
+
 char	*meta_chars_extractor(char *line, int *i)
 {
 	char	*substr;
 	int		start;
 
 	start = *i;
-	if ((line[*i] == '>' && line[*i + 1] == '>')
-		|| (line[*i] == '<' && line[*i + 1] == '<'))
+	if ((line[*i] == '>' && line[*i + 1] == '>') || (line[*i] == '<' && line[*i
+			+ 1] == '<'))
 		(*i) += 2;
 	else if (ft_ismeta_chars(line[*i]) && !ft_ismeta_chars(line[*i + 1]))
 		(*i)++;

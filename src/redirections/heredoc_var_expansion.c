@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   var_expansion.c                                    :+:      :+:    :+:   */
+/*   heredoc_var_expansion.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/13 09:43:35 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/18 15:46:28 by matislessar      ###   ########.fr       */
+/*   Created: 2024/12/10 01:00:23 by ccodere           #+#    #+#             */
+/*   Updated: 2024/12/10 01:00:52 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*apply_var_expansion(t_minishell *ms, char *token_dup, int *i, int k)
+char	*apply_var_expansion_hd(t_minishell *ms, char *token_dup, int *i)
 {
 	char	*var;
 	char	*before;
@@ -21,14 +21,13 @@ char	*apply_var_expansion(t_minishell *ms, char *token_dup, int *i, int k)
 	char	*var_value;
 
 	before = ft_substr(token_dup, 0, *i);
-	ms->token.expansion_start = *i;
 	(*i)++;
-	var = var_extractor(ms, token_dup, i);
+	var = var_extractor_hd(token_dup, i);
 	after = ft_substr(token_dup, *i, ft_strlen(token_dup) - *i);
-	var_value = get_env(ms->env, var);
-	new_token_dup = insert_variable_value(before, var_value, after);
+	new_token_dup = insert_variable_value_hd(ms, before, var, after);
 	free_ptr(token_dup);
 	token_dup = new_token_dup;
+	var_value = get_env(ms->env, var);
 	if (!var_value)
 		*i = ft_strlen(before);
 	else
@@ -36,45 +35,41 @@ char	*apply_var_expansion(t_minishell *ms, char *token_dup, int *i, int k)
 	free_ptr(before);
 	free_ptr(var);
 	free_ptr(after);
-	fill_3_new_state_array(ms, ms->token.expansion_start, ft_strlen(var_value), k);
 	return (new_token_dup);
 }
 
-char	*var_extractor(t_minishell *ms, char *token, int *i)
+char	*var_extractor_hd(char *token, int *i)
 {
 	char	*substr;
 	int		start;
-	// int		index;
 
-	// index = ms->token.state_index;
 	start = *i;
-	if ((ft_isalpha(token[*i]) || token[*i] == '_'))
+	if (ft_isalpha(token[*i]) || token[*i] == '_')
 	{
-		while (token[*i] && token[*i] != '$'
-			&& (ft_isalnum(token[*i]) || token[*i] == '_'))
-		{
-			// index++;
+		while (token[*i] && token[*i] != '$' && (ft_isalnum(token[*i])
+				|| token[*i] == '_'))
 			(*i)++;
-		}
 		substr = ft_substr(token, start, *i - start);
 	}
 	else
 	{
 		(*i)++;
-		substr = ft_strdup("");
+		return (ft_strdup(""));
 	}
-	ms->token.expansion_len = (*i - start);
 	return (substr);
 }
 
-char	*insert_variable_value(char *before, char *var, char *after)
+char	*insert_variable_value_hd(t_minishell *ms, char *before, char *var,
+		char *after)
 {
+	char	*var_value;
 	char	*half_token;
 	char	*complete_token;
 
-	if (!var)
-		var = "";
-	half_token = ft_strjoin(before, var);
+	var_value = get_env(ms->env, var);
+	if (!var_value)
+		var_value = "";
+	half_token = ft_strjoin(before, var_value);
 	complete_token = ft_strjoin(half_token, after);
 	free_ptr(half_token);
 	return (complete_token);

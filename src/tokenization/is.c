@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:47:09 by ccodere           #+#    #+#             */
-/*   Updated: 2024/11/25 06:47:12 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/17 05:31:38 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_is_squote(int c)
 	return (c == '\'');
 }
 
-int	ft_isquotes(int c)
+int	ft_is_quotes(int c)
 {
 	return (ft_is_dquote(c) || ft_is_squote(c));
 }

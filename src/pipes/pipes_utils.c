@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 00:18:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/02 04:32:25 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/06 03:58:41 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,27 @@ void	fill_pipes_quoted_arr(t_minishell *ms, int i)
 			ms->p.arg_quoted[j] = 1;
 		else
 			ms->p.arg_quoted[j] = 0;
+		j++;
+		i++;
+	}
+}
+
+void	fill_pipes_expanded_arr(t_minishell *ms, int i)
+{
+	int	j;
+	int	count;
+
+	j = 0;
+	count = count_tokens(ms->p.p_args);
+	ms->p.arg_expanded = ft_calloc(count + 1, sizeof(int));
+	if (!ms->p.arg_expanded)
+		return ;
+	while (ms->p.p_args[j])
+	{
+		if (ms->token.expanded[i] == 1)
+			ms->p.arg_expanded[j] = 1;
+		else
+			ms->p.arg_expanded[j] = 0;
 		j++;
 		i++;
 	}
