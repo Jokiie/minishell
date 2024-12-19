@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 22:48:09 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/17 05:03:10 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 11:29:16 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 /*
 	Cleaner:
-	Called only if no unquoted and no expanded pipes is found. It will iter in
+	Called only if no quoted and expanded pipes is found. It will iter in
 	each tokens and remove the unquoted empty tokens resulted from the previous
 	steps, usually from empty variables because we must keep the empty quoted
-	strings.
+	strings. If we keep the empty strings, we will have empty pipes and get
+	a syntax error.
 */
 static void	init_cleaner(char ***cleaned, int count, int *k, int *i)
 {

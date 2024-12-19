@@ -58,14 +58,14 @@ SRC_CMDS = commands/cd.c \
 		   commands/unset.c \
 
 SRC_TOK = tokenization/tokens_creator.c \
-		  tokenization/tokens_creator_utils.c \
-		  tokenization/expander.c \
-		  tokenization/expander_utils.c \
 		  tokenization/tokenizer.c \
-		  tokenization/trimmer.c \
-		  tokenization/retokenizer.c \
+		  tokenization/expander.c \
 		  tokenization/var_expansion.c \
 		  tokenization/nbr_expansion.c \
+		  tokenization/expander_utils.c \
+		  tokenization/trimmer.c \
+		  tokenization/retokenizer.c \
+		  tokenization/retokenizer_utils.c \
 		  tokenization/quotes_detector.c \
 		  tokenization/cleaner.c \
 		  tokenization/is.c \
@@ -77,7 +77,7 @@ SRC_TOK = tokenization/tokens_creator.c \
 		  tokenization/count.c \
 		  tokenization/int_arrays.c \
 		  tokenization/dynamic_arrays.c \
-		  tokenization/dynamic_array_int.c \
+		  tokenization/dynamic_state_array.c \
 		  tokenization/parser.c \
 		  tokenization/state_array_utils.c \
 		  tokenization/is_state.c \

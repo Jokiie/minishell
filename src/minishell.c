@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/18 15:37:43 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/19 12:18:20 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-/* init heredocs related data */
-void	init_heredoc_data(t_minishell *ms)
-{
-	ms->heredoc.fd_name = NULL;
-	ms->heredoc.delim = NULL;
-	ms->heredoc.input = NULL;
-	ms->heredoc.line = NULL;
-	ms->heredoc.count = 0;
-	ms->heredoc.index = 0;
-	ms->heredoc.in_quotes = FALSE;
-}
 
 /* init the minishell struct variables */
 

@@ -131,10 +131,6 @@ typedef struct s_minishell
 	sig_atomic_t	received_sig;
 }					t_minishell;
 
-// minishell.c
-
-void				init_heredoc_data(t_minishell *ms);
-
 // signal_handler.c
 void				init_signals_interactive(t_minishell *ms);
 void				init_signals_interactive_heredocs(t_minishell *ms);
@@ -193,12 +189,12 @@ void				print_state_array(t_minishell *ms, char **tokens,
 int					tokens_creator(t_minishell *ms, char *line);
 char				**transformer(t_minishell *ms);
 
-// tokens_creator_utils.c
+// retokenizer_utils.c
+int					init_retokenizer(t_minishell *ms, int **ex, int **qt,
+						size_t size);
 void				init_counter(t_counter *c);
 t_bool				is_expandable(t_minishell *ms, char *token, int k);
-t_bool				need_to_be_expand(t_minishell *ms, char **tokens);
-t_bool				is_space_or_meta2(t_minishell *ms, char *token, int *i,
-						int k);
+t_bool				is_space_state(t_minishell *ms, char *token, int *i, int k);
 
 // tokenizer.c
 int					separe_line(t_minishell *ms, char *line, int i, int *k);
@@ -211,7 +207,7 @@ int					count_words(char const *line);
 int					quotes_detector(t_minishell *ms, char *line, int i);
 int					open_quotes_checker(t_minishell *ms, char *line);
 int					quotes_detector2(t_minishell *ms, char *tok, int k, int i);
-int					quotes_detector3(t_minishell *ms, char *token, int i,
+int					quotes_detector_state(t_minishell *ms, char *token, int i,
 						int k);
 
 // parser.c
@@ -251,7 +247,8 @@ char				*insert_nbr_value(char *before, char *nbr, char *after);
 char				*single_var_extractor(char *token, int *i);
 
 // retokenizer.c
-char				**retokenizer(t_minishell *ms, char **tokens);
+char				**retokenizer(t_minishell *ms, char **tokens,
+						int initial_size);
 int					separe_token(t_minishell *ms, char *token, int *i, int k);
 void				handle_non_empty(t_minishell *ms, char **tokens, int j);
 void				fill_dbuffer(t_minishell *ms, t_counter *c, char **tokens,
@@ -272,8 +269,6 @@ int					count_valid_tokens(t_minishell *ms, char **tokens);
 void				init_int_arrays(t_minishell *ms, char **tokens);
 void				init_quoted_array(t_minishell *ms, char **tokens);
 void				init_expanded_array(t_minishell *ms, char **tokens);
-void				update_arrays(t_minishell *ms);
-void				update_quoted_array(t_minishell *ms, char **tokens);
 
 // dynamic_buffer.c
 
@@ -309,9 +304,9 @@ int					ft_is_quotes(int c);
 int					ft_ismeta_chars(int c);
 
 // is_state.c
-t_bool				is_squoted_char(t_minishell *ms, int *i, int k);
-t_bool				is_quoted_char(t_minishell *ms, int *i, int k);
-t_bool				is_expanded_char(t_minishell *ms, int *i, int k);
+t_bool				is_squoted_state(t_minishell *ms, int *i, int k);
+t_bool				is_quoted_state(t_minishell *ms, int *i, int k);
+t_bool				is_expanded_state(t_minishell *ms, int *i, int k);
 
 // has_meta.c
 t_bool				has_type(char **tokens, int **quoted, int **expanded,
@@ -339,17 +334,11 @@ int					error_pipes(t_minishell *ms);
 // contains_only.c
 t_bool				contains_only_digits(char *line);
 t_bool				contains_only_spaces(char *line);
-t_bool				contains_only_type(char **tokens, int **protected,
-						t_bool (*is_type)(char *));
-t_bool				contains_only_quotes(char *token);
-t_bool				contains_only_quotes2(t_minishell *ms, char **tokens,
-						int k);
 
 // count.c
 int					count_type(char **tokens, int **quoted, int **expanded,
 						t_bool (*is_type)(char *));
 int					count_tokens(char **tokens);
-int					count_size(char **tokens);
 
 /* /commands */
 
@@ -446,6 +435,7 @@ int					get_filtered_tokc(char **tokens, int **quoted,
 						int **expanded);
 
 // heredoc.c
+void				init_heredoc_data(t_minishell *ms);
 int					process_heredocs(t_minishell *ms);
 int					heredoc(t_minishell *ms);
 int					fill_heredoc(t_minishell *ms, int fd);

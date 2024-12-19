@@ -6,12 +6,18 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 13:27:04 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/17 00:21:54 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 12:11:28 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/*
+	Initialize and fill the int arrays that save the quoted and expanded state
+	for each tokens, used for checking if a meta character is really a meta.
+	A meta character that result from an expansion or is quoted is not
+	considered meta by bash, so we did the same.
+*/
 void	init_int_arrays(t_minishell *ms, char **tokens)
 {
 	init_quoted_array(ms, tokens);
@@ -34,8 +40,8 @@ void	init_quoted_array(t_minishell *ms, char **tokens)
 	{
 		if (tokens[k])
 		{
-			if (has_quotes(tokens[k])
-				&& open_quotes_checker(ms, tokens[k]) == SUCCESS)
+			if (has_quotes(tokens[k]) && open_quotes_checker(ms,
+					tokens[k]) == SUCCESS)
 				ms->token.quoted[i] = 1;
 			else
 				ms->token.quoted[i] = 0;
@@ -63,8 +69,8 @@ void	init_expanded_array(t_minishell *ms, char **tokens)
 	{
 		if (tokens[k])
 		{
-			if (is_expandable(ms, tokens[k], k) == TRUE
-				&& !is_heredoc_delim(ms, tokens, k))
+			if (is_expandable(ms, tokens[k], k) == TRUE && !is_heredoc_delim(ms,
+					tokens, k))
 				ms->token.expanded[i] = 1;
 			else
 				ms->token.expanded[i] = 0;

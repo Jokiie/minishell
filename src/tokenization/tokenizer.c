@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:06:50 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/17 04:27:55 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 12:25:30 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ char	*meta_chars_extractor(char *line, int *i)
 	int		start;
 
 	start = *i;
-	if ((line[*i] == '>' && line[*i + 1] == '>') || (line[*i] == '<' && line[*i
-			+ 1] == '<'))
+	if ((line[*i] == '>' && line[*i + 1] == '>')
+		|| (line[*i] == '<' && line[*i + 1] == '<'))
 		(*i) += 2;
 	else if (ft_ismeta_chars(line[*i]) && !ft_ismeta_chars(line[*i + 1]))
 		(*i)++;

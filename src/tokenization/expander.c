@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:04:56 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/17 05:14:49 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 11:50:11 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,19 @@
 
 /*
 	Expander:
-	Iter in each token and search a '$' character. If not a heredoc delimiter
-	and is not single quoted, replace the variable by its value in the
-	environment. If the value is NULL, replace the $VAR with a empty str. If '$'
-	is followed by another '$', we just write the dollars signs until a '$' sign
-	is followed by a letter, number or '?'. If this is the case, we replace the
-	variable by the value of the environment variable or the return value of
-	the last command if it's a '?'.
+	Iter in each token and check if it's expandable. If not a heredoc delimiter
+	and in singles quotes, the function will begin it's job:
+	if the section begin by '$' and a letter or '_', it will iterate in this
+	zone until the character evaluated is not a letter, a number or a '_'. We
+	keep this len for iterating in the state_array map so we continue to
+	evaluate each zone correctly.
+	The section is replaced by the variable value from the environment. If the
+	value is NULL, or begin with a number, we replace the $VAR with a empty str.
+	If '$' is followed by another '$', we just write the dollars signs until a
+	'$' sign is followed by a letter, number or '?'.
+	If '$' is followed by '?', we replace the '$?' by the return value of the
+	last command (value of ms->ret).
 */
-
 char	**expander(t_minishell *ms, char **tokens)
 {
 	char		**expanded;
@@ -65,24 +69,6 @@ void	fill_expanded_buffer(t_minishell *ms, t_counter *c, char **expanded,
 		c->i++;
 }
 
-char	*process_expansion(t_minishell *ms, char *dup, int *i, int k)
-{
-	char	*new_dup;
-
-	if (is_variable_expansion(dup, *i) == TRUE)
-	{
-		new_dup = apply_var_expansion(ms, dup, i, k);
-		dup = new_dup;
-		ms->token.state_index += (ms->token.expansion_len + 1);
-	}
-	else if (is_return_code_expansion(dup, *i) == TRUE)
-	{
-		new_dup = can_apply_nbr_expansion(ms, dup, i, k);
-		dup = new_dup;
-	}
-	return (dup);
-}
-
 char	*expand_token(t_minishell *ms, char *token, int k)
 {
 	char	*dup;
@@ -107,6 +93,24 @@ char	*expand_token(t_minishell *ms, char *token, int k)
 			ms->token.state_index++;
 			i++;
 		}
+	}
+	return (dup);
+}
+
+char	*process_expansion(t_minishell *ms, char *dup, int *i, int k)
+{
+	char	*new_dup;
+
+	if (is_variable_expansion(dup, *i) == TRUE)
+	{
+		new_dup = apply_var_expansion(ms, dup, i, k);
+		dup = new_dup;
+		ms->token.state_index += (ms->token.expansion_len + 1);
+	}
+	else if (is_return_code_expansion(dup, *i) == TRUE)
+	{
+		new_dup = can_apply_nbr_expansion(ms, dup, i, k);
+		dup = new_dup;
 	}
 	return (dup);
 }

@@ -3,14 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:40:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/05 13:33:00 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 12:18:37 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+/* init heredocs related data */
+void	init_heredoc_data(t_minishell *ms)
+{
+	ms->heredoc.fd_name = NULL;
+	ms->heredoc.delim = NULL;
+	ms->heredoc.input = NULL;
+	ms->heredoc.line = NULL;
+	ms->heredoc.count = 0;
+	ms->heredoc.index = 0;
+	ms->heredoc.in_quotes = FALSE;
+}
 
 int	process_heredocs(t_minishell *ms)
 {

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 05:43:45 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/16 06:05:56 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 12:28:02 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,11 @@ void	print_expanded_array(char **tokens, int **expanded)
 	}
 }
 
-void print_state_array(t_minishell *ms, char **tokens, int token_count)
+void	print_state_array(t_minishell *ms, char **tokens, int token_count)
 {
-	int k;
-	int i;
-	int len;
+	int	k;
+	int	i;
+	int	len;
 
 	if (!tokens || !*tokens)
 		return ;

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/18 16:03:33 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 12:33:57 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int	wait_children(t_minishell *ms)
 		return (WEXITSTATUS(last_status));
 	return (last_status);
 }
+
 void	welcome(t_minishell *ms)
 {
 	char	*read;
@@ -99,7 +100,7 @@ void	welcome(t_minishell *ms)
 
 	read = NULL;
 	user = get_user_color(ms);
-	ft_printf(GREEN"\nWELCOME : %s\n"RESET, user);
+	ft_printf(GREEN "\nWELCOME : %s\n" RESET, user);
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 	read = readline(read);
 	free(read);

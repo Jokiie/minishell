@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:02:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/17 04:27:19 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 12:23:03 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ char	**trimmer(t_minishell *ms, char **tokens)
 t_bool	is_a_quote(t_minishell *ms, char **tokens, int i, int k)
 {
 	if ((ft_is_dquote(tokens[k][i]) && !ms->token.in_squotes
-			&& ms->token.state_array[k][i] == 2) || (ft_is_squote(tokens[k][i])
-			&& !ms->token.in_dquotes && ms->token.state_array[k][i] == 1))
+		&& ms->token.state_array[k][i] == 2) || (ft_is_squote(tokens[k][i])
+		&& !ms->token.in_dquotes && ms->token.state_array[k][i] == 1))
 		return (TRUE);
 	return (FALSE);
 }

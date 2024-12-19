@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 09:43:35 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/18 15:46:28 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/19 12:16:56 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ char	*apply_var_expansion(t_minishell *ms, char *token_dup, int *i, int k)
 	free_ptr(before);
 	free_ptr(var);
 	free_ptr(after);
-	fill_3_new_state_array(ms, ms->token.expansion_start, ft_strlen(var_value), k);
+	fill_3_new_state_array(ms, ms->token.expansion_start, ft_strlen(var_value),
+		k);
 	return (new_token_dup);
 }
 
@@ -44,16 +45,13 @@ char	*var_extractor(t_minishell *ms, char *token, int *i)
 {
 	char	*substr;
 	int		start;
-	// int		index;
 
-	// index = ms->token.state_index;
 	start = *i;
 	if ((ft_isalpha(token[*i]) || token[*i] == '_'))
 	{
-		while (token[*i] && token[*i] != '$'
-			&& (ft_isalnum(token[*i]) || token[*i] == '_'))
+		while (token[*i] && token[*i] != '$' && (ft_isalnum(token[*i])
+				|| token[*i] == '_'))
 		{
-			// index++;
 			(*i)++;
 		}
 		substr = ft_substr(token, start, *i - start);
