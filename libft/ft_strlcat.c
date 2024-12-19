@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 15:17:12 by ccodere           #+#    #+#             */
-/*   Updated: 2024/06/11 22:50:19 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 15:23:04 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 	size_t	j;
 
 	if (!dst || !src)
-		return ('\0');
+		return (0);
 	srclen = ft_strlen(src);
 	dstlen = ft_strlen(dst);
 	i = dstlen;

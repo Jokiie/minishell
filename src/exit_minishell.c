@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:32:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/05 13:30:40 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 15:47:13 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	exit_child(t_minishell *ms, int return_code, t_bool in_pipe)
 	{
 		free_tokens_address(&ms->p.p_args);
 		free_int_array(&ms->p.arg_quoted);
+		free_int_array(&ms->p.arg_expanded);
 		close_pipes(ms);
 	}
 	exit(return_code);
