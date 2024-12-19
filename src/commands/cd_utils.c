@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd_utlis.c                                         :+:      :+:    :+:   */
+/*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: mlessard <mlessard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:35:22 by matislessar       #+#    #+#             */
-/*   Updated: 2024/12/06 15:36:11 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/19 14:10:25 by mlessard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 int	go_old_pwd(t_minishell *ms)
 {
 	char	*old_pwd;
-	
+
 	old_pwd = get_env(ms->env, "OLDPWD");
 	if (!old_pwd)
 	{

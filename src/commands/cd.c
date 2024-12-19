@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: mlessard <mlessard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/18 16:12:30 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/19 14:11:22 by mlessard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ int	cd(t_minishell *ms, char **tokens)
 	else if (ft_strcmp(tokens[1], "--") == 0)
 		return (go_home(ms));
 	else if (tokens[2])
-	{
-		// ft_putstr_fd("ms: cd: too many arguments\n", 2);
 		return (SUCCESS);
-	}
 	return (change_directory(ms, tokens[1]));
 }
 
