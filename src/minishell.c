@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/19 14:27:44 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 14:46:24 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	init_minishell(t_minishell *ms)
 	ms->in_pipe = FALSE;
 	ms->pid = 0;
 	ms->received_sig = 0;
+	ms->isatty = 0;
 	init_token_data(ms);
 	init_heredoc_data(ms);
 }
@@ -168,20 +169,19 @@ int	execute_input(t_minishell *ms, char *input)
 
 	5 - We free the history and other data to be ready for the next command.
 */
-void	execms(t_minishell *ms, char **envp)
+void	execms(t_minishell *ms)
 {
-	char	*rl_path;
-
-	ms->env = ft_envdup(envp);
-	ms->path = getcwd(NULL, 0);
-	rl_path = ft_strjoin(ms->path, "/includes/readline/.inputrc");
-	free(rl_path);
 	welcome(ms);
 	while (1)
 	{
 		sync_signals(ms);
-		ms->prompt_name = get_prompt_name(ms);
-		ms->input = readline(ms->prompt_name);
+		if (ms->isatty)
+		{
+			ms->prompt_name = get_prompt_name(ms);
+			ms->input = readline(ms->prompt_name);
+		}
+		else
+			ms->input = get_next_line(STDIN_FILENO);
 		if (!ms->input)
 			break ;
 		else if (*(ms->input) != '\0')
@@ -189,7 +189,7 @@ void	execms(t_minishell *ms, char **envp)
 			ms->ret = execute_input(ms, ms->input);
 			add_history(ms->input);
 		}
-		if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+		if (!ms->isatty)
 			exit_minishell(ms, ms->ret);
 		free_data(ms);
 	}
@@ -198,6 +198,7 @@ void	execms(t_minishell *ms, char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	*ms;
+	char		*rl_path;
 
 	if (argc > 1)
 	{
@@ -209,8 +210,16 @@ int	main(int argc, char **argv, char **envp)
 		exit(EXIT_FAILURE);
 	ft_memset(ms, 0, sizeof(ms));
 	init_minishell(ms);
+	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+		ms->isatty = 0;
+	else
+		ms->isatty = 1;
 	init_signals_interactive(ms);
-	execms(ms, envp);
+	ms->env = ft_envdup(envp);
+	ms->path = getcwd(NULL, 0);
+	rl_path = ft_strjoin(ms->path, "/includes/readline/.inputrc");
+	free(rl_path);
+	execms(ms);
 	exit_minishell(ms, 0);
 	return (0);
 }
