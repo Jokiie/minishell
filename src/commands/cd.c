@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/18 15:05:37 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/18 16:12:30 by matislessar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	change_directory(t_minishell *ms, const char *path)
 {
 	if (chdir(path) == -1)
 	{
-		ft_putstr_fd("No such file or directory\n", 2);
+		ft_fprintf(2, "ms: cd: %s: %s\n", path, strerror(errno));
 		return (ERROR);
 	}
 	update_working_directories(ms);
