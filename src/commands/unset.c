@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:28:23 by matislessar       #+#    #+#             */
-/*   Updated: 2024/12/03 14:35:16 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/19 14:26:23 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ bool	remove_env_var1(t_minishell *ms, int idx)
 		return (false);
 	return (true);
 }
+
 /*Realloc memory to the env var*/
 char	**realloc_env_vars(t_minishell *ms, int size)
 {

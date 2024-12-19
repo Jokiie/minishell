@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 01:55:05 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/18 15:48:12 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/19 14:26:08 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ int	parse_squotes(t_minishell *ms, char *token, int i, int k)
 		add_to_state_array(ms, SQUOTE, k);
 		while (token[++i] && !ft_is_squote(token[i]))
 			add_to_state_array(ms, SQUOTE, k);
-		// i = i;
 		add_to_state_array(ms, SQUOTE, k);
 		quotes_detector(ms, token, i);
 	}
