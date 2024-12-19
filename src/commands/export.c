@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: mlessard <mlessard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 12:08:12 by matislessar       #+#    #+#             */
-/*   Updated: 2024/12/06 23:23:23 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 14:09:25 by mlessard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ int	detect_export_call(t_minishell *ms, char **tokens)
 
 void	export_declare_x(char **env)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (env[i])
@@ -46,7 +46,7 @@ void	export_declare_x(char **env)
 				ft_putchar_fd('"', STDOUT_FILENO);
 				ft_putstr_fd(env[i] + j + 1, STDOUT_FILENO);
 				ft_putchar_fd('"', STDOUT_FILENO);
-				break;
+				break ;
 			}
 			j++;
 		}
@@ -66,22 +66,22 @@ int	env_var_count(char **env)
 	return (i);
 }
 
-void	export_handling(t_minishell *ms, char **tokens, int i)
+void	export_handling(t_minishell *ms, char **tokns, int i)
 {
 	char	*var_name;
 	char	*value;
-	
-	export_handling_x(ms, tokens, i);
-	while (tokens[i])
+
+	export_handling_x(ms, tokns, i);
+	while (tokns[i])
 	{
-		var_name = extract_var_name(tokens[i]);
-		value = extract_var_value(tokens[i], 0);
-		if (tokens[i][0] == '\0' && ms->token.quoted[i] == 1)
-			ft_fprintf(2, "ms: export: %s: not a valid identifier\n", tokens[i]);
-		if (!is_valid_var_name(var_name) || 
-			(tokens[i][0] == '=' || ft_strchr(tokens[i], '=') == tokens[i]))
+		var_name = extract_var_name(tokns[i]);
+		value = extract_var_value(tokns[i], 0);
+		if (tokns[i][0] == '\0' && ms->token.quoted[i] == 1)
+			ft_fprintf(2, "ms: export: %s: not a valid identifier\n", tokns[i]);
+		if (!is_valid_var_name(var_name)
+			|| (tokns[i][0] == '=' || ft_strchr(tokns[i], '=') == tokns[i]))
 		{
-			ft_fprintf(2, "ms: export: %s: not a valid identifier\n", tokens[i]);
+			ft_fprintf(2, "ms: export: %s: not a valid identifier\n", tokns[i]);
 			ms->ret = ERROR;
 		}
 		else if (var_name && value)

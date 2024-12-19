@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_commands.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
+/*   By: mlessard <mlessard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:23:54 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/06 04:51:32 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 14:04:50 by mlessard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,7 @@ int	call_commands(t_minishell *ms)
 	if (ms->pid < 0)
 		return (ERROR);
 	else if (ms->pid == 0)
-	{
 		handle_child(ms);
-	}
 	ms->ret = wait_children(ms);
 	return (ms->ret);
 }

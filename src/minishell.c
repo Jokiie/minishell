@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/19 14:18:43 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 14:27:44 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,8 @@ int	execute_input(t_minishell *ms, char *input)
 				resulted from the previous step (usually from empty variables).
 
 		2.4- Trimmer: Iter in each tokens and remove the quotes of tokens that
-				do not result from expansion. This is the final step and the result
-				is assigned to ms->tokens.
+				do not result from expansion. This is the final step and the
+				result is assigned to ms->tokens.
 
 	3-  We check if we have a unquoted and unexpanded heredoc, if so we execute
 		and fill all heredocs at once and save them with an unique name in our
@@ -171,7 +171,7 @@ int	execute_input(t_minishell *ms, char *input)
 void	execms(t_minishell *ms, char **envp)
 {
 	char	*rl_path;
-	
+
 	ms->env = ft_envdup(envp);
 	ms->path = getcwd(NULL, 0);
 	rl_path = ft_strjoin(ms->path, "/includes/readline/.inputrc");
