@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/19 13:45:59 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 14:18:43 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,8 @@ void	execms(t_minishell *ms, char **envp)
 			ms->ret = execute_input(ms, ms->input);
 			add_history(ms->input);
 		}
+		if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+			exit_minishell(ms, ms->ret);
 		free_data(ms);
 	}
 }
@@ -202,11 +204,6 @@ int	main(int argc, char **argv, char **envp)
 		error_msg(argv[1], "too many arguments");
 		return (1);
 	}
-	// if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
-	// {
-	// 	error_msg("./minishell", "must be run in interactive mode");
-	// 	return (1);
-	// }
 	ms = (t_minishell *)malloc(sizeof(t_minishell));
 	if (!ms)
 		exit(EXIT_FAILURE);

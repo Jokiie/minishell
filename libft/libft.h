@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 12:20:14 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/17 16:36:57 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/19 13:49:50 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,16 @@
 # include <unistd.h>
 # include "ft_printf/libftprintf.h"
 # include "ft_fprintf/libftfprintf.h"
-# define RED "\001\033[31m\002"
-# define GREEN "\001\033[32m\002"
-# define YELLOW "\001\033[33m\002"
-# define BLUE "\001\033[34m\002"
-# define WARLOCK "\001\033[38;5;19m\002"
-# define MAGENTA "\001\033[35m\002"
-# define PURPLE "\001\033[35m\002"
-# define CYAN "\001\033[36m\002"
-# define GREY "\001\033[90m\002"
-# define RESET "\001\033[0m\002"
+# define RED "\001\e[31m\002"
+# define GREEN "\001\e[32m\002"
+# define YELLOW "\001\e[33m\002"
+# define BLUE "\001\e[34m\002"
+# define WARLOCK "\001\e[38;5;19m\002"
+# define MAGENTA "\001\e[35m\002"
+# define PURPLE "\001\e[35m\002"
+# define CYAN "\001\e[36m\002"
+# define GREY "\001\e[90m\002"
+# define RESET "\001\e[0m\002"
 
 # define BUFFER_SIZE 1024
 # define INT_MAX 2147483647

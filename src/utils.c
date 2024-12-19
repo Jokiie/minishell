@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/19 13:28:24 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 14:19:37 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,11 @@ void	welcome(t_minishell *ms)
 	char	*read;
 	char	*user;
 
+	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+		return ;
 	read = NULL;
 	user = get_user_color(ms);
-	ft_printf(GREEN"\nWELCOME : %s\n"RESET, user);
+	ft_fprintf(2, GREEN"\nWELCOME : %s\n"RESET, user);
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 	read = readline(read);
 	free(read);
