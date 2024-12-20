@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   retokenizer.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 02:38:01 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/19 15:20:26 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 23:19:01 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,13 @@ void	fill_dbuffer(t_minishell *ms, t_counter *c, char **tokens,
 {
 	char	*tmp;
 
-	tmp = ft_strdup(tokens[c->k]);
 	if (saved_expanded == 1)
 		handle_non_empty(ms, tokens, c->k);
-	else
+	else if (tokens[c->k] && saved_expanded == 0)
+	{
+		tmp = ft_strdup(tokens[c->k]);
 		append_to_dbuffer_char(ms, tmp);
+	}
 }
 
 void	extract_new_token(t_minishell *ms, char *token, int *i, int k)

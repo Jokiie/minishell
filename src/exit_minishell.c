@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_minishell.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:32:13 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/19 15:47:13 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 23:12:37 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	exit_minishell(t_minishell *ms, int return_code)
 {
 	int	child_ret;
 
+	free_dbuffer(ms);
 	free_at_exit(ms);
 	reset_heredoc(ms);
 	clear_history();

@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 22:48:09 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/19 11:29:16 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 23:53:39 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,40 +20,32 @@
 	strings. If we keep the empty strings, we will have empty pipes and get
 	a syntax error.
 */
-static void	init_cleaner(char ***cleaned, int count, int *k, int *i)
+static void	init_cleaner(int *k, int *i)
 {
 	*k = 0;
 	*i = 0;
-	*cleaned = ft_calloc(count + 1, sizeof(char *));
 }
 
-char	**cleaner(t_minishell *ms, char **tokens)
+void	cleaner(t_minishell *ms, char **tokens)
 {
-	char	**cleaned;
-	int		count;
-	int		k;
-	int		i;
+	int	k;
+	int	i;
 
-	count = count_valid_tokens(ms, tokens);
-	init_cleaner(&cleaned, count, &k, &i);
-	if (!cleaned)
-		return (NULL);
+	init_cleaner(&k, &i);
 	while (tokens[k])
 	{
-		if (tokens[k][0] || (!tokens[k][0] && ms->token.quoted[k] == 1))
+		if (tokens[k][0] || (!tokens[k][0] && (ms->token.quoted[k] == 1)))
 		{
-			cleaned[i] = ft_strdup(tokens[k]);
-			if (cleaned[i])
-			{
-				ms->token.quoted[i] = ms->token.quoted[k];
-				ms->token.expanded[i] = ms->token.expanded[k];
-				i++;
-			}
+			tokens[i] = tokens[k];
+			ms->token.quoted[i] = ms->token.quoted[k];
+			ms->token.expanded[i] = ms->token.expanded[k];
+			i++;
 		}
+		else
+			free(tokens[k]);
 		k++;
 	}
-	cleaned[i] = NULL;
-	return (cleaned);
+	tokens[i] = NULL;
 }
 
 int	count_valid_tokens(t_minishell *ms, char **tokens)
@@ -63,7 +55,7 @@ int	count_valid_tokens(t_minishell *ms, char **tokens)
 
 	k = 0;
 	count = count_tokens(tokens);
-	while (tokens[k])
+	while (tokens[k] && k < count)
 	{
 		if (tokens[k][0] == '\0' && ms->token.quoted[k] == 0)
 		{

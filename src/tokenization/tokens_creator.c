@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_creator.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 13:07:11 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/19 14:22:26 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 23:51:03 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	tokens_creator(t_minishell *ms, char *line)
 	ms->tokens = transformer(ms);
 	if (ms->tokens && check_syntax(ms) == SYNTAX_ERROR)
 	{
-		free_tokens_address(&ms->tokens);
+		free_dbuffer(ms);
 		return (SYNTAX_ERROR);
 	}
 	if (ms->tokens && *ms->tokens)
@@ -79,9 +79,7 @@ char	**transformer(t_minishell *ms)
 	if (final_tokens && !has_type(final_tokens, &ms->token.quoted,
 			&ms->token.expanded, is_pipe))
 	{
-		tmp = cleaner(ms, final_tokens);
-		free_tokens_address(&final_tokens);
-		final_tokens = tmp;
+		cleaner(ms, ms->token.db_buffer);
 	}
 	free_state_array(ms, initial_size);
 	return (final_tokens);

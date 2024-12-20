@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/19 14:46:24 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 22:40:43 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	execute_input(t_minishell *ms, char *input)
 		if (has_type(ms->tokens, &ms->token.quoted, &ms->token.expanded,
 				is_heredoc))
 			reset_heredoc(ms);
-		free_tokens_address(&ms->tokens);
+		free_dbuffer(ms);
 	}
 	return (ms->ret);
 }

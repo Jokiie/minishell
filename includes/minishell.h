@@ -263,7 +263,7 @@ char				*ft_toktrim(t_minishell *ms, char **tokens, int **tmp,
 						int k);
 
 // cleaner.c
-char				**cleaner(t_minishell *ms, char **tokens);
+void cleaner(t_minishell *ms, char **tokens);
 int					count_valid_tokens(t_minishell *ms, char **tokens);
 
 // int_arrays.c

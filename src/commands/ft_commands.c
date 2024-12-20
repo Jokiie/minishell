@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_commands.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlessard <mlessard@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:23:54 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/19 14:04:50 by mlessard         ###   ########.fr       */
+/*   Updated: 2024/12/19 23:52:15 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void	handle_child(t_minishell *ms)
 		ms->ret = detect_executable(ms, ms->tokens);
 	if (ms->ret == EXE_NOT_FOUND)
 		ms->ret = ft_execvp(ms->tokens, ms->env);
+	free_tokens_address(&ms->tokens);
 	exit_child(ms, ms->ret, FALSE);
 }
 

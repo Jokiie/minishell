@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:32:54 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/04 13:13:28 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 23:00:24 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	free_data(t_minishell *ms)
 	free_at_address(&ms->cwd);
 	free_int_array(&ms->token.quoted);
 	free_int_array(&ms->token.expanded);
+	ms->token.db_buffer = NULL;
 	ms->token.in_dquotes = FALSE;
 	ms->token.in_squotes = FALSE;
 	ms->token.quoted = NULL;

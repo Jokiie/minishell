@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/19 14:38:11 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/19 22:58:33 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,16 +95,11 @@ int	wait_children(t_minishell *ms)
 
 void	welcome(t_minishell *ms)
 {
-	char	*read;
 	char	*user;
 
 	if (!ms->isatty)
 		return ;
-	read = NULL;
 	user = get_user_color(ms);
-	ft_fprintf(2, GREEN"\nWELCOME : %s\n"RESET, user);
-	ioctl(STDIN_FILENO, TIOCSTI, "\n");
-	read = readline(read);
-	free(read);
-	free(user);
+	ft_fprintf(2, GREEN "\nWELCOME : %s\n\n" RESET, user);
+	free_ptr(user);
 }

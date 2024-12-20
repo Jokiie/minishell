@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_array_tab.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matislessardgrenier <matislessardgrenie    +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 13:57:26 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/18 15:38:49 by matislessar      ###   ########.fr       */
+/*   Updated: 2024/12/19 23:53:56 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,13 @@ void	free_state_array(t_minishell *ms, int count)
 void	free_dbuffer(t_minishell *ms)
 {
 	size_t	i;
+	size_t	count;
 
 	i = 0;
 	if (!ms->token.db_buffer)
 		return ;
-	while (i < ms->token.db_size)
+	count = count_tokens(ms->token.db_buffer);
+	while (i < count)
 	{
 		if (ms->token.db_buffer[i])
 			free(ms->token.db_buffer[i]);
