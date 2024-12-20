@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 00:33:40 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/20 11:34:29 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/20 11:51:15 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,18 +93,18 @@ int	wait_children(t_minishell *ms)
 	return (last_status);
 }
 
-int	init_term(void)
+void	welcome(t_minishell *ms)
 {
-	char	*term_type;
-	char	buffer[1024];
-	char	*bp;
-	char	*str;
+	char	*read;
+	char	*user;
 
-	bp = buffer;
-	term_type = getenv("TERM");
-	if (tgetent(NULL, term_type) == -1)
-		return (ERROR);
-	str = tgetstr("cl", &bp);
-	tputs(str, 1, ft_putchar);
-	return (0);
+	if (!ms->isatty)
+		return ;
+	read = NULL;
+	user = get_user_color(ms);
+	ft_fprintf(2, GREEN "\nWELCOME : %s\n" RESET, user);
+	ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	read = readline(read);
+	free(read);
+	free(user);
 }
