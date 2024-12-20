@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/19 22:40:43 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/20 11:34:29 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ int	execute_input(t_minishell *ms, char *input)
 */
 void	execms(t_minishell *ms)
 {
-	welcome(ms);
+	init_term();
 	while (1)
 	{
 		sync_signals(ms);

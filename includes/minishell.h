@@ -14,6 +14,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <termios.h>
+#include <term.h>
+#include <curses.h>
 # include <unistd.h>
 # include "readline/history.h"
 # include "readline/readline.h"
@@ -143,7 +145,7 @@ void				handle_sigint_hd(int sig);
 void				print_tokens(char **tokens);
 char				**ft_envdup(char **envp);
 int					wait_children(t_minishell *ms);
-void				welcome(t_minishell *ms);
+int				init_term(void);
 
 // exit_minishell.c
 void				exit_minishell(t_minishell *ms, int return_code);
@@ -356,7 +358,7 @@ int					pwd(t_minishell *ms);
 int					detect_pwd_call(t_minishell *ms, char **tokens);
 
 // echo.c
-void				echo(t_minishell *ms, char **tokens, int opt);
+void				echo_func(t_minishell *ms, char **tokens, int opt);
 int					detect_echo_call(t_minishell *ms, char **tokens);
 t_bool				valid_echo_arg(char *token);
 int					update_echo_index(char **tokens, int *k);

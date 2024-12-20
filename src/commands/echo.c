@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccodere <ccodere@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:24 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/19 15:28:41 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/20 11:26:11 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ int	detect_echo_call(t_minishell *ms, char **tokens)
 	{
 		if (tokens[1] && valid_echo_arg(tokens[1]) == TRUE)
 			opt = 1;
-		echo(ms, tokens, opt);
+		echo_func(ms, tokens, opt);
 		return (SUCCESS);
 	}
 	return (CMD_NOT_FOUND);
 }
 
 /* Prints the tokens after echo */
-void	echo(t_minishell *ms, char **tokens, int opt)
+void	echo_func(t_minishell *ms, char **tokens, int opt)
 {
 	int	k;
 	int	first_word;
