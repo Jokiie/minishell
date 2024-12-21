@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:02:28 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/20 11:49:48 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/21 01:18:42 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,35 +105,66 @@ int	execute_input(t_minishell *ms, char *input)
 		set to null, and we return 0. Otherwise, We check if we have an open
 		quote, if so, we return SYNTAX_ERROR and do not proceed further.
 		Otherwise, We call tokenizer and transformer, then verify if we have a
-		syntax error. If so,
-			we return SYNTAX_ERROR. If no syntax error is found,
-		we return SUCCESS.
+		syntax error. If no syntax error is found, we return SUCCESS, otherwise
+		return SYNTAX_ERROR.
 
 	1- Tokenizer: Separe the line in tokens when we find an unquoted space or
 		a meta character. If the result is not NULL, we proceed further.
 
 	2- Transformer : Init quoted and expanded int arrays, which save the state
-						of each token (quoted or not) and (expanded or not). then
-						call the following:
+					 of each token (quoted or not) and (expanded or not). then
+					 call the following:
+					 
+		2.0- Parser: Create a int ** array named state_array, which save the quoted
+					 state of each character. (0 normal, 1 sgl quote, 2 dbl quote)
+					 for example:
+					 echo
+					 '$USER'hey$USER
+					 "$USER"
+					 is represented in the map:
+					 [0][0][0][0]
+					 [1][1][1][1][1][1][1][0][0][0][0][0][0][0][0]
+					 [2][2][2][2][2][2][2]
 
 		2.1- Expander: Iter in each tokens and expand the variables if not
-				single quoted or a heredoc delimiter.
+					   single quoted or a heredoc delimiter. Replace the state of
+					   each expanded character in the state_array by 3 (expanded)
+					   or 4 (expanded and double quoted).
+					   the state_array in the example above will be:
+					   echo
+					   '$USER'heyccodere
+					   "ccodere"
+					   [0][0][0][0]
+					   [1][1][1][1][1][1][1][0][0][0][3][3][3][3][3][3][3]
+					   [2][4][4][4][4][4][4][4][2]
+					   
 
-		2.2- Retokenizer : Iter in each tokens and resepare the tokens like
-				in tokenizer,
-					but save the empty tokens. Then update the quoted and
-				expanded arrays, so we have the state of each new tokens.
+		2.2- Trimmer: Iter in each tokens and remove the quotes of tokens that
+				do not result from expansion. To do so, it will remove the quotes
+				with the state 2 or 1 in the state_array map.
+				the state_array in the example above will be:
+				echo
+				$USERheyccodere
+				ccodere
+				[0][0][0][0]
+				[1][1][1][1][1][0][0][0][3][3][3][3][3][3][3]
+				[4][4][4][4][4][4][4]
+	
+		2.3- Retokenizer: Iter in each tokens and resepare the tokens like in
+						  tokenizer, but at any spaces and save the empty tokens.
+						  Save each token is a dynamic char **buffer, which will
+						  increase its capacity if needed. At the same time, it
+						  update the quoted and expanded int * arrays, which have
+						  dynamic capacity too.
 
-		2.2- Cleaner: Called only if no unquoted and no expanded pipes is found.
-				It will iter in each tokens and remove the unquoted empty tokens
-				resulted from the previous step (usually from empty variables).
-
-		2.4- Trimmer: Iter in each tokens and remove the quotes of tokens that
-				do not result from expansion. This is the final step and the
-				result is assigned to ms->tokens.
+		2.4- Cleaner: Called only if true pipes is found(unquoted and do not 
+					  result from expansion). It will iter in the tokens and
+					  remove the unquoted empty tokens resulted from empty
+					  variables. This is the final step and the result is
+					  assigned to ms->tokens.
 
 	3-  We check if we have a unquoted and unexpanded heredoc, if so we execute
-		and fill all heredocs at once and save them with an unique name in our
+		and fill all valid heredocs at once and save them with an unique name in our
 		folder /tmp. These are deleted after the command execution, or if we
 		received a SIGINT, at exit or with the command make fclean.
 
