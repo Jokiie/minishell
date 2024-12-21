@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 05:35:20 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/18 15:04:02 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/21 00:48:57 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,14 @@ char	**get_cwdsplit(t_minishell *ms)
 {
 	char	**splitted;
 	int		i;
-
+	char	*saved_cwd;
+	
 	i = 0;
 	splitted = NULL;
+	saved_cwd = get_env(ms->env, "OLDPWD");
 	ms->cwd = getcwd(NULL, 0);
 	if (!ms->cwd)
-		ms->cwd = ft_strdup("/deleted_dir");
+		ms->cwd = ft_strdup(saved_cwd);
 	if (ms->cwd)
 	{
 		if ((ms->cwd[0] == '/' && (!ms->cwd[1] || ms->cwd[1] == '/')))

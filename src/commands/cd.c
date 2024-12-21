@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlessard <mlessard@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 06:41:58 by ccodere           #+#    #+#             */
-/*   Updated: 2024/12/19 14:11:22 by mlessard         ###   ########.fr       */
+/*   Updated: 2024/12/21 00:50:58 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,26 +38,22 @@ int	cd(t_minishell *ms, char **tokens)
 /* Update cwd and OLDPWD in both struct and environment variables */
 void	update_working_directories(t_minishell *ms)
 {
-	char	*cwd;
+	char	*saved_old;
 
+	saved_old = ft_strdup(ms->cwd);
+	if (saved_old)
+		ms->prev_cwd = saved_old;
+	set_env_var(ms, "OLDPWD", ms->prev_cwd);
+	free_ptr(saved_old);
 	free_at_address(&ms->cwd);
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
+	ms->cwd = getcwd(NULL, 0);
+	if (!ms->cwd)
 	{
-		ft_putstr_fd("cd: error retrieving current directory: \n", 2);
-		ft_putstr_fd("getcwd: cannot access parent directories: \n", 2);
+		ft_putstr_fd("cd: error retrieving current directory: ", 2);
+		ft_putstr_fd("getcwd: cannot access parent directories:", 2);
 		ft_putendl_fd("No such file or directory\n", 2);
-		cwd = ft_strdup("deleted_dir");
 	}
-	if (ms->cwd)
-		set_env_var(ms, "OLDPWD", ms->cwd);
-	else
-		set_env_var(ms, "OLDPWD", "/deleted_dir");
-	if (ms->prev_cwd)
-		free(ms->prev_cwd);
-	ms->prev_cwd = ms->cwd;
-	set_env_var(ms, "PWD", cwd);
-	ms->cwd = cwd;
+	set_env_var(ms, "PWD", ms->cwd);
 }
 
 /* Change directory and update working directories */

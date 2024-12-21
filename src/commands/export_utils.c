@@ -6,7 +6,7 @@
 /*   By: ccodere <ccodere@student.42quebec.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 15:30:54 by matislessar       #+#    #+#             */
-/*   Updated: 2024/12/06 23:21:33 by ccodere          ###   ########.fr       */
+/*   Updated: 2024/12/21 00:03:15 by ccodere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	is_valid_var_name(const char *var_name)
 	len = ft_strlen(var_name);
 	if (!ft_strncmp(var_name, "=", len))
 		return (ERROR);
-	if (!var_name || !ft_isalpha(var_name[0]))
+	if (!var_name || (!ft_isalpha(var_name[0]) && var_name[0] != '_'))
 		return (SUCCESS);
 	while (var_name[i])
 	{
